@@ -1,0 +1,89 @@
+<resources>
+    <string name="app_name">Bring Me</string>
+    <string name="title_home">Home</string>
+    <string name="title_history">History</string>
+    <string name="title_notifications">Notifications</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_1">Get a quick pickup of your needs</string>
+    <string name="title_2">Any where in Germany</string>
+    <string name="title_3">Secure payments</string>
+
+    <string name="label_one">You can list everything from A to Z on your
+        \n order list and wait for the delivery
+        \n person to deliver.
+        \n \n Enter a time for how long you will
+        \n make the delivery quotation available to the delivery workers."</string>
+    <string name="label_two">Simple entry of location by location service.
+        \n Activate your location on the smartphone to
+        \n find your location . you can also manually
+        \nhear the address.</string>
+    <string name="label_three">Your money will be held with us until your \n
+    order is delivered. \n \n
+    Payment will only go out to the delivery \n
+    service if you give them a transfer password \n
+    upon receipt.</string>
+    <string name="privacy_policy">By continuing, you agree that you have read and
+        accept our <u>TC</u> and <u>Privacy Policy</u> </string>
+
+
+    <string name="enter_phone_number">Enter Phone Number for \n Verification</string>
+    <string name="when_an_unknown">when an unknown printer took a galley of \n type and scrambled.</string>
+
+    <string name="facebook_app_id">409357586832772</string>
+    <string name="fb_login_protocol_scheme">fb409357586832772</string>
+    <string name="title_activity_delete_me">DeleteMeActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="title_activity_phone_varification">PhoneVarificationActivity</string>
+    <string name="title_activity_o_t_p">OTPActivity</string>
+    <string name="title_activity_delete">DeleteActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="skip">SKIP</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="who_bring_me">Who Bring Me</string>
+    <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_account_yet">Don\'t have account yet?</string>
+    <string name="create_account">Create Account</string>
+    <string name="client_receiver">Client/ Receiver</string>
+    <string name="delivery_employee">Delivery Employee</string>
+    <string name="registration">Registration</string>
+    <string name="you_have_selected">You have selected : </string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="email_id">Email Id</string>
+    <string name="password">Password</string>
+    <string name="_6_digit_mpin_number">6 digit mPin Number</string>
+    <string name="submit">Submit</string>
+    <string name="by_continuing_you_agree_that_you_have_read_and_accept_our_t_amp_cs_and_privacy_policy"><![CDATA[By continuing, you agree that you have read and accept our T&Cs and Privacy Policy]]></string>
+    <string name="please_wait_we_will_auto_verify_nthe_otp_sent_to_917838939694">Please Wait. We will auto verify\nthe OTP sent to +917838939694</string>
+    <string name="auto_verifying_your_otp_in_00_12">Auto verifying your OTP in (00:12)</string>
+    <string name="verify">Verify</string>
+    <string name="don_t_receive_code_resend_code">Don\'t Receive Code?</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="get_start">Get Start</string>
+    <string name="there_are_no_job">There are no job!</string>
+    <string name="please_click_this">Please Click this</string>
+    <string name="icon_and">icon and</string>
+    <string name="post_a_job">post a job</string>
+    <string name="create_a_job">Create a Job</string>
+    <string name="what_do_you_want_to_post_about">What do you want to post about ?</string>
+    <string name="how_long_you_want_offer_this_job">How long you want offer this job ?</string>
+    <string name="minute">minute</string>
+    <string name="job_total_amount">Job Total Amount</string>
+
+</resources>
