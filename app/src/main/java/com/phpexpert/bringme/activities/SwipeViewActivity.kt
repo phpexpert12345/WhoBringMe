@@ -8,7 +8,7 @@ import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import com.phpexpert.bringme.R
-import com.phpexpert.bringme.Utilities.BaseActivity
+import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.adapters.ViewPagerAdapter
 import com.phpexpert.bringme.databinding.ActivitySwipeViewBinding
 

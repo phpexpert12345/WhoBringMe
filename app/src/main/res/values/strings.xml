@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bring Me</string>
+    <string name="app_name">Who Bring Me</string>
     <string name="title_home">Home</string>
     <string name="title_history">History</string>
     <string name="title_notifications">Notifications</string>
@@ -85,5 +85,14 @@
     <string name="how_long_you_want_offer_this_job">How long you want offer this job ?</string>
     <string name="minute">minute</string>
     <string name="job_total_amount">Job Total Amount</string>
+    <string name="payment">Payment</string>
+    <string name="job_post_preview">Job Post Preview</string>
+    <string name="job_total_amount">Job Total Amount</string>
+    <string name="euro">Euro</string>
+    <string name="how_long_you_want_offer_this_job">How long you want offer this job ?</string>
+    <string name="mint">Mint</string>
+    <string name="job_description">Job Description</string>
+    <string name="payment_methods">Payment Methods</string>
+    <string name="paypal">PayPal</string>
 
 </resources>

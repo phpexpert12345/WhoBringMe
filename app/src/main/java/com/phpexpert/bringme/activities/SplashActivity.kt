@@ -3,9 +3,8 @@ package com.phpexpert.bringme.activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import androidx.appcompat.app.AppCompatActivity
 import com.phpexpert.bringme.R
-import com.phpexpert.bringme.Utilities.BaseActivity
+import com.phpexpert.bringme.utilities.BaseActivity
 
 class SplashActivity : BaseActivity() {
     private var handler: Handler? = null

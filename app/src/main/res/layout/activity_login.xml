@@ -11,8 +11,8 @@
             android:id="@+id/headerImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/header_bg"
             android:scaleType="centerCrop"
+            android:src="@drawable/header_bg"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
@@ -138,48 +138,49 @@
             android:id="@+id/forgotPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/forgot_password"
-            app:layout_constraintTop_toBottomOf="@+id/passwordView"
-            app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="@dimen/_10sdp"
-            android:textColor="@color/color_text_grey"
+            android:layout_marginEnd="@dimen/_20sdp"
             android:fontFamily="@font/poppins_regular"
+            android:text="@string/forgot_password"
+            android:textColor="@color/color_text_grey"
             android:textSize="@dimen/_13sdp"
-            android:layout_marginEnd="@dimen/_20sdp" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordView" />
 
-
-        <TextView
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_rectangle_green"
-            app:layout_constraintTop_toBottomOf="@+id/forgotPassword"
             android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_20sdp"
-            android:text="@string/login"
+            android:background="@drawable/button_rectangle_green"
+            android:fontFamily="@font/poppins_medium"
             android:gravity="center"
-            android:textColor="@color/white"
             android:paddingTop="@dimen/_10sdp"
             android:paddingBottom="@dimen/_10sdp"
+            android:text="@string/login"
+            android:textColor="@color/white"
+            app:spinning_bar_color="@color/colorGreen"
             android:textSize="@dimen/_13sdp"
-            android:fontFamily="@font/poppins_medium"
-            android:layout_marginTop="@dimen/_10sdp" />
-
+            app:layout_constraintTop_toBottomOf="@+id/forgotPassword"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/loginButton"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="@dimen/_10sdp"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginButton">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/don_t_have_account_yet"
                 android:fontFamily="@font/poppins_regular"
+                android:text="@string/don_t_have_account_yet"
                 android:textColor="@color/colorDarkGrey"
                 android:textSize="@dimen/_11sdp" />
 
@@ -187,9 +188,9 @@
                 android:id="@+id/createAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
                 android:text="@string/create_account"
                 android:textColor="#00A8EC"
-                android:layout_marginStart="@dimen/_2sdp"
                 android:textSize="@dimen/_13sdp" />
         </LinearLayout>
 

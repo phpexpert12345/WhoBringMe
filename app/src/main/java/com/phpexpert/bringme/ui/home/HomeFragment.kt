@@ -16,6 +16,7 @@ import com.phpexpert.bringme.databinding.FragmentHomeBinding
 class HomeFragment : Fragment() {
     private var homeViewModel: HomeViewModel? = null
     private lateinit var homeFragmentBinding: FragmentHomeBinding
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
         homeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)

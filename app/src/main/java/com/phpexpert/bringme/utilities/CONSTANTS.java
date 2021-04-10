@@ -1,4 +1,4 @@
-package com.phpexpert.bringme.Utilities;
+package com.phpexpert.bringme.utilities;
 
 public class CONSTANTS {
 
