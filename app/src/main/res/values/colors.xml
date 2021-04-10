@@ -21,5 +21,6 @@
     <color name="colorLightBlue">#E6FCFF</color>
     <color name="blueBorderColor">#C3EBF1</color>
     <color name="red">#DC0101</color>
+    <color name="yellow">#E2BD03</color>
 
 </resources>

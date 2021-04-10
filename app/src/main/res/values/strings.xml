@@ -94,5 +94,7 @@
     <string name="job_description">Job Description</string>
     <string name="payment_methods">Payment Methods</string>
     <string name="paypal">PayPal</string>
+    <string name="proceed_to_pay">Proceed to Pay</string>
+    <string name="now_your_job_live_and_finding_delivery_employees_to_accept_the_job">Now your job live and finding delivery employees to accept the job</string>
 
 </resources>
