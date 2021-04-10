@@ -160,12 +160,13 @@
             android:paddingTop="@dimen/_10sdp"
             android:paddingBottom="@dimen/_10sdp"
             android:text="@string/login"
+            android:textAllCaps="false"
             android:textColor="@color/white"
-            app:spinning_bar_color="@color/colorGreen"
             android:textSize="@dimen/_13sdp"
-            app:layout_constraintTop_toBottomOf="@+id/forgotPassword"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/forgotPassword"
+            app:spinning_bar_color="@color/colorGreen" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -1,6 +1,8 @@
 package com.phpexpert.bringme.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.Window
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
@@ -18,5 +20,17 @@ class CreateJobActivity:BaseActivity() {
         @Suppress("DEPRECATION")
         window.statusBarColor = resources.getColor(R.color.colorLoginButton)
         createJobBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_job)
+
+        createJobBinding.submitButton.setOnClickListener {
+            createJobBinding.submitButton.startAnimation()
+            Handler().postDelayed({
+                startActivity(Intent(this, PaymentActivity::class.java))
+            }, 1000)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        createJobBinding.submitButton.revertAnimation()
     }
 }

@@ -69,7 +69,7 @@
     <string name="password">Password</string>
     <string name="_6_digit_mpin_number">6 digit mPin Number</string>
     <string name="submit">Submit</string>
-    <string name="by_continuing_you_agree_that_you_have_read_and_accept_our_t_amp_cs_and_privacy_policy"><![CDATA[By continuing, you agree that you have read and accept our T&Cs and Privacy Policy]]></string>
+    <string name="by_continuing_you_agree_that_you_have_read_and_accept_our_t_amp_cs_and_privacy_policy">By continuing, you agree that you have read and accept our <u>T&amp;Cs</u> and <u>Privacy Policy</u></string>
     <string name="please_wait_we_will_auto_verify_nthe_otp_sent_to_917838939694">Please Wait. We will auto verify\nthe OTP sent to +917838939694</string>
     <string name="auto_verifying_your_otp_in_00_12">Auto verifying your OTP in (00:12)</string>
     <string name="verify">Verify</string>
@@ -87,9 +87,7 @@
     <string name="job_total_amount">Job Total Amount</string>
     <string name="payment">Payment</string>
     <string name="job_post_preview">Job Post Preview</string>
-    <string name="job_total_amount">Job Total Amount</string>
     <string name="euro">Euro</string>
-    <string name="how_long_you_want_offer_this_job">How long you want offer this job ?</string>
     <string name="mint">Mint</string>
     <string name="job_description">Job Description</string>
     <string name="payment_methods">Payment Methods</string>
@@ -105,5 +103,8 @@
     <string name="state">State</string>
     <string name="city">City</string>
     <string name="pin_code">Pin Code</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="notification">Notification</string>
+    <string name="no_notification_yet">No Notification Yet</string>
 
 </resources>

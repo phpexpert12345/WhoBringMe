@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -165,13 +166,17 @@
 
         </LinearLayout>
 
-        <TextView
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/submitButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/button_rectangle_green"
             android:fontFamily="@font/poppins_medium"
             android:gravity="center"
+            android:layout_centerInParent="true"
+            app:spinning_bar_color="@color/colorGreen"
+            android:textAllCaps="false"
             android:text="Submit"
             android:textColor="@color/white"
             android:textSize="@dimen/_11sdp"

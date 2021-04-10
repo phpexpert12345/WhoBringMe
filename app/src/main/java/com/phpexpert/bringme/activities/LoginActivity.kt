@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginBinding.createAccount.setOnClickListener {
-            startActivity(Intent(this, RegistrationActivity::class.java))
+            startActivity(Intent(this, RegistrationSelectionActivity::class.java))
         }
     }
 }

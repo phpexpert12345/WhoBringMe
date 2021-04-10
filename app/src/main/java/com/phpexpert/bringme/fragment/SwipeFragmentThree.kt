@@ -2,6 +2,7 @@ package com.phpexpert.bringme.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,8 +20,13 @@ class SwipeFragmentThree : Fragment() {
         layoutSwipeFragmentThree = DataBindingUtil.inflate(inflater, R.layout.fragment_three, container, false)
 
         layoutSwipeFragmentThree.buttonGetStart.setOnClickListener {
-            val login = Intent(activity, LoginActivity::class.java)
-            startActivity(login)
+            layoutSwipeFragmentThree.buttonGetStart.startAnimation()
+            Handler().postDelayed({
+                val login = Intent(activity, LoginActivity::class.java)
+                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                startActivity(login)
+            }, 1000)
+
         }
         return layoutSwipeFragmentThree.root
     }

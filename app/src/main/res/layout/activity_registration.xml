@@ -75,6 +75,7 @@
                     android:textSize="@dimen/_11sdp" />
 
                 <TextView
+                    android:id="@+id/selectionString"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -85,6 +86,7 @@
                     tools:ignore="HardcodedText" />
 
                 <ImageView
+                    android:id="@+id/editData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/edit"
@@ -107,6 +109,7 @@
                     android:layout_margin="@dimen/_5sdp">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/firstNameEt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
@@ -125,6 +128,7 @@
                     android:layout_margin="@dimen/_5sdp">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/lastNameEt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
@@ -193,6 +197,7 @@
                     android:layout_margin="@dimen/_5sdp">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/emailEt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
@@ -215,12 +220,14 @@
                         android:layout_margin="@dimen/_5sdp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/digitPin"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/poppins_regular"
                             android:hint="@string/_6_digit_mpin_number"
-                            android:inputType="textPassword"
+                            android:inputType="numberPassword"
+                            android:digits="0123456789"
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/text_color_light"
                             android:textSize="@dimen/_12sdp"
@@ -239,7 +246,7 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <android.widget.Button
+            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                 android:id="@+id/btn_submit"
                 android:layout_width="@dimen/_180sdp"
                 android:layout_height="wrap_content"
@@ -248,6 +255,7 @@
                 android:background="@drawable/button_rectangle_green"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/submit"
+                app:spinning_bar_color="@color/colorGreen"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_11sdp" />

@@ -18,8 +18,8 @@
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.OTPActivity"
-            android:theme="@style/Theme.BringMe.NoActionBar"
-            android:label="@string/title_activity_o_t_p" />
+            android:label="@string/title_activity_o_t_p"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
 
         <activity
             android:name=".activities.PhoneVarificationActivity"
@@ -69,6 +69,18 @@
 
         <activity
             android:name=".activities.CreateJobActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
+        <activity
+            android:name=".activities.RegistrationSelectionActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
+        <activity
+            android:name=".activities.PaymentActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
+        <activity
+            android:name=".activities.CongratulationScreen"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
+        <activity
+            android:name=".activities.ProfileEditActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
     </application>
 
