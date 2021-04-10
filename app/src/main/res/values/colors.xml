@@ -12,6 +12,7 @@
     <color name="colorLoginButton">#27A5DD</color>
     <color name="text_color">#111010</color>
     <color name="text_color_light">#D8D8D8</color>
+    <color name="lightColor">#ABABAB</color>
     <color name="view_color">#D8D8D8</color>
     <color name="view_color_dark">#ECECEC</color>
     <color name="color_text_grey">#676767</color>

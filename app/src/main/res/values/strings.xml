@@ -101,5 +101,9 @@
     <string name="change_mpin">Change mPin</string>
     <string name="change_phone_number">Change Phone Number</string>
     <string name="logout">Logout</string>
+    <string name="address">Address</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
+    <string name="pin_code">Pin Code</string>
 
 </resources>
