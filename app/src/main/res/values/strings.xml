@@ -96,5 +96,10 @@
     <string name="paypal">PayPal</string>
     <string name="proceed_to_pay">Proceed to Pay</string>
     <string name="now_your_job_live_and_finding_delivery_employees_to_accept_the_job">Now your job live and finding delivery employees to accept the job</string>
+    <string name="profile">Profile</string>
+    <string name="job_post_limit">Job Post limit</string>
+    <string name="change_mpin">Change mPin</string>
+    <string name="change_phone_number">Change Phone Number</string>
+    <string name="logout">Logout</string>
 
 </resources>
