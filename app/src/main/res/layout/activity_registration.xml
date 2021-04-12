@@ -140,11 +140,11 @@
                         app:boxBackgroundColor="@android:color/transparent" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
                     android:orientation="horizontal"
                     android:padding="@dimen/_4sdp">
 
@@ -155,6 +155,8 @@
                         android:layout_gravity="center_vertical"
                         android:textSize="@dimen/_12sdp"
                         android:textStyle="bold"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_centerVertical="true"
                         app:ccpDialog_allowSearch="true"
                         app:ccpDialog_showCloseIcon="true"
                         app:ccp_autoDetectCountry="true"
@@ -172,7 +174,7 @@
                             android:id="@+id/mobileNumberEditText"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginStart="@dimen/_4sdp"
+                            android:paddingStart="@dimen/_75sdp"
                             android:layout_weight="4"
                             android:background="@android:color/transparent"
                             android:digits="0123456789"
@@ -184,11 +186,12 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/text_color_light"
                             android:textSize="@dimen/_12sdp"
-                            app:boxBackgroundColor="@android:color/transparent" />
+                            app:boxBackgroundColor="@android:color/transparent"
+                            tools:ignore="RtlSymmetry" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
-                </LinearLayout>
+                </RelativeLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -263,9 +266,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="@string/by_continuing_you_agree_that_you_have_read_and_accept_our_t_amp_cs_and_privacy_policy"
                 android:textColor="@color/text_color_dark"

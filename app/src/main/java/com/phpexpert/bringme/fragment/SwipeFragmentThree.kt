@@ -31,4 +31,9 @@ class SwipeFragmentThree : Fragment() {
         return layoutSwipeFragmentThree.root
     }
 
+    override fun onPause() {
+        super.onPause()
+        layoutSwipeFragmentThree.buttonGetStart.revertAnimation()
+    }
+
 }

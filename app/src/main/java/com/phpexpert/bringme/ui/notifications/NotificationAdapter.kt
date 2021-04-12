@@ -8,10 +8,11 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.HomeFragmentCellBinding
+import com.phpexpert.bringme.databinding.LayoutNotificationCellBinding
 
 class NotificationAdapter(var context: Context, var arrayList: ArrayList<String>) : RecyclerView.Adapter<NotificationAdapter.NotificationFragmentViewHolder>() {
 
-    private lateinit var notificationFragmentCellBinding: HomeFragmentCellBinding
+    private lateinit var notificationFragmentCellBinding: LayoutNotificationCellBinding
 
     inner class NotificationFragmentViewHolder(var viewBinding: ViewDataBinding) : RecyclerView.ViewHolder(viewBinding.root)
 
@@ -20,7 +21,7 @@ class NotificationAdapter(var context: Context, var arrayList: ArrayList<String>
     }
 
     override fun onBindViewHolder(holder: NotificationFragmentViewHolder, position: Int) {
-        notificationFragmentCellBinding = holder.viewBinding as HomeFragmentCellBinding
+        notificationFragmentCellBinding = holder.viewBinding as LayoutNotificationCellBinding
     }
 
     override fun getItemCount(): Int {

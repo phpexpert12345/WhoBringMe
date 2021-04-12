@@ -3,6 +3,7 @@ package com.phpexpert.bringme.activities
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
@@ -38,6 +39,11 @@ class SwipeViewActivity : BaseActivity() {
 
             @SuppressLint("SetTextI18n")
             override fun onPageSelected(position: Int) {
+                if (position==2){
+                    swipeViewBinding.skip.visibility = View.GONE
+                }else{
+                    swipeViewBinding.skip.visibility = View.VISIBLE
+                }
                 swipeViewBinding.position.text = "${position+1}/3"
             }
 
@@ -53,11 +59,11 @@ class SwipeViewActivity : BaseActivity() {
             }
             else{
                 swipeViewBinding.viewPager.currentItem = swipeViewBinding.viewPager.currentItem+1
-                handler.postDelayed(runnable, 1000)
+                handler.postDelayed(runnable, 2000)
             }
         }
 
-        handler.postDelayed(runnable, 1000)
+        handler.postDelayed(runnable, 2000)
 
         swipeViewBinding.skip.setOnClickListener {
             swipeViewBinding.viewPager.currentItem = 3
@@ -65,6 +71,7 @@ class SwipeViewActivity : BaseActivity() {
     }
     override fun onPause() {
         super.onPause()
+
         val window: Window = window
         window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     }

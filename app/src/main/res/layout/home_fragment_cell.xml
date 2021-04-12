@@ -131,6 +131,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:text="19 Mar'2021, Friday"
+            android:textSize="@dimen/_7sdp"
             android:fontFamily="@font/poppins_regular"
             android:textColor="@color/text_color_dark"
             android:layout_gravity="end"

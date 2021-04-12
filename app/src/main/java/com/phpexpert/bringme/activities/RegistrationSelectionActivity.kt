@@ -13,7 +13,7 @@ import com.phpexpert.bringme.utilities.BaseActivity
 class RegistrationSelectionActivity : BaseActivity() {
 
     private lateinit var registrationSelectionBinding: LayoutRegistrationSelectionBinding
-    private var selectionString: String = ""
+    private var selectionString: String = "client"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registrationSelectionBinding = DataBindingUtil.setContentView(this, R.layout.layout_registration_selection)
@@ -27,9 +27,9 @@ class RegistrationSelectionActivity : BaseActivity() {
                 registrationSelectionBinding.deliveryImage.setImageResource(R.drawable.delivery_employee_unselect)
                 "client"
             } else {
-                registrationSelectionBinding.clientImage.setImageResource(R.drawable.client_unselect)
+
                 registrationSelectionBinding.deliveryImage.setImageResource(R.drawable.delivery_employee_unselect)
-                ""
+                "client"
             }
         }
 
@@ -39,9 +39,8 @@ class RegistrationSelectionActivity : BaseActivity() {
                 registrationSelectionBinding.clientImage.setImageResource(R.drawable.client_unselect)
                 "delivery"
             } else {
-                registrationSelectionBinding.deliveryImage.setImageResource(R.drawable.delivery_employee_unselect)
                 registrationSelectionBinding.clientImage.setImageResource(R.drawable.client_unselect)
-                ""
+                "delivery"
             }
         }
 

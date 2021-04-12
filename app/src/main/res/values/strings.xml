@@ -13,7 +13,7 @@
         \n order list and wait for the delivery
         \n person to deliver.
         \n \n Enter a time for how long you will
-        \n make the delivery quotation available to the delivery workers."</string>
+        \n make the delivery quotation available\nto the delivery workers."</string>
     <string name="label_two">Simple entry of location by location service.
         \n Activate your location on the smartphone to
         \n find your location . you can also manually
@@ -49,7 +49,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="skip">SKIP</string>
+    <string name="skip">Skip</string>
     <string name="welcome_to">Welcome to</string>
     <string name="who_bring_me">Who Bring Me</string>
     <string name="enter_mobile_number">Enter Mobile Number</string>

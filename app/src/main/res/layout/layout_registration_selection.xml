@@ -68,7 +68,7 @@
                     android:id="@+id/clientImage"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_150sdp"
-                    android:src="@drawable/client_unselect"
+                    android:src="@drawable/client_select"
                     tools:ignore="ContentDescription" />
 
                 <TextView

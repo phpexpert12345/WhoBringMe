@@ -27,7 +27,10 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         setList()
         jobViewBinding = historyBinding.bottomHistryLayout
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
+        mBottomSheetFilter.isDraggable = false
         mBottomSheetFilter.peekHeight = 0
+
+
         return historyBinding.root
     }
 
@@ -44,9 +47,10 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
 
     override fun onClick() {
         mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
-
+        historyBinding.blurView.visibility = View.VISIBLE
         jobViewBinding.closeView.setOnClickListener {
             mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
+            historyBinding.blurView.visibility = View.GONE
         }
     }
 }
