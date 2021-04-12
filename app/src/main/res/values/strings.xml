@@ -111,5 +111,14 @@
     <string name="job_description">Job Description</string>
     <string name="write_a_review">Write a Review</string>
     <string name="otp_verification">OTP Verification</string>
+    <string name="we_will_send_you_an">We will send you an</string>
+    <string name="one_time_password">One Time Password</string>
+    <string name="on_this_mobile_number">on this mobile number</string>
+    <string name="get_otp">Get Otp</string>
+    <string name="we_ve_sent_an_otp_to">We\'ve sent an OTP to</string>
+    <string name="_91_9896632121">+91 9896632121</string>
+    <string name="resend_otp">RESEND OTP</string>
+    <string name="create_new_password">Create New Password</string>
+    <string name="save_amp_continue"><![CDATA[Save & Continue]]></string>
 
 </resources>
