@@ -108,7 +108,6 @@
     <string name="no_notification_yet">No Notification Yet</string>
     <string name="order">Order#</string>
     <string name="job_code">Job Code :</string>
-    <string name="job_description">Job Description</string>
     <string name="write_a_review">Write a Review</string>
     <string name="otp_verification">OTP Verification</string>
     <string name="we_will_send_you_an">We will send you an</string>
@@ -120,5 +119,7 @@
     <string name="resend_otp">RESEND OTP</string>
     <string name="create_new_password">Create New Password</string>
     <string name="save_amp_continue"><![CDATA[Save & Continue]]></string>
+    <string name="history">History</string>
+    <string name="no_history_yet">No History Yet</string>
 
 </resources>

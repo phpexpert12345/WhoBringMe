@@ -5,7 +5,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:background="@drawable/top_shadow_background"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:layout_height="@dimen/_360sdp">
 
         <RelativeLayout
             android:id="@+id/headerLayout"
@@ -33,6 +35,7 @@
                 tools:ignore="HardcodedText" />
 
             <ImageView
+                android:id="@+id/closeView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/cancel"
@@ -51,7 +54,7 @@
             android:layout_below="@+id/headerLayout"/>
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_above="@id/proceedButton"
             android:layout_below="@+id/headerView"
             android:layout_marginTop="@dimen/_10sdp"

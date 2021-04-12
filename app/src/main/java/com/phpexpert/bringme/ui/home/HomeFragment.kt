@@ -8,6 +8,7 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.activities.CreateJobActivity
 import com.phpexpert.bringme.databinding.FragmentHomeBinding
@@ -26,6 +27,7 @@ class HomeFragment : Fragment() {
         window.statusBarColor = resources.getColor(R.color.colorLoginButton)
         setObserver()
         setActions()
+        setList()
         return homeFragmentBinding.root
     }
 
@@ -33,6 +35,17 @@ class HomeFragment : Fragment() {
         homeFragmentBinding.addJobButton.setOnClickListener {
             startActivity(Intent(requireActivity(), CreateJobActivity::class.java))
         }
+    }
+
+    private fun setList(){
+        homeFragmentBinding.homeRv.layoutManager = LinearLayoutManager(requireActivity())
+        homeFragmentBinding.homeRv.isNestedScrollingEnabled = false
+        val arrayList = ArrayList<String>()
+        arrayList.add("abc")
+        arrayList.add("abc")
+        arrayList.add("abc")
+        arrayList.add("abc")
+        homeFragmentBinding.homeRv.adapter = HomeFragmentAdapter(requireActivity(), arrayList)
     }
 
     private fun setObserver() {

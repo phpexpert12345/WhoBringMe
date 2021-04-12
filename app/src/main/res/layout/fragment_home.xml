@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,6 +11,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/backgroundColor"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -56,8 +56,10 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/noDataFoundLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <ImageView
@@ -135,6 +137,21 @@
                     android:textColor="@color/color_text_grey"
                     android:textSize="@dimen/_13sdp" />
             </LinearLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/homeRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
+            </androidx.core.widget.NestedScrollView>
         </LinearLayout>
 
         <ImageView
@@ -143,7 +160,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/_70sdp"
             android:src="@drawable/add_job_ic"
             tools:ignore="ContentDescription" />
 
