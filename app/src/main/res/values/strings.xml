@@ -106,5 +106,10 @@
     <string name="update_profile">Update Profile</string>
     <string name="notification">Notification</string>
     <string name="no_notification_yet">No Notification Yet</string>
+    <string name="order">Order#</string>
+    <string name="job_code">Job Code :</string>
+    <string name="job_description">Job Description</string>
+    <string name="write_a_review">Write a Review</string>
+    <string name="otp_verification">OTP Verification</string>
 
 </resources>
