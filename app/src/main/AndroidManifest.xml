@@ -14,27 +14,27 @@
         android:theme="@style/Theme.BringMe"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activities.RegistrationActivity"
+            android:name=".activities.employee.RegistrationActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
-            android:name=".activities.OTPActivity"
+            android:name=".activities.employee.OTPActivity"
             android:label="@string/title_activity_o_t_p"
             android:theme="@style/Theme.BringMe.NoActionBar" />
 
         <activity
-            android:name=".activities.PhoneVarificationActivity"
+            android:name=".activities.employee.PhoneVarificationActivity"
             android:label="@string/title_activity_phone_varification" />
 
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".activities.employee.LoginActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
 
         <activity
-            android:name=".activities.SwipeViewActivity"
+            android:name=".activities.employee.SwipeViewActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
 
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".activities.employee.SplashActivity"
             android:theme="@style/Theme.BringMe.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.DashboardActivity"
+            android:name=".activities.employee.DashboardActivity"
             android:label="@string/app_name" />
 
         <meta-data
@@ -68,19 +68,19 @@
         </activity>
 
         <activity
-            android:name=".activities.CreateJobActivity"
+            android:name=".activities.employee.CreateJobActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
-            android:name=".activities.RegistrationSelectionActivity"
+            android:name=".activities.employee.RegistrationSelectionActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
-            android:name=".activities.PaymentActivity"
+            android:name=".activities.employee.PaymentActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
-            android:name=".activities.CongratulationScreen"
+            android:name=".activities.employee.CongratulationScreen"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
-            android:name=".activities.ProfileEditActivity"
+            android:name=".activities.employee.ProfileEditActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
     </application>
 

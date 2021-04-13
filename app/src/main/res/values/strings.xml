@@ -121,5 +121,8 @@
     <string name="save_amp_continue"><![CDATA[Save & Continue]]></string>
     <string name="history">History</string>
     <string name="no_history_yet">No History Yet</string>
+    <string name="latest_jobs">Latest Jobs</string>
+    <string name="running_orders">Running Orders</string>
+    <string name="total_amount">Total Amount</string>
 
 </resources>
