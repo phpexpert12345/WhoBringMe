@@ -17,11 +17,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_20sdp"
-        android:fontFamily="@font/poppins_medium"
+        android:fontFamily="@font/poppins_semi_bold"
         android:text="@string/title_2"
         android:textAlignment="center"
         android:textColor="@color/text_color"
-        android:textSize="@dimen/_13sdp" />
+        android:textSize="@dimen/_14sdp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -31,5 +31,5 @@
         android:text="@string/label_two"
         android:textAlignment="center"
         android:textColor="@color/color_text_grey"
-        android:textSize="@dimen/_11sdp" />
+        android:textSize="@dimen/_12sdp" />
 </LinearLayout>

@@ -3,6 +3,8 @@ package com.phpexpert.bringme.activities.employee
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.phpexpert.bringme.R
@@ -16,6 +18,8 @@ class RegistrationSelectionActivity : BaseActivity() {
     private var selectionString: String = "client"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val w: Window = window
+        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         registrationSelectionBinding = DataBindingUtil.setContentView(this, R.layout.layout_registration_selection)
         setActions()
     }
@@ -61,5 +65,7 @@ class RegistrationSelectionActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         registrationSelectionBinding.nextButton.revertAnimation()
+        val window: Window = window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 }

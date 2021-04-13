@@ -5,8 +5,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/backgroundColor"
         android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
         tools:context=".activities.employee.RegistrationActivity">
 
         <RelativeLayout
@@ -51,7 +51,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@string/registration"
+                        android:text="@string/create_account"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_15sdp"
                         android:textStyle="bold" />
@@ -59,10 +59,16 @@
                 </RelativeLayout>
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="center_vertical"
+                android:layout_centerVertical="true"
                 android:orientation="horizontal">
 
                 <TextView
@@ -79,27 +85,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/poppins_medium"
                     android:text="Delivery Employee"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_11sdp"
                     tools:ignore="HardcodedText" />
 
+            </LinearLayout>
                 <ImageView
                     android:id="@+id/editData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/edit"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="@dimen/_minus20sdp"
+                    android:layout_marginEnd="@dimen/_minus18sdp"
                     tools:ignore="ContentDescription" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_minus5sdp"
-                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:orientation="vertical">
 
 
@@ -115,10 +126,13 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="@string/first_name"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_light"
                         android:textSize="@dimen/_12sdp"
-                        app:boxBackgroundColor="@android:color/transparent" />
+                        app:boxBackgroundColor="@android:color/transparent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,10 +148,13 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="@string/last_name"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_light"
                         android:textSize="@dimen/_12sdp"
-                        app:boxBackgroundColor="@android:color/transparent" />
+                        app:boxBackgroundColor="@android:color/transparent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <RelativeLayout
@@ -152,11 +169,11 @@
                         android:id="@+id/search_county_country"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_minus6sdp"
                         android:textSize="@dimen/_12sdp"
                         android:textStyle="bold"
-                        android:layout_marginStart="@dimen/_6sdp"
-                        android:layout_centerVertical="true"
                         app:ccpDialog_allowSearch="true"
                         app:ccpDialog_showCloseIcon="true"
                         app:ccp_autoDetectCountry="true"
@@ -174,7 +191,6 @@
                             android:id="@+id/mobileNumberEditText"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:paddingStart="@dimen/_75sdp"
                             android:layout_weight="4"
                             android:background="@android:color/transparent"
                             android:digits="0123456789"
@@ -183,11 +199,13 @@
                             android:imeOptions="actionDone"
                             android:inputType="number"
                             android:maxLength="10"
+                            android:paddingStart="@dimen/_65sdp"
+                            android:paddingLeft="@dimen/_65sdp"
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/text_color_light"
                             android:textSize="@dimen/_12sdp"
                             app:boxBackgroundColor="@android:color/transparent"
-                            tools:ignore="RtlSymmetry" />
+                            tools:ignore="RtlHardcoded,RtlSymmetry" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -196,7 +214,6 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:layout_margin="@dimen/_5sdp">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -207,10 +224,13 @@
                         android:fontFamily="@font/poppins_regular"
                         android:hint="@string/email_id"
                         android:inputType="textEmailAddress"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_light"
                         android:textSize="@dimen/_12sdp"
-                        app:boxBackgroundColor="@android:color/transparent" />
+                        app:boxBackgroundColor="@android:color/transparent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <RelativeLayout
@@ -227,14 +247,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
+                            android:digits="0123456789"
                             android:fontFamily="@font/poppins_regular"
                             android:hint="@string/_6_digit_mpin_number"
                             android:inputType="numberPassword"
-                            android:digits="0123456789"
+                            android:paddingStart="0dp"
+                            android:paddingLeft="0dp"
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/text_color_light"
                             android:textSize="@dimen/_12sdp"
-                            app:boxBackgroundColor="@android:color/transparent" />
+                            app:boxBackgroundColor="@android:color/transparent"
+                            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -258,17 +281,17 @@
                 android:background="@drawable/button_rectangle_green"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/submit"
-                app:spinning_bar_color="@color/colorGreen"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_11sdp"
+                app:spinning_bar_color="@color/colorGreen" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="@string/by_continuing_you_agree_that_you_have_read_and_accept_our_t_amp_cs_and_privacy_policy"
                 android:textColor="@color/text_color_dark"

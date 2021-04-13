@@ -124,5 +124,7 @@
     <string name="latest_jobs">Latest Jobs</string>
     <string name="running_orders">Running Orders</string>
     <string name="total_amount">Total Amount</string>
+    <string name="it_is_a_long_established_fact_that_a_reader_will_be_n_distracted_by_the_readable_content_of_a_page_n_when_looking_at_its_layout">It is a long established fact that a reader will be\n distracted by the readable content of a page\n when looking at its layout.</string>
+    <string name="write_reviews">Write Reviews</string>
 
 </resources>

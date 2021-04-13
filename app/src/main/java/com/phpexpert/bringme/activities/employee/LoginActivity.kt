@@ -3,6 +3,8 @@ package com.phpexpert.bringme.activities.employee
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.text.method.PasswordTransformationMethod
+import android.text.method.TransformationMethod
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -24,6 +26,8 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var forgotPasswordThreeBehavior: BottomSheetBehavior<View>
     private lateinit var forgotPasswordThreeBinding: LayoutForgotPasswordThreeBinding
+
+    private var passwordVisible: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +87,18 @@ class LoginActivity : AppCompatActivity() {
         forgotPasswordTwoBinding.closeIcon.setOnClickListener {
             forgotPasswordTwoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             loginBinding.forgotPasswordView.visibility = View.GONE
+        }
+
+        loginBinding.eyeIcon.setOnClickListener {
+            if (passwordVisible) {
+                loginBinding.eyeIcon.setImageResource(R.drawable.eye_close)
+                passwordVisible = false
+                loginBinding.passwordET.transformationMethod = PasswordTransformationMethod()
+            } else {
+                loginBinding.eyeIcon.setImageResource(R.drawable.eye_open)
+                passwordVisible = true
+                loginBinding.passwordET.transformationMethod = null
+            }
         }
     }
 

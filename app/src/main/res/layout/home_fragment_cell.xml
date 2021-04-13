@@ -1,146 +1,301 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/_15sdp"
-        android:background="@color/backgroundColor">
+        android:layout_marginBottom="@dimen/_minus20sdp"
+        app:cardElevation="@dimen/_10sdp"
+        app:cardUseCompatPadding="true">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:background="@drawable/job_amount_bg"
-            android:paddingStart="@dimen/_10sdp"
-            android:paddingEnd="@dimen/_10sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:fontFamily="@font/poppins_regular"
-                android:text="@string/job_total_amount"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_9sdp" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal"
-                tools:ignore="RelativeOverlap">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_10sdp"
+                android:orientation="vertical">
 
-                <TextView
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        tools:ignore="RelativeOverlap">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="@string/order"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="@dimen/_11sdp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="GHDFGER5637289"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_11sdp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/euro"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="300"
+                            android:textColor="@color/colorGreen"
+                            android:textSize="@dimen/_13sdp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="50"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_15sdp"
-                    tools:ignore="HardcodedText" />
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@string/job_code"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/_11sdp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text=" 537367"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_11sdp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_36sdp"
+                        android:layout_toLeftOf="@+id/csImage"
+                        android:orientation="vertical"
+                        tools:ignore="RelativeOverlap,RtlHardcoded">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="@string/job_description"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_11sdp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="Reference site about Lorem Ipsum, giving information on its origins"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="@dimen/_7sdp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/csImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/cs"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_3sdp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:text="@string/euro"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_7sdp" />
+                    android:layout_marginTop="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/grey_rounded_rectangle"
+                        android:fontFamily="@font/poppins_medium"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_5sdp"
+                        android:text="Waiting"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_8sdp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@string/write_a_review"
+                        android:visibility="gone"
+                        android:textColor="@color/colorGreen"
+                        android:textSize="@dimen/_8sdp"
+                        tools:ignore="RelativeOverlap" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="When you want to get the product"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="@dimen/_7sdp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="20"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_11sdp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_3sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Mint"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_7sdp"
+                            tools:ignore="HardcodedText" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/viewJobImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/view"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
             </LinearLayout>
-        </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:background="@drawable/job_time_bg"
-            android:paddingStart="@dimen/_10sdp"
-            android:paddingEnd="@dimen/_10sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:fontFamily="@font/poppins_regular"
-                android:text="@string/how_long_you_want_offer_this_job"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_9sdp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/view_color"
+                android:paddingStart="@dimen/_minus10sdp"
+                android:paddingEnd="@dimen/_minus10sdp" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal"
-                tools:ignore="RelativeOverlap">
+                android:layout_margin="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/userImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/mask_group"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_toEndOf="@+id/userImage"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="Eric. T. Trim"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_13sdp"
+                        tools:ignore="HardcodedText" />
+
+                    <RatingBar
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:numStars="5"
+                        android:progressTint="@color/yellow"
+                        android:rating="4" />
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="20"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_15sdp"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/mint"
+                    android:text="@string/it_is_a_long_established_fact_that_a_reader_will_be_n_distracted_by_the_readable_content_of_a_page_n_when_looking_at_its_layout"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_7sdp" />
+                    android:textSize="@dimen/_11sdp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="22 March'21, 10:00 Am"
+                    android:textColor="@color/text_color_dark"
+                    android:textSize="@dimen/_9sdp"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:fontFamily="@font/poppins_medium"
-            android:text="@string/job_description"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/_11sdp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:fontFamily="@font/poppins_medium"
-            android:text="Lorem Ipsum is simply dummy text of the print ing and typesetting industry. Lorem Ipsum has been the industry's standard dummy"
-            android:textColor="@color/colorDarkGrey"
-            android:textSize="@dimen/_9sdp"
-            tools:ignore="HardcodedText" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:text="19 Mar'2021, Friday"
-            android:textSize="@dimen/_7sdp"
-            android:fontFamily="@font/poppins_regular"
-            android:textColor="@color/text_color_dark"
-            android:layout_gravity="end"
-            tools:ignore="HardcodedText" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:background="#ECECEC"
-            android:layout_marginTop="@dimen/_15sdp" />
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </layout>

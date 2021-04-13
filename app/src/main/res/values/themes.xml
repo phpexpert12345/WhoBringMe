@@ -19,6 +19,13 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Theme.BringMe.NoActionBarLight">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
     <style name="Theme.BringMe.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.BringMe.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

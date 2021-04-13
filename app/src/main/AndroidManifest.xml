@@ -31,11 +31,11 @@
 
         <activity
             android:name=".activities.employee.SwipeViewActivity"
-            android:theme="@style/Theme.BringMe.NoActionBar" />
+            android:theme="@style/Theme.BringMe.NoActionBarLight" />
 
         <activity
             android:name=".activities.employee.SplashActivity"
-            android:theme="@style/Theme.BringMe.NoActionBar">
+            android:theme="@style/Theme.BringMe.NoActionBarLight">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -56,6 +56,7 @@
                     app:cardElevation="@dimen/_5sdp">
 
                     <EditText
+                        android:id="@+id/otpPass1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
@@ -78,6 +79,7 @@
                     app:cardElevation="@dimen/_5sdp">
 
                     <EditText
+                        android:id="@+id/otpPass2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
@@ -100,6 +102,7 @@
                     app:cardElevation="@dimen/_5sdp">
 
                     <EditText
+                        android:id="@+id/otpPass3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
@@ -123,6 +126,7 @@
                     app:cardElevation="@dimen/_5sdp">
 
                     <EditText
+                        android:id="@+id/otpPass4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
