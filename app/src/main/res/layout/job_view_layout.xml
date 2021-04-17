@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="@dimen/_365sdp"
         android:background="@drawable/top_shadow_background"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:layout_height="@dimen/_360sdp">
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <RelativeLayout
             android:id="@+id/headerLayout"
@@ -38,10 +38,10 @@
                 android:id="@+id/closeView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/cancel"
-                android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/_10sdp"
+                android:src="@drawable/cancel"
                 tools:ignore="ContentDescription" />
         </RelativeLayout>
 
@@ -49,390 +49,296 @@
             android:id="@+id/headerView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
-            android:background="@color/view_color"
+            android:layout_below="@+id/headerLayout"
             android:layout_marginTop="@dimen/_10sdp"
-            android:layout_below="@+id/headerLayout"/>
-        <ScrollView
+            android:background="@color/view_color" />
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/proceedButton"
             android:layout_below="@+id/headerView"
             android:layout_marginTop="@dimen/_10sdp"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@string/job_post_preview"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_13sdp"
+                    tools:ignore="RelativeOverlap" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_minus15sdp"
+                    android:layout_marginEnd="@dimen/_minus18sdp"
+                    android:src="@drawable/edit"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/job_amount_bg"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="@string/job_total_amount"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_9sdp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal"
+                    tools:ignore="RelativeOverlap">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="50"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_15sdp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/euro"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_7sdp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/job_time_bg"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="@string/how_long_you_want_offer_this_job"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_9sdp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal"
+                    tools:ignore="RelativeOverlap">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="20"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_15sdp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/mint"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_7sdp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/job_description"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/_11sdp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Lorem Ipsum is simply dummy text of the print ing and typesetting industry. Lorem Ipsum has been the industry's standard dummy"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="@dimen/_9sdp"
+                tools:ignore="HardcodedText" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_17sdp"
+                android:background="@color/view_color_dark"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/payment_methods"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/_13sdp"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/paypalImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/paypal"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_toEndOf="@+id/paypalImage"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="Credit Card"
+                    android:textColor="@color/text_color_dark"
+                    android:textSize="@dimen/_13sdp"
+                    tools:ignore="HardcodedText,RelativeOverlap" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/dot_selected"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/creditCardImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/credit_card"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_11sdp"
+                    android:layout_toEndOf="@+id/creditCardImage"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@string/paypal"
+                    android:textColor="@color/text_color_dark"
+                    android:textSize="@dimen/_13sdp"
+                    tools:ignore="RelativeOverlap" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/dot_unselected"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_17sdp"
+                android:background="@color/view_color_dark"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/red_corner_bd"
+                android:fontFamily="@font/poppins_italic"
+                android:padding="@dimen/_5sdp"
+                android:text="Important Notes : Your money is safe by Who Bring Me company and never transfer to driver, before you not give him your Code."
+                android:textColor="@color/white"
+                android:textSize="@dimen/_9sdp"
+                android:visibility="gone"
+                tools:ignore="HardcodedText" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/doted_path"
+                android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:visibility="gone"
                     android:layout_marginEnd="@dimen/_10sdp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="@string/job_post_preview"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_13sdp"
-                        tools:ignore="RelativeOverlap" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="@dimen/_minus15sdp"
-                        android:layout_marginEnd="@dimen/_minus18sdp"
-                        android:src="@drawable/edit"
-                        tools:ignore="ContentDescription" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:background="@drawable/job_amount_bg"
-                    android:paddingStart="@dimen/_10sdp"
-                    android:paddingEnd="@dimen/_10sdp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:fontFamily="@font/poppins_regular"
-                        android:text="@string/job_total_amount"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_9sdp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:orientation="horizontal"
-                        tools:ignore="RelativeOverlap">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-                            android:text="50"
-                            android:textColor="@color/text_color"
-                            android:textSize="@dimen/_15sdp"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_3sdp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="@string/euro"
-                            android:textColor="@color/text_color"
-                            android:textSize="@dimen/_7sdp" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:background="@drawable/job_time_bg"
-                    android:paddingStart="@dimen/_10sdp"
-                    android:paddingEnd="@dimen/_10sdp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:fontFamily="@font/poppins_regular"
-                        android:text="@string/how_long_you_want_offer_this_job"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_9sdp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:orientation="horizontal"
-                        tools:ignore="RelativeOverlap">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-                            android:text="20"
-                            android:textColor="@color/text_color"
-                            android:textSize="@dimen/_15sdp"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_3sdp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="@string/mint"
-                            android:textColor="@color/text_color"
-                            android:textSize="@dimen/_7sdp" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="@string/job_description"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_11sdp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="Lorem Ipsum is simply dummy text of the print ing and typesetting industry. Lorem Ipsum has been the industry's standard dummy"
-                    android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/_9sdp"
-                    tools:ignore="HardcodedText" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
-                    android:layout_marginTop="@dimen/_17sdp"
-                    android:visibility="gone"
-                    android:background="@color/view_color_dark" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:visibility="gone"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="@string/payment_methods"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_13sdp" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:visibility="gone"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp">
-
-                    <ImageView
-                        android:id="@+id/paypalImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/paypal"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        android:layout_toEndOf="@+id/paypalImage"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="Credit Card"
-                        android:textColor="@color/text_color_dark"
-                        android:textSize="@dimen/_13sdp"
-                        tools:ignore="HardcodedText,RelativeOverlap" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:src="@drawable/dot_selected"
-                        tools:ignore="ContentDescription" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:visibility="gone"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp">
-
-                    <ImageView
-                        android:id="@+id/creditCardImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/credit_card"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_11sdp"
-                        android:layout_toEndOf="@+id/creditCardImage"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="@string/paypal"
-                        android:textColor="@color/text_color_dark"
-                        android:textSize="@dimen/_13sdp"
-                        tools:ignore="RelativeOverlap" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:src="@drawable/dot_unselected"
-                        tools:ignore="ContentDescription" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
-                    android:layout_marginTop="@dimen/_17sdp"
-                    android:background="@color/view_color_dark"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:background="@drawable/red_corner_bd"
-                    android:fontFamily="@font/poppins_italic"
-                    android:visibility="gone"
-                    android:padding="@dimen/_5sdp"
-                    android:text="Important Notes : Your money is safe by Who Bring Me company and never transfer to driver, before you not give him your Code."
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_9sdp"
-                    tools:ignore="HardcodedText" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:background="@drawable/doted_path"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_1sdp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="Subtotal"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="@dimen/_11sdp"
-                            tools:ignore="HardcodedText" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:orientation="horizontal"
-                            tools:ignore="UseCompoundDrawables">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/euro_currency_black"
-                                tools:ignore="ContentDescription" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="@dimen/_1sdp"
-                                android:layout_marginTop="@dimen/_1sdp"
-                                android:fontFamily="@font/poppins_regular"
-                                android:text="200"
-                                android:textColor="@color/text_color"
-                                android:textSize="@dimen/_11sdp"
-                                tools:ignore="HardcodedText" />
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_1sdp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="Charges for Job (8%)"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="@dimen/_11sdp"
-                            tools:ignore="HardcodedText" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:orientation="horizontal"
-                            tools:ignore="UseCompoundDrawables">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/euro_currency_black"
-                                tools:ignore="ContentDescription" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="@dimen/_1sdp"
-                                android:layout_marginTop="@dimen/_1sdp"
-                                android:fontFamily="@font/poppins_regular"
-                                android:text="100"
-                                android:textColor="@color/text_color"
-                                android:textSize="@dimen/_11sdp"
-                                tools:ignore="HardcodedText" />
-                        </LinearLayout>
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_10sdp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginTop="@dimen/_1sdp"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="Grand Total"
-                        android:textColor="@color/text_color"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Subtotal"
+                        android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
 
@@ -447,26 +353,117 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/euro_currency_symbol"
+                            android:src="@drawable/euro_currency_black"
                             tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginStart="@dimen/_1sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="300/-"
-
-                            android:textColor="@color/yellow"
-                            android:textSize="@dimen/_17sdp"
+                            android:text="200"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
                     </LinearLayout>
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_1sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Charges for Job (8%)"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/_11sdp"
+                        tools:ignore="HardcodedText" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/euro_currency_black"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_1sdp"
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="100"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_11sdp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
-        </ScrollView>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="Grand Total"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_11sdp"
+                    tools:ignore="HardcodedText" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/euro_currency_symbol"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_1sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="300/-"
+
+                        android:textColor="@color/yellow"
+                        android:textSize="@dimen/_17sdp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/proceedButton"
@@ -476,11 +473,11 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/button_rectangle_green"
             android:fontFamily="@font/poppins_medium"
-            app:spinning_bar_color="@color/colorGreen"
             android:inputType="textCapWords"
             android:text="@string/proceed_to_pay"
-            android:visibility="gone"
             android:textColor="@color/white"
-            android:textSize="@dimen/_11sdp" />
+            android:textSize="@dimen/_11sdp"
+            android:visibility="gone"
+            app:spinning_bar_color="@color/colorGreen" />
     </RelativeLayout>
 </layout>

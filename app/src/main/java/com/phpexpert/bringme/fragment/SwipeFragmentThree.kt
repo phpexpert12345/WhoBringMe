@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.phpexpert.bringme.R
-import com.phpexpert.bringme.activities.employee.LoginActivity
+import com.phpexpert.bringme.activities.LoginActivity
 import com.phpexpert.bringme.databinding.FragmentThreeBinding
 
 class SwipeFragmentThree : Fragment() {

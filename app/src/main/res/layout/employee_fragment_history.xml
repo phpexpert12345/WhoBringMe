@@ -84,11 +84,15 @@
             android:id="@+id/blurView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            android:background="#B3000000" />
+            android:background="#B3000000"
+            android:visibility="gone" />
 
         <include
             android:id="@+id/bottomHistryLayout"
             layout="@layout/job_view_layout" />
+
+        <include
+            android:id="@+id/reviewLayout"
+            layout="@layout/write_review_layout" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

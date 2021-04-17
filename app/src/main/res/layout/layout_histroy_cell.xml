@@ -162,6 +162,7 @@
                         tools:ignore="HardcodedText" />
 
                     <TextView
+                        android:id="@+id/writeReview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -238,6 +239,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
+                android:visibility="visible"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -289,11 +291,81 @@
                     android:layout_gravity="end"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="22 March'21, 10:00 Am"
+                    android:text="22 March'21, 10:00 AM"
                     android:textColor="@color/text_color_dark"
                     android:textSize="@dimen/_9sdp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_margin="@dimen/_10sdp">
+
+                <ImageView
+                    android:id="@+id/deliveryImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/delivery_boy"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/deliveryImageView"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jerry Thomas"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_11sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+49 8900123456"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_7sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Accepted Time"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_7sdp"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/poppins_medium"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="19 Mar'2021, Friday"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_7sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

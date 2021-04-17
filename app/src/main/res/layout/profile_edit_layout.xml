@@ -22,7 +22,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_minus10sdp"
+                android:layout_marginStart="@dimen/_minus15sdp"
                 android:layout_marginBottom="@dimen/_minus32sdp"
                 android:src="@drawable/back_arrow"
                 tools:ignore="ContentDescription" />
@@ -63,6 +63,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/updateButton"
             android:layout_below="@+id/headerLayout"
             android:layout_marginTop="@dimen/_10sdp">
 
@@ -76,7 +77,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp">
+                    android:layout_margin="@dimen/_5sdp"
+                    app:hintTextAppearance="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -84,16 +86,20 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/first_name"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
-                        app:boxBackgroundColor="@android:color/transparent" />
+                        app:boxBackgroundColor="@android:color/transparent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp">
+                    android:layout_margin="@dimen/_5sdp"
+                    app:hintTextAppearance="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -101,51 +107,63 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/last_name"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
-                        app:boxBackgroundColor="@android:color/transparent" />
+                        app:boxBackgroundColor="@android:color/transparent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp">
+                    android:layout_margin="@dimen/_5sdp"
+                    app:hintTextAppearance="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@string/email_id"
+                        android:hint="@string/email"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
-                        app:boxBackgroundColor="@android:color/transparent" />
+                        app:boxBackgroundColor="@android:color/transparent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp">
+                    android:layout_margin="@dimen/_5sdp"
+                    app:hintTextAppearance="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
+                        android:drawableEnd="@drawable/location_address"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/address"
-                        android:drawableEnd="@drawable/location_address"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
-                        app:boxBackgroundColor="@android:color/transparent" />
+                        app:boxBackgroundColor="@android:color/transparent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp">
+                    android:layout_margin="@dimen/_5sdp"
+                    app:hintTextAppearance="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -153,16 +171,20 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/state"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
-                        app:boxBackgroundColor="@android:color/transparent" />
+                        app:boxBackgroundColor="@android:color/transparent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp">
+                    android:layout_margin="@dimen/_5sdp"
+                    app:hintTextAppearance="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -170,27 +192,34 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/city"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
-                        app:boxBackgroundColor="@android:color/transparent" />
+                        app:boxBackgroundColor="@android:color/transparent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp">
+                    android:layout_margin="@dimen/_5sdp"
+                    app:hintTextAppearance="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@string/pin_code"
+                        android:hint="@string/post_code"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
-                        app:boxBackgroundColor="@android:color/transparent" />
+                        app:boxBackgroundColor="@android:color/transparent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </ScrollView>
@@ -201,12 +230,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@drawable/button_rectangle_green"
+            android:fontFamily="@font/poppins_medium"
             android:text="@string/update_profile"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            app:spinning_bar_color="@color/colorGreen"
-            android:fontFamily="@font/poppins_medium"
-            android:textSize="@dimen/_11sdp" />
+            android:textSize="@dimen/_11sdp"
+            app:spinning_bar_color="@color/colorGreen" />
 
     </RelativeLayout>
 </layout>

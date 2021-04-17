@@ -9,9 +9,9 @@ import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import com.phpexpert.bringme.R
-import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.adapters.ViewPagerAdapter
 import com.phpexpert.bringme.databinding.ActivitySwipeViewBinding
+import com.phpexpert.bringme.utilities.BaseActivity
 
 @Suppress("DEPRECATION")
 class SwipeViewActivity : BaseActivity() {
@@ -23,28 +23,25 @@ class SwipeViewActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         swipeViewBinding = DataBindingUtil.setContentView(this, R.layout.activity_swipe_view)
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.white)
+
         myAdapter = ViewPagerAdapter(supportFragmentManager)
         swipeViewBinding.viewPager.adapter = myAdapter
         setActions()
     }
 
     private fun setActions(){
-        swipeViewBinding.viewPager.addOnPageChangeListener(object :ViewPager.OnPageChangeListener{
+        swipeViewBinding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
 
             @SuppressLint("SetTextI18n")
             override fun onPageSelected(position: Int) {
-                if (position==2){
+                if (position == 2) {
                     swipeViewBinding.skip.visibility = View.GONE
-                }else{
+                } else {
                     swipeViewBinding.skip.visibility = View.VISIBLE
                 }
-                swipeViewBinding.position.text = "${position+1}/3"
+                swipeViewBinding.position.text = "${position + 1}/3"
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -68,6 +65,15 @@ class SwipeViewActivity : BaseActivity() {
         swipeViewBinding.skip.setOnClickListener {
             swipeViewBinding.viewPager.currentItem = 3
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val window: Window = window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        @Suppress("DEPRECATION")
+        window.statusBarColor = resources.getColor(R.color.white)
+
     }
     override fun onPause() {
         super.onPause()

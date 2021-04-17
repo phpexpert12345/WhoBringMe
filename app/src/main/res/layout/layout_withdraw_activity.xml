@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_170sdp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorLoginButton"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/headerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/back_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/_minus19sdp"
+                    android:src="@drawable/back_arrow"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/mask_group"
+                    tools:ignore="ContentDescription" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Request Withdraw"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11sdp"
+                    tools:ignore="HardcodedText" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:src="@drawable/euro"
+                        app:tint="@color/white"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="2100"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_15sdp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Withdraw Amount"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_19sdp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/amountTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_minus3sdp"
+            android:layout_marginTop="@dimen/_135sdp"
+            android:layout_marginEnd="@dimen/_minus3sdp"
+            android:background="@color/white"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/_10sdp"
+            app:cardElevation="@dimen/_10sdp"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp">
+
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:background="@null"
+                    android:fontFamily="@font/poppins_regular"
+                    android:inputType="numberDecimal"
+                    android:text="200"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_13sdp"
+                    tools:ignore="Autofill,HardcodedText,LabelFor" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/withdrow_amount_symbol_bg"
+                    android:paddingStart="@dimen/_20sdp"
+                    android:paddingEnd="@dimen/_20sdp"
+                    android:src="@drawable/euro_currency_symbol_large"
+                    app:tint="@color/white"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/paymentMethodsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/amountTransaction"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="@string/payment_methods_colun"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_13sdp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/paymentMethodsText"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_10sdp">
+
+            <ImageView
+                android:id="@+id/bankIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/bank_icon"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_toEndOf="@+id/bankIcon"
+                android:text="@string/bank"
+                android:textColor="@color/text_color_dark"
+                android:textSize="@dimen/_13sdp"
+                tools:ignore="RelativeOverlap" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/dot_unselected"
+                tools:ignore="ContentDescription" />
+        </RelativeLayout>
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_rectangle_green"
+            android:text="Submit Request"
+            app:spinning_bar_color="@color/colorGreen"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="@dimen/_11sdp"
+            android:fontFamily="@font/poppins_medium"
+            tools:ignore="HardcodedText" />
+    </RelativeLayout>
+</layout>

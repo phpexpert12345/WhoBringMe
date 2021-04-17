@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_190sdp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorLoginButton"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:layout_marginEnd="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:text="@string/latest_jobs"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_19sdp"
+                    tools:ignore="RelativeOverlap" />
+
+                <ImageView
+                    android:id="@+id/notificationIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/notification"
+                    tools:ignore="ContentDescription" />
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_toStartOf="@+id/notificationIcon"
+                    android:src="@drawable/loupe"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:orientation="horizontal"
+                tools:ignore="DisableBaselineAlignment">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/deliver_home_running_orders_bg"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp"
+                    tools:ignore="RtlSymmetry">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="05"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_19sdp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/delivered_orders"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_7sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/cancel_order_earning_bg"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp"
+                    tools:ignore="RtlSymmetry">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_9sdp"
+                            android:src="@drawable/euro_currency_symbol_large"
+                            android:visibility="gone"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="10"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_19sdp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/cancel_order"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_7sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/deliver_home_amount_bg"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp"
+                    tools:ignore="RtlSymmetry">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:src="@drawable/euro_currency_symbol_large"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="200"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_19sdp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/total_amount"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_7sdp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/amountTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_minus3sdp"
+            android:layout_marginTop="@dimen/_135sdp"
+            android:layout_marginEnd="@dimen/_minus3sdp"
+            android:background="@color/white"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/_10sdp"
+            app:cardElevation="@dimen/_10sdp"
+            app:cardUseCompatPadding="true">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_10sdp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:src="@drawable/euro_grey"
+                            app:tint="@color/colorLoginButton"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:text="2100"
+                            android:textColor="@color/colorLoginButton"
+                            android:textSize="@dimen/_15sdp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/total_earning"
+                        android:textColor="@color/text_color_dark"
+                        tools:ignore="RelativeOverlap" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/transactionLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/transaction_history_bg"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_7sdp"
+                        android:text="@string/transactions_history"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_9sdp" />
+
+                    <TextView
+                        android:id="@+id/withdrawLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/withdraw_request_bg"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_7sdp"
+                        android:text="@string/withdraw_request"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_9sdp" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/monthlyEarningCalender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/amountTransaction"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/monthly_earning"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/_11sdp"
+                tools:ignore="RelativeOverlap" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/left_arrow"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:fontFamily="@font/poppins_medium"
+
+                    android:text="Jan 2021"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_9sdp"
+                    tools:ignore="HardcodedText" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:src="@drawable/right_arrow"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_below="@+id/monthlyEarningCalender">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/earningRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
+</layout>

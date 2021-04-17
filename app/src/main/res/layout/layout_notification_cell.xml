@@ -36,7 +36,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_15sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="10:00 Am to 12:00 PM"
+                    android:text="10:00 AM to 12:00 PM"
                     android:textColor="@color/text_color_dark"
                     android:textSize="@dimen/_13sdp"
                     tools:ignore="HardcodedText" />

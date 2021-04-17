@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/backgroundColor"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/headerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLoginButton"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/back_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="-20dp"
+                    android:src="@drawable/back_arrow"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_23sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/filter"
+                    android:visibility="gone"
+                    tools:ignore="ContentDescription" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/back_arrow"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="-20dp"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    android:background="@color/colorLoginButton"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="@string/document_upload"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_19sdp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Country/Region of Issue"
+                android:textColor="@color/colorDarkGrey"
+                tools:ignore="HardcodedText" />
+
+            <com.hbb20.CountryCodePicker
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                app:ccpDialog_textColor="@color/text_color"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_contentColor="@color/text_color"
+                app:ccp_showFullName="true"
+                app:ccp_showNameCode="false"
+                app:ccp_showPhoneCode="false"
+                app:ccp_textGravity="LEFT"
+                app:ccp_textSize="@dimen/_11sdp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="#D8D8D8" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Select Document Type"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/_13sdp"
+                tools:ignore="HardcodedText" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/id_unselct_bg">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:src="@drawable/id_card_unselect"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="ID Card"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/_13sdp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/checked"
+                    android:visibility="gone"
+                    tools:ignore="ContentDescription" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/id_unselct_bg">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/passport_unselect"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Passport"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/_13sdp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/checked"
+                    android:visibility="gone"
+                    tools:ignore="ContentDescription" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/id_unselct_bg">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/passport_unselect"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Driver's License"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/_13sdp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/checked"
+                    android:visibility="gone"
+                    tools:ignore="ContentDescription" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/continueButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_rectangle_green"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Continue"
+            android:layout_centerVertical="true"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_11sdp"
+            app:spinning_bar_color="@color/colorGreen"
+            tools:ignore="HardcodedText" />
+    </RelativeLayout>
+</layout>

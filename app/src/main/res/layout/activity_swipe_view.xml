@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context=".activities.employee.SwipeViewActivity">
 
         <RelativeLayout
+            android:id="@+id/headerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
@@ -41,28 +42,36 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="match_parent"
+            android:layout_below="@+id/headerLayout" />
 
         <RelativeLayout
+            android:id="@+id/footerLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="end"
-            android:layout_weight=".15"
-            android:background="@drawable/bg_onboarding">
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_minus2sdp"
+                android:scaleType="fitXY"
+                android:src="@drawable/bg_onboarding"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/skip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_50sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
-                android:fontFamily="@font/poppins_medium"
+                android:fontFamily="@font/poppins_semi_bold"
                 android:text="@string/skip"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="@dimen/_15sdp"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_12sdp"
+                tools:ignore="RelativeOverlap" />
+
         </RelativeLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </layout>

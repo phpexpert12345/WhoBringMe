@@ -30,6 +30,7 @@ class NotificationsFragment : Fragment() {
         arrayList.add("abc")
         arrayList.add("abc")
         arrayList.add("abc")
+        arrayList.add("abc")
         notificationBinding.notificationRV.adapter = NotificationAdapter(requireActivity(), arrayList)
     }
 }

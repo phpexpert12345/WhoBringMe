@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.phpexpert.bringme.R;
+import com.phpexpert.bringme.activities.OTPActivity;
 
 public class PhoneVarificationActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class PhoneVarificationActivity extends AppCompatActivity {
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PhoneVarificationActivity.this,OTPActivity.class));
+                startActivity(new Intent(PhoneVarificationActivity.this, OTPActivity.class));
             }
         });
     }

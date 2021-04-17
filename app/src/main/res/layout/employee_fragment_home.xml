@@ -2,166 +2,184 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ui.employee.home.HomeFragment">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/backgroundColor"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorLoginButton"
-                android:padding="@dimen/_10sdp">
-
-                <TextView
-                    android:id="@+id/lebel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:text="@string/who_bring_me"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_19sdp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/lebel"
-                    android:paddingTop="@dimen/_10sdp"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/location"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:text="Noida, Sector 63, Uttar Pradesh"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_9sdp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </RelativeLayout>
+            android:orientation="vertical"
+            tools:context=".ui.employee.home.HomeFragment">
 
             <LinearLayout
-                android:id="@+id/noDataFoundLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:layout_height="match_parent"
+                android:background="@color/backgroundColor"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_50sdp"
-                    android:src="@drawable/no_job"
-                    tools:ignore="ContentDescription" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:text="@string/there_are_no_job"
-                    android:textColor="@color/color_text_grey"
-                    android:textSize="@dimen/_13sdp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:background="@color/colorLoginButton"
+                    android:padding="@dimen/_10sdp">
 
                     <TextView
+                        android:id="@+id/lebel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:fontFamily="@font/poppins_regular"
-                        android:text="@string/please_click_this"
-                        android:textColor="@color/color_text_grey"
-                        android:textSize="@dimen/_13sdp" />
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="@string/who_bring_me"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_19sdp" />
 
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_5sdp">
+                        android:layout_below="@id/lebel"
+                        android:paddingTop="@dimen/_10sdp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/grey_circle"
+                            android:src="@drawable/location"
                             tools:ignore="ContentDescription" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:text="+"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Noida, Sector 63, Uttar Pradesh"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_9sdp"
                             tools:ignore="HardcodedText" />
-                    </RelativeLayout>
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/noDataFoundLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/_50sdp"
+                        android:src="@drawable/no_job"
+                        tools:ignore="ContentDescription" />
+
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/there_are_no_job"
+                        android:textColor="@color/color_text_grey"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="@string/please_click_this"
+                            android:textColor="@color/color_text_grey"
+                            android:textSize="@dimen/_13sdp" />
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_5sdp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/grey_circle"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:text="+"
+                                tools:ignore="HardcodedText" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="@string/icon_and"
+                            android:textColor="@color/color_text_grey"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/icon_and"
+                        android:text="@string/post_a_job"
                         android:textColor="@color/color_text_grey"
                         android:textSize="@dimen/_13sdp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:text="@string/post_a_job"
-                    android:textColor="@color/color_text_grey"
-                    android:textSize="@dimen/_13sdp" />
-            </LinearLayout>
-
-            <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <RelativeLayout
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/scrollableBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/homeRv"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </RelativeLayout>
-            </androidx.core.widget.NestedScrollView>
-        </LinearLayout>
+                        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/addJobButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:src="@drawable/add_job_ic"
-            tools:ignore="ContentDescription" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/homeRv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                </androidx.core.widget.NestedScrollView>
+            </LinearLayout>
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/addJobButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/add_job_ic"
+                tools:ignore="ContentDescription" />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/blurView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#B3000000"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/bottomHistryLayout"
+            layout="@layout/job_view_layout" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -72,7 +72,8 @@
                     android:id="@+id/countyCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    app:ccp_contentColor="@color/text_color"
+                    app:ccpDialog_textColor="@color/text_color"
                     app:ccpDialog_allowSearch="true"
                     app:ccpDialog_showCloseIcon="true"
                     app:ccp_autoDetectCountry="true"
@@ -227,16 +228,16 @@
         <include
             android:id="@+id/forPasswordOne"
             layout="@layout/layout_forgot_password_one"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <include
             android:id="@+id/forgotPasswordTwo"
             layout="@layout/layout_forgot_password_two"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <include
             android:id="@+id/forgotPasswordThree"
             layout="@layout/layout_forgot_password_three"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

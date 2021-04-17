@@ -7,17 +7,17 @@
     <application
         android:allowBackup="true"
         android:allowClearUserData="true"
-        android:icon="@drawable/login_logo"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/login_logo"
+        android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.BringMe"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activities.employee.RegistrationActivity"
+            android:name=".activities.RegistrationActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
-            android:name=".activities.employee.OTPActivity"
+            android:name=".activities.OTPActivity"
             android:label="@string/title_activity_o_t_p"
             android:theme="@style/Theme.BringMe.NoActionBar" />
 
@@ -26,7 +26,7 @@
             android:label="@string/title_activity_phone_varification" />
 
         <activity
-            android:name=".activities.employee.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
 
         <activity
@@ -34,8 +34,8 @@
             android:theme="@style/Theme.BringMe.NoActionBarLight" />
 
         <activity
-            android:name=".activities.employee.SplashActivity"
-            android:theme="@style/Theme.BringMe.NoActionBarLight">
+            android:name=".activities.SplashActivity"
+            android:theme="@style/CustomTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,6 +44,10 @@
         </activity>
         <activity
             android:name=".activities.employee.DashboardActivity"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".activities.delivery.DashboardActivity"
             android:label="@string/app_name" />
 
         <meta-data
@@ -71,8 +75,8 @@
             android:name=".activities.employee.CreateJobActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
-            android:name=".activities.employee.RegistrationSelectionActivity"
-            android:theme="@style/Theme.BringMe.NoActionBar" />
+            android:name=".activities.RegistrationSelectionActivity"
+            android:theme="@style/Theme.BringMe.NoActionBarn" />
         <activity
             android:name=".activities.employee.PaymentActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
@@ -81,6 +85,24 @@
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.employee.ProfileEditActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
+        <activity
+            android:name=".activities.employee.NewCardActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
+
+        <activity
+            android:name=".activities.delivery.TransactionActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
+
+        <activity
+            android:name=".activities.delivery.WithdrawActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
+
+        <activity
+            android:name=".activities.delivery.UploadDocumentSelectActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
+        <activity
+            android:name=".activities.delivery.DocumentUploadActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
     </application>
 

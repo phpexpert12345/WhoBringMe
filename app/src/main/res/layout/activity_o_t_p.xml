@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/box_inset_layout_padding"
-        tools:context=".activities.employee.OTPActivity">
+        tools:context=".activities.OTPActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -15,19 +15,21 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/back_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_minus10sdp"
+                android:layout_marginStart="@dimen/_minus12sdp"
                 android:src="@drawable/back_arrow"
                 tools:ignore="ContentDescription" />
 
 
             <TextView
+                android:id="@+id/headerText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/please_wait_we_will_auto_verify_nthe_otp_sent_to_917838939694"
+                android:text="@string/please_wait_we_will_auto_verify_nthe_otp_sent_to"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_15sdp" />
 
@@ -42,17 +44,17 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15sdp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="@dimen/_40sdp"
                     android:layout_height="@dimen/_45sdp"
-                    app:cardCornerRadius="@dimen/_10sdp"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
+                    app:cardCornerRadius="@dimen/_10sdp"
                     app:cardElevation="@dimen/_5sdp">
 
                     <EditText
@@ -61,9 +63,9 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:fontFamily="@font/poppins_medium"
+                        android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
-                        android:gravity="center"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="Autofill,LabelFor" />
@@ -73,9 +75,9 @@
                     android:layout_width="@dimen/_40sdp"
                     android:layout_height="@dimen/_45sdp"
                     android:layout_marginStart="@dimen/_12sdp"
-                    app:cardCornerRadius="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
+                    app:cardCornerRadius="@dimen/_10sdp"
                     app:cardElevation="@dimen/_5sdp">
 
                     <EditText
@@ -84,12 +86,12 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:fontFamily="@font/poppins_medium"
+                        android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
-                        android:gravity="center"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
-                        tools:ignore="Autofill,LabelFor"/>
+                        tools:ignore="Autofill,LabelFor" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -107,12 +109,12 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:fontFamily="@font/poppins_medium"
+                        android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
-                        android:gravity="center"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
-                        tools:ignore="Autofill,LabelFor"/>
+                        tools:ignore="Autofill,LabelFor" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -131,46 +133,50 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:fontFamily="@font/poppins_medium"
+                        android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_15sdp"
-                        android:gravity="center"
-                        tools:ignore="Autofill,LabelFor"/>
+                        android:textSize="@dimen/_11sdp"
+                        tools:ignore="Autofill,LabelFor" />
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
             <TextView
+                android:id="@+id/timeText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_12sdp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="@string/auto_verifying_your_otp_in_00_12"
                 android:textAlignment="center"
-                android:layout_marginTop="@dimen/_12sdp"
                 android:textColor="@color/colorGrey"
                 android:textSize="@dimen/_9sdp"
                 android:textStyle="bold" />
 
             <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                 android:id="@+id/btn_verify"
-                android:layout_width="@dimen/_180sdp"
+                android:layout_width="@dimen/_150sdp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:background="@drawable/button_shape_gray"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/verify"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_11sdp"
-                app:spinning_bar_color="@color/colorGrey" />
+                app:spinning_bar_color="@color/colorGreen" />
 
             <LinearLayout
+                android:id="@+id/resendLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:visibility="gone"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 

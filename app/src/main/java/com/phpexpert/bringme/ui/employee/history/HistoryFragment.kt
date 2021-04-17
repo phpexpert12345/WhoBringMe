@@ -12,12 +12,16 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.EmployeeFragmentHistoryBinding
 import com.phpexpert.bringme.databinding.JobViewLayoutBinding
+import com.phpexpert.bringme.databinding.WriteReviewLayoutBinding
 
 class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
     private var dashboardViewModel: DashboardViewModel? = null
     private lateinit var historyBinding: EmployeeFragmentHistoryBinding
     private lateinit var mBottomSheetFilter: BottomSheetBehavior<View>
-    private lateinit var jobViewBinding:JobViewLayoutBinding
+    private lateinit var jobViewBinding: JobViewLayoutBinding
+
+    private lateinit var mBottomSheetReview: BottomSheetBehavior<View>
+    private lateinit var reviewBinding: WriteReviewLayoutBinding
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -30,6 +34,10 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         mBottomSheetFilter.isDraggable = false
         mBottomSheetFilter.peekHeight = 0
 
+        reviewBinding = historyBinding.reviewLayout
+        mBottomSheetReview = BottomSheetBehavior.from(reviewBinding.root)
+        mBottomSheetReview.isDraggable = false
+        mBottomSheetReview.peekHeight = 0
 
         return historyBinding.root
     }
@@ -45,12 +53,24 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         historyBinding.historyRV.adapter = HistoryFragmentAdapter(requireActivity(), arrayList, this)
     }
 
-    override fun onClick() {
-        mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
-        historyBinding.blurView.visibility = View.VISIBLE
-        jobViewBinding.closeView.setOnClickListener {
-            mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
-            historyBinding.blurView.visibility = View.GONE
+    override fun onClick(textInput: String) {
+        when (textInput) {
+            "viewData" -> {
+                mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
+                historyBinding.blurView.visibility = View.VISIBLE
+                jobViewBinding.closeView.setOnClickListener {
+                    mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
+                    historyBinding.blurView.visibility = View.GONE
+                }
+            }
+            else -> {
+                mBottomSheetReview.state = BottomSheetBehavior.STATE_EXPANDED
+                historyBinding.blurView.visibility = View.VISIBLE
+                reviewBinding.closeIcon.setOnClickListener {
+                    mBottomSheetReview.state = BottomSheetBehavior.STATE_COLLAPSED
+                    historyBinding.blurView.visibility = View.GONE
+                }
+            }
         }
     }
 }

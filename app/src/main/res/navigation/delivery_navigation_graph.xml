@@ -2,7 +2,29 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/delivery_navigation_graph">
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
 
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.phpexpert.bringme.ui.delivery.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/delivery_fragment_home" />
 
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.phpexpert.bringme.ui.delivery.myjob.MyJobFragment"
+        android:label="@string/title_history"
+        tools:layout="@layout/fragment_my_job" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.phpexpert.bringme.ui.delivery.myjob.EarningFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_earning" />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.phpexpert.bringme.ui.delivery.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/delivery_profile_fragment" />
 </navigation>

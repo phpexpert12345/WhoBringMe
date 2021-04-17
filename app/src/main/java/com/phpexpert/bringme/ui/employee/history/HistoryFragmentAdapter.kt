@@ -14,7 +14,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Stri
     private lateinit var historyFragmentCellBinding: LayoutHistroyCellBinding
 
     interface OnClickView{
-        fun onClick()
+        fun onClick(textInput:String)
     }
 
     inner class HistoryFragmentViewHolder(var viewBinding: ViewDataBinding) : RecyclerView.ViewHolder(viewBinding.root)
@@ -26,7 +26,11 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Stri
     override fun onBindViewHolder(holder: HistoryFragmentViewHolder, position: Int) {
         historyFragmentCellBinding = holder.viewBinding as LayoutHistroyCellBinding
         historyFragmentCellBinding.viewJobImageView.setOnClickListener {
-            onClickListener.onClick()
+            onClickListener.onClick("viewData")
+        }
+
+        historyFragmentCellBinding.writeReview.setOnClickListener {
+            onClickListener.onClick("writeReview")
         }
     }
 

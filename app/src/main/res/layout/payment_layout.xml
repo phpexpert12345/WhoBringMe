@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,6 +15,7 @@
 
 
             <ImageView
+                android:id="@+id/backIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_minus10sdp"
@@ -61,6 +62,7 @@
                         tools:ignore="RelativeOverlap" />
 
                     <ImageView
+                        android:id="@+id/editIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -187,7 +189,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
+                    android:layout_height="@dimen/_3sdp"
                     android:layout_marginTop="@dimen/_17sdp"
                     android:background="@color/view_color_dark" />
 
@@ -195,7 +197,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_17sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_medium"
                     android:text="@string/payment_methods"
@@ -223,12 +225,13 @@
                         android:layout_marginStart="@dimen/_15sdp"
                         android:layout_toEndOf="@+id/paypalImage"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Credit Card"
+                        android:text="PayPal"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_13sdp"
                         tools:ignore="HardcodedText,RelativeOverlap" />
 
                     <ImageView
+                        android:id="@+id/payPalSelection"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -257,12 +260,13 @@
                         android:layout_marginStart="@dimen/_11sdp"
                         android:layout_toEndOf="@+id/creditCardImage"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@string/paypal"
+                        android:text="Credit Card"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_13sdp"
-                        tools:ignore="RelativeOverlap" />
+                        tools:ignore="HardcodedText,RelativeOverlap" />
 
                     <ImageView
+                        android:id="@+id/creditCardSelection"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -272,7 +276,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
+                    android:layout_height="@dimen/_3sdp"
                     android:layout_marginTop="@dimen/_17sdp"
                     android:background="@color/view_color_dark" />
 
@@ -290,7 +294,7 @@
                     android:textSize="@dimen/_9sdp"
                     tools:ignore="HardcodedText" />
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
@@ -300,11 +304,11 @@
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -316,10 +320,28 @@
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:text="Charges for Job (8%)"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="@dimen/_11sdp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/_10sdp">
+
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
                             android:orientation="horizontal"
                             tools:ignore="UseCompoundDrawables">
 
@@ -342,30 +364,11 @@
                                 android:textSize="@dimen/_11sdp"
                                 tools:ignore="HardcodedText" />
                         </LinearLayout>
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_1sdp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="Charges for Job (8%)"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="@dimen/_11sdp"
-                            tools:ignore="HardcodedText" />
-
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
                             android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/_10sdp"
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
@@ -387,8 +390,9 @@
                                 android:textSize="@dimen/_11sdp"
                                 tools:ignore="HardcodedText" />
                         </LinearLayout>
-                    </RelativeLayout>
-                </LinearLayout>
+                    </LinearLayout>
+
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -404,7 +408,7 @@
                         android:layout_marginTop="@dimen/_1sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:text="Grand Total"
-                        android:textColor="@color/colorDarkGrey"
+                        android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
 
@@ -416,8 +420,8 @@
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/_12sdp"
+                            android:layout_height="@dimen/_12sdp"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/euro_currency_symbol"
                             tools:ignore="ContentDescription" />
@@ -430,9 +434,8 @@
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:text="300/-"
-
                             android:textColor="@color/yellow"
-                            android:textSize="@dimen/_17sdp"
+                            android:textSize="@dimen/_15sdp"
                             tools:ignore="HardcodedText" />
                     </LinearLayout>
                 </RelativeLayout>
@@ -448,10 +451,10 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/button_rectangle_green"
             android:fontFamily="@font/poppins_medium"
-            app:spinning_bar_color="@color/colorGreen"
             android:inputType="textCapWords"
             android:text="@string/proceed_to_pay"
             android:textColor="@color/white"
-            android:textSize="@dimen/_11sdp" />
+            android:textSize="@dimen/_11sdp"
+            app:spinning_bar_color="@color/colorGreen" />
     </RelativeLayout>
 </layout>
