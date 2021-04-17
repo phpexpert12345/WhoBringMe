@@ -8,9 +8,10 @@ import android.view.Window
 import android.view.WindowManager
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.activities.employee.SwipeViewActivity
+import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.utilities.BaseActivity
 
-class SplashActivity : BaseActivity() {
+class SplashActivity : BaseActivity(), AuthInterface {
     private var handler: Handler? = null
     private var runnable: Runnable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,8 +21,7 @@ class SplashActivity : BaseActivity() {
         @Suppress("DEPRECATION")
         window.statusBarColor = Color.parseColor("#00000000")
         setContentView(R.layout.activity_splash)
-        doTimeDelay()
-        handler!!.postDelayed(runnable!!, 3000)
+        hitAuthApi(this)
     }
 
     private fun doTimeDelay() {
@@ -47,5 +47,12 @@ class SplashActivity : BaseActivity() {
 
         /*val window: Window = window
         window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)*/
+    }
+
+    override fun isAuthHit(value: Boolean) {
+        if (value) {
+            doTimeDelay()
+            handler!!.postDelayed(runnable!!, 3000)
+        }
     }
 }

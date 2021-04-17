@@ -1,28 +1,53 @@
+@file:Suppress("DEPRECATION")
+
 package com.phpexpert.bringme.activities
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.*
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityRegistrationBinding
+import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.PostDataOtp
+import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import java.util.*
+import kotlin.collections.HashMap
 
-@Suppress("DEPRECATION")
-class RegistrationActivity : BaseActivity() {
+
+@Suppress("DEPRECATION", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private lateinit var registrationActivity: ActivityRegistrationBinding
+    private lateinit var selectionString: String
+    private var mGoogleApiClient: GoogleApiClient? = null
+    private lateinit var mLocationCallback: LocationCallback
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+
+    @SuppressLint("InlinedApi")
+    private var perission = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
         registrationActivity = DataBindingUtil.setContentView(this, R.layout.activity_registration)
+        if (mGoogleApiClient == null) {
+            buildGoogleApiClient()
+        }
         setActions()
         setValues()
     }
@@ -33,34 +58,155 @@ class RegistrationActivity : BaseActivity() {
         }
 
         registrationActivity.btnSubmit.setOnClickListener {
-            if (registrationActivity.mobileNumberEditText.text!!.toString() != "") {
-                registrationActivity.btnSubmit.startAnimation()
-                Handler().postDelayed({
-                    val v = Intent(this@RegistrationActivity, OTPActivity::class.java)
-                    val mobileNumber = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString() + registrationActivity.mobileNumberEditText.text.toString()
-                    v.putExtra("mobileNumber", mobileNumber)
-                    startActivity(v)
-                }, 1000)
+            if (checkValidations()) {
+                if (isCheckPermissions(this, perission))
+                    setObserver()
+                else
+                    Toast.makeText(this, "Please Enable permissions first", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this, "Enter mobile number first", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Please enter all fields", Toast.LENGTH_LONG).show()
             }
+
         }
 
         registrationActivity.backArrow.setOnClickListener {
             finish()
         }
 
-        registrationActivity.textData.onFocusChangeListener = object : View.OnFocusChangeListener {
-            override fun onFocusChange(p0: View?, p1: Boolean) {
-                if (p1) {
-                    registrationActivity.textData.hint = "Password"
-                } else {
-                    if (registrationActivity.digitPin.text!!.isEmpty())
-                        registrationActivity.textData.hint = "6 digit mPin Number"
-                }
+        registrationActivity.textData.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+            if (p1) {
+                registrationActivity.textData.hint = "Password"
+            } else {
+                if (registrationActivity.digitPin.text!!.isEmpty())
+                    registrationActivity.textData.hint = "6 digit mPin Number"
             }
-
         }
+    }
+
+    private fun setValues() {
+        selectionString = intent.extras!!.getString("selectionString")!!
+        registrationActivity.selectionString.text = if (selectionString == "client") "Client / Receiver" else "Delivery Employee"
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val window: Window = window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        @Suppress("DEPRECATION")
+        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun setObserver() {
+        if (isOnline()) {
+            registrationActivity.btnSubmit.startAnimation()
+            val otpSendViewModel = ViewModelProvider(this).get(RegistrationModel::class.java)
+            otpSendViewModel.sendOtpModel(this, getMapData()).observe(this, {
+                val v = Intent(this@RegistrationActivity, OTPActivity::class.java)
+                val postDataOtp = PostDataOtp()
+                postDataOtp.accountFirstName = registrationActivity.firstNameEt.text.toString()
+                postDataOtp.accountLasttName = registrationActivity.lastNameEt.text.toString()
+                postDataOtp.accountMobile = registrationActivity.mobileNumberEditText.text.toString()
+                postDataOtp.accountPhoneCode = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
+                postDataOtp.accountEmail = registrationActivity.emailEt.text.toString()
+                postDataOtp.accountType = selectionString
+                postDataOtp.mobilePinCode = registrationActivity.digitPin.text.toString()
+                try {
+                    val mLocationRequest = LocationRequest.create()
+                    mLocationRequest.interval = 60000
+                    mLocationRequest.fastestInterval = 5000
+                    mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                    var mLocation: Location?
+                    mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+                    mLocationCallback = object : LocationCallback() {
+                        override fun onLocationResult(locationResult: LocationResult) {
+                            for (location in locationResult.locations) {
+                                if (location != null) {
+                                    mLocation = location
+                                    val geocoder = Geocoder(this@RegistrationActivity, Locale.getDefault())
+                                    val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                                    postDataOtp.accountLat = mLocation!!.latitude.toString()
+                                    postDataOtp.accountLong = mLocation!!.longitude.toString()
+                                    postDataOtp.accountCountry = addresses[0]!!.countryName
+                                    postDataOtp.accountState = addresses[0]!!.adminArea
+                                    postDataOtp.accountCity = addresses[0]!!.locality
+                                    val stringBuilder = StringBuilder()
+                                    for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                                        stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                                    postDataOtp.accountAddress = stringBuilder.toString()
+                                    postDataOtp.addressPostCode = addresses[0]!!.postalCode
+                                    break
+                                } else {
+                                    Toast.makeText(this@RegistrationActivity, "Location not found", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                            mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+                            v.putExtra("postDataModel", postDataOtp)
+                            startActivity(v)
+                        }
+                    }
+                    mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
+
+//                        val mLocation =
+//                                LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+            })
+
+        } else {
+            Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun getMapData(): Map<String, String> {
+        val mapData = HashMap<String, String>()
+        mapData["account_mobile"] = registrationActivity.mobileNumberEditText.text.toString()
+        mapData["account_type"] = if (selectionString == "client") "1" else "2"
+        mapData["account_phone_code"] = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
+        mapData["auth_key"] = AuthSingleton.authObject.auth_key!!
+        return mapData
+    }
+
+
+    private fun checkValidations(): Boolean {
+        return when {
+            registrationActivity.firstNameEt.text.toString().isEmpty() -> {
+                false
+            }
+            registrationActivity.lastNameEt.text.toString().isEmpty() -> {
+                false
+            }
+            registrationActivity.mobileNumberEditText.text.toString().isEmpty() -> {
+                false
+            }
+            registrationActivity.emailEt.text.toString().isEmpty() -> {
+                false
+            }
+            registrationActivity.digitPin.text.toString().isEmpty() -> {
+                registrationActivity.digitPin.error = "Enter Pin"
+                false
+            }
+            registrationActivity.digitPin.text.toString().length != 6 -> {
+                registrationActivity.digitPin.error = "Enter valid pin"
+                false
+            }
+            else -> {
+                true
+            }
+        }
+    }
+
+    @Synchronized
+    protected fun buildGoogleApiClient() {
+        mGoogleApiClient = GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build()
+//        setAction()
     }
 
     override fun onPause() {
@@ -71,11 +217,13 @@ class RegistrationActivity : BaseActivity() {
 
     }
 
-    private fun setValues() {
-        val selectionString = intent.extras!!.getString("selectionString")
-
-        registrationActivity.selectionString.text = if (selectionString == "client") "Client / Receiver" else "Delivery Employee"
-
-
+    override fun onConnected(p0: Bundle?) {
     }
+
+    override fun onConnectionSuspended(p0: Int) {
+    }
+
+    override fun onConnectionFailed(p0: ConnectionResult) {
+    }
+
 }

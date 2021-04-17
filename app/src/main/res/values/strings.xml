@@ -160,5 +160,6 @@
     <string name="complete">Complete</string>
     <string name="payment_methods_colun">Payment Methods:</string>
     <string name="bank">Bank</string>
+    <string name="network_error">No internet available</string>
 
 </resources>

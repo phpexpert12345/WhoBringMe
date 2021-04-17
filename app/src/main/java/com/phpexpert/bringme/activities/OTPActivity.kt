@@ -10,28 +10,39 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityOTPBinding
+import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.PostDataOtp
+import com.phpexpert.bringme.models.RegistrationModel
+import com.phpexpert.bringme.utilities.BaseActivity
 
 @Suppress("DEPRECATION")
-class OTPActivity : AppCompatActivity() {
+class OTPActivity : BaseActivity() {
 
     private lateinit var otpActivity: ActivityOTPBinding
+    private lateinit var postDataOtp: PostDataOtp
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         otpActivity = DataBindingUtil.setContentView(this, R.layout.activity_o_t_p)
+
+        postDataOtp = intent.getSerializableExtra("postDataModel") as PostDataOtp
+
         otpActivity.btnVerify.setOnClickListener {
-            otpActivity.btnVerify.startAnimation()
-            Handler().postDelayed({
-                startActivity(Intent(this@OTPActivity, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java))
-            }, 1000)
+            if (isOnline()) {
+                otpActivity.btnVerify.startAnimation()
+                setObserver()
+            } else {
+                Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show()
+            }
         }
         timerRestriction()
-        otpActivity.headerText.text = "${resources.getString(R.string.please_wait_we_will_auto_verify_nthe_otp_sent_to)} ${intent.extras!!.getString("mobileNumber")}"
+        otpActivity.headerText.text = "${resources.getString(R.string.please_wait_we_will_auto_verify_nthe_otp_sent_to)} ${postDataOtp.accountPhoneCode + postDataOtp.accountMobile}"
 
         otpActivity.backArrow.setOnClickListener {
             finish()
@@ -48,6 +59,7 @@ class OTPActivity : AppCompatActivity() {
     }
 
     inner class GenericTextWatcher(var view: View) : TextWatcher {
+        @SuppressLint("SetTextI18n")
         override fun afterTextChanged(editable: Editable) {
             val text = editable.toString()
             when (view.id) {
@@ -91,7 +103,7 @@ class OTPActivity : AppCompatActivity() {
         object : CountDownTimer(30000, 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                otpActivity.timeText.text = "${resources.getString(R.string.auto_verifying_your_otp_in_00_12)} in (00:${counter[0].toString()})"
+                otpActivity.timeText.text = "${resources.getString(R.string.auto_verifying_your_otp_in_00_12)} in (00:${counter[0]})"
                 counter[0]--
             }
 
@@ -100,5 +112,43 @@ class OTPActivity : AppCompatActivity() {
                 otpActivity.resendLayout.visibility = View.VISIBLE
             }
         }.start()
+    }
+
+    private fun setObserver() {
+        val viewDataModel = ViewModelProvider(this).get(RegistrationModel::class.java)
+
+        viewDataModel.registerViewModel(this, mapData()).observe(this, {
+            if (it.status_code == "0") {
+                Handler().postDelayed({
+                    startActivity(Intent(this@OTPActivity, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java))
+                }, 1000)
+            } else {
+                Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    private fun mapData(): Map<String, String?> {
+        val mapDataVal = HashMap<String, String?>()
+        mapDataVal["otp_number"] = otpActivity.otpPass1.text.toString() + otpActivity.otpPass2.text.toString() + otpActivity.otpPass3.text.toString() + otpActivity.otpPass4.text.toString()
+        mapDataVal["account_first_name"] = postDataOtp.accountFirstName
+        mapDataVal["account_last_name"] = postDataOtp.accountLasttName
+        mapDataVal["account_email"] = postDataOtp.accountEmail
+        mapDataVal["account_mobile"] = postDataOtp.accountMobile
+        mapDataVal["account_mpin_number"] = postDataOtp.mobilePinCode
+        mapDataVal["account_type"] = postDataOtp.accountType
+        mapDataVal["account_country"] = postDataOtp.accountCountry
+        mapDataVal["account_state"] = postDataOtp.accountState
+        mapDataVal["account_city"] = postDataOtp.accountCity
+        mapDataVal["account_address"] = postDataOtp.accountAddress
+        mapDataVal["address_postcode"] = postDataOtp.addressPostCode
+        mapDataVal["account_lat"] = postDataOtp.accountLat
+        mapDataVal["account_long"] = postDataOtp.accountLong
+        mapDataVal["account_phone_code"] = postDataOtp.accountPhoneCode
+        mapDataVal["referral_code"] = postDataOtp.accountReferralCode
+        mapDataVal["device_token_id"] = postDataOtp.deviceTokenId
+        mapDataVal["device_platform"] = postDataOtp.devicePlatform
+        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        return mapDataVal
     }
 }
