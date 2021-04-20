@@ -10,6 +10,7 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.activities.employee.SwipeViewActivity
 import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 
 class SplashActivity : BaseActivity(), AuthInterface {
     private var handler: Handler? = null
@@ -18,6 +19,7 @@ class SplashActivity : BaseActivity(), AuthInterface {
         super.onCreate(savedInstanceState)
         val window: Window = window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         @Suppress("DEPRECATION")
         window.statusBarColor = Color.parseColor("#00000000")
         setContentView(R.layout.activity_splash)
@@ -27,11 +29,27 @@ class SplashActivity : BaseActivity(), AuthInterface {
     private fun doTimeDelay() {
         handler = Handler()
         runnable = Runnable {
-            val intent = Intent(this@SplashActivity, SwipeViewActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            startActivity(intent)
-            handler!!.removeCallbacks(runnable!!)
-            finish()
+            if (sharedPrefrenceManager.getPreference(CONSTANTS.isLogin) == "true") {
+                if (sharedPrefrenceManager.getProfile().account_type == "Client / Receiver" || sharedPrefrenceManager.getProfile().account_type=="1") {
+                    val intent = Intent(this@SplashActivity, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    startActivity(intent)
+                    handler!!.removeCallbacks(runnable!!)
+                    finish()
+                } else {
+                    val intent = Intent(this@SplashActivity, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    startActivity(intent)
+                    handler!!.removeCallbacks(runnable!!)
+                    finish()
+                }
+            } else {
+                val intent = Intent(this@SplashActivity, SwipeViewActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                startActivity(intent)
+                handler!!.removeCallbacks(runnable!!)
+                finish()
+            }
         }
     }
 

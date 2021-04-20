@@ -161,5 +161,6 @@
     <string name="payment_methods_colun">Payment Methods:</string>
     <string name="bank">Bank</string>
     <string name="network_error">No internet available</string>
+    <string name="change_password">Change Password</string>
 
 </resources>

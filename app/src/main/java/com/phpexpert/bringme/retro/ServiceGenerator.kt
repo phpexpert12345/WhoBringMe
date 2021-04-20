@@ -41,7 +41,7 @@ class ServiceGenerator {
 
         private val unsafeOkHttpClient:
                 OkHttpClient.Builder
-            get() = try { // Create a trust manager that does not validate certificate chains
+        get() = try { // Create a trust manager that does not validate certificate chains
                 val trustAllCerts =
                     arrayOf<TrustManager>(
                         object : X509TrustManager {

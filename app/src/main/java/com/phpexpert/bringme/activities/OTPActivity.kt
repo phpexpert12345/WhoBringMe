@@ -19,6 +19,7 @@ import com.phpexpert.bringme.dtos.AuthSingleton
 import com.phpexpert.bringme.dtos.PostDataOtp
 import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 
 @Suppress("DEPRECATION")
 class OTPActivity : BaseActivity() {
@@ -119,9 +120,17 @@ class OTPActivity : BaseActivity() {
 
         viewDataModel.registerViewModel(this, mapData()).observe(this, {
             if (it.status_code == "0") {
-                Handler().postDelayed({
-                    startActivity(Intent(this@OTPActivity, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java))
-                }, 1000)
+                sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
+                sharedPrefrenceManager.saveProfile(it.data)
+                if (sharedPrefrenceManager.getProfile().account_type == "1") {
+                    val intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    val intent = Intent(this, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
             } else {
                 Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
             }
@@ -131,17 +140,17 @@ class OTPActivity : BaseActivity() {
     private fun mapData(): Map<String, String?> {
         val mapDataVal = HashMap<String, String?>()
         mapDataVal["otp_number"] = otpActivity.otpPass1.text.toString() + otpActivity.otpPass2.text.toString() + otpActivity.otpPass3.text.toString() + otpActivity.otpPass4.text.toString()
-        mapDataVal["account_first_name"] = postDataOtp.accountFirstName
-        mapDataVal["account_last_name"] = postDataOtp.accountLasttName
+        mapDataVal["account_first_name"] = base64Encoded(postDataOtp.accountFirstName)
+        mapDataVal["account_last_name"] = base64Encoded(postDataOtp.accountLasttName)
         mapDataVal["account_email"] = postDataOtp.accountEmail
         mapDataVal["account_mobile"] = postDataOtp.accountMobile
         mapDataVal["account_mpin_number"] = postDataOtp.mobilePinCode
         mapDataVal["account_type"] = postDataOtp.accountType
-        mapDataVal["account_country"] = postDataOtp.accountCountry
-        mapDataVal["account_state"] = postDataOtp.accountState
-        mapDataVal["account_city"] = postDataOtp.accountCity
-        mapDataVal["account_address"] = postDataOtp.accountAddress
-        mapDataVal["address_postcode"] = postDataOtp.addressPostCode
+        mapDataVal["account_country"] = base64Encoded(postDataOtp.accountCountry)
+        mapDataVal["account_state"] = base64Encoded(postDataOtp.accountState)
+        mapDataVal["account_city"] = base64Encoded(postDataOtp.accountCity)
+        mapDataVal["account_address"] = base64Encoded(postDataOtp.accountAddress)
+        mapDataVal["address_postcode"] = base64Encoded(postDataOtp.addressPostCode)
         mapDataVal["account_lat"] = postDataOtp.accountLat
         mapDataVal["account_long"] = postDataOtp.accountLong
         mapDataVal["account_phone_code"] = postDataOtp.accountPhoneCode
@@ -149,6 +158,7 @@ class OTPActivity : BaseActivity() {
         mapDataVal["device_token_id"] = postDataOtp.deviceTokenId
         mapDataVal["device_platform"] = postDataOtp.devicePlatform
         mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code
         return mapDataVal
     }
 }

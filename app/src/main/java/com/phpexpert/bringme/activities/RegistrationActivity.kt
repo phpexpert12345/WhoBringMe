@@ -8,7 +8,6 @@ import android.content.Intent
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -102,56 +101,62 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
             registrationActivity.btnSubmit.startAnimation()
             val otpSendViewModel = ViewModelProvider(this).get(RegistrationModel::class.java)
             otpSendViewModel.sendOtpModel(this, getMapData()).observe(this, {
-                val v = Intent(this@RegistrationActivity, OTPActivity::class.java)
-                val postDataOtp = PostDataOtp()
-                postDataOtp.accountFirstName = registrationActivity.firstNameEt.text.toString()
-                postDataOtp.accountLasttName = registrationActivity.lastNameEt.text.toString()
-                postDataOtp.accountMobile = registrationActivity.mobileNumberEditText.text.toString()
-                postDataOtp.accountPhoneCode = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
-                postDataOtp.accountEmail = registrationActivity.emailEt.text.toString()
-                postDataOtp.accountType = selectionString
-                postDataOtp.mobilePinCode = registrationActivity.digitPin.text.toString()
-                try {
-                    val mLocationRequest = LocationRequest.create()
-                    mLocationRequest.interval = 60000
-                    mLocationRequest.fastestInterval = 5000
-                    mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                    var mLocation: Location?
-                    mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-                    mLocationCallback = object : LocationCallback() {
-                        override fun onLocationResult(locationResult: LocationResult) {
-                            for (location in locationResult.locations) {
-                                if (location != null) {
-                                    mLocation = location
-                                    val geocoder = Geocoder(this@RegistrationActivity, Locale.getDefault())
-                                    val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
-                                    postDataOtp.accountLat = mLocation!!.latitude.toString()
-                                    postDataOtp.accountLong = mLocation!!.longitude.toString()
-                                    postDataOtp.accountCountry = addresses[0]!!.countryName
-                                    postDataOtp.accountState = addresses[0]!!.adminArea
-                                    postDataOtp.accountCity = addresses[0]!!.locality
-                                    val stringBuilder = StringBuilder()
-                                    for (i in 0..addresses[0]!!.maxAddressLineIndex)
-                                        stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
-                                    postDataOtp.accountAddress = stringBuilder.toString()
-                                    postDataOtp.addressPostCode = addresses[0]!!.postalCode
-                                    break
-                                } else {
-                                    Toast.makeText(this@RegistrationActivity, "Location not found", Toast.LENGTH_LONG).show()
+                if (it.status_code == "0") {
+                    val v = Intent(this@RegistrationActivity, OTPActivity::class.java)
+                    val postDataOtp = PostDataOtp()
+                    postDataOtp.accountFirstName = registrationActivity.firstNameEt.text.toString()
+                    postDataOtp.accountLasttName = registrationActivity.lastNameEt.text.toString()
+                    postDataOtp.accountMobile = registrationActivity.mobileNumberEditText.text.toString()
+                    postDataOtp.accountPhoneCode = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
+                    postDataOtp.accountEmail = registrationActivity.emailEt.text.toString()
+                    postDataOtp.accountType = selectionString
+                    postDataOtp.mobilePinCode = registrationActivity.digitPin.text.toString()
+                    postDataOtp.deviceTokenId = it.data!!.Token_ID
+                    postDataOtp.devicePlatform = "Android"
+                    try {
+                        val mLocationRequest = LocationRequest.create()
+                        mLocationRequest.interval = 60000
+                        mLocationRequest.fastestInterval = 5000
+                        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                        var mLocation: Location?
+                        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+                        mLocationCallback = object : LocationCallback() {
+                            override fun onLocationResult(locationResult: LocationResult) {
+                                for (location in locationResult.locations) {
+                                    if (location != null) {
+                                        mLocation = location
+                                        val geocoder = Geocoder(this@RegistrationActivity, Locale.getDefault())
+                                        val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                                        postDataOtp.accountLat = mLocation!!.latitude.toString()
+                                        postDataOtp.accountLong = mLocation!!.longitude.toString()
+                                        postDataOtp.accountCountry = addresses[0]!!.countryName
+                                        postDataOtp.accountState = addresses[0]!!.adminArea
+                                        postDataOtp.accountCity = addresses[0]!!.locality
+                                        val stringBuilder = StringBuilder()
+                                        for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                                            stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                                        postDataOtp.accountAddress = stringBuilder.toString()
+                                        postDataOtp.addressPostCode = addresses[0]!!.postalCode
+                                        break
+                                    } else {
+                                        Toast.makeText(this@RegistrationActivity, "Location not found", Toast.LENGTH_LONG).show()
+                                    }
                                 }
+                                mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+                                v.putExtra("postDataModel", postDataOtp)
+                                startActivity(v)
                             }
-                            mFusedLocationClient.removeLocationUpdates(mLocationCallback)
-                            v.putExtra("postDataModel", postDataOtp)
-                            startActivity(v)
                         }
-                    }
-                    mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
+                        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
 
 //                        val mLocation =
 //                                LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
 
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                } else {
+                    Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
                 }
 
             })
@@ -167,6 +172,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
         mapData["account_type"] = if (selectionString == "client") "1" else "2"
         mapData["account_phone_code"] = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
         mapData["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapData["lang_code"] = AuthSingleton.authObject.lang_code!!
         return mapData
     }
 

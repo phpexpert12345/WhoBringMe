@@ -45,12 +45,15 @@
                 android:layout_marginTop="@dimen/_60sdp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/userImage"
+                    android:layout_width="@dimen/_65sdp"
+                    android:layout_height="@dimen/_65sdp"
                     android:src="@drawable/mask_group_1"
+                    android:scaleType="centerCrop"
                     tools:ignore="ContentDescription" />
 
                 <ImageView
+                    android:id="@+id/editProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_55sdp"
@@ -78,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    app:hintTextAppearance="@color/lightColor">
+                    app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -86,8 +89,10 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/first_name"
+                        android:id="@+id/firstNameEt"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
+                        android:paddingTop="@dimen/_20sdp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
@@ -99,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    app:hintTextAppearance="@color/lightColor">
+                    app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -107,7 +112,9 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/last_name"
+                        android:id="@+id/lastName"
                         android:paddingStart="0dp"
+                        android:paddingTop="@dimen/_20sdp"
                         android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/lightColor"
@@ -120,7 +127,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    app:hintTextAppearance="@color/lightColor">
+                    app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -128,8 +135,10 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/email"
+                        android:paddingTop="@dimen/_20sdp"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
+                        android:id="@+id/emailEt"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
@@ -141,15 +150,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    app:hintTextAppearance="@color/lightColor">
+                    app:hintTextColor="@color/lightColor">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <AutoCompleteTextView
+                        android:id="@+id/autoComplete"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/_50sdp"
                         android:background="@android:color/transparent"
                         android:drawableEnd="@drawable/location_address"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/address"
+                        android:paddingTop="@dimen/_20sdp"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
@@ -163,14 +174,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    app:hintTextAppearance="@color/lightColor">
+                    app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/stateEt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/state"
+                        android:paddingTop="@dimen/_20sdp"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
@@ -184,14 +197,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    app:hintTextAppearance="@color/lightColor">
+                    app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/cityET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/city"
+                        android:paddingTop="@dimen/_20sdp"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
@@ -205,15 +220,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    app:hintTextAppearance="@color/lightColor">
+                    app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/postCodeEt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="@string/post_code"
+                        android:paddingTop="@dimen/_20sdp"
                         android:paddingStart="0dp"
+                        android:inputType="number"
                         android:paddingLeft="0dp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/lightColor"
@@ -232,10 +250,12 @@
             android:background="@drawable/button_rectangle_green"
             android:fontFamily="@font/poppins_medium"
             android:text="@string/update_profile"
+            android:layout_centerHorizontal="true"
             android:textAllCaps="false"
             android:textColor="@color/white"
+            app:spinning_bar_padding="@dimen/_5sdp"
             android:textSize="@dimen/_11sdp"
-            app:spinning_bar_color="@color/colorGreen" />
+            app:spinning_bar_color="@color/white" />
 
     </RelativeLayout>
 </layout>

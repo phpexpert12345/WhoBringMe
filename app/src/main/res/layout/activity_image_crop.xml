@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.ImageCropActivity">
+
+        <com.theartofdev.edmodo.cropper.CropImageView
+            android:id="@+id/CropImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cropScaleType="fitCenter" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/set_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/_16sdp"
+            android:onClick="onCropImageClick"
+            app:srcCompat="@drawable/ic_send_icon"
+            tools:ignore="ContentDescription,VectorDrawableCompat" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/rotate_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="@dimen/_16sdp"
+            android:visibility="gone"
+            app:srcCompat="@android:drawable/ic_menu_rotate"
+            tools:ignore="ContentDescription,VectorDrawableCompat" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

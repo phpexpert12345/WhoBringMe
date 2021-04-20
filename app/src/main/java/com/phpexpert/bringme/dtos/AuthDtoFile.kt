@@ -23,8 +23,11 @@ class AuthDtoData {
 
     @SerializedName("GOOGLE_MAP_KEY")
     var GOOGLE_MAP_KEY: String? = ""
+
+    @SerializedName("lang_code")
+    var lang_code: String? = ""
 }
 
-object AuthSingleton{
-    lateinit var authObject:AuthDtoData
+object AuthSingleton {
+    lateinit var authObject: AuthDtoData
 }

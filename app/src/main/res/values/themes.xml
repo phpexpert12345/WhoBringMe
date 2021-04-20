@@ -19,6 +19,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
     <style name="CustomTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowTranslucentStatus">false</item>
@@ -29,6 +35,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="Theme.BringMe.NoActionBarn">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

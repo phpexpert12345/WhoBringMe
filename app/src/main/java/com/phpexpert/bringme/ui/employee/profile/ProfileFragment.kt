@@ -9,6 +9,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.phpexpert.bringme.R
+import com.phpexpert.bringme.activities.ChangePasswordActivity
+import com.phpexpert.bringme.activities.LoginActivity
+import com.phpexpert.bringme.activities.delivery.UploadDocumentSelectActivity
+import com.phpexpert.bringme.activities.employee.DashboardActivity
 import com.phpexpert.bringme.activities.employee.ProfileEditActivity
 import com.phpexpert.bringme.databinding.EmployeeProfileFragmentBinding
 
@@ -23,9 +27,19 @@ class ProfileFragment : Fragment() {
         return profileFragmentBinding.root
     }
 
-    private fun setActions(){
+    private fun setActions() {
         profileFragmentBinding.editImage.setOnClickListener {
             startActivity(Intent(requireActivity(), ProfileEditActivity::class.java))
+        }
+
+        profileFragmentBinding.changeMPinLayout.setOnClickListener {
+            startActivity(Intent(requireActivity(), ChangePasswordActivity::class.java))
+        }
+
+        profileFragmentBinding.logoutLayout.setOnClickListener {
+            (activity as DashboardActivity).sharedPrefrenceManager.clearData()
+            startActivity(Intent(requireActivity(), LoginActivity::class.java))
+            requireActivity().finishAffinity()
         }
     }
 

@@ -9,4 +9,5 @@ object CONSTANTS {
     const val CONTINUE_WITH_FRAGMENT = "LOGIN_FRAGMENT_TAG"
     const val VERIFY_OTP_FRAGMENT_TAG = "VERIFY_OTP_FRAGMENT_TAG"
     const val PHONE_VARIFICATION_TAG = "PHONE_FRAGMENT_TAG"
+    const val isLogin = "isLogin"
 }

@@ -8,8 +8,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.phpexpert.bringme.R
+import com.phpexpert.bringme.utilities.BaseActivity
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
