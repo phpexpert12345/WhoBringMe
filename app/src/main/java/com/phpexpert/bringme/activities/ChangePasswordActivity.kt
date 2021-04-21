@@ -1,6 +1,7 @@
 package com.phpexpert.bringme.activities
 
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
@@ -16,6 +17,9 @@ class ChangePasswordActivity : BaseActivity() {
 
     private lateinit var changePasswordActivity: LayoutChangePasswordBinding
     private lateinit var changePasswordViewModel: ProfileViewModel
+    private var oldPassword: Boolean = false
+    private var passwordNewVisible: Boolean = false
+    private var passwordConfirmVisible: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +35,41 @@ class ChangePasswordActivity : BaseActivity() {
 
         changePasswordActivity.backArrow.setOnClickListener {
             finish()
+        }
+
+        changePasswordActivity.oldPasswordEye.setOnClickListener {
+            if (oldPassword) {
+                changePasswordActivity.oldPasswordEye.setImageResource(R.drawable.eye_close)
+                oldPassword = false
+                changePasswordActivity.oldPassword.transformationMethod = PasswordTransformationMethod()
+            } else {
+                changePasswordActivity.oldPasswordEye.setImageResource(R.drawable.eye_open)
+                oldPassword = true
+                changePasswordActivity.oldPassword.transformationMethod = null
+            }
+        }
+
+        changePasswordActivity.newPasswordEye.setOnClickListener {
+            if (passwordNewVisible) {
+                changePasswordActivity.newPasswordEye.setImageResource(R.drawable.eye_close)
+                passwordNewVisible = false
+                changePasswordActivity.newPasswordET.transformationMethod = PasswordTransformationMethod()
+            } else {
+                changePasswordActivity.newPasswordEye.setImageResource(R.drawable.eye_open)
+                passwordNewVisible = true
+                changePasswordActivity.newPasswordET.transformationMethod = null
+            }
+        }
+        changePasswordActivity.confirmPasswordEye.setOnClickListener {
+            if (passwordConfirmVisible) {
+                changePasswordActivity.confirmPasswordEye.setImageResource(R.drawable.eye_close)
+                passwordConfirmVisible = false
+                changePasswordActivity.confirmPasswordET.transformationMethod = PasswordTransformationMethod()
+            } else {
+                changePasswordActivity.confirmPasswordEye.setImageResource(R.drawable.eye_open)
+                passwordConfirmVisible = true
+                changePasswordActivity.confirmPasswordET.transformationMethod = null
+            }
         }
     }
 
@@ -60,6 +99,11 @@ class ChangePasswordActivity : BaseActivity() {
                 Toast.makeText(this, "Please Enter 6 digit confirm password", Toast.LENGTH_LONG).show()
                 false
             }
+            changePasswordActivity.newPasswordET.text.toString() != changePasswordActivity.confirmPasswordET.text.toString() -> {
+                Toast.makeText(this, "Password not match", Toast.LENGTH_LONG).show()
+                false
+            }
+
             else -> true
         }
     }

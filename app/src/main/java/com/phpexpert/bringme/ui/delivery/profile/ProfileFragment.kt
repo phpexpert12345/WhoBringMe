@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.activities.ChangePasswordActivity
 import com.phpexpert.bringme.activities.LoginActivity
+import com.phpexpert.bringme.activities.delivery.DashboardActivity
 import com.phpexpert.bringme.activities.delivery.UploadDocumentSelectActivity
-import com.phpexpert.bringme.activities.employee.DashboardActivity
 import com.phpexpert.bringme.activities.employee.ProfileEditActivity
 import com.phpexpert.bringme.databinding.DeliveryProfileFragmentBinding
 

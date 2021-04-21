@@ -8,6 +8,7 @@ import android.content.Intent
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -34,6 +35,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     private var mGoogleApiClient: GoogleApiClient? = null
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private var passwordVisible: Boolean = false
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -69,7 +71,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
         }
 
         registrationActivity.backArrow.setOnClickListener {
-            finish()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finishAffinity()
         }
 
         registrationActivity.textData.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
@@ -78,6 +81,18 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
             } else {
                 if (registrationActivity.digitPin.text!!.isEmpty())
                     registrationActivity.textData.hint = "6 digit mPin Number"
+            }
+        }
+
+        registrationActivity.passwordEye.setOnClickListener {
+            if (passwordVisible) {
+                registrationActivity.passwordEye.setImageResource(R.drawable.eye_close)
+                passwordVisible = false
+                registrationActivity.digitPin.transformationMethod = PasswordTransformationMethod()
+            } else {
+                registrationActivity.passwordEye.setImageResource(R.drawable.eye_open)
+                passwordVisible = true
+                registrationActivity.digitPin.transformationMethod = null
             }
         }
     }

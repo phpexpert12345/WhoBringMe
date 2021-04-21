@@ -2,9 +2,15 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="postJobData"
+            type="com.phpexpert.bringme.dtos.PostJobPostDto" />
+    </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:background="@color/backgroundColor"
         android:layout_height="match_parent">
 
         <RelativeLayout
@@ -102,7 +108,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="50"
+                            android:text="@{postJobData.jobAmount}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_15sdp"
                             tools:ignore="HardcodedText" />
@@ -149,7 +155,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="20"
+                            android:text="@{postJobData.jobTime}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_15sdp"
                             tools:ignore="HardcodedText" />
@@ -182,7 +188,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="Lorem Ipsum is simply dummy text of the print ing and typesetting industry. Lorem Ipsum has been the industry's standard dummy"
+                    android:text="@{postJobData.jobDescription}"
                     android:textColor="@color/colorDarkGrey"
                     android:textSize="@dimen/_9sdp"
                     tools:ignore="HardcodedText" />
@@ -321,11 +327,23 @@
                             tools:ignore="HardcodedText" />
 
                         <TextView
+                            android:id="@+id/serviceChargePercentage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:text="Charges for Job (8%)"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="@dimen/_11sdp"
+                            tools:ignore="HardcodedText" />
+                        <TextView
+                            android:id="@+id/adminServiceFees"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:text="Charges for Job (8%)"
+                            android:visibility="gone"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -336,7 +354,8 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="@dimen/_10sdp">
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        tools:ignore="RelativeOverlap">
 
 
                         <LinearLayout
@@ -359,7 +378,7 @@
                                 android:layout_marginStart="@dimen/_1sdp"
                                 android:layout_marginTop="@dimen/_1sdp"
                                 android:fontFamily="@font/poppins_regular"
-                                android:text="200"
+                                android:text="@{postJobData.jobAmount}"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_11sdp"
                                 tools:ignore="HardcodedText" />
@@ -379,13 +398,41 @@
                                 tools:ignore="ContentDescription" />
 
                             <TextView
+                                android:id="@+id/serviceCharges"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="@dimen/_1sdp"
                                 android:layout_marginTop="@dimen/_1sdp"
                                 android:fontFamily="@font/poppins_regular"
-                                android:text="100"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_11sdp"
+                                tools:ignore="HardcodedText" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/adminServiceFeesLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/euro_currency_black"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:id="@+id/adminServiceFeesCharge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="@dimen/_1sdp"
+                                android:layout_marginTop="@dimen/_1sdp"
+                                android:fontFamily="@font/poppins_regular"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_11sdp"
                                 tools:ignore="HardcodedText" />
@@ -417,7 +464,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
+                        tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="@dimen/_12sdp"
@@ -427,13 +474,13 @@
                             tools:ignore="ContentDescription" />
 
                         <TextView
+                            android:id="@+id/grandTotalAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="300/-"
                             android:textColor="@color/yellow"
                             android:textSize="@dimen/_15sdp"
                             tools:ignore="HardcodedText" />

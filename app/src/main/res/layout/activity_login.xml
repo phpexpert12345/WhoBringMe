@@ -78,6 +78,7 @@
                         android:layout_height="wrap_content"
                         app:ccpDialog_allowSearch="true"
                         app:ccpDialog_showCloseIcon="true"
+                        android:layout_marginTop="@dimen/_2sdp"
                         app:ccpDialog_textColor="@color/text_color"
                         app:ccp_autoDetectCountry="true"
                         app:ccp_contentColor="@color/text_color"
@@ -93,7 +94,7 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:digits="0123456789"
-                        android:fontFamily="@font/poppins_regular"
+                        android:fontFamily="@font/poppins_semi_bold"
                         android:gravity="center_vertical"
                         android:hint="@string/enter_mobile_number"
                         android:inputType="number"
@@ -128,7 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
-                        android:fontFamily="@font/poppins_regular"
+                        android:fontFamily="@font/poppins_semi_bold"
                         android:gravity="center_vertical"
                         android:hint="@string/enter_password"
                         android:inputType="textPassword"
@@ -234,12 +235,12 @@
         <include
             android:id="@+id/forPasswordOne"
             layout="@layout/layout_forgot_password_one"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <include
             android:id="@+id/forgotPasswordTwo"
             layout="@layout/layout_forgot_password_two"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <include
             android:id="@+id/forgotPasswordThree"

@@ -121,8 +121,10 @@ class OTPActivity : BaseActivity() {
         viewDataModel.registerViewModel(this, mapData()).observe(this, {
             if (it.status_code == "0") {
                 sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
-                sharedPrefrenceManager.saveProfile(it.data)
-                if (sharedPrefrenceManager.getProfile().account_type == "1") {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finishAffinity()
+                /*if (sharedPrefrenceManager.getProfile().account_type == "1") {
                     val intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -130,7 +132,7 @@ class OTPActivity : BaseActivity() {
                     val intent = Intent(this, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java)
                     startActivity(intent)
                     finish()
-                }
+                }*/
             } else {
                 Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
             }
@@ -145,7 +147,7 @@ class OTPActivity : BaseActivity() {
         mapDataVal["account_email"] = postDataOtp.accountEmail
         mapDataVal["account_mobile"] = postDataOtp.accountMobile
         mapDataVal["account_mpin_number"] = postDataOtp.mobilePinCode
-        mapDataVal["account_type"] = postDataOtp.accountType
+        mapDataVal["account_type"] = if (postDataOtp.accountType == "client") "1" else "2"
         mapDataVal["account_country"] = base64Encoded(postDataOtp.accountCountry)
         mapDataVal["account_state"] = base64Encoded(postDataOtp.accountState)
         mapDataVal["account_city"] = base64Encoded(postDataOtp.accountCity)

@@ -30,7 +30,7 @@ class LoginRepo {
             }
 
             override fun onFailure(call: Call<LoginDtoMain>, t: Throwable) {
-                Toast.makeText(context, "Login error in api", Toast.LENGTH_LONG).show()
+                loginData.postValue(null)
             }
 
         })

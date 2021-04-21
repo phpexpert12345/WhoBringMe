@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Editable
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.Window
@@ -38,6 +39,9 @@ class LoginActivity : BaseActivity() {
     private lateinit var forgotPasswordTwoBinding: LayoutForgotPasswordTwoBinding
 
     private var passwordVisible: Boolean = false
+    private var passwordNewVisible: Boolean = false
+    private var passwordConfirmVisible: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +114,29 @@ class LoginActivity : BaseActivity() {
             }
         }
 
+        forgotPasswordTwoBinding.newPasswordEye.setOnClickListener {
+            if (passwordNewVisible) {
+                forgotPasswordTwoBinding.newPasswordEye.setImageResource(R.drawable.eye_close)
+                passwordNewVisible = false
+                forgotPasswordTwoBinding.newPasswordET.transformationMethod = PasswordTransformationMethod()
+            } else {
+                forgotPasswordTwoBinding.newPasswordEye.setImageResource(R.drawable.eye_open)
+                passwordNewVisible = true
+                forgotPasswordTwoBinding.newPasswordET.transformationMethod = null
+            }
+        }
+        forgotPasswordTwoBinding.confirmPasswordEye.setOnClickListener {
+            if (passwordConfirmVisible) {
+                forgotPasswordTwoBinding.confirmPasswordEye.setImageResource(R.drawable.eye_close)
+                passwordConfirmVisible = false
+                forgotPasswordTwoBinding.confirmPasswordET.transformationMethod = PasswordTransformationMethod()
+            } else {
+                forgotPasswordTwoBinding.confirmPasswordEye.setImageResource(R.drawable.eye_open)
+                passwordConfirmVisible = true
+                forgotPasswordTwoBinding.confirmPasswordET.transformationMethod = null
+            }
+        }
+
         //create account button
         loginBinding.createAccount.setOnClickListener {
             startActivity(Intent(this, RegistrationSelectionActivity::class.java))
@@ -122,6 +149,7 @@ class LoginActivity : BaseActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+            forgotPasswordOneBinding.mobileNumber.text = Editable.Factory.getInstance().newEditable("")
             forgotPasswordOneBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             loginBinding.forgotPasswordView.visibility = View.GONE
         }
@@ -143,6 +171,7 @@ class LoginActivity : BaseActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+            forgotPasswordOneBinding.mobileNumber.text = Editable.Factory.getInstance().newEditable("")
             forgotPasswordTwoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             loginBinding.forgotPasswordView.visibility = View.GONE
         }
@@ -165,10 +194,11 @@ class LoginActivity : BaseActivity() {
                 forgotPasswordTwoBinding.confirmPasswordET.text.length != 6 -> {
                     Toast.makeText(this, "Please enter 6 digit confirm password", Toast.LENGTH_LONG).show()
                 }
-                forgotPasswordTwoBinding.newPasswordET.text.toString() == forgotPasswordTwoBinding.confirmPasswordET.text.toString() -> {
+                forgotPasswordTwoBinding.newPasswordET.text.toString() != forgotPasswordTwoBinding.confirmPasswordET.text.toString() -> {
                     Toast.makeText(this, "Password not match", Toast.LENGTH_LONG).show()
                 }
                 else -> {
+                    forgotPasswordOneBinding.mobileNumber.text = Editable.Factory.getInstance().newEditable("")
                     forgotPasswordTwoBinding.continueButton.startAnimation()
                     observeForgotPasswordResetData()
                 }
@@ -181,21 +211,22 @@ class LoginActivity : BaseActivity() {
         if (isOnline()) {
             loginViewModel.getLoginData(this, mapDataLogin()).observe(this, {
                 loginBinding.loginButton.revertAnimation()
-                if (it.status_code == "0") {
-                    sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
-                    sharedPrefrenceManager.saveProfile(it.data)
-                    if (sharedPrefrenceManager.getProfile().account_type == "1") {
-                        val intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                if (it != null)
+                    if (it.status_code == "0") {
+                        sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
+                        sharedPrefrenceManager.saveProfile(it.data)
+                        if (sharedPrefrenceManager.getProfile().account_type == "1") {
+                            val intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            val intent = Intent(this, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
                     } else {
-                        val intent = Intent(this, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                        Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
                     }
-                } else {
-                    Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
-                }
             })
         } else {
             loginBinding.loginButton.revertAnimation()

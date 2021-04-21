@@ -155,11 +155,13 @@
             </RelativeLayout>
 
             <EditText
+                android:id="@+id/totalAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
+                android:inputType="numberDecimal"
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/job_total_amount"
                 android:digits="1234567890."
@@ -180,12 +182,12 @@
             android:fontFamily="@font/poppins_medium"
             android:gravity="center"
             android:layout_centerInParent="true"
-            app:spinning_bar_color="@color/colorGreen"
+            app:spinning_bar_color="@color/white"
+            app:spinning_bar_padding="@dimen/_5sdp"
             android:textAllCaps="false"
-            android:text="Submit"
+            android:text="@string/submit"
             android:textColor="@color/white"
             android:textSize="@dimen/_11sdp"
-
             tools:ignore="HardcodedText" />
     </RelativeLayout>
 </layout>
