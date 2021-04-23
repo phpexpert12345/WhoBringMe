@@ -13,18 +13,24 @@ import retrofit2.Response
 class AuthRepo {
 
     private var authData: MutableLiveData<AuthDtoMain> = MutableLiveData()
-    fun getAuthData(context: Context): MutableLiveData<AuthDtoMain> {
+    fun getAuthData(): MutableLiveData<AuthDtoMain> {
         ServiceGenerator.createService(AuthRetro::class.java).getAuthApis().enqueue(object : Callback<AuthDtoMain> {
             override fun onResponse(call: Call<AuthDtoMain>, response: Response<AuthDtoMain>) {
                 if (response.isSuccessful) {
                     authData.postValue(response.body())
                 } else {
-                    Toast.makeText(context, "Auth Api Failure", Toast.LENGTH_SHORT).show()
+                    val authDtoMain = AuthDtoMain()
+                    authDtoMain.status_message = "Auth Api Failure"
+                    authDtoMain.status_code = "1"
+                    authData.postValue(authDtoMain)
                 }
             }
 
             override fun onFailure(call: Call<AuthDtoMain>, t: Throwable) {
-                Toast.makeText(context, "Auth Api Failure", Toast.LENGTH_SHORT).show()
+                val authDtoMain = AuthDtoMain()
+                authDtoMain.status_message = "Auth Api Failure"
+                authDtoMain.status_code = "1"
+                authData.postValue(authDtoMain)
             }
 
         })

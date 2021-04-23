@@ -16,18 +16,18 @@ class LoginViewModel : ViewModel() {
     private var otpForgotPasswordReset = MutableLiveData<ForgotPasswordChangeDtoMain>()
 
 
-    fun getLoginData(context: Context, mapData: Map<String, String>): LiveData<LoginDtoMain> {
-        loginData = LoginRepo().getLoginData(context, mapData)
+    fun getLoginData(mapData: Map<String, String>): LiveData<LoginDtoMain> {
+        loginData = LoginRepo().getLoginData(mapData)
         return loginData
     }
 
-    fun getOtpForgotPasswordSendData(context: Context, mapData: Map<String, String>): LiveData<ForgotPasswordDtoMain> {
-        otpForgotPasswordSend = LoginRepo().getForgotPasswordOtpSend(context, mapData)
+    fun getOtpForgotPasswordSendData(mapData: Map<String, String>): LiveData<ForgotPasswordDtoMain> {
+        otpForgotPasswordSend = LoginRepo().getForgotPasswordOtpSend(mapData)
         return otpForgotPasswordSend
     }
 
-    fun getOtpForgotPasswordReset(context: Context, mapData: Map<String, String>): LiveData<ForgotPasswordChangeDtoMain> {
-        otpForgotPasswordReset = LoginRepo().getForgotPasswordReset(context, mapData)
+    fun getOtpForgotPasswordReset(mapData: Map<String, String>): LiveData<ForgotPasswordChangeDtoMain> {
+        otpForgotPasswordReset = LoginRepo().getForgotPasswordReset(mapData)
         return otpForgotPasswordReset
     }
 }

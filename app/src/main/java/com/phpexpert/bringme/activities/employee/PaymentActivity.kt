@@ -50,12 +50,17 @@ class PaymentActivity : BaseActivity() {
         paymentActivityBinding.proceedButton.setOnClickListener {
             paymentActivityBinding.proceedButton.startAnimation()
             if (selectionByString == "paypal") {
-                /*Handler().postDelayed({
-                    startActivity(Intent(this, CongratulationScreen::class.java))
-                }, 1000)*/
+                /* Handler().postDelayed({
+                     val intent = Intent(this, CongratulationScreen::class.java)
+                     intent.putExtra("postValue", servicePostValue)
+                     startActivity(intent)
+                 }, 1000)*/
             } else {
-
-                setPaymentAuthKeyObserver()
+                Handler().postDelayed({
+                    val intent = Intent(this, NewCardActivity::class.java)
+                    intent.putExtra("postValues", servicePostValue)
+                    startActivity(intent)
+                }, 1000)
 
             }
         }
@@ -92,57 +97,58 @@ class PaymentActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun setObserver() {
-        progressDialog.show()
-        jobPostViewModel.getServiceCharges(this, servicePostValue.jobAmount!!, AuthSingleton.authObject.auth_key!!)
-                .observe(this, {
-                    progressDialog.dismiss()
-                    if (it.status_code == "0") {
-
-                        grandTotal = servicePostValue.jobAmount!!.toFloat()
-                        paymentActivityBinding.serviceChargePercentage.text = "Charges for Job (${it.data!!.Charge_for_Jobs_percentage})"
-                        paymentActivityBinding.serviceCharges.text = it.data!!.Charge_for_Jobs
-                        grandTotal = grandTotal!! + it.data!!.Charge_for_Jobs!!.toFloat()
-                        if (it.data!!.job_tax_amount == "" || it.data!!.job_tax_amount == "0") {
-                            paymentActivityBinding.adminServiceFees.visibility = View.GONE
-                            paymentActivityBinding.adminServiceFeesLayout.visibility = View.GONE
-                        } else {
-                            paymentActivityBinding.adminServiceFees.visibility = View.VISIBLE
-                            paymentActivityBinding.adminServiceFeesLayout.visibility = View.VISIBLE
-                            paymentActivityBinding.adminServiceFees.text = "Admin Charges (${it.data!!.Charge_for_Jobs_Admin_percentage})"
-                            paymentActivityBinding.adminServiceFeesCharge.text = it.data!!.admin_service_fees
-                            grandTotal = grandTotal!! + it.data!!.admin_service_fees!!.toFloat()
-                        }
-                        paymentActivityBinding.grandTotalAmount.text = grandTotal.toString()
-                        servicePostValue.grandTotal = grandTotal.toString()
-                        servicePostValue.Charge_for_Jobs = it.data!!.Charge_for_Jobs
-                        servicePostValue.Charge_for_Jobs_Admin_percentage = it.data!!.Charge_for_Jobs_Admin_percentage
-                        servicePostValue.jobPaymentMode = "Card"
-                        servicePostValue.job_tax_amount = it.data!!.job_tax_amount
-                        servicePostValue.Charge_for_Jobs_percentage = it.data!!.Charge_for_Jobs_percentage
-                        servicePostValue.Charge_for_Jobs_Delivery_percentage = it.data!!.Charge_for_Jobs_Delivery_percentage
-                        servicePostValue.admin_service_fees = it.data!!.admin_service_fees
-                        servicePostValue.delivery_employee_fee = it.data!!.delivery_employee_fee
-
-                    } else {
+        if (isOnline()) {
+            progressDialog.show()
+            jobPostViewModel.getServiceCharges(servicePostValue.jobAmount!!, AuthSingleton.authObject.auth_key!!)
+                    .observe(this, {
                         progressDialog.dismiss()
-                        Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
-                    }
-                })
-    }
+                        bottomSheetDialogMessageText.text = it.status_message
+                        bottomSheetDialogMessageOkButton.text = "Ok"
+                        bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+                        if (it.status_code == "0") {
 
-    private fun setPaymentAuthKeyObserver() {
-        jobPostViewModel.getPaymentAuthKey(this, AuthSingleton.authObject.auth_key!!)
-                .observe(this, {
-                    paymentActivityBinding.proceedButton.revertAnimation()
-                    if (it.status_code == "0") {
-                        PaymentConfigurationSingleton.paymentConfiguration = it.data!!
-                        val intent = Intent(this, NewCardActivity::class.java)
-                        intent.putExtra("postValues", servicePostValue)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
-                    }
-                })
+                            grandTotal = servicePostValue.jobAmount!!.toFloat()
+                            paymentActivityBinding.serviceChargePercentage.text = "Charges for Job (${it.data!!.Charge_for_Jobs_percentage})"
+                            paymentActivityBinding.serviceCharges.text = it.data!!.Charge_for_Jobs
+                            grandTotal = grandTotal!! + it.data!!.Charge_for_Jobs!!.toFloat()
+                            if (it.data!!.job_tax_amount == "" || it.data!!.job_tax_amount == "0") {
+                                paymentActivityBinding.adminServiceFees.visibility = View.GONE
+                                paymentActivityBinding.adminServiceFeesLayout.visibility = View.GONE
+                            } else {
+                                paymentActivityBinding.adminServiceFees.visibility = View.VISIBLE
+                                paymentActivityBinding.adminServiceFeesLayout.visibility = View.VISIBLE
+                                paymentActivityBinding.adminServiceFees.text = "Admin Charges (${it.data!!.Charge_for_Jobs_Admin_percentage})"
+                                paymentActivityBinding.adminServiceFeesCharge.text = it.data!!.admin_service_fees
+                                grandTotal = grandTotal!! + it.data!!.admin_service_fees!!.toFloat()
+                            }
+                            paymentActivityBinding.grandTotalAmount.text = grandTotal.toString()
+                            servicePostValue.grandTotal = grandTotal.toString()
+                            servicePostValue.Charge_for_Jobs = it.data!!.Charge_for_Jobs
+                            servicePostValue.Charge_for_Jobs_Admin_percentage = it.data!!.Charge_for_Jobs_Admin_percentage
+                            servicePostValue.jobPaymentMode = "Card"
+                            servicePostValue.job_tax_amount = it.data!!.job_tax_amount
+                            servicePostValue.Charge_for_Jobs_percentage = it.data!!.Charge_for_Jobs_percentage
+                            servicePostValue.Charge_for_Jobs_Delivery_percentage = it.data!!.Charge_for_Jobs_Delivery_percentage
+                            servicePostValue.admin_service_fees = it.data!!.admin_service_fees
+                            servicePostValue.delivery_employee_fee = it.data!!.delivery_employee_fee
+
+                        } else {
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
+                            bottomSheetDialog.show()
+                        }
+                    })
+
+        } else {
+            bottomSheetDialogMessageText.text = getString(R.string.network_error)
+            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        }
     }
 
     override fun onResume() {

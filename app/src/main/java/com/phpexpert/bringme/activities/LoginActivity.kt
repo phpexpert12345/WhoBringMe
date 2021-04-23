@@ -207,30 +207,51 @@ class LoginActivity : BaseActivity() {
     }
 
     //method to observe login data
+    @SuppressLint("SetTextI18n")
     private fun observerDataLogin() {
         if (isOnline()) {
-            loginViewModel.getLoginData(this, mapDataLogin()).observe(this, {
+            loginViewModel.getLoginData(mapDataLogin()).observe(this, {
                 loginBinding.loginButton.revertAnimation()
-                if (it != null)
-                    if (it.status_code == "0") {
-                        sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
-                        sharedPrefrenceManager.saveProfile(it.data)
-                        if (sharedPrefrenceManager.getProfile().account_type == "1") {
-                            val intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            val intent = Intent(this, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java)
+                bottomSheetDialogMessageText.text = it.status_message
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                if (it.status_code == "0") {
+                    sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
+                    sharedPrefrenceManager.saveProfile(it.data)
+                    var intent: Intent?
+                    if (sharedPrefrenceManager.getProfile().account_type == "1") {
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
+                            bottomSheetDialog.dismiss()
                             startActivity(intent)
                             finish()
                         }
+
                     } else {
-                        Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            intent = Intent(this, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java)
+                            bottomSheetDialog.dismiss()
+                            startActivity(intent)
+                            finish()
+                        }
                     }
+
+                } else {
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                }
+                bottomSheetDialog.show()
             })
         } else {
             loginBinding.loginButton.revertAnimation()
-            Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show()
+            bottomSheetDialogMessageText.text = getString(R.string.network_error)
+            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
         }
     }
 
@@ -239,20 +260,35 @@ class LoginActivity : BaseActivity() {
     @SuppressLint("SetTextI18n")
     private fun observeForgotPasswordOtpSendData() {
         if (isOnline()) {
-            loginViewModel.getOtpForgotPasswordSendData(this, mapDataOtpForgotSend()).observe(this, {
+            loginViewModel.getOtpForgotPasswordSendData(mapDataOtpForgotSend()).observe(this, {
                 forgotPasswordOneBinding.getOtpButton.revertAnimation()
+                bottomSheetDialogMessageText.text = it.status_message
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 if (it.status_code == "0") {
-                    loginId = it.data!!.LoginId!!
-                    forgotPasswordTwoBinding.mobileNUmberTV.text = forgotPasswordOneBinding.countyCode.textView_selectedCountry.text.toString() + forgotPasswordOneBinding.mobileNumber.text.toString()
-                    forgotPasswordTwoBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    forgotPasswordOneBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                        bottomSheetDialog.dismiss()
+                        loginId = it.data!!.LoginId!!
+                        forgotPasswordTwoBinding.mobileNUmberTV.text = forgotPasswordOneBinding.countyCode.textView_selectedCountry.text.toString() + forgotPasswordOneBinding.mobileNumber.text.toString()
+                        forgotPasswordTwoBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        forgotPasswordOneBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    }
                 } else {
-                    Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
                 }
+                bottomSheetDialog.show()
             })
         } else {
             forgotPasswordOneBinding.getOtpButton.revertAnimation()
-            Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show()
+            bottomSheetDialogMessageText.text = getString(R.string.network_error)
+            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
         }
     }
 
@@ -260,18 +296,33 @@ class LoginActivity : BaseActivity() {
     @SuppressLint("SetTextI18n")
     private fun observeForgotPasswordResetData() {
         if (isOnline()) {
-            loginViewModel.getOtpForgotPasswordReset(this, mapDataResetPassword()).observe(this, {
+            loginViewModel.getOtpForgotPasswordReset(mapDataResetPassword()).observe(this, {
                 forgotPasswordTwoBinding.continueButton.revertAnimation()
+                forgotPasswordOneBinding.getOtpButton.revertAnimation()
+                bottomSheetDialogMessageText.text = it.status_message
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 if (it.status_code == "0") {
-                    forgotPasswordTwoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                    Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                        forgotPasswordTwoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    }
                 } else {
-                    Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
                 }
+                bottomSheetDialog.dismiss()
             })
         } else {
             forgotPasswordTwoBinding.continueButton.revertAnimation()
-            Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show()
+            bottomSheetDialogMessageText.text = getString(R.string.network_error)
+            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
         }
     }
 

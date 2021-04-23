@@ -71,3 +71,12 @@ class RegistrationMainDto {
     @SerializedName("data")
     var data: LoginDetailsDto? = LoginDetailsDto()
 }
+
+class ResendOtpMain : BaseResponseDto() {
+    @SerializedName("data")
+    var data: ResendOtpData? = ResendOtpData()
+}
+
+class ResendOtpData {
+
+}

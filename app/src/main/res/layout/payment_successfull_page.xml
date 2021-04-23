@@ -21,6 +21,7 @@
                     android:id="@+id/back_arrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:layout_marginStart="@dimen/_minus15sdp"
                     android:layout_marginBottom="@dimen/_minus15sdp"
                     android:src="@drawable/back_arrow"
@@ -44,6 +45,7 @@
                     tools:ignore="ContentDescription" />
 
                 <TextView
+                    android:id="@+id/userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -100,6 +102,7 @@
                         tools:ignore="HardcodedText" />
 
                     <TextView
+                        android:id="@+id/hoursTV"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -124,6 +127,7 @@
                         tools:ignore="HardcodedText" />
 
                     <TextView
+                        android:id="@+id/minute1TV"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -132,12 +136,13 @@
                         android:background="@drawable/red_box"
                         android:fontFamily="@font/poppins_regular"
                         android:gravity="center"
-                        android:text="1"
+                        android:text="0"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_17sdp"
                         tools:ignore="HardcodedText" />
 
                     <TextView
+                        android:id="@+id/minute2TV"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -162,6 +167,7 @@
                         tools:ignore="HardcodedText" />
 
                     <TextView
+                        android:id="@+id/second1TV"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -170,12 +176,13 @@
                         android:background="@drawable/red_box"
                         android:fontFamily="@font/poppins_regular"
                         android:gravity="center"
-                        android:text="2"
+                        android:text="0"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_17sdp"
                         tools:ignore="HardcodedText" />
 
                     <TextView
+                        android:id="@+id/second2TV"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -209,11 +216,11 @@
                         tools:ignore="HardcodedText" />
 
                     <TextView
+                        android:id="@+id/orderId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_35sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="GHDFGER5637289"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_15sdp"
                         tools:ignore="HardcodedText" />
@@ -233,12 +240,13 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Totoal Pay"
+                        android:text="Total Pay"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_13sdp"
                         tools:ignore="HardcodedText" />
 
                     <TextView
+                        android:id="@+id/grandTotalAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_20sdp"
@@ -246,7 +254,6 @@
                         android:drawableStart="@drawable/euro_currency_black"
                         android:drawablePadding="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="200"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_15sdp"
                         tools:ignore="HardcodedText,UseCompatTextViewDrawableXml" />

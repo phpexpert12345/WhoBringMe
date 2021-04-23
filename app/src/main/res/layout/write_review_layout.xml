@@ -50,15 +50,16 @@
             tools:ignore="ContentDescription" />
 
         <RatingBar
+            android:id="@+id/ratingData"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/_15sdp"
             android:numStars="5"
-            android:theme="@style/largeRating"
-            android:rating="3" />
+            android:theme="@style/largeRating"/>
 
         <EditText
+            android:id="@+id/writeReviewET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_14sdp"
@@ -84,6 +85,7 @@
             tools:ignore="HardcodedText" />
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/submitButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
@@ -91,8 +93,9 @@
             android:fontFamily="@font/poppins_medium"
             android:text="@string/submit"
             android:textAllCaps="false"
-            app:spinning_bar_color="@color/colorGreen"
+            app:spinning_bar_color="@color/white"
             android:textColor="@color/white"
+            app:spinning_bar_padding="@dimen/_5sdp"
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/_11sdp" />
 

@@ -110,74 +110,104 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
         window.statusBarColor = resources.getColor(R.color.colorLoginButton)
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "SetTextI18n")
     private fun setObserver() {
         if (isOnline()) {
             registrationActivity.btnSubmit.startAnimation()
             val otpSendViewModel = ViewModelProvider(this).get(RegistrationModel::class.java)
-            otpSendViewModel.sendOtpModel(this, getMapData()).observe(this, {
+            otpSendViewModel.sendOtpModel(getMapData()).observe(this, {
+                bottomSheetDialogMessageText.text = it.status_message
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 if (it.status_code == "0") {
-                    val v = Intent(this@RegistrationActivity, OTPActivity::class.java)
-                    val postDataOtp = PostDataOtp()
-                    postDataOtp.accountFirstName = registrationActivity.firstNameEt.text.toString()
-                    postDataOtp.accountLasttName = registrationActivity.lastNameEt.text.toString()
-                    postDataOtp.accountMobile = registrationActivity.mobileNumberEditText.text.toString()
-                    postDataOtp.accountPhoneCode = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
-                    postDataOtp.accountEmail = registrationActivity.emailEt.text.toString()
-                    postDataOtp.accountType = selectionString
-                    postDataOtp.mobilePinCode = registrationActivity.digitPin.text.toString()
-                    postDataOtp.deviceTokenId = it.data!!.Token_ID
-                    postDataOtp.devicePlatform = "Android"
-                    try {
-                        val mLocationRequest = LocationRequest.create()
-                        mLocationRequest.interval = 60000
-                        mLocationRequest.fastestInterval = 5000
-                        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                        var mLocation: Location?
-                        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-                        mLocationCallback = object : LocationCallback() {
-                            override fun onLocationResult(locationResult: LocationResult) {
-                                for (location in locationResult.locations) {
-                                    if (location != null) {
-                                        mLocation = location
-                                        val geocoder = Geocoder(this@RegistrationActivity, Locale.getDefault())
-                                        val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
-                                        postDataOtp.accountLat = mLocation!!.latitude.toString()
-                                        postDataOtp.accountLong = mLocation!!.longitude.toString()
-                                        postDataOtp.accountCountry = addresses[0]!!.countryName
-                                        postDataOtp.accountState = addresses[0]!!.adminArea
-                                        postDataOtp.accountCity = addresses[0]!!.locality
-                                        val stringBuilder = StringBuilder()
-                                        for (i in 0..addresses[0]!!.maxAddressLineIndex)
-                                            stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
-                                        postDataOtp.accountAddress = stringBuilder.toString()
-                                        postDataOtp.addressPostCode = addresses[0]!!.postalCode
-                                        break
-                                    } else {
-                                        Toast.makeText(this@RegistrationActivity, "Location not found", Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                        bottomSheetDialog.dismiss()
+                        val v = Intent(this@RegistrationActivity, OTPActivity::class.java)
+                        val postDataOtp = PostDataOtp()
+                        postDataOtp.accountFirstName = registrationActivity.firstNameEt.text.toString()
+                        postDataOtp.accountLasttName = registrationActivity.lastNameEt.text.toString()
+                        postDataOtp.accountMobile = registrationActivity.mobileNumberEditText.text.toString()
+                        postDataOtp.accountPhoneCode = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
+                        postDataOtp.accountEmail = registrationActivity.emailEt.text.toString()
+                        postDataOtp.accountType = selectionString
+                        postDataOtp.mobilePinCode = registrationActivity.digitPin.text.toString()
+                        postDataOtp.deviceTokenId = it.data!!.Token_ID
+                        postDataOtp.devicePlatform = "Android"
+                        try {
+                            val mLocationRequest = LocationRequest.create()
+                            mLocationRequest.interval = 60000
+                            mLocationRequest.fastestInterval = 5000
+                            mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                            var mLocation: Location?
+                            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+                            mLocationCallback = object : LocationCallback() {
+                                override fun onLocationResult(locationResult: LocationResult) {
+                                    for (location in locationResult.locations) {
+                                        if (location != null) {
+                                            mLocation = location
+                                            val geocoder = Geocoder(this@RegistrationActivity, Locale.getDefault())
+                                            val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                                            postDataOtp.accountLat = mLocation!!.latitude.toString()
+                                            postDataOtp.accountLong = mLocation!!.longitude.toString()
+                                            postDataOtp.accountCountry = addresses[0]!!.countryName
+                                            postDataOtp.accountState = addresses[0]!!.adminArea
+                                            postDataOtp.accountCity = addresses[0]!!.locality
+                                            val stringBuilder = StringBuilder()
+                                            for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                                                stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                                            postDataOtp.accountAddress = stringBuilder.toString()
+                                            postDataOtp.addressPostCode = addresses[0]!!.postalCode
+                                            break
+                                        } else {
+                                            bottomSheetDialogMessageText.text = "Location not found"
+                                            bottomSheetDialogMessageOkButton.text = "Ok"
+                                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                                bottomSheetDialog.dismiss()
+                                            }
+                                            bottomSheetDialog.show()
+
+                                        }
                                     }
+                                    mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+                                    v.putExtra("postDataModel", postDataOtp)
+                                    startActivity(v)
                                 }
-                                mFusedLocationClient.removeLocationUpdates(mLocationCallback)
-                                v.putExtra("postDataModel", postDataOtp)
-                                startActivity(v)
                             }
-                        }
-                        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
+                            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
 
 //                        val mLocation =
 //                                LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
 
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            bottomSheetDialogMessageText.text = "Something is wrong"
+                            bottomSheetDialogMessageOkButton.text = "Ok"
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
+                            bottomSheetDialog.show()
+                        }
                     }
-                } else {
-                    Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
-                }
 
+                } else {
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+
+                }
+                bottomSheetDialog.show()
             })
 
         } else {
-            Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show()
+            bottomSheetDialogMessageText.text = getString(R.string.network_error)
+            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
         }
     }
 

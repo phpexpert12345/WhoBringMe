@@ -1,10 +1,12 @@
+@file:Suppress("DEPRECATION")
+
 package com.phpexpert.bringme.activities
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -26,6 +28,8 @@ class OTPActivity : BaseActivity() {
 
     private lateinit var otpActivity: ActivityOTPBinding
     private lateinit var postDataOtp: PostDataOtp
+    private lateinit var viewDataModel: RegistrationModel
+    private lateinit var progressDialog: ProgressDialog
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,12 +46,24 @@ class OTPActivity : BaseActivity() {
                 Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show()
             }
         }
+
+        viewDataModel = ViewModelProvider(this).get(RegistrationModel::class.java)
+
         timerRestriction()
         otpActivity.headerText.text = "${resources.getString(R.string.please_wait_we_will_auto_verify_nthe_otp_sent_to)} ${postDataOtp.accountPhoneCode + postDataOtp.accountMobile}"
 
         otpActivity.backArrow.setOnClickListener {
             finish()
         }
+
+        otpActivity.resendLayout.setOnClickListener {
+            progressDialog.show()
+            resendOtpObserver()
+        }
+
+        progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Please Wait...")
+        progressDialog.setCancelable(false)
         handleOtpET()
     }
 
@@ -104,7 +120,7 @@ class OTPActivity : BaseActivity() {
         object : CountDownTimer(30000, 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                otpActivity.timeText.text = "${resources.getString(R.string.auto_verifying_your_otp_in_00_12)} in (00:${counter[0]})"
+                otpActivity.timeText.text = "${resources.getString(R.string.auto_verifying_your_otp_in_00_12)} (00:${counter[0]})"
                 counter[0]--
             }
 
@@ -115,27 +131,44 @@ class OTPActivity : BaseActivity() {
         }.start()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setObserver() {
-        val viewDataModel = ViewModelProvider(this).get(RegistrationModel::class.java)
-
-        viewDataModel.registerViewModel(this, mapData()).observe(this, {
+        viewDataModel.registerViewModel(mapData()).observe(this, {
+            otpActivity.btnVerify.revertAnimation()
+            bottomSheetDialogMessageText.text = it.status_message
+            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
             if (it.status_code == "0") {
-                sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finishAffinity()
-                /*if (sharedPrefrenceManager.getProfile().account_type == "1") {
-                    val intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                    sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
+                    val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
-                    finish()
-                } else {
-                    val intent = Intent(this, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }*/
+                    finishAffinity()
+                }
             } else {
-                Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
             }
+            bottomSheetDialog.show()
+        })
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun resendOtpObserver() {
+        viewDataModel.resendOtpModel(resendData()).observe(this, {
+            progressDialog.dismiss()
+            bottomSheetDialogMessageText.text = it.status_message
+            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                otpActivity.timeText.visibility = View.VISIBLE
+                otpActivity.resendLayout.visibility = View.GONE
+                timerRestriction()
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
         })
     }
 
@@ -161,6 +194,14 @@ class OTPActivity : BaseActivity() {
         mapDataVal["device_platform"] = postDataOtp.devicePlatform
         mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
         mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code
+        return mapDataVal
+    }
+
+    private fun resendData(): Map<String, String> {
+        val mapDataVal = HashMap<String, String>()
+        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataVal["Token_ID"] = postDataOtp.deviceTokenId!!
+        mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code!!
         return mapDataVal
     }
 }

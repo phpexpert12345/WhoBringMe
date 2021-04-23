@@ -8,6 +8,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityCreateJobBinding
 import com.phpexpert.bringme.dtos.PostJobPostDto
@@ -25,6 +26,13 @@ class CreateJobActivity : BaseActivity() {
         @Suppress("DEPRECATION")
         window.statusBarColor = resources.getColor(R.color.colorLoginButton)
         createJobBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_job)
+
+        Glide.with(this).load(sharedPrefrenceManager.getProfile().login_photo)
+                .placeholder(R.drawable.user_placeholder)
+                .circleCrop()
+                .into(createJobBinding.userImage)
+
+        createJobBinding.userName.text = sharedPrefrenceManager.getProfile().login_name
         setActions()
     }
 

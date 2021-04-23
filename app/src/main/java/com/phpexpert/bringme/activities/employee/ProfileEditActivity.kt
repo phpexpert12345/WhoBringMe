@@ -14,6 +14,7 @@ import android.os.Parcelable
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ArrayAdapter
@@ -30,6 +31,7 @@ import com.phpexpert.bringme.dtos.*
 import com.phpexpert.bringme.retro.ProfileRetro
 import com.phpexpert.bringme.retro.ServiceGenerator
 import com.phpexpert.bringme.retro.ServiceGeneratorLocation
+import com.phpexpert.bringme.ui.employee.profile.ProfileViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.utilities.ImageCropActivity
 import okhttp3.MediaType
@@ -72,6 +74,9 @@ class ProfileEditActivity : BaseActivity() {
             override fun afterTextChanged(s: Editable) {}
         })
 
+        profileEditLayoutBinding.backArrow.setOnClickListener {
+            finish()
+        }
         isCheckPermissions(this, perission)
         profileEditLayoutBinding.autoComplete.setOnItemClickListener { _, _, i, _ ->
 
@@ -109,7 +114,8 @@ class ProfileEditActivity : BaseActivity() {
     }
 
     private fun setValues() {
-        val requestOptions = RequestOptions()
+        var requestOptions = RequestOptions()
+        requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(16))
         Glide.with(this).load(sharedPrefrenceManager.getProfile().login_photo)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
@@ -332,7 +338,7 @@ class ProfileEditActivity : BaseActivity() {
         map["account_last_name"] = createRequestBody(base64Encoded(profileEditLayoutBinding.lastName.text.toString()))
         map["LoginId"] = createRequestBody(sharedPrefrenceManager.getLoginId())
         map["account_email"] = createRequestBody((profileEditLayoutBinding.emailEt.text.toString()))
-        map["account_country"] = createRequestBody(postDataOtp.accountCountry!!)
+        map["account_country"] = createRequestBody(base64Encoded(postDataOtp.accountCountry!!))
         map["account_state"] = createRequestBody(base64Encoded(profileEditLayoutBinding.stateEt.text.toString()))
         map["account_city"] = createRequestBody(base64Encoded(profileEditLayoutBinding.cityET.text.toString()))
         map["account_address"] = createRequestBody(base64Encoded(profileEditLayoutBinding.autoComplete.text.toString()))
@@ -344,20 +350,53 @@ class ProfileEditActivity : BaseActivity() {
         ServiceGenerator.createService(ProfileRetro::class.java)
                 .editPhotoData(map, createMultiPartBody(POD1_URI, "account_photo"))
                 .enqueue(object : Callback<EditProfileDto> {
+                    @SuppressLint("SetTextI18n")
                     override fun onResponse(call: Call<EditProfileDto>, response: Response<EditProfileDto>) {
                         if (response.isSuccessful) {
                             val responseData = response.body()
-                            if (responseData!!.status_code == "0") {
-                                finish()
+                            bottomSheetDialogMessageText.text = responseData!!.status_message
+                            bottomSheetDialogMessageOkButton.text = "Ok"
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                                if (responseData.status_code == "0") {
+                                    val loginData = sharedPrefrenceManager.getProfile()
+                                    loginData.login_photo = ""
+                                    loginData.login_email = profileEditLayoutBinding.emailEt.text.toString()
+                                    loginData.login_name = profileEditLayoutBinding.firstNameEt.text.toString()+" "+profileEditLayoutBinding.lastName.text.toString()
+                                    loginData.login_address = profileEditLayoutBinding.autoComplete.text.toString()
+                                    loginData.login_country = postDataOtp.accountCountry
+                                    loginData.login_city = postDataOtp.accountCity
+                                    loginData.login_state = postDataOtp.accountState
+                                    loginData.login_postcode = postDataOtp.addressPostCode
+                                    loginData.login_lat = postDataOtp.accountLat
+                                    loginData.login_long = postDataOtp.accountLong
+                                    sharedPrefrenceManager.saveProfile(loginData)
+                                    ProfileViewModel.changeModel.postValue(true)
+                                    finish()
+                                }
                             }
-                            Toast.makeText(this@ProfileEditActivity, responseData.status_message, Toast.LENGTH_LONG).show()
+                            bottomSheetDialog.show()
                         } else {
-                            Toast.makeText(this@ProfileEditActivity, "Edit profile api error", Toast.LENGTH_LONG).show()
+                            bottomSheetDialogMessageText.text = "Edit profile api error"
+                            bottomSheetDialogMessageOkButton.text = "Ok"
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
+                            bottomSheetDialog.show()
                         }
                     }
 
+                    @SuppressLint("SetTextI18n")
                     override fun onFailure(call: Call<EditProfileDto>, t: Throwable) {
-                        Toast.makeText(this@ProfileEditActivity, "Edit profile api error", Toast.LENGTH_LONG).show()
+                        bottomSheetDialogMessageText.text = "Edit profile api error"
+                        bottomSheetDialogMessageOkButton.text = "Ok"
+                        bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            bottomSheetDialog.dismiss()
+                        }
+                        bottomSheetDialog.show()
                     }
 
                 })

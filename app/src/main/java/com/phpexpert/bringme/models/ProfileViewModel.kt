@@ -10,8 +10,8 @@ import com.phpexpert.bringme.repositories.ProfileRepo
 class ProfileViewModel : ViewModel() {
     private var changePassword = MutableLiveData<ForgotPasswordChangeDtoMain>()
 
-    fun changePassword(context: Context, mapData: Map<String, String>): LiveData<ForgotPasswordChangeDtoMain> {
-        changePassword = ProfileRepo().changePassword(context, mapData)
+    fun changePassword(mapData: Map<String, String>): LiveData<ForgotPasswordChangeDtoMain> {
+        changePassword = ProfileRepo().changePassword(mapData)
         return changePassword
     }
 }

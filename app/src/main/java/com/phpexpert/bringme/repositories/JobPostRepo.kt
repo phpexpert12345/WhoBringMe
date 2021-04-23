@@ -3,11 +3,8 @@ package com.phpexpert.bringme.repositories
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import com.phpexpert.bringme.dtos.PaymentConfigurationMain
-import com.phpexpert.bringme.dtos.PaymentTokenMain
-import com.phpexpert.bringme.dtos.PostJobDataMain
-import com.phpexpert.bringme.dtos.ServicesChargesDtoMain
-import com.phpexpert.bringme.retro.CreateJobRetro
+import com.phpexpert.bringme.dtos.*
+import com.phpexpert.bringme.retro.JobPostRetro
 import com.phpexpert.bringme.retro.ServiceGenerator
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,81 +16,177 @@ class JobPostRepo {
     private var paymentAuthKey = MutableLiveData<PaymentConfigurationMain>()
     private var paymentGenerateToken = MutableLiveData<PaymentTokenMain>()
     private var postJobData = MutableLiveData<PostJobDataMain>()
+    private var jobDetailsData = MutableLiveData<GetJobDetailsMain>()
+    private var cancelJobData = MutableLiveData<CancelJobDtoMain>()
+    private var updateJobData = MutableLiveData<UpdateJobDtoMain>()
 
 
-    fun jobPostRepo(context: Context, subAmount: String, authKey: String): MutableLiveData<ServicesChargesDtoMain> {
-        ServiceGenerator.createService(CreateJobRetro::class.java).getServiceChanges(subAmount, authKey)
+
+    fun jobPostRepo(subAmount: String, authKey: String): MutableLiveData<ServicesChargesDtoMain> {
+        ServiceGenerator.createService(JobPostRetro::class.java).getServiceChanges(subAmount, authKey)
                 .enqueue(object : Callback<ServicesChargesDtoMain> {
                     override fun onResponse(call: Call<ServicesChargesDtoMain>, response: Response<ServicesChargesDtoMain>) {
                         if (response.isSuccessful) {
                             serviceChargesData.postValue(response.body())
                         } else {
-                            Toast.makeText(context, "Service Api Error", Toast.LENGTH_LONG).show()
+                            val servicesChargesDtoMain = ServicesChargesDtoMain()
+                            servicesChargesDtoMain.status_message = "Service Api Error"
+                            servicesChargesDtoMain.status_code = "1"
+                            serviceChargesData.postValue(servicesChargesDtoMain)
                         }
                     }
 
                     override fun onFailure(call: Call<ServicesChargesDtoMain>, t: Throwable) {
-                        Toast.makeText(context, "Service Api Error", Toast.LENGTH_LONG).show()
+                        val servicesChargesDtoMain = ServicesChargesDtoMain()
+                        servicesChargesDtoMain.status_message = "Service Api Error"
+                        servicesChargesDtoMain.status_code = "1"
+                        serviceChargesData.postValue(servicesChargesDtoMain)
                     }
 
                 })
         return serviceChargesData
     }
 
-    fun getPaymentAuthKey(context: Context, authKey: String): MutableLiveData<PaymentConfigurationMain> {
-        ServiceGenerator.createService(CreateJobRetro::class.java).getPaymentAuthKey(authKey)
+    fun getPaymentAuthKey(authKey: String): MutableLiveData<PaymentConfigurationMain> {
+        ServiceGenerator.createService(JobPostRetro::class.java).getPaymentAuthKey(authKey)
                 .enqueue(object : Callback<PaymentConfigurationMain> {
                     override fun onResponse(call: Call<PaymentConfigurationMain>, response: Response<PaymentConfigurationMain>) {
                         if (response.isSuccessful) {
                             paymentAuthKey.postValue(response.body())
                         } else {
-                            Toast.makeText(context, "Payment Auth Api Error", Toast.LENGTH_LONG).show()
+                            val paymentConfigurationMain = PaymentConfigurationMain()
+                            paymentConfigurationMain.status_code = "1"
+                            paymentConfigurationMain.status_message = "Payment Auth Api Error"
+                            paymentAuthKey.postValue(paymentConfigurationMain)
                         }
                     }
 
                     override fun onFailure(call: Call<PaymentConfigurationMain>, t: Throwable) {
-                        Toast.makeText(context, "Payment Auth Api Error", Toast.LENGTH_LONG).show()
+                        val paymentConfigurationMain = PaymentConfigurationMain()
+                        paymentConfigurationMain.status_code = "1"
+                        paymentConfigurationMain.status_message = "Payment Auth Api Error"
+                        paymentAuthKey.postValue(paymentConfigurationMain)
                     }
 
                 })
         return paymentAuthKey
     }
 
-    fun getPaymentGenerateToken(context: Context, mapData:Map<String, String>): MutableLiveData<PaymentTokenMain> {
-        ServiceGenerator.createService(CreateJobRetro::class.java).getPaymentToken(mapData)
+    fun getPaymentGenerateToken(mapData:Map<String, String>): MutableLiveData<PaymentTokenMain> {
+        ServiceGenerator.createService(JobPostRetro::class.java).getPaymentToken(mapData)
                 .enqueue(object : Callback<PaymentTokenMain> {
                     override fun onResponse(call: Call<PaymentTokenMain>, response: Response<PaymentTokenMain>) {
                         if (response.isSuccessful) {
                             paymentGenerateToken.postValue(response.body())
                         } else {
-                            Toast.makeText(context, "Payment Token Api Error", Toast.LENGTH_LONG).show()
+                            val paymentTokenMain = PaymentTokenMain()
+                            paymentTokenMain.status_message = "Payment Token Api Error"
+                            paymentTokenMain.status_code = "1"
+                            paymentGenerateToken.postValue(paymentTokenMain)
                         }
                     }
-
                     override fun onFailure(call: Call<PaymentTokenMain>, t: Throwable) {
-                        Toast.makeText(context, "Payment Token Api Error", Toast.LENGTH_LONG).show()
+                        val paymentTokenMain = PaymentTokenMain()
+                        paymentTokenMain.status_message = "Payment Token Api Error"
+                        paymentTokenMain.status_code = "1"
+                        paymentGenerateToken.postValue(paymentTokenMain)
                     }
 
                 })
         return paymentGenerateToken
     }
 
-    fun getPostJobData(context: Context, mapData:Map<String, String>): MutableLiveData<PostJobDataMain> {
-        ServiceGenerator.createService(CreateJobRetro::class.java).postJobData(mapData)
+    fun getPostJobData(mapData:Map<String, String>): MutableLiveData<PostJobDataMain> {
+        ServiceGenerator.createService(JobPostRetro::class.java).postJobData(mapData)
                 .enqueue(object : Callback<PostJobDataMain> {
                     override fun onResponse(call: Call<PostJobDataMain>, response: Response<PostJobDataMain>) {
                         if (response.isSuccessful) {
                             postJobData.postValue(response.body())
                         } else {
-                            Toast.makeText(context, "Payment Token Api Error", Toast.LENGTH_LONG).show()
+                            val postJobDataMain = PostJobDataMain()
+                            postJobDataMain.status_message = "Payment Token Api Error"
+                            postJobDataMain.status_code = "1"
+                            postJobData.postValue(postJobDataMain)
                         }
                     }
 
                     override fun onFailure(call: Call<PostJobDataMain>, t: Throwable) {
-                        Toast.makeText(context, "Payment Token Api Error", Toast.LENGTH_LONG).show()
+                        val postJobDataMain = PostJobDataMain()
+                        postJobDataMain.status_message = "Payment Token Api Error"
+                        postJobDataMain.status_code = "1"
+                        postJobData.postValue(postJobDataMain)
                     }
 
                 })
         return postJobData
+    }
+
+    fun getJobDetailsData(context: Context, mapData:Map<String, String>): MutableLiveData<GetJobDetailsMain> {
+        ServiceGenerator.createService(JobPostRetro::class.java).getJobDetails(mapData)
+                .enqueue(object : Callback<GetJobDetailsMain> {
+                    override fun onResponse(call: Call<GetJobDetailsMain>, response: Response<GetJobDetailsMain>) {
+                        if (response.isSuccessful) {
+                            jobDetailsData.postValue(response.body())
+                        } else {
+                            Toast.makeText(context, "Payment Token Api Error", Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<GetJobDetailsMain>, t: Throwable) {
+                        Toast.makeText(context, "Payment Token Api Error", Toast.LENGTH_LONG).show()
+                    }
+
+                })
+        return jobDetailsData
+    }
+
+    fun cancelJobData(mapData: Map<String, String>):MutableLiveData<CancelJobDtoMain>{
+        ServiceGenerator.createService(JobPostRetro::class.java).cancelJobData(mapData)
+                .enqueue(object : Callback<CancelJobDtoMain> {
+                    override fun onResponse(call: Call<CancelJobDtoMain>, response: Response<CancelJobDtoMain>) {
+                        if (response.isSuccessful) {
+                            cancelJobData.postValue(response.body())
+                        } else {
+                            val cancelJobDtoMain = CancelJobDtoMain()
+                            cancelJobDtoMain.status_code="1"
+                            cancelJobDtoMain.status_message = "Cancel Job Api Error"
+                            cancelJobData.postValue(cancelJobDtoMain)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CancelJobDtoMain>, t: Throwable) {
+                        val cancelJobDtoMain = CancelJobDtoMain()
+                        cancelJobDtoMain.status_code="1"
+                        cancelJobDtoMain.status_message = "Cancel Job Api Error"
+                        cancelJobData.postValue(cancelJobDtoMain)
+                    }
+
+                })
+        return cancelJobData
+    }
+
+    fun updateJobData(mapData: Map<String, String>):MutableLiveData<UpdateJobDtoMain>{
+        ServiceGenerator.createService(JobPostRetro::class.java).updateJobData(mapData)
+                .enqueue(object : Callback<UpdateJobDtoMain> {
+                    override fun onResponse(call: Call<UpdateJobDtoMain>, response: Response<UpdateJobDtoMain>) {
+                        if (response.isSuccessful) {
+                            updateJobData.postValue(response.body())
+                        } else {
+                            val cancelJobDtoMain = UpdateJobDtoMain()
+                            cancelJobDtoMain.status_code="1"
+                            cancelJobDtoMain.status_message = "Cancel Job Api Error"
+                            updateJobData.postValue(cancelJobDtoMain)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateJobDtoMain>, t: Throwable) {
+                        val cancelJobDtoMain = UpdateJobDtoMain()
+                        cancelJobDtoMain.status_code="1"
+                        cancelJobDtoMain.status_message = "Cancel Job Api Error"
+                        updateJobData.postValue(cancelJobDtoMain)
+                    }
+
+                })
+        return updateJobData
     }
 }

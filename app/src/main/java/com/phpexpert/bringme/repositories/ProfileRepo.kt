@@ -14,18 +14,24 @@ class ProfileRepo {
 
     private var changePassword: MutableLiveData<ForgotPasswordChangeDtoMain> = MutableLiveData()
 
-    fun changePassword(context: Context, mapData: Map<String, String>): MutableLiveData<ForgotPasswordChangeDtoMain> {
+    fun changePassword(mapData: Map<String, String>): MutableLiveData<ForgotPasswordChangeDtoMain> {
         ServiceGenerator.createService(ProfileRetro::class.java).changePassword(mapData).enqueue(object : Callback<ForgotPasswordChangeDtoMain> {
             override fun onResponse(call: Call<ForgotPasswordChangeDtoMain>, response: Response<ForgotPasswordChangeDtoMain>) {
                 if (response.isSuccessful) {
                     changePassword.postValue(response.body())
                 } else {
-                    Toast.makeText(context, "Login error in api", Toast.LENGTH_LONG).show()
+                    val forgotPasswordChangeDtoMain = ForgotPasswordChangeDtoMain()
+                    forgotPasswordChangeDtoMain.status_code = "1"
+                    forgotPasswordChangeDtoMain.status_message = "Login error in api"
+                    changePassword.postValue(forgotPasswordChangeDtoMain)
                 }
             }
 
             override fun onFailure(call: Call<ForgotPasswordChangeDtoMain>, t: Throwable) {
-                Toast.makeText(context, "Login error in api", Toast.LENGTH_LONG).show()
+                val forgotPasswordChangeDtoMain = ForgotPasswordChangeDtoMain()
+                forgotPasswordChangeDtoMain.status_code = "1"
+                forgotPasswordChangeDtoMain.status_message = "Login error in api"
+                changePassword.postValue(forgotPasswordChangeDtoMain)
             }
 
         })

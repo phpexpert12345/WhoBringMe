@@ -19,54 +19,72 @@ class LoginRepo {
     private var forgotOtpReset: MutableLiveData<ForgotPasswordChangeDtoMain> = MutableLiveData()
 
 
-    fun getLoginData(context: Context, mapData: Map<String, String>): MutableLiveData<LoginDtoMain> {
+    fun getLoginData(mapData: Map<String, String>): MutableLiveData<LoginDtoMain> {
         ServiceGenerator.createService(LoginRetro::class.java).loginApi(mapData).enqueue(object : Callback<LoginDtoMain> {
             override fun onResponse(call: Call<LoginDtoMain>, response: Response<LoginDtoMain>) {
                 if (response.isSuccessful) {
                     loginData.postValue(response.body())
                 } else {
-                    Toast.makeText(context, "Login error in api", Toast.LENGTH_LONG).show()
+                    val loginDtoMain = LoginDtoMain()
+                    loginDtoMain.status_message = "Login error in api"
+                    loginDtoMain.status_code = "1"
+                    loginData.postValue(loginDtoMain)
                 }
             }
 
             override fun onFailure(call: Call<LoginDtoMain>, t: Throwable) {
-                loginData.postValue(null)
+                val loginDtoMain = LoginDtoMain()
+                loginDtoMain.status_message = "Login error in api"
+                loginDtoMain.status_code = "1"
+                loginData.postValue(loginDtoMain)
             }
 
         })
         return loginData
     }
 
-    fun getForgotPasswordOtpSend(context: Context, mapData: Map<String, String>): MutableLiveData<ForgotPasswordDtoMain> {
+    fun getForgotPasswordOtpSend(mapData: Map<String, String>): MutableLiveData<ForgotPasswordDtoMain> {
         ServiceGenerator.createService(LoginRetro::class.java).getForgotPasswordOTP(mapData).enqueue(object : Callback<ForgotPasswordDtoMain> {
             override fun onResponse(call: Call<ForgotPasswordDtoMain>, response: Response<ForgotPasswordDtoMain>) {
                 if (response.isSuccessful) {
                     forgotOtpSendData.postValue(response.body())
                 } else {
-                    Toast.makeText(context, "Login error in api", Toast.LENGTH_LONG).show()
+                    val forgotPasswordDtoMain = ForgotPasswordDtoMain()
+                    forgotPasswordDtoMain.status_message="Login error in api"
+                    forgotPasswordDtoMain.status_code="1"
+                    forgotOtpSendData.postValue(forgotPasswordDtoMain)
                 }
             }
 
             override fun onFailure(call: Call<ForgotPasswordDtoMain>, t: Throwable) {
-                Toast.makeText(context, "Login error in api", Toast.LENGTH_LONG).show()
+                val forgotPasswordDtoMain = ForgotPasswordDtoMain()
+                forgotPasswordDtoMain.status_message="Login error in api"
+                forgotPasswordDtoMain.status_code="1"
+                forgotOtpSendData.postValue(forgotPasswordDtoMain)
             }
 
         })
         return forgotOtpSendData
     }
 
-    fun getForgotPasswordReset(context: Context, mapData: Map<String, String>): MutableLiveData<ForgotPasswordChangeDtoMain> {
+    fun getForgotPasswordReset(mapData: Map<String, String>): MutableLiveData<ForgotPasswordChangeDtoMain> {
         ServiceGenerator.createService(LoginRetro::class.java).getForgotPasswordReset(mapData).enqueue(object : Callback<ForgotPasswordChangeDtoMain> {
             override fun onResponse(call: Call<ForgotPasswordChangeDtoMain>, response: Response<ForgotPasswordChangeDtoMain>) {
                 if (response.isSuccessful) {
                     forgotOtpReset.postValue(response.body())
                 } else {
-                    Toast.makeText(context, "Login error in api", Toast.LENGTH_LONG).show()
+                    val forgotPasswordChangeDtoMain = ForgotPasswordChangeDtoMain()
+                    forgotPasswordChangeDtoMain.status_code="1"
+                    forgotPasswordChangeDtoMain.status_message = "Login error in api"
+                    forgotOtpReset.postValue(forgotPasswordChangeDtoMain)
                 }
             }
 
             override fun onFailure(call: Call<ForgotPasswordChangeDtoMain>, t: Throwable) {
-                Toast.makeText(context, "Login error in api", Toast.LENGTH_LONG).show()
+                val forgotPasswordChangeDtoMain = ForgotPasswordChangeDtoMain()
+                forgotPasswordChangeDtoMain.status_code="1"
+                forgotPasswordChangeDtoMain.status_message = "Login error in api"
+                forgotOtpReset.postValue(forgotPasswordChangeDtoMain)
             }
 
         })

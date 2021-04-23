@@ -180,23 +180,6 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/_4sdp">
 
-                        <com.hbb20.CountryCodePicker
-                            android:id="@+id/search_county_country"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="@dimen/_minus6sdp"
-                            android:textSize="@dimen/_12sdp"
-                            android:textStyle="bold"
-                            app:ccpDialog_allowSearch="true"
-                            app:ccpDialog_showCloseIcon="true"
-                            app:ccp_autoDetectCountry="true"
-                            app:ccp_showFlag="true"
-                            app:ccp_showFullName="false"
-                            app:ccp_showNameCode="false"
-                            app:ccp_showPhoneCode="true"
-                            app:ccp_textSize="@dimen/_12sdp" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
@@ -225,6 +208,23 @@
                                 tools:ignore="RtlHardcoded,RtlSymmetry" />
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <com.hbb20.CountryCodePicker
+                            android:id="@+id/search_county_country"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_minus6sdp"
+                            android:textSize="@dimen/_12sdp"
+                            android:textStyle="bold"
+                            app:ccpDialog_allowSearch="true"
+                            app:ccpDialog_showCloseIcon="true"
+                            app:ccp_autoDetectCountry="true"
+                            app:ccp_showFlag="true"
+                            app:ccp_showFullName="false"
+                            app:ccp_showNameCode="false"
+                            app:ccp_showPhoneCode="true"
+                            app:ccp_textSize="@dimen/_12sdp" />
 
                     </RelativeLayout>
 

@@ -4,38 +4,55 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.phpexpert.bringme.dtos.PaymentConfigurationMain
-import com.phpexpert.bringme.dtos.PaymentTokenMain
-import com.phpexpert.bringme.dtos.PostJobDataMain
-import com.phpexpert.bringme.dtos.ServicesChargesDtoMain
+import com.phpexpert.bringme.dtos.*
 import com.phpexpert.bringme.repositories.JobPostRepo
 
-class JobPostModel:ViewModel() {
+class JobPostModel : ViewModel() {
 
 
     private var serviceChargesData = MutableLiveData<ServicesChargesDtoMain>()
     private var paymentAuthKey = MutableLiveData<PaymentConfigurationMain>()
     private var paymentGenerateToken = MutableLiveData<PaymentTokenMain>()
     private var postJobData = MutableLiveData<PostJobDataMain>()
+    private var jobDetailsData = MutableLiveData<GetJobDetailsMain>()
+    private var cancelJobData = MutableLiveData<CancelJobDtoMain>()
+    private var updateJobData = MutableLiveData<UpdateJobDtoMain>()
 
-    fun getServiceCharges(context: Context, subAmount:String, authKey:String):LiveData<ServicesChargesDtoMain>{
-        serviceChargesData = JobPostRepo().jobPostRepo(context, subAmount, authKey)
+
+
+
+    fun getServiceCharges(subAmount: String, authKey: String): LiveData<ServicesChargesDtoMain> {
+        serviceChargesData = JobPostRepo().jobPostRepo(subAmount, authKey)
         return serviceChargesData
     }
 
-    fun getPaymentAuthKey(context: Context, authKey:String):LiveData<PaymentConfigurationMain>{
-        paymentAuthKey = JobPostRepo().getPaymentAuthKey(context, authKey)
+    fun getPaymentAuthKey(authKey: String): LiveData<PaymentConfigurationMain> {
+        paymentAuthKey = JobPostRepo().getPaymentAuthKey(authKey)
         return paymentAuthKey
     }
 
-    fun getPaymentGenerateToken(context: Context, mapData:Map<String, String>):LiveData<PaymentTokenMain>{
-        paymentGenerateToken = JobPostRepo().getPaymentGenerateToken(context, mapData)
+    fun getPaymentGenerateToken(mapData: Map<String, String>): LiveData<PaymentTokenMain> {
+        paymentGenerateToken = JobPostRepo().getPaymentGenerateToken(mapData)
         return paymentGenerateToken
     }
 
-    fun getPostJobData(context: Context, mapData:Map<String, String>):LiveData<PostJobDataMain>{
-        postJobData = JobPostRepo().getPostJobData(context, mapData)
+    fun getPostJobData(mapData: Map<String, String>): LiveData<PostJobDataMain> {
+        postJobData = JobPostRepo().getPostJobData(mapData)
         return postJobData
     }
-}
 
+    fun getJobDetails(context: Context, mapData: Map<String, String>): LiveData<GetJobDetailsMain> {
+        jobDetailsData = JobPostRepo().getJobDetailsData(context, mapData)
+        return jobDetailsData
+    }
+
+    fun cancelJob(mapData:Map<String, String>):LiveData<CancelJobDtoMain>{
+        cancelJobData = JobPostRepo().cancelJobData(mapData)
+        return cancelJobData
+    }
+
+    fun updateJob(mapData:Map<String, String>):LiveData<UpdateJobDtoMain>{
+        updateJobData = JobPostRepo().updateJobData(mapData)
+        return updateJobData
+    }
+}

@@ -11,11 +11,14 @@ import android.os.Bundle
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.Base64
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.dtos.AuthSingleton
 import com.phpexpert.bringme.interfaces.AuthInterface
@@ -32,6 +35,10 @@ import kotlin.collections.ArrayList
 open class BaseActivity : AppCompatActivity() {
 
     private lateinit var authViewModel: AuthModel
+    lateinit var bottomSheetDialog: BottomSheetDialog
+    lateinit var bottomSheetDialogMessageText: TextView
+    lateinit var bottomSheetDialogMessageOkButton: TextView
+    lateinit var bottomSheetDialogMessageCancelButton: TextView
 
     @Inject
     lateinit var sharedPrefrenceManager: SharedPrefrenceManager
@@ -42,22 +49,41 @@ open class BaseActivity : AppCompatActivity() {
                 .build()
                 .inject(this)
         super.onCreate(savedInstanceState)
-
+        bottomSheetDialog = BottomSheetDialog(this, R.style.SheetDialog)
+        bottomSheetDialog.setContentView(R.layout.bottom_dialog_layout)
+        bottomSheetDialogMessageText = bottomSheetDialog.findViewById(R.id.message)!!
+        bottomSheetDialogMessageOkButton = bottomSheetDialog.findViewById(R.id.okText)!!
+        bottomSheetDialogMessageCancelButton = bottomSheetDialog.findViewById(R.id.cancelText)!!
     }
 
-    fun hitAuthApi(isAuthHit: AuthInterface) = if (isOnline()) {
+    @SuppressLint("SetTextI18n")
+    fun hitAuthApi(authData: AuthInterface) = if (isOnline()) {
         authViewModel = ViewModelProvider(this).get(AuthModel::class.java)
-        authViewModel.getAuthDataModel(this).observe(this, {
+        authViewModel.getAuthDataModel().observe(this, {
+            bottomSheetDialogMessageText.text = it.status_message
+            bottomSheetDialogMessageOkButton.text = "OK"
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
             if (it.status_code == "0") {
-                isAuthHit.isAuthHit(true)
                 AuthSingleton.authObject = it.data!![0]
+                authData.isAuthHit(true)
             } else {
-                Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    authData.isAuthHit(false)
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
             }
         })
+
     } else {
-        isAuthHit.isAuthHit(false)
-        Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show()
+        bottomSheetDialogMessageText.text = getString(R.string.network_error)
+        bottomSheetDialogMessageOkButton.text = "OK"
+        bottomSheetDialogMessageCancelButton.visibility = View.GONE
+        bottomSheetDialogMessageOkButton.setOnClickListener {
+            authData.isAuthHit(false)
+            bottomSheetDialog.dismiss()
+        }
+        bottomSheetDialog.show()
     }
 
     open fun isOnline(): Boolean {

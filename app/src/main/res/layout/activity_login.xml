@@ -235,12 +235,12 @@
         <include
             android:id="@+id/forPasswordOne"
             layout="@layout/layout_forgot_password_one"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <include
             android:id="@+id/forgotPasswordTwo"
             layout="@layout/layout_forgot_password_two"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <include
             android:id="@+id/forgotPasswordThree"

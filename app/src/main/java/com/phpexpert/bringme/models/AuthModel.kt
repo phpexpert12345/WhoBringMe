@@ -10,8 +10,8 @@ import com.phpexpert.bringme.repositories.AuthRepo
 class AuthModel : ViewModel() {
 
     private lateinit var authDataModel: MutableLiveData<AuthDtoMain>
-    fun getAuthDataModel(context: Context): LiveData<AuthDtoMain> {
-        authDataModel = AuthRepo().getAuthData(context)
+    fun getAuthDataModel(): LiveData<AuthDtoMain> {
+        authDataModel = AuthRepo().getAuthData()
         return authDataModel
     }
 }

@@ -5,6 +5,8 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.phpexpert.bringme.dtos.GetOtpSendDataMain
 import com.phpexpert.bringme.dtos.RegistrationMainDto
+import com.phpexpert.bringme.dtos.ResendOtpData
+import com.phpexpert.bringme.dtos.ResendOtpMain
 import com.phpexpert.bringme.retro.RegistrationRetro
 import com.phpexpert.bringme.retro.ServiceGenerator
 import retrofit2.Call
@@ -14,20 +16,26 @@ import retrofit2.Response
 class RegistrationRepo {
     private var otpSendDataMain: MutableLiveData<GetOtpSendDataMain> = MutableLiveData()
     private var registrationMainDto: MutableLiveData<RegistrationMainDto> = MutableLiveData()
+    private var resendMainDto: MutableLiveData<ResendOtpMain> = MutableLiveData()
 
-
-    fun otpSendResponse(context: Context, mapField: Map<String, String>): MutableLiveData<GetOtpSendDataMain> {
+    fun otpSendResponse(mapField: Map<String, String>): MutableLiveData<GetOtpSendDataMain> {
         ServiceGenerator.createService(RegistrationRetro::class.java).sendOtpApi(mapField).enqueue(object : Callback<GetOtpSendDataMain> {
             override fun onResponse(call: Call<GetOtpSendDataMain>, response: Response<GetOtpSendDataMain>) {
                 if (response.isSuccessful) {
                     otpSendDataMain.postValue(response.body())
                 } else {
-                    Toast.makeText(context, "Registration api failure", Toast.LENGTH_LONG).show()
+                    val getOtpSendDataMain = GetOtpSendDataMain()
+                    getOtpSendDataMain.status_message = "Registration api failure"
+                    getOtpSendDataMain.status_code = "1"
+                    otpSendDataMain.postValue(getOtpSendDataMain)
                 }
             }
 
             override fun onFailure(call: Call<GetOtpSendDataMain>, t: Throwable) {
-                Toast.makeText(context, "Registration api failure", Toast.LENGTH_LONG).show()
+                val getOtpSendDataMain = GetOtpSendDataMain()
+                getOtpSendDataMain.status_message = "Registration api failure"
+                getOtpSendDataMain.status_code = "1"
+                otpSendDataMain.postValue(getOtpSendDataMain)
             }
 
         })
@@ -35,22 +43,51 @@ class RegistrationRepo {
         return otpSendDataMain
     }
 
-    fun registerData(context: Context, mapField: Map<String, String?>): MutableLiveData<RegistrationMainDto> {
+    fun registerData(mapField: Map<String, String?>): MutableLiveData<RegistrationMainDto> {
         ServiceGenerator.createService(RegistrationRetro::class.java).registerUser(mapField).enqueue(object : Callback<RegistrationMainDto> {
             override fun onResponse(call: Call<RegistrationMainDto>, response: Response<RegistrationMainDto>) {
                 if (response.isSuccessful) {
                     registrationMainDto.postValue(response.body())
                 } else {
-                    Toast.makeText(context, "Registration api failure", Toast.LENGTH_LONG).show()
+                    val registrationMainDto  =RegistrationMainDto()
+                    registrationMainDto.status_message = "Registration api failure"
+                    registrationMainDto.status_code = "1"
                 }
             }
 
             override fun onFailure(call: Call<RegistrationMainDto>, t: Throwable) {
-                Toast.makeText(context, "Registration api failure", Toast.LENGTH_LONG).show()
+                val registrationMainDto  =RegistrationMainDto()
+                registrationMainDto.status_message = "Registration api failure"
+                registrationMainDto.status_code = "1"
             }
 
         })
 
         return registrationMainDto
+    }
+
+    fun resendOtp(mapField: Map<String, String>): MutableLiveData<ResendOtpMain> {
+        ServiceGenerator.createService(RegistrationRetro::class.java).resendOtpData(mapField).enqueue(object : Callback<ResendOtpMain> {
+            override fun onResponse(call: Call<ResendOtpMain>, response: Response<ResendOtpMain>) {
+                if (response.isSuccessful) {
+                    resendMainDto.postValue(response.body())
+                } else {
+                    val resendOtpMain = ResendOtpMain()
+                    resendOtpMain.status_code = "1"
+                    resendOtpMain.status_message = "Resend Otp api error"
+                    resendMainDto.postValue(resendOtpMain)
+                }
+            }
+
+            override fun onFailure(call: Call<ResendOtpMain>, t: Throwable) {
+                val resendOtpMain = ResendOtpMain()
+                resendOtpMain.status_code = "1"
+                resendOtpMain.status_message = "Resend Otp api error"
+                resendMainDto.postValue(resendOtpMain)
+            }
+
+        })
+
+        return resendMainDto
     }
 }

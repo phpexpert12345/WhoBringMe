@@ -17,6 +17,7 @@ class PostJobPostDto : Serializable {
     var Charge_for_Jobs_Delivery_percentage: String? = ""
     var admin_service_fees: String? = ""
     var delivery_employee_fee: String? = ""
+    var jobId: String? = ""
 }
 
 class ServicesChargesDtoMain : BaseResponseDto() {
@@ -117,3 +118,40 @@ class PostJobDataDto {
     @SerializedName("thank_you_content")
     var thank_you_content: String? = ""
 }
+
+class GetJobDetailsMain : BaseResponseDto() {
+    @SerializedName("data")
+    var data: GetJobDetailsData = GetJobDetailsData()
+}
+
+class GetJobDetailsData {
+
+}
+
+class CancelJobDtoMain:BaseResponseDto(){
+    @SerializedName("data")
+    var data:CancelJobDtoData = CancelJobDtoData()
+}
+
+class CancelJobDtoData{
+
+}
+class UpdateJobDtoMain:BaseResponseDto(){
+    @SerializedName("data")
+    var data:UpdateJobDtoData = UpdateJobDtoData()
+}
+
+class UpdateJobDtoData{
+
+}
+
+class WriteReviewJobDtoMain:BaseResponseDto(){
+    @SerializedName("data")
+    var data:WriteReviewJobDtoData = WriteReviewJobDtoData()
+}
+
+class WriteReviewJobDtoData{
+
+}
+
+

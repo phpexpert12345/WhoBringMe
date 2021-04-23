@@ -48,11 +48,11 @@
                             tools:ignore="ContentDescription" />
 
                         <TextView
+                            android:id="@+id/clientCurrentLocation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="Noida, Sector 63, Uttar Pradesh"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_9sdp"
                             tools:ignore="HardcodedText" />
@@ -87,6 +87,7 @@
                         android:textSize="@dimen/_13sdp" />
 
                     <LinearLayout
+                        android:id="@+id/messageNoData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -181,5 +182,9 @@
         <include
             android:id="@+id/bottomHistryLayout"
             layout="@layout/job_view_layout" />
+
+        <include
+            android:id="@+id/writeReviewLayout"
+            layout="@layout/write_review_layout" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

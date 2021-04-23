@@ -1,7 +1,9 @@
 package com.phpexpert.bringme.activities
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
@@ -108,18 +110,30 @@ class ChangePasswordActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setObserver() {
         if (isOnline()) {
-            changePasswordViewModel.changePassword(this, mapData()).observe(this, {
+            changePasswordViewModel.changePassword(mapData()).observe(this, {
                 changePasswordActivity.continueButton.revertAnimation()
-                if (it.status_code == "0") {
-                    finish()
+                bottomSheetDialogMessageText.text = it.status_message
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                    if (it.status_code == "0") {
+                        finish()
+                    }
+                    bottomSheetDialog.dismiss()
                 }
-                Toast.makeText(this, it.status_message, Toast.LENGTH_LONG).show()
             })
         } else {
             changePasswordActivity.continueButton.revertAnimation()
-            Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show()
+            bottomSheetDialogMessageText.text = getString(R.string.network_error)
+            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
         }
     }
 

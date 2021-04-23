@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="jobDetails"
+            type="com.phpexpert.bringme.dtos.PostJobPostDto" />
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_365sdp"
@@ -120,7 +128,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="50"
+                        android:text="@{jobDetails.jobAmount}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_15sdp"
                         tools:ignore="HardcodedText" />
@@ -167,7 +175,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="20"
+                        android:text="@{jobDetails.jobTime}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_15sdp"
                         tools:ignore="HardcodedText" />
@@ -316,7 +324,7 @@
                 android:visibility="gone"
                 tools:ignore="HardcodedText" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -326,11 +334,11 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -342,55 +350,42 @@
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/euro_currency_black"
-                            tools:ignore="ContentDescription" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="@dimen/_1sdp"
-                            android:layout_marginTop="@dimen/_1sdp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="200"
-                            android:textColor="@color/text_color"
-                            android:textSize="@dimen/_11sdp"
-                            tools:ignore="HardcodedText" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp">
-
                     <TextView
+                        android:id="@+id/serviceChargePercentage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_1sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Charges for Job (8%)"
+                        android:text='@{"Charges for Job ("+jobDetails.charge_for_Jobs_percentage+"%)"}'
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
 
+                    <TextView
+                        android:id="@+id/adminServiceFees"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text='@{"Admin Charges for Job ("+jobDetails.charge_for_Jobs_Admin_percentage+"%)"}'
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/_11sdp"
+                        android:visibility='@{jobDetails.job_tax_amount.equalsIgnoreCase("0") || jobDetails.job_tax_amount.equalsIgnoreCase("") ? View.GONE : View.VISIBLE}'
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:orientation="vertical"
+                    tools:ignore="RelativeOverlap">
+
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
@@ -408,13 +403,72 @@
                             android:layout_marginStart="@dimen/_1sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="100"
+                            android:text="@{jobDetails.jobAmount}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
                     </LinearLayout>
-                </RelativeLayout>
-            </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/euro_currency_black"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/serviceCharges"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_1sdp"
+                            android:text="@{jobDetails.charge_for_Jobs}"
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_11sdp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/adminServiceFeesLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="horizontal"
+                        android:visibility='@{jobDetails.job_tax_amount.equalsIgnoreCase("0") || jobDetails.job_tax_amount.equalsIgnoreCase("") ? View.GONE : View.VISIBLE}'
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/euro_currency_black"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/adminServiceFeesCharge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_1sdp"
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="@{jobDetails.admin_service_fees}"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_11sdp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -455,8 +509,7 @@
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_1sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="300/-"
-
+                        android:text='@{jobDetails.grandTotal+"/-"}'
                         android:textColor="@color/yellow"
                         android:textSize="@dimen/_17sdp"
                         tools:ignore="HardcodedText" />
