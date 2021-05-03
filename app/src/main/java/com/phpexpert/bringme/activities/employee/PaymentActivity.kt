@@ -108,8 +108,8 @@ class PaymentActivity : BaseActivity() {
                         if (it.status_code == "0") {
 
                             grandTotal = servicePostValue.jobAmount!!.toFloat()
-                            paymentActivityBinding.serviceChargePercentage.text = "Charges for Job (${it.data!!.Charge_for_Jobs_percentage})"
-                            paymentActivityBinding.serviceCharges.text = it.data!!.Charge_for_Jobs
+                            paymentActivityBinding.serviceChargePercentage.text = "Charges for Job (${it.data!!.Charge_for_Jobs_percentage} %)"
+                            paymentActivityBinding.serviceCharges.text = it.data!!.Charge_for_Jobs!!.toFloat().toString()
                             grandTotal = grandTotal!! + it.data!!.Charge_for_Jobs!!.toFloat()
                             if (it.data!!.job_tax_amount == "" || it.data!!.job_tax_amount == "0") {
                                 paymentActivityBinding.adminServiceFees.visibility = View.GONE
@@ -117,13 +117,13 @@ class PaymentActivity : BaseActivity() {
                             } else {
                                 paymentActivityBinding.adminServiceFees.visibility = View.VISIBLE
                                 paymentActivityBinding.adminServiceFeesLayout.visibility = View.VISIBLE
-                                paymentActivityBinding.adminServiceFees.text = "Admin Charges (${it.data!!.Charge_for_Jobs_Admin_percentage})"
-                                paymentActivityBinding.adminServiceFeesCharge.text = it.data!!.admin_service_fees
+                                paymentActivityBinding.adminServiceFees.text = "Admin Charges (${it.data!!.Charge_for_Jobs_Admin_percentage} %)"
+                                paymentActivityBinding.adminServiceFeesCharge.text = it.data!!.admin_service_fees!!.toFloat().toString()
                                 grandTotal = grandTotal!! + it.data!!.admin_service_fees!!.toFloat()
                             }
                             paymentActivityBinding.grandTotalAmount.text = grandTotal.toString()
                             servicePostValue.grandTotal = grandTotal.toString()
-                            servicePostValue.Charge_for_Jobs = it.data!!.Charge_for_Jobs
+                            servicePostValue.Charge_for_Jobs = it.data!!.Charge_for_Jobs!!.toFloat().toString()
                             servicePostValue.Charge_for_Jobs_Admin_percentage = it.data!!.Charge_for_Jobs_Admin_percentage
                             servicePostValue.jobPaymentMode = "Card"
                             servicePostValue.job_tax_amount = it.data!!.job_tax_amount

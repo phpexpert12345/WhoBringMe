@@ -247,7 +247,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
-                android:text="@string/phone_number_change"
+                android:text="@string/change_phone_number"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_11sdp"
                 tools:ignore="RelativeOverlap" />

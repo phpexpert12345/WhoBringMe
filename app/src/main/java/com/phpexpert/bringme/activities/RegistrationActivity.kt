@@ -75,7 +75,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
             finishAffinity()
         }
 
-        registrationActivity.textData.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+        registrationActivity.digitPin.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
             if (p1) {
                 registrationActivity.textData.hint = "Password"
             } else {

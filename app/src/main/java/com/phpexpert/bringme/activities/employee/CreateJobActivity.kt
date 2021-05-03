@@ -41,7 +41,7 @@ class CreateJobActivity : BaseActivity() {
             if (checkValidation()) {
                 createJobBinding.submitButton.startAnimation()
                 val postJobPostDto = PostJobPostDto()
-                postJobPostDto.jobAmount = createJobBinding.totalAmount.text.toString()
+                postJobPostDto.jobAmount = createJobBinding.totalAmount.text.toString().toFloat().toString()
                 postJobPostDto.jobDescription = createJobBinding.postInfo.text.toString()
                 postJobPostDto.jobTime = createJobBinding.mintsTextView.text.toString()
                 Handler().postDelayed({

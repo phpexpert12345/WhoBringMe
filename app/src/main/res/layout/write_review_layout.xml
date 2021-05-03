@@ -65,6 +65,7 @@
             android:layout_marginStart="@dimen/_14sdp"
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_14sdp"
+            android:maxLength="250"
             android:fontFamily="@font/poppins_medium"
             android:hint="@string/write_your_review"
             android:inputType="textCapSentences"

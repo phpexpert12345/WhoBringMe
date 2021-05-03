@@ -59,6 +59,7 @@ class NewCardActivity : BaseActivity() {
         setValues()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setValues() {
         cardActivityBinding.expiryDate.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -107,13 +108,23 @@ class NewCardActivity : BaseActivity() {
         })
 
         cardActivityBinding.payNowButton.setOnClickListener {
-            cardActivityBinding.payNowButton.startAnimation()
-            val cardData = Card.create(cardActivityBinding.cardNumber.text.toString().replace("\\s".toRegex(), ""),
-                    cardActivityBinding.expiryDate.text.toString().split("/")[0].toInt(),
-                    cardActivityBinding.expiryDate.text.toString().split("/")[1].toInt(),
-                    cardActivityBinding.cvv.text.toString()
-            )
-            createPaymentCall(cardData)
+            if (cardActivityBinding.cardNumber.text.toString().length!=19){
+                bottomSheetDialogMessageText.text = "Card Number not valid"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
+            }else {
+                cardActivityBinding.payNowButton.startAnimation()
+                val cardData = Card.create(cardActivityBinding.cardNumber.text.toString().replace("\\s".toRegex(), ""),
+                        cardActivityBinding.expiryDate.text.toString().split("/")[0].toInt(),
+                        cardActivityBinding.expiryDate.text.toString().split("/")[1].toInt(),
+                        cardActivityBinding.cvv.text.toString()
+                )
+                createPaymentCall(cardData)
+            }
         }
 
         cardActivityBinding.backLayout.setOnClickListener {

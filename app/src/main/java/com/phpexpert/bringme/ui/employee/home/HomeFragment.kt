@@ -199,8 +199,9 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
             "writeReview" -> {
                 writeReviewBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
                 homeFragmentBinding.blurView.visibility = View.VISIBLE
+
                 writeReviewBinding.closeIcon.setOnClickListener {
-                    mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
+                    writeReviewBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
                     homeFragmentBinding.blurView.visibility = View.GONE
                 }
 
@@ -210,6 +211,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                     writeReviewBinding.writeReviewET.text = Editable.Factory.getInstance().newEditable("")
                     writeReviewData(orderListData[position].job_order_id!!, writeReviewBinding.ratingData.rating.toString(), writeReviewBinding.writeReviewET.text.toString(), position)
                 }
+
+
             }
         }
     }

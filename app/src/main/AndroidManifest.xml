@@ -87,6 +87,7 @@
 
         <activity
             android:name=".activities.employee.CreateJobActivity"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.RegistrationSelectionActivity"

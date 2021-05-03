@@ -46,12 +46,12 @@ class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = Color.parseColor("#00000000")
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+//        val window: Window = window
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+//        @Suppress("DEPRECATION")
+//        window.statusBarColor = Color.parseColor("#00000000")
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
@@ -70,7 +70,7 @@ class LoginActivity : BaseActivity() {
         forgotPasswordOneBehavior.isDraggable = false
         forgotPasswordOneBehavior.peekHeight = 0
 
-
+        forgotPasswordOneBinding.countyCode.setTypeFace(Typeface.DEFAULT_BOLD)
         forgotPasswordTwoBinding = loginBinding.forgotPasswordTwo
         forgotPasswordTwoBehavior = BottomSheetBehavior.from(forgotPasswordTwoBinding.root)
         forgotPasswordTwoBehavior.isDraggable = false
@@ -156,11 +156,18 @@ class LoginActivity : BaseActivity() {
 
         // get otp button in forgot password button
         forgotPasswordOneBinding.getOtpButton.setOnClickListener {
-            if (forgotPasswordOneBinding.mobileNumber.text.isEmpty()) {
-                Toast.makeText(this, "Enter Mobile number first", Toast.LENGTH_LONG).show()
-            } else {
-                forgotPasswordOneBinding.getOtpButton.startAnimation()
-                observeForgotPasswordOtpSendData()
+            when {
+                forgotPasswordOneBinding.mobileNumber.text.isEmpty() -> {
+                    Toast.makeText(this, "Enter Phone number first", Toast.LENGTH_LONG).show()
+                }
+                forgotPasswordOneBinding.mobileNumber.text.toString().length != 10 -> {
+                    Toast.makeText(this, "Please Enter Valid Phone Number", Toast.LENGTH_LONG).show()
+                }
+                else -> {
+                    forgotPasswordOneBinding.mobileNumber.text = Editable.Factory.getInstance().newEditable("")
+                    forgotPasswordOneBinding.getOtpButton.startAnimation()
+                    observeForgotPasswordOtpSendData()
+                }
             }
         }
 
@@ -363,8 +370,8 @@ class LoginActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        val w: Window = window
-        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+//        val w: Window = window
+//        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
     }
 
@@ -372,7 +379,7 @@ class LoginActivity : BaseActivity() {
         super.onPause()
         forgotPasswordOneBinding.getOtpButton.revertAnimation()
 
-        val window: Window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+//        val window: Window = window
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 }

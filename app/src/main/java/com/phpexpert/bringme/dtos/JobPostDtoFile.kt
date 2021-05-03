@@ -45,7 +45,7 @@ class ServicesChargesDtoData {
     var Charge_for_Jobs_Delivery_percentage: String? = ""
 
     @SerializedName("job_tax_amount")
-    var job_tax_amount: String? = ""
+    var job_tax_amount: String? = "0"
 }
 
 

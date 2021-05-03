@@ -132,7 +132,7 @@
                         android:fontFamily="@font/poppins_semi_bold"
                         android:gravity="center_vertical"
                         android:hint="@string/enter_password"
-                        android:inputType="textPassword"
+                        android:inputType="numberPassword"
                         android:paddingTop="@dimen/_5sdp"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"

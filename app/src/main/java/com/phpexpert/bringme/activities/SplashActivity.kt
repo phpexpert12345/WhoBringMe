@@ -18,8 +18,8 @@ class SplashActivity : BaseActivity(), AuthInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         @Suppress("DEPRECATION")
         window.statusBarColor = Color.parseColor("#00000000")
         setContentView(R.layout.activity_splash)

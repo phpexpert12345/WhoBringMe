@@ -208,7 +208,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Lorem Ipsum is simply dummy text of the print ing and typesetting industry. Lorem Ipsum has been the industry's standard dummy"
+                android:text="@{jobDetails.jobDescription}"
                 android:textColor="@color/colorDarkGrey"
                 android:textSize="@dimen/_9sdp"
                 tools:ignore="HardcodedText" />
