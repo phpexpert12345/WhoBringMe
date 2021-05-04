@@ -142,8 +142,10 @@
             </LinearLayout>
 
             <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/_155sdp">
 
                 <RelativeLayout
@@ -156,6 +158,34 @@
                         android:layout_height="match_parent" />
                 </RelativeLayout>
             </androidx.core.widget.NestedScrollView>
+
+            <LinearLayout
+                android:id="@+id/noDataFoundLayout"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_195sdp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_50sdp"
+                    android:src="@drawable/no_job"
+                    tools:ignore="ContentDescription" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="@string/there_are_no_job"
+                    android:textColor="@color/color_text_grey"
+                    android:textSize="@dimen/_13sdp" />
+            </LinearLayout>
         </RelativeLayout>
 
         <View
@@ -182,6 +212,7 @@
 
         <include
             android:id="@+id/declineOrderLayout"
+            android:visibility="visible"
             layout="@layout/order_decline_bottom_sheet" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

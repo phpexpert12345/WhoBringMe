@@ -27,10 +27,11 @@
                 tools:ignore="HardcodedText" />
 
             <TextView
+                android:id="@+id/orderId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
-                android:text="GHDFGER5637289"
+                android:text=""
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_17sdp"
                 tools:ignore="HardcodedText" />
@@ -57,6 +58,7 @@
             tools:ignore="HardcodedText" />
 
         <EditText
+            android:id="@+id/orderReason"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"

@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="model"
+            type="com.phpexpert.bringme.dtos.LatestJobDeliveryDataList" />
+    </data>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,9 +33,9 @@
                     tools:ignore="UseCompoundDrawables">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/mask_group"
+                        android:id="@+id/userImage"
+                        android:layout_width="@dimen/_45sdp"
+                        android:layout_height="@dimen/_45sdp"
                         tools:ignore="ContentDescription" />
 
                     <TextView
@@ -38,7 +44,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Raj Kaushal"
+                        android:text="@{model.client_name}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -82,7 +88,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="GHDFGER5637289"
+                        android:text="@{model.job_order_id}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -132,7 +138,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/reference_site_about_lorem_ipsum_giving_information_on_its_origins"
+                        android:text="@{model.about_job}"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_7sdp" />
                 </LinearLayout>
@@ -152,6 +158,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_12sdp"
+                android:visibility='@{model.order_status_msg.equalsIgnoreCase("Pending") ? View.GONE : View.VISIBLE}'
                 android:orientation="horizontal">
 
                 <TextView
@@ -203,7 +210,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="1 Hour"
+                        android:text="@{model.job_posted_time}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_9sdp"
                         tools:ignore="HardcodedText" />
@@ -229,7 +236,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="19 March'2021"
+                        android:text="@{model.job_post_date}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_9sdp"
                         tools:ignore="HardcodedText" />
@@ -269,7 +276,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_4sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="100"
+                        android:text="@{model.job_total_amount}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_13sdp"
                         tools:ignore="HardcodedText" />

@@ -9,15 +9,16 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.DeliveryHomeCellBinding
+import com.phpexpert.bringme.dtos.LatestJobDeliveryDataList
 
 @Suppress("DEPRECATION")
-class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList<String>, private var onClickListener: OnClickView) : RecyclerView.Adapter<HomeFragmentAdapter.HomeFragmentViewHolder>() {
+class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList<LatestJobDeliveryDataList>, private var onClickListener: OnClickView) : RecyclerView.Adapter<HomeFragmentAdapter.HomeFragmentViewHolder>() {
 
     private lateinit var homeFragmentCellBinding: DeliveryHomeCellBinding
 
     inner class HomeFragmentViewHolder(var viewBinding: ViewDataBinding) : RecyclerView.ViewHolder(viewBinding.root)
     interface OnClickView {
-        fun onClick(textInput: String)
+        fun onClick(textInput: String, position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeFragmentViewHolder {
@@ -27,25 +28,31 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HomeFragmentViewHolder, position: Int) {
         homeFragmentCellBinding = holder.viewBinding as DeliveryHomeCellBinding
+        homeFragmentCellBinding.model = arrayList[position]
 
-        if (position == 2) {
+        if (arrayList[position].job_accept_time != null) {
             homeFragmentCellBinding.acceptViewLayout.text = "View"
             homeFragmentCellBinding.declineFinishedLayout.text = "Finished"
             homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.colorLoginButton))
+        } else {
+            homeFragmentCellBinding.acceptViewLayout.text = "Accept"
+            homeFragmentCellBinding.declineFinishedLayout.text = "Decline"
+            homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.red))
         }
+
         homeFragmentCellBinding.acceptViewLayout.setOnClickListener {
-            if (position == 2) {
-                onClickListener.onClick("viewData")
+            if (homeFragmentCellBinding.acceptViewLayout.text.toString() == "View") {
+                onClickListener.onClick("viewData", position)
             } else {
-                onClickListener.onClick("acceptData")
+                onClickListener.onClick("acceptData", position)
             }
         }
 
         homeFragmentCellBinding.declineFinishedLayout.setOnClickListener {
-            if (position == 2) {
-                onClickListener.onClick("finishedJob")
+            if (homeFragmentCellBinding.declineFinishedLayout.text.toString() == "Finished") {
+                onClickListener.onClick("finishedJob", position)
             } else {
-                onClickListener.onClick("declineJob")
+                onClickListener.onClick("declineJob", position)
             }
         }
     }

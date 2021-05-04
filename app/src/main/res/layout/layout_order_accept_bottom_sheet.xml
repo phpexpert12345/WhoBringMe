@@ -27,10 +27,10 @@
                 tools:ignore="HardcodedText" />
 
             <TextView
+                android:id="@+id/orderId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
-                android:text="GHDFGER5637289"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_17sdp"
                 tools:ignore="HardcodedText" />
@@ -73,7 +73,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13sdp" />
 
-            <TextView
+            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                 android:id="@+id/yesLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
