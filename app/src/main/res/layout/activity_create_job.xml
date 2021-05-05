@@ -12,15 +12,18 @@
         <RelativeLayout
             android:id="@+id/headerLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_70sdp"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_20sdp"
+            android:paddingBottom="@dimen/_20sdp"
             android:background="@color/colorLoginButton">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:text="@string/create_a_job"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_centerHorizontal="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13sdp"
                 tools:ignore="RelativeOverlap" />
@@ -30,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_20sdp"
                 android:src="@drawable/close"
                 tools:ignore="ContentDescription" />

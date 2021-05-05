@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="data"
+            type="com.phpexpert.bringme.dtos.LatestJobDeliveryDataList" />
+    </data>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,9 +80,9 @@
                     tools:ignore="UseCompoundDrawables">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/mask_group"
+                        android:id="@+id/userImage"
+                        android:layout_width="@dimen/_45sdp"
+                        android:layout_height="@dimen/_45sdp"
                         tools:ignore="ContentDescription" />
 
                     <TextView
@@ -86,7 +91,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Visal Saxena"
+                        android:text="@{data.client_name}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -103,7 +108,7 @@
                     android:paddingTop="@dimen/_5sdp"
                     android:paddingEnd="@dimen/_15sdp"
                     android:paddingBottom="@dimen/_5sdp"
-                    android:text="@string/accept"
+                    android:text="@{data.order_status_msg}"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_8sdp"
                     tools:ignore="RelativeOverlap" />
@@ -133,7 +138,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="19 March'2021"
+                        android:text="@{data.job_post_date}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_9sdp"
                         tools:ignore="HardcodedText" />
@@ -159,7 +164,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="10:00 AM"
+                        android:text="@{data.job_posted_time}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_9sdp"
                         tools:ignore="HardcodedText" />
@@ -186,7 +191,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="GHDFGER5637289"
+                    android:text="@{data.job_order_id}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_11sdp"
                     tools:ignore="HardcodedText" />
@@ -259,7 +264,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="50"
+                        android:text="@{data.job_sub_total}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_15sdp"
                         tools:ignore="HardcodedText" />
@@ -306,7 +311,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="20"
+                        android:text='@{data.job_offer_time.split(" ")[0]}'
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_15sdp"
                         tools:ignore="HardcodedText" />
@@ -339,7 +344,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Lorem Ipsum is simply dummy text of the print ing and typesetting industry. Lorem Ipsum has been the industry's standard dummy"
+                android:text="@{data.about_job}"
                 android:textColor="@color/colorDarkGrey"
                 android:textSize="@dimen/_9sdp"
                 tools:ignore="HardcodedText" />
@@ -502,7 +507,7 @@
                             android:layout_marginStart="@dimen/_1sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="200"
+                            android:text="@{data.job_sub_total}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -521,7 +526,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_1sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Charges for Job (8%)"
+                        android:text='@{"Charges for Job ("+data.Charge_for_Jobs_percentage+"%)"}'
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -547,7 +552,7 @@
                             android:layout_marginStart="@dimen/_1sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="100"
+                            android:text="@{data.Charge_for_Jobs}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -594,7 +599,7 @@
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_1sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="300/-"
+                        android:text='@{data.job_total_amount+"/-"}'
 
                         android:textColor="@color/yellow"
                         android:textSize="@dimen/_17sdp"

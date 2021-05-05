@@ -28,8 +28,8 @@ class CreateJobActivity : BaseActivity() {
         createJobBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_job)
 
         Glide.with(this).load(sharedPrefrenceManager.getProfile().login_photo)
-                .placeholder(R.drawable.user_placeholder)
                 .circleCrop()
+                .placeholder(R.drawable.user_placeholder)
                 .into(createJobBinding.userImage)
 
         createJobBinding.userName.text = sharedPrefrenceManager.getProfile().login_name

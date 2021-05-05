@@ -1,6 +1,8 @@
 package com.phpexpert.bringme.ui.employee.home
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -31,6 +33,7 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
     override fun onBindViewHolder(holder: HomeFragmentViewHolder, position: Int) {
         homeFragmentCellBinding = holder.viewBinding as HomeFragmentCellBinding
         homeFragmentCellBinding.model = arrayList[position]
+        homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
         homeFragmentCellBinding.viewJobImageView.setOnClickListener {
             onClickListener.onClick("viewData", position)
         }

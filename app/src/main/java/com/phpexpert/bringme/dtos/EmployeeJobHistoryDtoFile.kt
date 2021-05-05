@@ -2,17 +2,17 @@ package com.phpexpert.bringme.dtos
 
 import com.google.gson.annotations.SerializedName
 
-class LatestJobDtoMain : BaseResponseDto() {
+class EmployeeJobHistoryDtoMain : BaseResponseDto() {
     @SerializedName("data")
-    var data: LatestJobDtoData? = LatestJobDtoData()
+    var data: EmployeeJobHistoryDtoData? = EmployeeJobHistoryDtoData()
 }
 
-class LatestJobDtoData {
+class EmployeeJobHistoryDtoData {
     @SerializedName("OrderList")
-    var OrderList: ArrayList<OrderListData>? = ArrayList()
+    var OrderList: ArrayList<EmployeeJobHistoryDtoList> = ArrayList()
 }
 
-class OrderListData {
+class EmployeeJobHistoryDtoList {
     @SerializedName("order_id")
     var order_id: String? = ""
 
@@ -27,6 +27,9 @@ class OrderListData {
 
     @SerializedName("job_offer_time")
     var job_offer_time: String? = ""
+
+    @SerializedName("delivery_employee_id")
+    var delivery_employee_id: String? = ""
 
     @SerializedName("job_sub_total")
     var job_sub_total: String? = ""
@@ -49,14 +52,23 @@ class OrderListData {
     @SerializedName("payment_status")
     var payment_status: String? = ""
 
+    @SerializedName("Charge_for_Jobs")
+    var Charge_for_Jobs: String? = ""
+
+    @SerializedName("Charge_for_Jobs_percentage")
+    var Charge_for_Jobs_percentage: String? = ""
+
+    @SerializedName("Charge_for_Jobs_Admin_percentage")
+    var Charge_for_Jobs_Admin_percentage: String? = ""
+
+    @SerializedName("Charge_for_Jobs_Delivery_percentage")
+    var Charge_for_Jobs_Delivery_percentage: String? = ""
+
     @SerializedName("job_post_date")
     var job_post_date: String? = ""
 
     @SerializedName("job_posted_time")
     var job_posted_time: String? = ""
-
-    @SerializedName("delivery_employee_id")
-    var delivery_employee_id: String? = ""
 
     @SerializedName("payment_transaction_id")
     var payment_transaction_id: String? = ""
@@ -81,18 +93,6 @@ class OrderListData {
 
     @SerializedName("job_posted_address")
     var job_posted_address: String? = ""
-
-    @SerializedName("Charge_for_Jobs")
-    var Charge_for_Jobs: String? = ""
-
-    @SerializedName("Charge_for_Jobs_percentage")
-    var Charge_for_Jobs_percentage: String? = ""
-
-    @SerializedName("Charge_for_Jobs_Admin_percentage")
-    var Charge_for_Jobs_Admin_percentage: String? = ""
-
-    @SerializedName("Charge_for_Jobs_Delivery_percentage")
-    var Charge_for_Jobs_Delivery_percentage: String? = ""
 
     @SerializedName("Client_name")
     var Client_name: String? = ""
@@ -202,4 +202,3 @@ class OrderListData {
     @SerializedName("order_decline_reason")
     var order_decline_reason: String? = ""
 }
-

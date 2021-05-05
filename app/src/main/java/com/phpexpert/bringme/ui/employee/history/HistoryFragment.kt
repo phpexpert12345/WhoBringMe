@@ -1,6 +1,8 @@
 package com.phpexpert.bringme.ui.employee.history
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,21 +15,27 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.EmployeeFragmentHistoryBinding
 import com.phpexpert.bringme.databinding.JobViewLayoutBinding
 import com.phpexpert.bringme.databinding.WriteReviewLayoutBinding
+import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoList
+import com.phpexpert.bringme.dtos.PostJobPostDto
+import com.phpexpert.bringme.models.JobHistoryModel
+import com.phpexpert.bringme.utilities.BaseActivity
 
 class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
-    private var dashboardViewModel: DashboardViewModel? = null
+    private var jobHistoryViewModel: JobHistoryModel? = null
     private lateinit var historyBinding: EmployeeFragmentHistoryBinding
     private lateinit var mBottomSheetFilter: BottomSheetBehavior<View>
     private lateinit var jobViewBinding: JobViewLayoutBinding
 
     private lateinit var mBottomSheetReview: BottomSheetBehavior<View>
     private lateinit var reviewBinding: WriteReviewLayoutBinding
+    private lateinit var arrayList:ArrayList<EmployeeJobHistoryDtoList>
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
-        dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
 
         historyBinding = DataBindingUtil.inflate(inflater, R.layout.employee_fragment_history, container, false)
+        jobHistoryViewModel = ViewModelProvider(this).get(JobHistoryModel::class.java)
         setList()
         jobViewBinding = historyBinding.bottomHistryLayout
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
@@ -39,21 +47,52 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         mBottomSheetReview.isDraggable = false
         mBottomSheetReview.peekHeight = 0
 
+        setObserver()
         return historyBinding.root
     }
 
     private fun setList() {
         historyBinding.historyRV.layoutManager = LinearLayoutManager(requireActivity())
         historyBinding.historyRV.isNestedScrollingEnabled = false
-        val arrayList = ArrayList<String>()
-        arrayList.add("abc")
-        arrayList.add("abc")
-        arrayList.add("abc")
-        arrayList.add("abc")
+        arrayList = ArrayList()
         historyBinding.historyRV.adapter = HistoryFragmentAdapter(requireActivity(), arrayList, this)
     }
 
-    override fun onClick(textInput: String) {
+    @SuppressLint("SetTextI18n")
+    private fun setObserver() {
+        jobHistoryViewModel!!.getJobHistoryData(jobHistoryMapData()).observe(viewLifecycleOwner, {
+            if (it.status_code == "0") {
+                historyBinding.noJobHistroy.visibility = View.GONE
+                historyBinding.nestedScrollView.visibility = View.VISIBLE
+                arrayList.clear()
+                arrayList.addAll(it.data!!.OrderList)
+                historyBinding.historyRV.adapter!!.notifyDataSetChanged()
+            } else {
+                if (it.status == "") {
+                    historyBinding.noJobHistroy.visibility = View.VISIBLE
+                    historyBinding.nestedScrollView.visibility = View.GONE
+                } else {
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                }
+            }
+        })
+    }
+
+    private fun jobHistoryMapData(): Map<String, String> {
+        val mapDataVal = HashMap<String, String>()
+        mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
+        mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code!!
+        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        return mapDataVal
+    }
+
+    override fun onClick(textInput: String, position:Int) {
         when (textInput) {
             "viewData" -> {
                 mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
@@ -62,6 +101,23 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                     mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
                     historyBinding.blurView.visibility = View.GONE
                 }
+
+                val postDataValue = PostJobPostDto()
+                postDataValue.jobDescription = arrayList[position].about_job
+                postDataValue.jobTime = arrayList[position].job_offer_time!!.split(" ")[0]
+                postDataValue.jobAmount = arrayList[position].job_sub_total
+                postDataValue.grandTotal = arrayList[position].job_total_amount
+                postDataValue.jobPaymentMode = arrayList[position].payment_mode
+                postDataValue.job_tax_amount = arrayList[position].job_tax_amount
+                postDataValue.Charge_for_Jobs = arrayList[position].Charge_for_Jobs
+                postDataValue.Charge_for_Jobs_percentage = arrayList[position].Charge_for_Jobs_percentage
+                postDataValue.Charge_for_Jobs_Admin_percentage = arrayList[position].Charge_for_Jobs_Admin_percentage
+                postDataValue.Charge_for_Jobs_Delivery_percentage = arrayList[position].Charge_for_Jobs_Delivery_percentage
+                postDataValue.admin_service_fees = arrayList[position].admin_service_fees
+                postDataValue.delivery_employee_fee = arrayList[position].delivery_employee_fee
+                postDataValue.jobId = arrayList[position].job_order_id
+
+                jobViewBinding.jobDetails = postDataValue
             }
             else -> {
                 mBottomSheetReview.state = BottomSheetBehavior.STATE_EXPANDED
@@ -70,7 +126,54 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                     mBottomSheetReview.state = BottomSheetBehavior.STATE_COLLAPSED
                     historyBinding.blurView.visibility = View.GONE
                 }
+                reviewBinding.submitButton.setOnClickListener {
+                    reviewBinding.submitButton.startAnimation()
+                    reviewBinding.ratingData.rating = 0f
+                    reviewBinding.writeReviewET.text = Editable.Factory.getInstance().newEditable("")
+                    writeReviewData(arrayList[position].job_order_id!!, reviewBinding.ratingData.rating.toString(), reviewBinding.writeReviewET.text.toString(), position)
+                }
             }
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun writeReviewData(jobOrderId: String, totalRating: String, reviewContent: String, position: Int) {
+        jobHistoryViewModel!!.getWriteReviewJobData(reviewDataMap(jobOrderId, totalRating, reviewContent)).observe(viewLifecycleOwner, {
+            reviewBinding.submitButton.revertAnimation()
+            mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
+            historyBinding.blurView.visibility = View.GONE
+            if (it.status_code == "0") {
+                (activity as BaseActivity).bottomSheetDialog.show()
+                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                    (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    arrayList[position].review_status = "Done"
+                    arrayList[position].job_review_description = reviewContent
+                    arrayList[position].job_rating = totalRating
+                }
+                (activity as BaseActivity).bottomSheetDialog.show()
+            } else {
+                (activity as BaseActivity).bottomSheetDialog.show()
+                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                    (activity as BaseActivity).bottomSheetDialog.dismiss()
+                }
+                (activity as BaseActivity).bottomSheetDialog.show()
+            }
+        })
+    }
+
+    private fun reviewDataMap(jobOrderId: String, totalRating: String, reviewContent: String): Map<String, String> {
+        val mapDataValue = HashMap<String, String>()
+        mapDataValue["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
+        mapDataValue["job_order_id"] = jobOrderId
+        mapDataValue["total_tating"] = totalRating
+        mapDataValue["review_content"] = (activity as BaseActivity).base64Encoded(reviewContent)
+        mapDataValue["auth_key"] = AuthSingleton.authObject.auth_key!!
+        return mapDataValue
     }
 }

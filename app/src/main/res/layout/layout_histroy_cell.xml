@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="model"
+            type="com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoList" />
+    </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,7 +50,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="GHDFGER5637289"
+                            android:text="@{model.order_id}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -71,7 +77,7 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="300"
+                            android:text="@{model.job_total_amount}"
                             android:textColor="@color/colorGreen"
                             android:textSize="@dimen/_13sdp"
                             tools:ignore="HardcodedText" />
@@ -96,7 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text=" 537367"
+                        android:text='@{" "+model.job_order_id}'
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -107,7 +113,7 @@
                     android:layout_height="wrap_content">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/_36sdp"
@@ -127,7 +133,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="Reference site about Lorem Ipsum, giving information on its origins"
+                            android:text="@{model.about_job}"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="@dimen/_7sdp"
                             tools:ignore="HardcodedText" />
@@ -148,6 +154,7 @@
                     android:layout_marginTop="@dimen/_10sdp">
 
                     <TextView
+                        android:id="@+id/orderStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/grey_rounded_rectangle"
@@ -156,7 +163,7 @@
                         android:paddingTop="@dimen/_5sdp"
                         android:paddingEnd="@dimen/_10sdp"
                         android:paddingBottom="@dimen/_5sdp"
-                        android:text="Waiting"
+                        android:text="@{model.order_status_msg}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_8sdp"
                         tools:ignore="HardcodedText" />
@@ -200,7 +207,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="20"
+                            android:text='@{model.job_offer_time.split(" ")[0]}'
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -236,10 +243,11 @@
                 android:paddingEnd="@dimen/_minus10sdp" />
 
             <LinearLayout
+                android:id="@+id/jobReviewLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -248,9 +256,8 @@
 
                     <ImageView
                         android:id="@+id/userImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/mask_group"
+                        android:layout_width="@dimen/_45sdp"
+                        android:layout_height="@dimen/_45sdp"
                         tools:ignore="ContentDescription" />
 
                     <TextView
@@ -260,20 +267,22 @@
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_toEndOf="@+id/userImage"
                         android:fontFamily="@font/poppins_semi_bold"
-                        android:text="Eric. T. Trim"
+                        android:text="@{model.client_name}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_13sdp"
                         tools:ignore="HardcodedText" />
 
                     <RatingBar
+                        android:id="@+id/reviewRatingBar"
                         style="@style/Widget.AppCompat.RatingBar.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:focusableInTouchMode="false"
+                        android:focusable="false"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:numStars="5"
-                        android:progressTint="@color/yellow"
-                        android:rating="4" />
+                        android:progressTint="@color/yellow"/>
                 </RelativeLayout>
 
                 <TextView
@@ -281,23 +290,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/it_is_a_long_established_fact_that_a_reader_will_be_n_distracted_by_the_readable_content_of_a_page_n_when_looking_at_its_layout"
+                    android:text="@{model.job_review_description}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_11sdp"/>
 
                 <TextView
+                    android:id="@+id/jobReviewTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="22 March'21, 10:00 AM"
                     android:textColor="@color/text_color_dark"
                     android:textSize="@dimen/_9sdp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/jobAcceptLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -305,8 +315,8 @@
 
                 <ImageView
                     android:id="@+id/deliveryImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
                     android:src="@drawable/delivery_boy"
                     tools:ignore="ContentDescription" />
 
@@ -321,7 +331,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Jerry Thomas"
+                        android:text="@{model.delivery_Employee_name}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         android:fontFamily="@font/poppins_medium"
@@ -330,7 +340,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+49 8900123456"
+                        android:text="@{model.delivery_Employee_phone_code+model.delivery_Employee_phone}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp"
                         android:layout_marginTop="@dimen/_8sdp"
@@ -358,7 +368,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="19 Mar'2021, Friday"
+                        android:text="@{model.job_accept_date}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp"
                         android:layout_marginTop="@dimen/_5sdp"

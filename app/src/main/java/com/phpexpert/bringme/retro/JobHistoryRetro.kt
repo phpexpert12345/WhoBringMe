@@ -1,6 +1,6 @@
 package com.phpexpert.bringme.retro
 
-import com.phpexpert.bringme.dtos.JobHistoryDtoMain
+import com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoMain
 import com.phpexpert.bringme.dtos.LatestJobDtoMain
 import com.phpexpert.bringme.dtos.WriteReviewJobDtoMain
 import retrofit2.Call
@@ -15,7 +15,7 @@ interface JobHistoryRetro {
 
     @FormUrlEncoded
     @POST("phpexpert_client_reciever_job_history.php")
-    fun getJobHistory(@FieldMap mapData:Map<String, String>):Call<JobHistoryDtoMain>
+    fun getJobHistory(@FieldMap mapData:Map<String, String>):Call<EmployeeJobHistoryDtoMain>
 
     @FormUrlEncoded
     @POST("phpexpert_write_review.php")

@@ -15,8 +15,9 @@
             <RelativeLayout
                 android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_70sdp"
-                android:background="@color/colorLoginButton">
+                android:layout_height="wrap_content"
+                android:background="@color/colorLoginButton"
+                android:paddingTop="@dimen/_20sdp">
 
 
                 <ImageView
@@ -31,7 +32,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_20sdp"
                     android:fontFamily="@font/poppins_medium"
                     android:text="Add New Card"
                     android:textColor="@color/white"
@@ -39,15 +41,20 @@
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
-                android:scaleType="fitXY"
-                android:src="@drawable/credit_cardimage"
-                tools:ignore="ContentDescription" />
+                android:layout_marginEnd="@dimen/_15sdp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/credit_cardimage"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -71,13 +78,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
+                    android:digits="1234567890 "
+                    android:maxLength="19"
                     android:fontFamily="@font/poppins_regular"
                     android:hint="Card Number"
-                    android:digits="1234567890 "
                     android:inputType="number"
-                    android:paddingTop="@dimen/_25sdp"
                     android:paddingStart="0dp"
                     android:paddingLeft="0dp"
+                    android:paddingTop="@dimen/_25sdp"
                     android:singleLine="true"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_light"
@@ -102,9 +110,9 @@
                     android:fontFamily="@font/poppins_regular"
                     android:hint="Name On Card"
                     android:paddingStart="0dp"
+                    android:paddingLeft="0dp"
                     android:paddingTop="@dimen/_25sdp"
                     android:singleLine="true"
-                    android:paddingLeft="0dp"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_light"
                     android:textSize="@dimen/_12sdp"
@@ -135,11 +143,11 @@
                         android:fontFamily="@font/poppins_regular"
                         android:hint="Expiry Date"
                         android:inputType="number"
-                        android:paddingTop="@dimen/_25sdp"
-                        android:singleLine="true"
                         android:maxLength="5"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
+                        android:paddingTop="@dimen/_25sdp"
+                        android:singleLine="true"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_light"
                         android:textSize="@dimen/_12sdp"
@@ -164,11 +172,11 @@
                         android:digits="0123456789"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="CVV"
-                        android:singleLine="true"
                         android:maxLength="3"
-                        android:paddingTop="@dimen/_25sdp"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
+                        android:paddingTop="@dimen/_25sdp"
+                        android:singleLine="true"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_light"
                         android:textSize="@dimen/_12sdp"
@@ -184,15 +192,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:background="@drawable/button_rectangle_green"
             android:fontFamily="@font/poppins_medium"
             android:text="Pay Now"
             android:textAllCaps="false"
-            android:layout_centerHorizontal="true"
-            app:spinning_bar_color="@color/white"
-            app:spinning_bar_width="@dimen/_5sdp"
             android:textColor="@color/white"
             android:textSize="@dimen/_11sdp"
+            app:spinning_bar_color="@color/white"
+            app:spinning_bar_width="@dimen/_5sdp"
             tools:ignore="HardcodedText" />
 
     </RelativeLayout>

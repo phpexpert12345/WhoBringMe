@@ -11,12 +11,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_90sdp"
+            android:layout_height="@dimen/_120sdp"
+            android:paddingTop="@dimen/_20sdp"
             android:background="@color/colorLoginButton" />
 
         <RelativeLayout
             android:id="@+id/headerLayout"
             android:layout_width="match_parent"
+            android:paddingTop="@dimen/_20sdp"
             android:layout_height="wrap_content">
 
             <ImageView

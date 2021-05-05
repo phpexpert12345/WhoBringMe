@@ -375,6 +375,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp"
+                        android:text="@{model.job_accept_date}"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/poppins_medium"

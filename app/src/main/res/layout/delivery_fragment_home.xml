@@ -77,10 +77,11 @@
                         tools:ignore="RtlSymmetry">
 
                         <TextView
+                            android:id="@+id/runningOrders"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="05"
+                            android:text="00"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_25sdp"
                             tools:ignore="HardcodedText" />
@@ -120,11 +121,12 @@
                                 tools:ignore="ContentDescription" />
 
                             <TextView
+                                android:id="@+id/totalAmount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_5sdp"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="200"
+                                android:text="00"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_25sdp"
                                 tools:ignore="HardcodedText" />

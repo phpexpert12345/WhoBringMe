@@ -1,5 +1,7 @@
 package com.phpexpert.bringme.activities.delivery
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
@@ -10,6 +12,13 @@ import com.phpexpert.bringme.utilities.BaseActivity
 
 class DashboardActivity : BaseActivity() {
 
+    @SuppressLint("InlinedApi")
+    private var perission = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.CALL_PHONE
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_delivery)
@@ -19,5 +28,6 @@ class DashboardActivity : BaseActivity() {
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
         NavigationUI.setupWithNavController(navView, navController)
+        isCheckPermissions(this, perission)
     }
 }

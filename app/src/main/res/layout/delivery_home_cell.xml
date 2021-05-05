@@ -51,6 +51,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/clientCall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -96,6 +97,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/orderStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -106,7 +108,7 @@
                     android:paddingBottom="@dimen/_5sdp"
                     android:textColor="@color/text_color"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/waiting"
+                    android:text="@{model.order_status_msg}"
                     android:textSize="@dimen/_8sdp"
                     tools:ignore="RelativeOverlap" />
             </RelativeLayout>
@@ -170,6 +172,7 @@
                     android:textSize="@dimen/_7sdp" />
 
                 <TextView
+                    android:id="@+id/acceptedDateTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"

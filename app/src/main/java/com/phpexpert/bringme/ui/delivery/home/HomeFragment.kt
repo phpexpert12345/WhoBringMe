@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.phpexpert.bringme.R
@@ -137,6 +138,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                     arrayList.clear()
                     arrayList.addAll(it.data!!.OrderList)
                     homeFragmentBinding.homeRecyclerView.adapter!!.notifyDataSetChanged()
+                    homeFragmentBinding.runningOrders.text = it.Total_Running_Orders
+                    homeFragmentBinding.totalAmount.text = it.Total_Running_Order_Amount
                 } else {
                     if (it.status == "") {
                         homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
@@ -289,6 +292,9 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                     mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
                     homeFragmentBinding.blurView.visibility = View.GONE
                 }
+
+                Glide.with(requireActivity()).load(arrayList[position]).centerCrop().placeholder(R.drawable.user_placeholder).into(jobViewBinding.userImage)
+                jobViewBinding.data = arrayList[position]
             }
             "acceptData" -> {
                 orderAcceptBehavior.state = BottomSheetBehavior.STATE_EXPANDED
