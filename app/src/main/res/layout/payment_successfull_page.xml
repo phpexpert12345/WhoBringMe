@@ -29,9 +29,11 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/timingDataLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_60sdp"
+                android:visibility="visible"
                 android:background="@drawable/congratulate_bg"
                 android:orientation="vertical">
 
@@ -284,6 +286,236 @@
                     android:textSize="@dimen/_11sdp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/userAcceptedData"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_60sdp"
+                android:visibility="gone"
+                android:background="@drawable/congratulate_bg"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:src="@drawable/tick"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/userName1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="Hello Raj,"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_13sdp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:text="Congratulation,"
+                    android:textColor="@color/colorGreen"
+                    android:textSize="@dimen/_15sdp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_45sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_45sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center_horizontal"
+                    android:text="@string/now_your_job_live_and_finding_delivery_employees_to_accept_the_job"
+                    android:textColor="@color/text_color_dark"
+                    android:textSize="@dimen/_11sdp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@color/view_color"/>
+
+                <RelativeLayout
+                    android:id="@+id/deliveryDataLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp">
+
+                    <ImageView
+                        android:id="@+id/deliveryImageView"
+                        android:layout_width="@dimen/_45sdp"
+                        android:layout_height="@dimen/_45sdp"
+                        tools:ignore="ContentDescription" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/deliveryImageView"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/userName2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Jerry Thomas"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_11sdp"
+                            android:fontFamily="@font/poppins_medium"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/userMobileNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="+49 8900123456"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_7sdp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:fontFamily="@font/poppins_medium"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Accepted Time"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_7sdp"
+                            android:layout_gravity="center_horizontal"
+                            android:fontFamily="@font/poppins_medium"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="19 Mar'2021, Friday"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_7sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:fontFamily="@font/poppins_medium"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@color/view_color"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="Order Id"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/_13sdp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/orderId1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_35sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_15sdp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/totalPayText1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="Total Pay"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/_13sdp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/grandTotalAmount1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_20sdp"
+                        android:layout_toEndOf="@+id/totalPayText1"
+                        android:drawableStart="@drawable/euro_currency_black"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_15sdp"
+                        tools:ignore="HardcodedText,UseCompatTextViewDrawableXml" />
+
+                    <ImageView
+                        android:id="@+id/viewJobIcon1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/view"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                android:id="@+id/homeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:background="@color/colorGreen"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingStart="@dimen/_70sdp"
+                android:paddingEnd="@dimen/_70sdp"
+                android:text="Go to Home"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_11sdp"
+                tools:ignore="HardcodedText" />
         </RelativeLayout>
 
         <View
@@ -296,6 +528,6 @@
         <include
             android:id="@+id/jobViewLayout"
             layout="@layout/job_view_layout"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

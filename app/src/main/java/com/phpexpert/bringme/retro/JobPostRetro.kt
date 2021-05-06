@@ -25,14 +25,14 @@ interface JobPostRetro {
     fun postJobData(@FieldMap map:Map<String, String>):Call<PostJobDataMain>
 
     @FormUrlEncoded
-    @POST("phpexpert_job_post_order_detail.php")
-    fun getJobDetails(@FieldMap map:Map<String, String>):Call<GetJobDetailsMain>
-
-    @FormUrlEncoded
     @POST("phpexpert_auto_job_cancelled.php")
     fun cancelJobData(@FieldMap map:Map<String, String>):Call<CancelJobDtoMain>
 
     @FormUrlEncoded
     @POST("phpexpert_client_reciever_job_time_update.php")
     fun updateJobData(@FieldMap map:Map<String, String>):Call<UpdateJobDtoMain>
+
+    @FormUrlEncoded
+    @POST("phpexpert_job_post_order_detail.php")
+    fun getJobDetails(@FieldMap map:Map<String, String>):Call<JobDetailsDtoMain>
 }

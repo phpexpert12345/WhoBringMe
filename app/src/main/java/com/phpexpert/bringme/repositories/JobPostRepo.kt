@@ -16,7 +16,7 @@ class JobPostRepo {
     private var paymentAuthKey = MutableLiveData<PaymentConfigurationMain>()
     private var paymentGenerateToken = MutableLiveData<PaymentTokenMain>()
     private var postJobData = MutableLiveData<PostJobDataMain>()
-    private var jobDetailsData = MutableLiveData<GetJobDetailsMain>()
+    private var jobDetailsData = MutableLiveData<JobDetailsDtoMain>()
     private var cancelJobData = MutableLiveData<CancelJobDtoMain>()
     private var updateJobData = MutableLiveData<UpdateJobDtoMain>()
 
@@ -121,19 +121,25 @@ class JobPostRepo {
         return postJobData
     }
 
-    fun getJobDetailsData(context: Context, mapData:Map<String, String>): MutableLiveData<GetJobDetailsMain> {
+    fun getJobDetailsData(mapData:Map<String, String>): MutableLiveData<JobDetailsDtoMain> {
         ServiceGenerator.createService(JobPostRetro::class.java).getJobDetails(mapData)
-                .enqueue(object : Callback<GetJobDetailsMain> {
-                    override fun onResponse(call: Call<GetJobDetailsMain>, response: Response<GetJobDetailsMain>) {
+                .enqueue(object : Callback<JobDetailsDtoMain> {
+                    override fun onResponse(call: Call<JobDetailsDtoMain>, response: Response<JobDetailsDtoMain>) {
                         if (response.isSuccessful) {
                             jobDetailsData.postValue(response.body())
                         } else {
-                            Toast.makeText(context, "Payment Token Api Error", Toast.LENGTH_LONG).show()
+                            val postJobDataMain = JobDetailsDtoMain()
+                            postJobDataMain.status_message = "Job Details Api Error"
+                            postJobDataMain.status_code = "1"
+                            jobDetailsData.postValue(postJobDataMain)
                         }
                     }
 
-                    override fun onFailure(call: Call<GetJobDetailsMain>, t: Throwable) {
-                        Toast.makeText(context, "Payment Token Api Error", Toast.LENGTH_LONG).show()
+                    override fun onFailure(call: Call<JobDetailsDtoMain>, t: Throwable) {
+                        val postJobDataMain = JobDetailsDtoMain()
+                        postJobDataMain.status_message = "Job Details Api Error"
+                        postJobDataMain.status_code = "1"
+                        jobDetailsData.postValue(postJobDataMain)
                     }
 
                 })

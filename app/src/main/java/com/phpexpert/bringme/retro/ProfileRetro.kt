@@ -1,8 +1,6 @@
 package com.phpexpert.bringme.retro
 
-import com.phpexpert.bringme.dtos.EditProfileDto
-import com.phpexpert.bringme.dtos.ForgotPasswordChangeDtoMain
-import com.phpexpert.bringme.dtos.PlaceMainClass
+import com.phpexpert.bringme.dtos.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -20,4 +18,16 @@ interface ProfileRetro {
     @POST("phpexpert_edit_login_profile.php")
     fun editPhotoData(@PartMap map: HashMap<String, RequestBody?>,
                       @Part account_photo: MultipartBody.Part?):Call<EditProfileDto>
+
+    @FormUrlEncoded
+    @POST("phpexpert_change_mobile_number_OTP.php")
+    fun changePhoneNumber(@FieldMap mapData: Map<String, String>):Call<ProfileChangeNumberDtoMain>
+
+    @FormUrlEncoded
+    @POST("phpexpert_change_mobile_number.php")
+    fun changePhoneNumberOtpVerify(@FieldMap mapData: Map<String, String>):Call<ProfileVerifyOtpDtoMain>
+
+    @FormUrlEncoded
+    @POST("phpexpert_change_mobile_number_Resend_OTP.php")
+    fun changePhoneNumberResendOtp(@FieldMap mapData: Map<String, String>):Call<ProfileResendDataMain>
 }

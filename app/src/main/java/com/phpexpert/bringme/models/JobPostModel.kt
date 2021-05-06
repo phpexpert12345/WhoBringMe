@@ -14,7 +14,7 @@ class JobPostModel : ViewModel() {
     private var paymentAuthKey = MutableLiveData<PaymentConfigurationMain>()
     private var paymentGenerateToken = MutableLiveData<PaymentTokenMain>()
     private var postJobData = MutableLiveData<PostJobDataMain>()
-    private var jobDetailsData = MutableLiveData<GetJobDetailsMain>()
+    private var jobDetailsData = MutableLiveData<JobDetailsDtoMain>()
     private var cancelJobData = MutableLiveData<CancelJobDtoMain>()
     private var updateJobData = MutableLiveData<UpdateJobDtoMain>()
 
@@ -41,8 +41,8 @@ class JobPostModel : ViewModel() {
         return postJobData
     }
 
-    fun getJobDetails(context: Context, mapData: Map<String, String>): LiveData<GetJobDetailsMain> {
-        jobDetailsData = JobPostRepo().getJobDetailsData(context, mapData)
+    fun getJobDetails(mapData: Map<String, String>): LiveData<JobDetailsDtoMain> {
+        jobDetailsData = JobPostRepo().getJobDetailsData(mapData)
         return jobDetailsData
     }
 

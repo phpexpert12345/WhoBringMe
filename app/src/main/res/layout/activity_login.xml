@@ -93,6 +93,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
+                        android:singleLine="true"
                         android:digits="0123456789"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:gravity="center_vertical"
@@ -129,6 +130,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:singleLine="true"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:gravity="center_vertical"
                         android:hint="@string/enter_password"
@@ -232,15 +234,15 @@
             android:background="#80000000"
             android:visibility="gone" />
 
-        <include
+        <!--<include
             android:id="@+id/forPasswordOne"
             layout="@layout/layout_forgot_password_one"
             android:visibility="visible" />
-
-        <include
+-->
+        <!--<include
             android:id="@+id/forgotPasswordTwo"
             layout="@layout/layout_forgot_password_two"
-            android:visibility="visible" />
+            android:visibility="visible" />-->
 
         <include
             android:id="@+id/forgotPasswordThree"

@@ -52,7 +52,6 @@
                     android:layout_width="@dimen/_65sdp"
                     android:layout_height="@dimen/_65sdp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/mask_group_1"
                     tools:ignore="ContentDescription" />
 
                 <ImageView

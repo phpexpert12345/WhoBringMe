@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.phpexpert.bringme.R
@@ -51,6 +52,8 @@ class CongratulationScreen : BaseActivity() {
     }
 
     private fun initValues() {
+        congratulationScreenBinding.userName.text = sharedPrefrenceManager.getProfile().login_name
+        congratulationScreenBinding.userName1.text = sharedPrefrenceManager.getProfile().login_name
         servicePostValue = intent.getSerializableExtra("postValue") as PostJobPostDto
         jobViewBinding = congratulationScreenBinding.jobViewLayout
         jobViewBinding.jobDetails = servicePostValue
@@ -122,6 +125,10 @@ class CongratulationScreen : BaseActivity() {
                     countSecond = intArrayOf(59)
                 } else {
                     countSecond[0]--
+                }
+
+                if (countSecond[0] % 3==0){
+                    getJobDetailsObserver()
                 }
 
                 if (countMint[0] == 0) {
@@ -242,6 +249,29 @@ class CongratulationScreen : BaseActivity() {
             }
             bottomSheetDialog.show()
         })
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun getJobDetailsObserver() {
+        jobViewModel.getJobDetails(getJobDetailsMap()).observe(this, {
+            if (it.status_code == "0") {
+                if (it.data!!.OrderDetailList!![0].order_status_msg == "Accepted") {
+                    congratulationScreenBinding.timingDataLayout.visibility = View.GONE
+                    congratulationScreenBinding.deliveryDataLayout.visibility = View.VISIBLE
+                    Glide.with(this).load(it.data!!.OrderDetailList!![0].Delivery_Employee_photo).placeholder(R.drawable.user_placeholder).into(congratulationScreenBinding.deliveryImageView)
+                    congratulationScreenBinding.userName2.text = it.data!!.OrderDetailList!![0].Delivery_Employee_name
+                    congratulationScreenBinding.userMobileNo.text = it.data!!.OrderDetailList!![0].Delivery_Employee_phone_code + " " + it.data!!.OrderDetailList!![0].Delivery_Employee_phone
+                }
+            }
+        })
+    }
+
+    private fun getJobDetailsMap(): Map<String, String> {
+        val mapData = HashMap<String, String>()
+        mapData["job_order_id"] = servicePostValue.jobId!!
+        mapData["LoginId"] = sharedPrefrenceManager.getLoginId()
+        mapData["auth_key"] = AuthSingleton.authObject.auth_key!!
+        return mapData
     }
 
     private fun getCancelMap(): Map<String, String> {

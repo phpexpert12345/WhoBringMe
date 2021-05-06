@@ -9,8 +9,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import android.os.StrictMode
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -41,6 +43,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.lang.reflect.Method
 import java.net.URI
 import java.util.*
 
@@ -62,8 +65,17 @@ class ProfileEditActivity : BaseActivity() {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
 
+    @SuppressLint("ObsoleteSdkInt")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= 24) {
+            try {
+                val m: Method = StrictMode::class.java.getMethod("disableDeathOnFileUriExposure")
+                m.invoke(null)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
         profileEditLayoutBinding = DataBindingUtil.setContentView(this, R.layout.profile_edit_layout)
         profileEditLayoutBinding.autoComplete.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -120,6 +132,7 @@ class ProfileEditActivity : BaseActivity() {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .apply(requestOptions)
+                .placeholder(R.drawable.user_placeholder)
                 .into(profileEditLayoutBinding.userImage)
 
         profileEditLayoutBinding.firstNameEt.text = Editable.Factory.getInstance().newEditable(sharedPrefrenceManager.getProfile().login_name!!.split(" ")[0])
