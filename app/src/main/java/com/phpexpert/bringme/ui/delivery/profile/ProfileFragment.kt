@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -54,6 +55,7 @@ class ProfileFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         profileFragmentBinding = DataBindingUtil.inflate(layoutInflater, R.layout.delivery_profile_fragment, container, false)
+        profileViewMode = ViewModelProvider(this).get(com.phpexpert.bringme.models.ProfileViewModel::class.java)
         initValues()
         setActions()
         profileFragmentBinding.phoneChangeLayout.setOnClickListener {

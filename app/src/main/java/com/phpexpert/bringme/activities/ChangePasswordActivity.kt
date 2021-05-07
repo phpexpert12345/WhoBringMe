@@ -78,7 +78,7 @@ class ChangePasswordActivity : BaseActivity() {
     private fun validationData(): Boolean {
         return when {
             changePasswordActivity.oldPassword.text.isEmpty() -> {
-                Toast.makeText(this, "Please Enter old password first", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Please Enter old password  first", Toast.LENGTH_LONG).show()
                 false
             }
             changePasswordActivity.oldPassword.text.length != 6 -> {

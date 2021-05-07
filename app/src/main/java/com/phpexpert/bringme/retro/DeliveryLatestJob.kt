@@ -19,7 +19,7 @@ interface DeliveryLatestJob {
     fun orderAcceptData(@FieldMap map: Map<String, String>):Call<OrderAcceptMainDto>
 
     @FormUrlEncoded
-    @POST("phpexpert_delivery_emp_order_accepted.php")
+    @POST("phpexpert_delivery_emp_order_decline.php")
     fun orderDeclineData(@FieldMap map: Map<String, String>):Call<OrderDeclineMainDto>
 
     @FormUrlEncoded

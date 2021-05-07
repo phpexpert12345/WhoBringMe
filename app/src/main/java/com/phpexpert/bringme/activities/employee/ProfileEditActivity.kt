@@ -156,27 +156,88 @@ class ProfileEditActivity : BaseActivity() {
         postDataOtp.addressPostCode = sharedPrefrenceManager.getProfile().login_postcode
     }
 
+    @SuppressLint("SetTextI18n")
     private fun checkValidations(): Boolean {
         return when {
             profileEditLayoutBinding.firstNameEt.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Enter First Name"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             profileEditLayoutBinding.lastName.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Enter Last Name"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             profileEditLayoutBinding.emailEt.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Enter Email"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
+                false
+            }
+            !profileEditLayoutBinding.emailEt.text.toString().isValidEmail()->{
+                bottomSheetDialogMessageText.text = "Enter Valid Email"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
+
                 false
             }
             profileEditLayoutBinding.autoComplete.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Enter Address"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             profileEditLayoutBinding.stateEt.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Enter State"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             profileEditLayoutBinding.cityET.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Enter City"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             profileEditLayoutBinding.postCodeEt.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Enter Post Code"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             else -> {

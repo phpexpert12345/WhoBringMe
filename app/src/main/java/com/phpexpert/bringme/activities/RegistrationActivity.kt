@@ -53,6 +53,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
         setValues()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setActions() {
         registrationActivity.editData.setOnClickListener {
             finish()
@@ -62,10 +63,23 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
             if (checkValidations()) {
                 if (isCheckPermissions(this, perission))
                     setObserver()
-                else
-                    Toast.makeText(this, "Please Enable permissions first", Toast.LENGTH_LONG).show()
+                else {
+                    bottomSheetDialogMessageText.text = "Please Enable permissions first"
+                    bottomSheetDialogMessageOkButton.text = "Ok"
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
+                }
             } else {
-                Toast.makeText(this, "Please enter all fields", Toast.LENGTH_LONG).show()
+                /*bottomSheetDialogMessageText.text = "Please enter all fields"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()*/
             }
 
         }
@@ -222,26 +236,87 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun checkValidations(): Boolean {
         return when {
             registrationActivity.firstNameEt.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Enter First Name"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             registrationActivity.lastNameEt.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Enter Last Name First"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             registrationActivity.mobileNumberEditText.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Enter Mobile Number first"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
+                false
+            }
+            registrationActivity.mobileNumberEditText.text.toString().length!=10->{
+                bottomSheetDialogMessageText.text = "Enter Valid Mobile Number"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             registrationActivity.emailEt.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Enter Email"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
+                false
+            }
+            !registrationActivity.emailEt.text.toString().isValidEmail()->{
+                bottomSheetDialogMessageText.text = "Enter Valid Email"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             registrationActivity.digitPin.text.toString().isEmpty() -> {
-                registrationActivity.digitPin.error = "Enter Pin"
+                bottomSheetDialogMessageText.text = "Enter Pin First"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             registrationActivity.digitPin.text.toString().length != 6 -> {
-                registrationActivity.digitPin.error = "Enter valid pin"
+                bottomSheetDialogMessageText.text = "Password must contains atleast 6 digits"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             else -> {

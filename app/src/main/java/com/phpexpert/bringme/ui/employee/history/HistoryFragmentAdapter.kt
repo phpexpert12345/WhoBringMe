@@ -36,7 +36,11 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
         historyFragmentCellBinding = holder.viewBinding as LayoutHistroyCellBinding
         historyFragmentCellBinding.model = arrayList[position]
 
-        historyFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+        try {
+            historyFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
 
         if (arrayList[position].review_status == "Not Done") {
             historyFragmentCellBinding.jobReviewLayout.visibility = View.GONE

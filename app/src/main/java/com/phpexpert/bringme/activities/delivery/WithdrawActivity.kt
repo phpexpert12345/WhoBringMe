@@ -15,6 +15,9 @@ class WithdrawActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         layoutWithdrawActivity = DataBindingUtil.setContentView(this, R.layout.layout_withdraw_activity)
+        layoutWithdrawActivity.backArrow.setOnClickListener {
+            finish()
+        }
     }
 
     override fun onResume() {

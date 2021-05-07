@@ -128,9 +128,9 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                 }
                 reviewBinding.submitButton.setOnClickListener {
                     reviewBinding.submitButton.startAnimation()
+                    writeReviewData(arrayList[position].job_order_id!!, reviewBinding.ratingData.rating.toString(), reviewBinding.writeReviewET.text.toString(), position)
                     reviewBinding.ratingData.rating = 0f
                     reviewBinding.writeReviewET.text = Editable.Factory.getInstance().newEditable("")
-                    writeReviewData(arrayList[position].job_order_id!!, reviewBinding.ratingData.rating.toString(), reviewBinding.writeReviewET.text.toString(), position)
                 }
             }
         }
@@ -149,9 +149,11 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    mBottomSheetReview.state = BottomSheetBehavior.STATE_COLLAPSED
                     arrayList[position].review_status = "Done"
                     arrayList[position].job_review_description = reviewContent
                     arrayList[position].job_rating = totalRating
+                    historyBinding.historyRV.adapter!!.notifyItemChanged(position)
                 }
                 (activity as BaseActivity).bottomSheetDialog.show()
             } else {

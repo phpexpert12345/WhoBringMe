@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
+
         <variable
             name="model"
             type="com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoList" />
@@ -178,6 +181,7 @@
                         android:text="@string/write_a_review"
                         android:textColor="@color/colorGreen"
                         android:textSize="@dimen/_8sdp"
+                        android:visibility='@{model.review_status.equalsIgnoreCase("Done") ? View.GONE : View.VISIBLE}'
                         tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
 
@@ -247,8 +251,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -277,12 +281,12 @@
                         style="@style/Widget.AppCompat.RatingBar.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:focusableInTouchMode="false"
-                        android:focusable="false"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:numStars="5"
-                        android:progressTint="@color/yellow"/>
+                        android:progressTint="@color/yellow" />
                 </RelativeLayout>
 
                 <TextView
@@ -292,7 +296,7 @@
                     android:fontFamily="@font/poppins_regular"
                     android:text="@{model.job_review_description}"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_11sdp"/>
+                    android:textSize="@dimen/_11sdp" />
 
                 <TextView
                     android:id="@+id/jobReviewTime"
@@ -310,8 +314,8 @@
                 android:id="@+id/jobAcceptLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_margin="@dimen/_10sdp">
+                android:layout_margin="@dimen/_10sdp"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/deliveryImageView"
@@ -323,28 +327,28 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/deliveryImageView"
-                    android:layout_marginStart="@dimen/_10sdp"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_toEndOf="@+id/deliveryImageView"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
                         android:text="@{model.delivery_Employee_name}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
-                        android:fontFamily="@font/poppins_medium"
                         tools:ignore="HardcodedText" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_medium"
                         android:text="@{model.delivery_Employee_phone_code+model.delivery_Employee_phone}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:fontFamily="@font/poppins_medium"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
 
@@ -358,21 +362,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/poppins_medium"
                         android:text="Accepted Time"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp"
-                        android:layout_gravity="center_horizontal"
-                        android:fontFamily="@font/poppins_medium"
                         tools:ignore="HardcodedText" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:fontFamily="@font/poppins_medium"
                         android:text="@{model.job_accept_date}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:fontFamily="@font/poppins_medium"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
             </RelativeLayout>

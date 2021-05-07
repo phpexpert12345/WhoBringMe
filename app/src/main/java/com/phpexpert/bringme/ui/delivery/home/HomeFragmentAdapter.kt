@@ -46,7 +46,11 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
             val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + arrayList[position].Client_phone_code+arrayList[position].Client_phone))
             context.startActivity(intent)
         }
-        homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+        try {
+            homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
         if (arrayList[position].job_accept_time != null) {
             homeFragmentCellBinding.acceptedDateTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
             homeFragmentCellBinding.acceptViewLayout.text = "View"

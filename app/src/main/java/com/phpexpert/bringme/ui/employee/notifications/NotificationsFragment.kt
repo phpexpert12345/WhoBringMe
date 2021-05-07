@@ -25,6 +25,7 @@ class NotificationsFragment : Fragment() {
         notificationsViewModel = ViewModelProvider(this).get(NotificationViewModel::class.java)
         notificationBinding = DataBindingUtil.inflate(inflater, R.layout.employee_fragment_notifications, container, false)
         setList()
+        setObserver()
         return notificationBinding.root
     }
 

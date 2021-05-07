@@ -162,10 +162,12 @@ class OTPActivity : BaseActivity() {
             bottomSheetDialogMessageText.text = it.status_message
             bottomSheetDialogMessageOkButton.text = "Ok"
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
-            bottomSheetDialogMessageOkButton.setOnClickListener {
-                otpActivity.timeText.visibility = View.VISIBLE
-                otpActivity.resendLayout.visibility = View.GONE
-                timerRestriction()
+            bottomSheetDialogMessageOkButton.setOnClickListener {_->
+                if (it.status_code=="0") {
+                    otpActivity.timeText.visibility = View.VISIBLE
+                    otpActivity.resendLayout.visibility = View.GONE
+                    timerRestriction()
+                }
                 bottomSheetDialog.dismiss()
             }
             bottomSheetDialog.show()

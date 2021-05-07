@@ -1,6 +1,9 @@
+@file:Suppress("DEPRECATION")
+
 package com.phpexpert.bringme.ui.delivery.home
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -24,6 +27,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
+@Suppress("DEPRECATION", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     private var latestJobViewModel: LatestJobDeliveryViewModel? = null
     private lateinit var homeFragmentBinding: DeliveryFragmentHomeBinding
@@ -48,6 +52,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     private lateinit var arrayList: ArrayList<LatestJobDeliveryDataList>
     private var selectedPosition: Int = -1
     private lateinit var orderDelcineString: String
+
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -81,6 +87,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
     @SuppressLint("MissingPermission")
     private fun initValues() {
+
+        progressDialog = ProgressDialog(requireActivity())
+        progressDialog.setMessage("Please Wait...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
         val mLocationRequest = LocationRequest.create()
         mLocationRequest.interval = 60000
         mLocationRequest.fastestInterval = 5000
@@ -101,7 +112,6 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                         address = addresses[0]
                         setObserver()
                         break
-                    } else {
                     }
                 }
                 mFusedLocationClient.removeLocationUpdates(mLocationCallback)
@@ -129,9 +139,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         homeFragmentBinding.homeRecyclerView.adapter = HomeFragmentAdapter(requireActivity(), arrayList, this)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setObserver() {
         if ((activity as BaseActivity).isOnline()) {
             latestJobViewModel!!.getLatestJobDeliveryData(mapData()).observe(viewLifecycleOwner, {
+                progressDialog.dismiss()
                 if (it.status_code == "0") {
                     homeFragmentBinding.noDataFoundLayout.visibility = View.GONE
                     homeFragmentBinding.nestedScrollView.visibility = View.VISIBLE
@@ -157,6 +169,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
             })
 
         } else {
+            progressDialog.dismiss()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -167,6 +180,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun orderAcceptObserver() {
         if ((activity as BaseActivity).isOnline()) {
             latestJobViewModel!!.orderAcceptData(orderMapData()).observe(viewLifecycleOwner, {
@@ -192,6 +206,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun orderDeclineObserver() {
         if ((activity as BaseActivity).isOnline()) {
             latestJobViewModel!!.orderDeclineData(orderDeclineData()).observe(viewLifecycleOwner, {
@@ -217,6 +232,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun orderFinishObserver() {
         if ((activity as BaseActivity).isOnline()) {
             latestJobViewModel!!.orderFinishData(orderFinishData()).observe(viewLifecycleOwner, {
@@ -282,6 +298,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         return mapDataVal
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onClick(textInput: String, position: Int) {
         selectedPosition = position
         when (textInput) {
@@ -324,7 +341,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                         orderFinishedBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                         homeFragmentBinding.blurView.visibility = View.GONE
                         orderFinishObserver()
-                    }else{
+                    } else {
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter order otp first"
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE

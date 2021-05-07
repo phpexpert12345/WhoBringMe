@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.Base64
+import android.util.Patterns
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -176,4 +177,7 @@ open class BaseActivity : AppCompatActivity() {
         }
         return file
     }
+
+    fun CharSequence?.isValidEmail() = !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
+
 }

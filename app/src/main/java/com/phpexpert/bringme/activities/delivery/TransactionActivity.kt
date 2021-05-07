@@ -18,6 +18,9 @@ class TransactionActivity : BaseActivity() {
         transactionActivity = DataBindingUtil.setContentView(this, R.layout.layout_transaction_history_activity)
         transactionActivity.historyTransactionRV.layoutManager = LinearLayoutManager(this)
         transactionActivity.historyTransactionRV.isNestedScrollingEnabled = false
+        transactionActivity.backArrow.setOnClickListener {
+            finish()
+        }
         val arrayList = ArrayList<String>()
         arrayList.add("abc")
         arrayList.add("abc")

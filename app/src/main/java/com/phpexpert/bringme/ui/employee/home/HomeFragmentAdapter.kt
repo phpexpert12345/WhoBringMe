@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.HomeFragmentCellBinding
 import com.phpexpert.bringme.dtos.OrderListData
+import java.lang.Exception
 
 class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderListData>, var onClickListener: OnClickView) : RecyclerView.Adapter<HomeFragmentAdapter.HomeFragmentViewHolder>() {
 
@@ -33,7 +34,11 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
     override fun onBindViewHolder(holder: HomeFragmentViewHolder, position: Int) {
         homeFragmentCellBinding = holder.viewBinding as HomeFragmentCellBinding
         homeFragmentCellBinding.model = arrayList[position]
-        homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+        try {
+            homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
         homeFragmentCellBinding.viewJobImageView.setOnClickListener {
             onClickListener.onClick("viewData", position)
         }

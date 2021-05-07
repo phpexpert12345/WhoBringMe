@@ -89,20 +89,24 @@ class NewCardActivity : BaseActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (s!!.isNotEmpty() && s.length % 5 == 0) {
-                    val c: Char = s[s.length - 1]
-                    if (' ' == c) {
-                        s.delete(s.length - 1, s.length)
+                try {
+                    if (s!!.isNotEmpty() && s.length % 5 == 0) {
+                        val c: Char = s[s.length - 1]
+                        if (' ' == c) {
+                            s.delete(s.length - 1, s.length)
+                        }
                     }
-                }
-                // Insert char where needed.
-                // Insert char where needed.
-                if (s.isNotEmpty() && s.length % 5 == 0) {
-                    val c: Char = s[s.length - 1]
-                    // Only if its a digit where there should be a space we insert a space
-                    if (Character.isDigit(c) && TextUtils.split(s.toString(), java.lang.String.valueOf(' ')).size <= 3) {
-                        s.insert(s.length - 1, java.lang.String.valueOf(' '))
+                    // Insert char where needed.
+                    // Insert char where needed.
+                    if (s.isNotEmpty() && s.length % 5 == 0) {
+                        val c: Char = s[s.length - 1]
+                        // Only if its a digit where there should be a space we insert a space
+                        if (Character.isDigit(c) && TextUtils.split(s.toString(), java.lang.String.valueOf(' ')).size <= 3) {
+                            s.insert(s.length - 1, java.lang.String.valueOf(' '))
+                        }
                     }
+                }catch (e:Exception){
+                    e.printStackTrace()
                 }
             }
         })
@@ -118,12 +122,16 @@ class NewCardActivity : BaseActivity() {
                 bottomSheetDialog.show()
             }else {
                 cardActivityBinding.payNowButton.startAnimation()
-                val cardData = Card.create(cardActivityBinding.cardNumber.text.toString().replace("\\s".toRegex(), ""),
-                        cardActivityBinding.expiryDate.text.toString().split("/")[0].toInt(),
-                        cardActivityBinding.expiryDate.text.toString().split("/")[1].toInt(),
-                        cardActivityBinding.cvv.text.toString()
-                )
-                createPaymentCall(cardData)
+                try {
+                    val cardData = Card.create(cardActivityBinding.cardNumber.text.toString().replace("\\s".toRegex(), ""),
+                            cardActivityBinding.expiryDate.text.toString().split("/")[0].toInt(),
+                            cardActivityBinding.expiryDate.text.toString().split("/")[1].toInt(),
+                            cardActivityBinding.cvv.text.toString()
+                    )
+                    createPaymentCall(cardData)
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
             }
         }
 
@@ -147,17 +155,21 @@ class NewCardActivity : BaseActivity() {
     }
 
     private fun createPaymentCall(card_details: Card) {
-        val stripe = Stripe(this, PaymentConfigurationSingleton.paymentConfiguration.stripe_publishKey!!)
-        stripe.createToken(card_details, object : ApiResultCallback<Token?> {
-            override fun onError(error: Exception) {
-                Toast.makeText(this@NewCardActivity, "Please try again", Toast.LENGTH_SHORT).show()
-                //progressBar.setVisibility(View.GONE);
-            }
+        try {
+            val stripe = Stripe(this, PaymentConfigurationSingleton.paymentConfiguration.stripe_publishKey!!)
+            stripe.createToken(card_details, object : ApiResultCallback<Token?> {
+                override fun onError(error: Exception) {
+                    Toast.makeText(this@NewCardActivity, "Please try again", Toast.LENGTH_SHORT).show()
+                    //progressBar.setVisibility(View.GONE);
+                }
 
-            override fun onSuccess(token: Token) {
-                setPaymentTokenObserver(token.id)
-            }
-        })
+                override fun onSuccess(token: Token) {
+                    setPaymentTokenObserver(token.id)
+                }
+            })
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
     }
 
     @SuppressLint("SetTextI18n")

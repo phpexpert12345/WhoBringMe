@@ -81,6 +81,7 @@ class ProfileFragment : Fragment() {
             if (mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString().trim() == "") {
                 Toast.makeText(requireActivity(), "Please enter mobile number first", Toast.LENGTH_LONG).show()
             } else {
+                mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.startAnimation()
                 getOtpNumberObserver()
             }
         }
@@ -91,6 +92,7 @@ class ProfileFragment : Fragment() {
         }
 
         otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setOnClickListener {
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.startAnimation()
             verifyOtpObserver()
         }
 
@@ -178,6 +180,7 @@ class ProfileFragment : Fragment() {
     private fun getOtpNumberObserver() {
         if ((activity as BaseActivity).isOnline()) {
             profileViewMode.changeMobileNumber(getOtpDataMap()).observe(viewLifecycleOwner, {
+                mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -192,6 +195,7 @@ class ProfileFragment : Fragment() {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
+            mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -206,6 +210,7 @@ class ProfileFragment : Fragment() {
     private fun verifyOtpObserver() {
         if ((activity as BaseActivity).isOnline()) {
             profileViewMode.otpVerifyData(getOtpVerify()).observe(viewLifecycleOwner, {
+                otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.revertAnimation()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -219,6 +224,7 @@ class ProfileFragment : Fragment() {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.revertAnimation()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE

@@ -87,6 +87,11 @@ class CongratulationScreen : BaseActivity() {
             finish()
         }
 
+        congratulationScreenBinding.homeButton.setOnClickListener {
+            startActivity(Intent(this, DashboardActivity::class.java))
+            finishAffinity()
+        }
+
         congratulationScreenBinding.cancelButton.setOnClickListener {
             bottomSheetDialogMessageText.text = "Are you sure you want to cancel this job?"
             bottomSheetDialogMessageCancelButton.text = "No"
@@ -106,83 +111,87 @@ class CongratulationScreen : BaseActivity() {
     }
 
     private fun setCountDownTimer() {
-        val counterHour: IntArray = if (servicePostValue.jobTime!!.toInt() % 60 == 0) {
-            intArrayOf((servicePostValue.jobTime!!.toInt() / 60) - 1)
-        } else {
-            intArrayOf((servicePostValue.jobTime!!.toInt() / 60))
-        }
-        var countMint = intArrayOf((servicePostValue.jobTime!!.toInt() % 60) - 1)
-        var countSecond = intArrayOf(59)
-        object : CountDownTimer(TimeUnit.MINUTES.toMillis(servicePostValue.jobTime!!.toLong()), 1000) {
-            override fun onTick(p0: Long) {
-                congratulationScreenBinding.hoursTV.text = counterHour[0].toString()
-                congratulationScreenBinding.minute1TV.text = (countMint[0] / 10).toString()
-                congratulationScreenBinding.minute2TV.text = (countMint[0] % 10).toString()
-                congratulationScreenBinding.second1TV.text = (countSecond[0] / 10).toString()
-                congratulationScreenBinding.second2TV.text = (countSecond[0] % 10).toString()
-                if (countSecond[0] == 0) {
-                    countMint[0]--
-                    countSecond = intArrayOf(59)
-                } else {
-                    countSecond[0]--
-                }
-
-                if (countSecond[0] % 3==0){
-                    getJobDetailsObserver()
-                }
-
-                if (countMint[0] == 0) {
-                    counterHour[0]--
-                    countMint = intArrayOf(59)
-                }
+        try {
+            val counterHour: IntArray = if (servicePostValue.jobTime!!.toInt() % 60 == 0) {
+                intArrayOf((servicePostValue.jobTime!!.toInt() / 60) - 1)
+            } else {
+                intArrayOf((servicePostValue.jobTime!!.toInt() / 60))
             }
-
-            @SuppressLint("SetTextI18n")
-            override fun onFinish() {
-                bottomSheetDialogMessageText.text = "Sorry ! We did not find any delivery employee within your job offer time. Do you want to update your job offer time?"
-                bottomSheetDialogMessageOkButton.text = "Yes"
-                bottomSheetDialogMessageCancelButton.text = "No"
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
-                    val updateTimeDialog = BottomSheetDialog(this@CongratulationScreen)
-                    updateTimeDialog.setContentView(R.layout.update_time_layout)
-                    val minusImageView = updateTimeDialog.findViewById<ImageView>(R.id.minusIcon)
-                    val plusImageView = updateTimeDialog.findViewById<ImageView>(R.id.plusIcon)
-                    val okTextView = updateTimeDialog.findViewById<TextView>(R.id.okText)
-                    val mintsTextView = updateTimeDialog.findViewById<TextView>(R.id.mintsTextView)
-
-                    plusImageView!!.setOnClickListener {
-                        if (counting < 170) {
-                            counting += 10
-                            mintsTextView!!.text = counting.toString()
-                        }
+            var countMint = intArrayOf((servicePostValue.jobTime!!.toInt() % 60) - 1)
+            var countSecond = intArrayOf(59)
+            object : CountDownTimer(TimeUnit.MINUTES.toMillis(servicePostValue.jobTime!!.toLong()), 1000) {
+                override fun onTick(p0: Long) {
+                    congratulationScreenBinding.hoursTV.text = counterHour[0].toString()
+                    congratulationScreenBinding.minute1TV.text = (countMint[0] / 10).toString()
+                    congratulationScreenBinding.minute2TV.text = (countMint[0] % 10).toString()
+                    congratulationScreenBinding.second1TV.text = (countSecond[0] / 10).toString()
+                    congratulationScreenBinding.second2TV.text = (countSecond[0] % 10).toString()
+                    if (countSecond[0] == 0) {
+                        countMint[0]--
+                        countSecond = intArrayOf(59)
+                    } else {
+                        countSecond[0]--
                     }
 
-                    minusImageView!!.setOnClickListener {
-                        if (counting != 10) {
-                            counting -= 10
-                            mintsTextView!!.text = counting.toString()
-                        }
+                    if (countSecond[0] % 3 == 0) {
+                        getJobDetailsObserver()
                     }
 
-                    okTextView!!.setOnClickListener {
-                        servicePostValue.jobTime = mintsTextView!!.text.toString()
+                    if (countMint[0] == 0) {
+                        counterHour[0]--
+                        countMint = intArrayOf(59)
+                    }
+                }
+
+                @SuppressLint("SetTextI18n")
+                override fun onFinish() {
+                    bottomSheetDialogMessageText.text = "Sorry ! We did not find any delivery employee within your job offer time. Do you want to update your job offer time?"
+                    bottomSheetDialogMessageOkButton.text = "Yes"
+                    bottomSheetDialogMessageCancelButton.text = "No"
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                        val updateTimeDialog = BottomSheetDialog(this@CongratulationScreen)
+                        updateTimeDialog.setContentView(R.layout.update_time_layout)
+                        val minusImageView = updateTimeDialog.findViewById<ImageView>(R.id.minusIcon)
+                        val plusImageView = updateTimeDialog.findViewById<ImageView>(R.id.plusIcon)
+                        val okTextView = updateTimeDialog.findViewById<TextView>(R.id.okText)
+                        val mintsTextView = updateTimeDialog.findViewById<TextView>(R.id.mintsTextView)
+
+                        plusImageView!!.setOnClickListener {
+                            if (counting < 170) {
+                                counting += 10
+                                mintsTextView!!.text = counting.toString()
+                            }
+                        }
+
+                        minusImageView!!.setOnClickListener {
+                            if (counting != 10) {
+                                counting -= 10
+                                mintsTextView!!.text = counting.toString()
+                            }
+                        }
+
+                        okTextView!!.setOnClickListener {
+                            servicePostValue.jobTime = mintsTextView!!.text.toString()
+                            progressDialog.show()
+                            updateJobObserver()
+                            updateTimeDialog.dismiss()
+                        }
+
+                        updateTimeDialog.show()
+                    }
+                    bottomSheetDialogMessageCancelButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
                         progressDialog.show()
-                        updateJobObserver()
-                        updateTimeDialog.dismiss()
+                        cancelJobObserver()
                     }
-
-                    updateTimeDialog.show()
+                    bottomSheetDialog.show()
                 }
-                bottomSheetDialogMessageCancelButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
-                    progressDialog.show()
-                    cancelJobObserver()
-                }
-                bottomSheetDialog.show()
-            }
 
-        }.start()
+            }.start()
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
     }
 
     override fun onResume() {
@@ -256,8 +265,10 @@ class CongratulationScreen : BaseActivity() {
         jobViewModel.getJobDetails(getJobDetailsMap()).observe(this, {
             if (it.status_code == "0") {
                 if (it.data!!.OrderDetailList!![0].order_status_msg == "Accepted") {
+
                     congratulationScreenBinding.timingDataLayout.visibility = View.GONE
                     congratulationScreenBinding.deliveryDataLayout.visibility = View.VISIBLE
+                    congratulationScreenBinding.homeButton.visibility = View.VISIBLE
                     Glide.with(this).load(it.data!!.OrderDetailList!![0].Delivery_Employee_photo).placeholder(R.drawable.user_placeholder).into(congratulationScreenBinding.deliveryImageView)
                     congratulationScreenBinding.userName2.text = it.data!!.OrderDetailList!![0].Delivery_Employee_name
                     congratulationScreenBinding.userMobileNo.text = it.data!!.OrderDetailList!![0].Delivery_Employee_phone_code + " " + it.data!!.OrderDetailList!![0].Delivery_Employee_phone

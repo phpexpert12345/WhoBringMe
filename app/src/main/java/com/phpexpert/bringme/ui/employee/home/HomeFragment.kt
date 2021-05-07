@@ -27,6 +27,7 @@ import com.phpexpert.bringme.dtos.OrderListData
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobHistoryModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -75,13 +76,18 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
                     if (location != null) {
-                        mLocation = location
-                        val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
-                        val stringBuilder = StringBuilder()
-                        for (i in 0..addresses[0]!!.maxAddressLineIndex)
-                            stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
-                        homeFragmentBinding.clientCurrentLocation.text = stringBuilder.toString()
+                        try {
+                            mLocation = location
+                            val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+                            val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                            val stringBuilder = StringBuilder()
+                            for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                                stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                            homeFragmentBinding.clientCurrentLocation.text = stringBuilder.toString()
+                        }catch (e:Exception){
+                            e.printStackTrace()
+                            homeFragmentBinding.clientCurrentLocation.text = ""
+                        }
                         break
                     } else {
                         homeFragmentBinding.clientCurrentLocation.text = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_address
@@ -181,7 +187,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
                 val postDataValue = PostJobPostDto()
                 postDataValue.jobDescription = orderListData[position].about_job
-                postDataValue.jobTime = orderListData[position].job_offer_time
+                postDataValue.jobTime = orderListData[position].job_offer_time!!.split(" ")[0]
                 postDataValue.jobAmount = orderListData[position].job_sub_total
                 postDataValue.grandTotal = orderListData[position].job_total_amount
                 postDataValue.jobPaymentMode = orderListData[position].payment_mode
@@ -207,9 +213,9 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
                 writeReviewBinding.submitButton.setOnClickListener {
                     writeReviewBinding.submitButton.startAnimation()
+                    writeReviewData(orderListData[position].job_order_id!!, writeReviewBinding.ratingData.rating.toString(), writeReviewBinding.writeReviewET.text.toString(), position)
                     writeReviewBinding.ratingData.rating = 0f
                     writeReviewBinding.writeReviewET.text = Editable.Factory.getInstance().newEditable("")
-                    writeReviewData(orderListData[position].job_order_id!!, writeReviewBinding.ratingData.rating.toString(), writeReviewBinding.writeReviewET.text.toString(), position)
                 }
 
 
@@ -230,9 +236,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    writeReviewBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
                     orderListData[position].review_status = "Done"
                     orderListData[position].job_review_description = reviewContent
                     orderListData[position].job_rating = totalRating
+                    homeFragmentBinding.homeRv.adapter!!.notifyItemChanged(position)
                 }
                 (activity as BaseActivity).bottomSheetDialog.show()
             } else {

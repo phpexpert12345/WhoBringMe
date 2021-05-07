@@ -29,7 +29,7 @@
         tools:ignore="AllowBackup">
         <activity
             android:name=".activities.RegistrationActivity"
-            android:theme="@style/Theme.BringMe.NoActionBar" />
+            android:theme="@style/RegistrationActivity" />
         <activity
             android:name=".activities.OTPActivity"
             android:label="@string/title_activity_o_t_p"
@@ -102,7 +102,7 @@
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.employee.ProfileEditActivity"
-            android:theme="@style/Theme.BringMe.NoActionBar" />
+            android:theme="@style/RegistrationActivity" />
         <activity
             android:name=".activities.employee.NewCardActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
