@@ -21,10 +21,6 @@ class CreateJobActivity : BaseActivity() {
     private lateinit var createJobBinding: ActivityCreateJobBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
         createJobBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_job)
 
         Glide.with(this).load(sharedPrefrenceManager.getProfile().login_photo)
@@ -86,18 +82,8 @@ class CreateJobActivity : BaseActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
-    }
-
     override fun onPause() {
         super.onPause()
-        val window: Window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         createJobBinding.submitButton.revertAnimation()
     }
 }

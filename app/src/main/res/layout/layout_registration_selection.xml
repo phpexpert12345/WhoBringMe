@@ -11,11 +11,27 @@
             android:id="@+id/headerImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/header_bg"
             android:scaleType="centerCrop"
+            android:src="@drawable/header_bg"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_minus15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/back_arrow"
+                tools:ignore="ContentDescription" />
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/logo"
@@ -103,8 +119,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_15sdp"
-                    android:text="@string/delivery_employee"
                     android:fontFamily="@font/poppins_medium"
+                    android:text="@string/delivery_employee"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_13sdp" />
 

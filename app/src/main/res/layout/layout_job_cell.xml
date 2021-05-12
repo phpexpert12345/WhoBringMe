@@ -3,6 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.phpexpert.bringme.dtos.MyJobDtoList" />
+    </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,6 +36,7 @@
                     tools:ignore="UseCompoundDrawables">
 
                     <ImageView
+                        android:id="@+id/userImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/mask_group"
@@ -38,7 +48,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Raj Kaushal"
+                        android:text="@{model.client_name}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -83,7 +93,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="GHDFGER5637289"
+                        android:text="@{model.job_order_id}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -95,12 +105,12 @@
                     android:layout_width="@dimen/_60sdp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:gravity="center_horizontal"
                     android:background="@drawable/job_complete_bg"
                     android:fontFamily="@font/poppins_medium"
+                    android:gravity="center_horizontal"
                     android:paddingTop="@dimen/_5sdp"
                     android:paddingBottom="@dimen/_5sdp"
-                    android:text="@string/complete"
+                    android:text="@{model.order_status_msg}"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_8sdp"
                     tools:ignore="RelativeOverlap" />
@@ -133,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/reference_site_about_lorem_ipsum_giving_information_on_its_origins"
+                        android:text="@{model.about_job}"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_7sdp" />
                 </LinearLayout>
@@ -165,10 +175,12 @@
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
+                    android:id="@+id/jobAcceptCancelTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text=" 19 Mar'2021, Friday, 10:00 AM"
+                    android:text="19 Mar'2021, Friday, 10:00 AM"
                     android:textColor="@color/text_color_dark"
                     android:textSize="@dimen/_8sdp"
                     tools:ignore="HardcodedText" />
@@ -206,7 +218,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="1 Hour"
+                        android:text="@{model.job_posted_time}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_9sdp"
                         tools:ignore="HardcodedText" />
@@ -232,7 +244,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="19 March'2021"
+                        android:text="@{model.job_post_date}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_9sdp"
                         tools:ignore="HardcodedText" />
@@ -244,7 +256,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:background="@color/view_color_dark" />
+                android:background="@color/view_color_dark"
+                android:visibility='@{model.review_status.equalsIgnoreCase("Done")?View.VISIBLE:View.GONE}' />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -252,7 +265,8 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility='@{model.review_status.equalsIgnoreCase("Done")?View.VISIBLE:View.GONE}'>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -268,14 +282,14 @@
                         tools:ignore="RelativeOverlap" />
 
                     <RatingBar
+                        android:id="@+id/ratingData"
                         style="@style/Widget.AppCompat.RatingBar.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:numStars="5"
-                        android:progressTint="@color/yellow"
-                        android:rating="4" />
+                        android:progressTint="@color/yellow" />
 
                 </RelativeLayout>
 
@@ -284,7 +298,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+                    android:text="@{model.job_review_description}"
                     android:textSize="@dimen/_9sdp"
                     tools:ignore="HardcodedText" />
 
@@ -319,7 +333,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_1sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Your Charges (5%)"
+                        android:text='@{"Your Charges ("+model.charge_for_Jobs_percentage+"%)"}'
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -329,7 +343,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Admin Fees (5%)"
+                        android:text='@{"Admin Fees ("+model.charge_for_Jobs_Admin_percentage+"%)"}'
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -339,8 +353,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:orientation="vertical"
-                    android:layout_marginEnd="@dimen/_10sdp">
+                    tools:ignore="RelativeOverlap">
 
 
                     <LinearLayout
@@ -363,11 +378,12 @@
                             android:layout_marginStart="@dimen/_3sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="200.00"
+                            android:text="@{model.charge_for_Jobs}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -389,7 +405,7 @@
                             android:layout_marginStart="@dimen/_3sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="100.00"
+                            android:text="@{model.admin_service_fees}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -403,8 +419,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:layout_marginBottom="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_10sdp">
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_20sdp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -422,7 +438,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                    tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="@dimen/_15sdp"
@@ -438,7 +454,7 @@
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="300/-"
+                        android:text='@{model.job_total_amount+"/-"}'
 
                         android:textColor="@color/yellow"
                         android:textSize="@dimen/_17sdp"
@@ -474,7 +490,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_4sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="100"
+                        android:text="@{model.job_sub_total}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_13sdp"
                         tools:ignore="HardcodedText" />
@@ -487,6 +503,7 @@
                     tools:ignore="RelativeOverlap">
 
                     <TextView
+                        android:id="@+id/viewData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_rectangle_green"
@@ -510,12 +527,11 @@
                         android:paddingEnd="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_5sdp"
                         android:text="@string/decline"
-                        android:visibility="gone"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_13sdp" />
+                        android:textSize="@dimen/_13sdp"
+                        android:visibility="gone" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
-
     </androidx.cardview.widget.CardView>
 </layout>

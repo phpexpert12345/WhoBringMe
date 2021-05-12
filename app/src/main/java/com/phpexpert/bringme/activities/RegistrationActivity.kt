@@ -24,6 +24,7 @@ import com.phpexpert.bringme.dtos.AuthSingleton
 import com.phpexpert.bringme.dtos.PostDataOtp
 import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.SoftInputAssist
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -36,6 +37,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private var passwordVisible: Boolean = false
+    private lateinit var softInputAssist: SoftInputAssist
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -46,6 +48,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registrationActivity = DataBindingUtil.setContentView(this, R.layout.activity_registration)
+        softInputAssist = SoftInputAssist(this)
         if (mGoogleApiClient == null) {
             buildGoogleApiClient()
         }
@@ -114,14 +117,6 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     private fun setValues() {
         selectionString = intent.extras!!.getString("selectionString")!!
         registrationActivity.selectionString.text = if (selectionString == "client") "Client / Receiver" else "Delivery Employee"
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
     }
 
     @SuppressLint("MissingPermission", "SetTextI18n")
@@ -269,7 +264,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 bottomSheetDialog.show()
                 false
             }
-            registrationActivity.mobileNumberEditText.text.toString().length!=10->{
+            registrationActivity.mobileNumberEditText.text.toString().length in 10..14 ->{
                 bottomSheetDialogMessageText.text = "Enter Valid Mobile Number"
                 bottomSheetDialogMessageOkButton.text = "Ok"
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -335,14 +330,6 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
 //        setAction()
     }
 
-    override fun onPause() {
-        super.onPause()
-        registrationActivity.btnSubmit.revertAnimation()
-        val window: Window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-
-    }
-
     override fun onConnected(p0: Bundle?) {
     }
 
@@ -350,6 +337,22 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
+    }
+
+    override fun onPause() {
+        softInputAssist.onPause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        softInputAssist.onResume()
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        softInputAssist.onDestroy()
+        super.onDestroy()
+
     }
 
 }

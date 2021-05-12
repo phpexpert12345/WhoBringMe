@@ -29,6 +29,7 @@
         tools:ignore="AllowBackup">
         <activity
             android:name=".activities.RegistrationActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize"
             android:theme="@style/RegistrationActivity" />
         <activity
             android:name=".activities.OTPActivity"
@@ -89,7 +90,6 @@
 
         <activity
             android:name=".activities.employee.CreateJobActivity"
-            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.RegistrationSelectionActivity"

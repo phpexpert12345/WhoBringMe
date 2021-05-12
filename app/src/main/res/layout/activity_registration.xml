@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/backgroundColor"
         tools:context=".activities.RegistrationActivity">
 
@@ -22,9 +22,9 @@
             android:id="@+id/headerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/_20sdp"
             android:background="@color/colorLoginButton"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:paddingTop="@dimen/_20sdp">
 
             <ImageView
                 android:id="@+id/back_arrow"

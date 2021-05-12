@@ -234,7 +234,7 @@ class LoginActivity : BaseActivity() {
                             intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
                             bottomSheetDialog.dismiss()
                             startActivity(intent)
-                            finish()
+                            finishAffinity()
                         }
 
                     } else {
@@ -242,7 +242,7 @@ class LoginActivity : BaseActivity() {
                             intent = Intent(this, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java)
                             bottomSheetDialog.dismiss()
                             startActivity(intent)
-                            finish()
+                            finishAffinity()
                         }
                     }
 

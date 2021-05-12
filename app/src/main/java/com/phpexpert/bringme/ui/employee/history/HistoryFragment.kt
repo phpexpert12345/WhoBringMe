@@ -1,6 +1,7 @@
 package com.phpexpert.bringme.ui.employee.history
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobHistoryModel
 import com.phpexpert.bringme.utilities.BaseActivity
 
+@Suppress("DEPRECATION")
 class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
     private var jobHistoryViewModel: JobHistoryModel? = null
     private lateinit var historyBinding: EmployeeFragmentHistoryBinding
@@ -29,13 +31,19 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
 
     private lateinit var mBottomSheetReview: BottomSheetBehavior<View>
     private lateinit var reviewBinding: WriteReviewLayoutBinding
-    private lateinit var arrayList:ArrayList<EmployeeJobHistoryDtoList>
+    private lateinit var arrayList: ArrayList<EmployeeJobHistoryDtoList>
+    private var searOrderString: String = ""
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         historyBinding = DataBindingUtil.inflate(inflater, R.layout.employee_fragment_history, container, false)
         jobHistoryViewModel = ViewModelProvider(this).get(JobHistoryModel::class.java)
+        progressDialog = ProgressDialog(requireActivity())
+        progressDialog.setMessage("Please Wait...")
+        progressDialog.setCancelable(false)
+
         setList()
         jobViewBinding = historyBinding.bottomHistryLayout
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
@@ -46,9 +54,31 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         mBottomSheetReview = BottomSheetBehavior.from(reviewBinding.root)
         mBottomSheetReview.isDraggable = false
         mBottomSheetReview.peekHeight = 0
-
+        setAction()
         setObserver()
         return historyBinding.root
+    }
+
+    private fun setAction() {
+        historyBinding.searchIcon.setOnClickListener {
+            if (historyBinding.textHeading.visibility == View.VISIBLE) {
+                historyBinding.textHeading.visibility = View.GONE
+                historyBinding.searchET.visibility = View.VISIBLE
+                historyBinding.closeIcon.visibility = View.VISIBLE
+            } else {
+                searOrderString = historyBinding.searchET.text.toString()
+                setObserver()
+            }
+        }
+
+        historyBinding.closeIcon.setOnClickListener {
+            historyBinding.searchET.text = Editable.Factory.getInstance().newEditable("")
+            this.searOrderString = ""
+            historyBinding.textHeading.visibility = View.VISIBLE
+            historyBinding.searchET.visibility = View.GONE
+            historyBinding.closeIcon.visibility = View.GONE
+            setObserver()
+        }
     }
 
     private fun setList() {
@@ -60,7 +90,9 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
 
     @SuppressLint("SetTextI18n")
     private fun setObserver() {
+        progressDialog.show()
         jobHistoryViewModel!!.getJobHistoryData(jobHistoryMapData()).observe(viewLifecycleOwner, {
+            progressDialog.dismiss()
             if (it.status_code == "0") {
                 historyBinding.noJobHistroy.visibility = View.GONE
                 historyBinding.nestedScrollView.visibility = View.VISIBLE
@@ -89,10 +121,11 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
         mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code!!
         mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataVal["Order_Number"] = searOrderString
         return mapDataVal
     }
 
-    override fun onClick(textInput: String, position:Int) {
+    override fun onClick(textInput: String, position: Int) {
         when (textInput) {
             "viewData" -> {
                 mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED

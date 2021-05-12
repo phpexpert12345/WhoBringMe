@@ -35,6 +35,10 @@ class RegistrationSelectionActivity : BaseActivity() {
             }
         }
 
+        registrationSelectionBinding.backArrow.setOnClickListener {
+            finish()
+        }
+
         registrationSelectionBinding.deliveryImage.setOnClickListener {
             selectionString = if (selectionString == "" || selectionString == "client") {
                 registrationSelectionBinding.deliveryImage.setImageResource(R.drawable.delivery_employee_select)

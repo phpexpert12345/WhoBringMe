@@ -163,5 +163,6 @@
     <string name="network_error">No internet available</string>
     <string name="change_password">Change Password</string>
     <string name="declineOrderText">Are you sure you want to Decline\nthis order?</string>
+    <string name="enter_order_number">Enter Order Number</string>
 
 </resources>

@@ -18,6 +18,7 @@
                 android:background="@color/colorLoginButton">
 
                 <TextView
+                    android:id="@+id/textHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -26,16 +27,53 @@
                     android:text="@string/history"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_19sdp"
+                    android:visibility="visible"
                     tools:ignore="RelativeOverlap" />
 
-                <ImageView
+                <EditText
+                    android:id="@+id/searchET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:backgroundTint="@color/white"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="@string/enter_order_number"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="#CFCFCF"
+                    android:textSize="@dimen/_15sdp"
+                    android:visibility="gone"
+                    tools:ignore="Autofill,TextFields" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_10sdp"
-                    android:src="@drawable/loupe"
-                    tools:ignore="ContentDescription" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/searchIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/loupe"
+                        android:visibility="visible"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/closeIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_25sdp"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:src="@drawable/close"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+
             </RelativeLayout>
 
             <LinearLayout
@@ -91,12 +129,12 @@
 
         <include
             android:id="@+id/bottomHistryLayout"
-            android:visibility="visible"
-            layout="@layout/job_view_layout" />
+            layout="@layout/job_view_layout"
+            android:visibility="gone" />
 
         <include
             android:id="@+id/reviewLayout"
-            android:visibility="visible"
-            layout="@layout/write_review_layout" />
+            layout="@layout/write_review_layout"
+            android:visibility="gone" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

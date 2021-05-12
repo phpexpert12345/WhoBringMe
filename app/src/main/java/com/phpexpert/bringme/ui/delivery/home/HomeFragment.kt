@@ -8,6 +8,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.text.Editable
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -54,6 +55,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     private lateinit var orderDelcineString: String
 
     private lateinit var progressDialog: ProgressDialog
+    private var searOrderString: String = ""
+
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -121,7 +124,27 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     }
 
     private fun setActions() {
+        homeFragmentBinding.searchIcon.setOnClickListener {
+            if (homeFragmentBinding.textHeading.visibility == View.VISIBLE) {
+                homeFragmentBinding.textHeading.visibility = View.GONE
+                homeFragmentBinding.notificationIcon.visibility = View.GONE
+                homeFragmentBinding.searchET.visibility = View.VISIBLE
+                homeFragmentBinding.closeIcon.visibility = View.VISIBLE
+            } else {
+                searOrderString = homeFragmentBinding.searchET.text.toString()
+                setObserver()
+            }
+        }
 
+        homeFragmentBinding.closeIcon.setOnClickListener {
+            homeFragmentBinding.searchET.text = Editable.Factory.getInstance().newEditable("")
+            this.searOrderString = ""
+            homeFragmentBinding.textHeading.visibility = View.VISIBLE
+            homeFragmentBinding.searchET.visibility = View.GONE
+            homeFragmentBinding.notificationIcon.visibility = View.VISIBLE
+            homeFragmentBinding.closeIcon.visibility = View.GONE
+            setObserver()
+        }
     }
 
     override fun onResume() {
@@ -269,6 +292,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         mapDataVal["current_zipcode"] = address.postalCode
         mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code!!
         mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataVal["Order_Number"] = searOrderString
         return mapDataVal
     }
 
