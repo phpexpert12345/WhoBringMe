@@ -10,9 +10,6 @@ import android.location.Location
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.ConnectionResult
@@ -20,7 +17,6 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.*
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityRegistrationBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
 import com.phpexpert.bringme.dtos.PostDataOtp
 import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
@@ -48,6 +44,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registrationActivity = DataBindingUtil.setContentView(this, R.layout.activity_registration)
+        registrationActivity.languageModel = sharedPrefrenceManager.getLanguageData()
         softInputAssist = SoftInputAssist(this)
         if (mGoogleApiClient == null) {
             buildGoogleApiClient()
@@ -56,7 +53,6 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
         setValues()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setActions() {
         registrationActivity.editData.setOnClickListener {
             finish()
@@ -67,22 +63,14 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 if (isCheckPermissions(this, perission))
                     setObserver()
                 else {
-                    bottomSheetDialogMessageText.text = "Please Enable permissions first"
-                    bottomSheetDialogMessageOkButton.text = "Ok"
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().please_enable_permissions_irst
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     bottomSheetDialogMessageOkButton.setOnClickListener {
                         bottomSheetDialog.dismiss()
                     }
                     bottomSheetDialog.show()
                 }
-            } else {
-                /*bottomSheetDialogMessageText.text = "Please enter all fields"
-                bottomSheetDialogMessageOkButton.text = "Ok"
-                bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
-                }
-                bottomSheetDialog.show()*/
             }
 
         }
@@ -102,10 +90,10 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
         }
         registrationActivity.digitPin.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
             if (p1) {
-                registrationActivity.textData.hint = "Password"
+                registrationActivity.textData.hint = sharedPrefrenceManager.getLanguageData().password
             } else {
                 if (registrationActivity.digitPin.text!!.isEmpty())
-                    registrationActivity.textData.hint = "6 digit mPin Number"
+                    registrationActivity.textData.hint = sharedPrefrenceManager.getLanguageData()._6_digit_mpin_number
             }
         }
 
@@ -126,17 +114,17 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
 
     private fun setValues() {
         selectionString = intent.extras!!.getString("selectionString")!!
-        registrationActivity.selectionString.text = if (selectionString == "client") "Client / Receiver" else "Delivery Employee"
+        registrationActivity.selectionString.text = if (selectionString == "client") sharedPrefrenceManager.getLanguageData().client_receiver else sharedPrefrenceManager.getLanguageData().delivery_employee
     }
 
-    @SuppressLint("MissingPermission", "SetTextI18n")
+    @SuppressLint("MissingPermission")
     private fun setObserver() {
         if (isOnline()) {
             registrationActivity.btnSubmit.startAnimation()
             val otpSendViewModel = ViewModelProvider(this).get(RegistrationModel::class.java)
             otpSendViewModel.sendOtpModel(getMapData()).observe(this, {
                 bottomSheetDialogMessageText.text = it.status_message
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 if (it.status_code == "0") {
                     bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
@@ -178,8 +166,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                                             postDataOtp.addressPostCode = addresses[0]!!.postalCode
                                             break
                                         } else {
-                                            bottomSheetDialogMessageText.text = "Location not found"
-                                            bottomSheetDialogMessageOkButton.text = "Ok"
+                                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_not_found
+                                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                                             bottomSheetDialogMessageCancelButton.visibility = View.GONE
                                             bottomSheetDialogMessageOkButton.setOnClickListener {
                                                 bottomSheetDialog.dismiss()
@@ -200,8 +188,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
 
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            bottomSheetDialogMessageText.text = "Something is wrong"
-                            bottomSheetDialogMessageOkButton.text = "Ok"
+                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().something_is_wrong
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                             bottomSheetDialogMessageCancelButton.visibility = View.GONE
                             bottomSheetDialogMessageOkButton.setOnClickListener {
                                 bottomSheetDialog.dismiss()
@@ -220,8 +208,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
             })
 
         } else {
-            bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()
@@ -235,18 +223,17 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
         mapData["account_mobile"] = registrationActivity.mobileNumberEditText.text.toString()
         mapData["account_type"] = if (selectionString == "client") "1" else "2"
         mapData["account_phone_code"] = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
-        mapData["auth_key"] = AuthSingleton.authObject.auth_key!!
-        mapData["lang_code"] = AuthSingleton.authObject.lang_code!!
+        mapData["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapData["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
         return mapData
     }
 
 
-    @SuppressLint("SetTextI18n")
     private fun checkValidations(): Boolean {
         return when {
             registrationActivity.firstNameEt.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "First name is required field."
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().first_name_is_required_field
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -255,8 +242,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             registrationActivity.lastNameEt.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Last name is required field."
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().last_name_is_required_field
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -265,8 +252,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             registrationActivity.mobileNumberEditText.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Mobile Number is required field."
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().mobile_number_is_required_field
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -275,8 +262,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             registrationActivity.mobileNumberEditText.text.toString().length !in 10..14 -> {
-                bottomSheetDialogMessageText.text = "Enter Valid Mobile Number"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_valid_mobile_number
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -285,8 +272,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             registrationActivity.emailEt.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Email ID is required field."
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().email_id_is_required_field
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -295,8 +282,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             !registrationActivity.emailEt.text.toString().isValidEmail() -> {
-                bottomSheetDialogMessageText.text = "Enter Valid Email"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enater_valid_email
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -305,8 +292,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             registrationActivity.digitPin.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Please create a 6 digit password for account login."
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().create_6_digit_password
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -315,8 +302,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             registrationActivity.digitPin.text.toString().length != 6 -> {
-                bottomSheetDialogMessageText.text = "Password must contain only 6 digits."
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().must_contain_6_digit_password
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()

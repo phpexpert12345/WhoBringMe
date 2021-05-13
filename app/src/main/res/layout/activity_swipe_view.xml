@@ -2,6 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -67,7 +72,7 @@
                 android:layout_marginTop="@dimen/_50sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:text="@string/skip"
+                android:text="@{languageModel.skip}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_12sdp"
                 tools:ignore="RelativeOverlap" />

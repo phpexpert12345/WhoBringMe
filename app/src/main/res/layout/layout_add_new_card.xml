@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -35,10 +40,9 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="Add New Card"
+                    android:text="@{languageModel.add_new_card}"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_13sdp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="@dimen/_13sdp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -70,10 +74,9 @@
                     android:layout_marginStart="@dimen/_17sdp"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="VISA"
+                    android:text="@{languageModel.visa}"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_12sdp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="@dimen/_12sdp" />
 
                 <TextView
                     android:id="@+id/cardNumberText"
@@ -100,7 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/card_holder"
+                        android:text="@{languageModel.card_holder}"
                         android:textColor="#D5D5D5"
                         android:textSize="@dimen/_10sdp" />
 
@@ -128,7 +131,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/expires"
+                        android:text="@{languageModel.expires}"
                         android:textColor="#D5D5D5"
                         android:textSize="@dimen/_10sdp" />
 
@@ -156,7 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/cvv"
+                        android:text="@{languageModel.cvv}"
                         android:textColor="#D5D5D5"
                         android:textSize="@dimen/_10sdp" />
 
@@ -177,7 +180,7 @@
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:text="@string/card_details"
+                android:text="@{languageModel.card_details}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_15sdp" />
 
@@ -195,7 +198,7 @@
                     android:background="@android:color/transparent"
                     android:digits="1234567890 "
                     android:fontFamily="@font/poppins_regular"
-                    android:hint="Card Number"
+                    android:hint="@{languageModel.card_number}"
                     android:inputType="number"
                     android:maxLength="19"
                     android:paddingStart="0dp"
@@ -207,7 +210,7 @@
                     android:textColorHint="@color/text_color_light"
                     android:textSize="@dimen/_12sdp"
                     app:boxBackgroundColor="@android:color/transparent"
-                    tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+                    tools:ignore="RtlHardcoded,RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -224,7 +227,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/poppins_regular"
-                    android:hint="Name On Card"
+                    android:hint="@{languageModel.name_on_card}"
                     android:inputType="textCapSentences"
                     android:maxLength="24"
                     android:paddingStart="0dp"
@@ -236,7 +239,7 @@
                     android:textColorHint="@color/text_color_light"
                     android:textSize="@dimen/_12sdp"
                     app:boxBackgroundColor="@android:color/transparent"
-                    tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+                    tools:ignore="RtlHardcoded,RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -260,7 +263,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_regular"
-                        android:hint="Expiry Date"
+                        android:hint="@{languageModel.expiry_date}"
                         android:inputType="number"
                         android:maxLength="5"
                         android:paddingStart="0dp"
@@ -272,7 +275,7 @@
                         android:textColorHint="@color/text_color_light"
                         android:textSize="@dimen/_12sdp"
                         app:boxBackgroundColor="@android:color/transparent"
-                        tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -291,7 +294,7 @@
                         android:background="@android:color/transparent"
                         android:digits="0123456789"
                         android:fontFamily="@font/poppins_regular"
-                        android:hint="CVV"
+                        android:hint="@{languageModel.cvv}"
                         android:inputType="number"
                         android:maxLength="3"
                         android:paddingStart="0dp"
@@ -303,7 +306,7 @@
                         android:textColorHint="@color/text_color_light"
                         android:textSize="@dimen/_12sdp"
                         app:boxBackgroundColor="@android:color/transparent"
-                        tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>

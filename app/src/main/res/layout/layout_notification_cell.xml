@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,10 +67,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_13sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="Order Id:"
+                    android:text="@{languageModel.order}"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/_13sdp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="@dimen/_13sdp" />
 
                 <TextView
                     android:id="@+id/orderId"
@@ -100,10 +104,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_13sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="Title:"
+                    android:text="@{languageModel.title}"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/_13sdp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="@dimen/_13sdp"/>
 
                 <TextView
                     android:id="@+id/title"
@@ -138,10 +141,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_13sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="Message:"
+                    android:text="@{languageModel.message}"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/_13sdp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="@dimen/_13sdp" />
 
                 <TextView
                     android:id="@+id/notificationMessage"
@@ -164,11 +166,10 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/poppins_regular"
-                android:text="Job Accepted"
+                android:text="@{languageModel.job_accepted}"
                 android:textColor="@color/colorGreen"
                 android:textSize="@dimen/_11sdp"
-                android:visibility="gone"
-                tools:ignore="HardcodedText" />
+                android:visibility="gone" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

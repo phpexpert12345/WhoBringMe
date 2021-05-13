@@ -1,9 +1,10 @@
 package com.phpexpert.bringme.utilities
 
-import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import com.google.gson.Gson
+import com.phpexpert.bringme.dtos.AuthDtoData
+import com.phpexpert.bringme.dtos.AuthDtoMain
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.LoginDetailsDto
 import javax.inject.Inject
 
@@ -28,6 +29,22 @@ class SharedPrefrenceManager @Inject constructor(var sharedPreferences: SharedPr
         savePrefrence("USER_PROFILE", regString)
     }
 
+    fun saveAuthData(
+            profile: AuthDtoData?
+    ) {
+        val gson = Gson()
+        val regString = gson.toJson(profile)
+        savePrefrence("AUTH_DATA", regString)
+    }
+
+    fun saveLanguageData(
+            profile: LanguageDtoData?
+    ) {
+        val gson = Gson()
+        val regString = gson.toJson(profile)
+        savePrefrence("LANGUAGE_DATA", regString)
+    }
+
     fun deletePrefrence(key: String?) {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.remove(key)
@@ -40,6 +57,24 @@ class SharedPrefrenceManager @Inject constructor(var sharedPreferences: SharedPr
         return g.fromJson(
                 regStr,
                 LoginDetailsDto::class.java
+        )
+    }
+
+    fun getAuthData(): AuthDtoData {
+        val g = Gson()
+        val regStr: String = getPreference("AUTH_DATA")!!
+        return g.fromJson(
+                regStr,
+                AuthDtoData::class.java
+        )
+    }
+
+    fun getLanguageData(): LanguageDtoData {
+        val g = Gson()
+        val regStr: String = getPreference("LANGUAGE_DATA")!!
+        return g.fromJson(
+                regStr,
+                LanguageDtoData::class.java
         )
     }
 
@@ -80,6 +115,4 @@ class SharedPrefrenceManager @Inject constructor(var sharedPreferences: SharedPr
         et.clear()
         et.apply()
     }
-
-
 }

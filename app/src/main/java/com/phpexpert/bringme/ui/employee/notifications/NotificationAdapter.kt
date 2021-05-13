@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutNotificationCellBinding
 import com.phpexpert.bringme.dtos.NotificationDtoList
+import com.phpexpert.bringme.utilities.BaseActivity
 
 class NotificationAdapter(var context: Context, var arrayList: ArrayList<NotificationDtoList>) : RecyclerView.Adapter<NotificationAdapter.NotificationFragmentViewHolder>() {
 
@@ -24,6 +25,7 @@ class NotificationAdapter(var context: Context, var arrayList: ArrayList<Notific
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: NotificationFragmentViewHolder, position: Int) {
         notificationFragmentCellBinding = holder.viewBinding as LayoutNotificationCellBinding
+        notificationFragmentCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
         notificationFragmentCellBinding.notificationTime.text = arrayList[position].notification_date + " " + arrayList[position].notification_time
         notificationFragmentCellBinding.orderId.text = arrayList[position].order_id
         notificationFragmentCellBinding.title.text = arrayList[position].notification_subject

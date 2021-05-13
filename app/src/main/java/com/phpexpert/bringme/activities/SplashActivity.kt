@@ -8,10 +8,12 @@ import android.view.Window
 import android.view.WindowManager
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.activities.employee.SwipeViewActivity
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.utilities.CONSTANTS
 
+@Suppress("DEPRECATION")
 class SplashActivity : BaseActivity(), AuthInterface {
     private var handler: Handler? = null
     private var runnable: Runnable? = null
@@ -29,8 +31,9 @@ class SplashActivity : BaseActivity(), AuthInterface {
     private fun doTimeDelay() {
         handler = Handler()
         runnable = Runnable {
+            sharedPrefrenceManager.saveLanguageData(LanguageDtoData())
             if (sharedPrefrenceManager.getPreference(CONSTANTS.isLogin) == "true") {
-                if (sharedPrefrenceManager.getProfile().account_type == "Client / Receiver" || sharedPrefrenceManager.getProfile().account_type=="1") {
+                if (sharedPrefrenceManager.getProfile().account_type == "Client / Receiver" || sharedPrefrenceManager.getProfile().account_type == "1") {
                     val intent = Intent(this@SplashActivity, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                     startActivity(intent)

@@ -2,7 +2,6 @@
 
 package com.phpexpert.bringme.ui.employee.history
 
-import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
@@ -18,7 +17,6 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.EmployeeFragmentHistoryBinding
 import com.phpexpert.bringme.databinding.JobViewLayoutBinding
 import com.phpexpert.bringme.databinding.WriteReviewLayoutBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
 import com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoList
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobHistoryModel
@@ -42,18 +40,23 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         historyBinding = DataBindingUtil.inflate(inflater, R.layout.employee_fragment_history, container, false)
+        historyBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         jobHistoryViewModel = ViewModelProvider(this).get(JobHistoryModel::class.java)
+        historyBinding.textHeading.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().history
+
         progressDialog = ProgressDialog(requireActivity())
-        progressDialog.setMessage("Please Wait...")
+        progressDialog.setMessage((activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_wait)
         progressDialog.setCancelable(false)
 
         setList()
         jobViewBinding = historyBinding.bottomHistryLayout
+        jobViewBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
         mBottomSheetFilter.isDraggable = false
         mBottomSheetFilter.peekHeight = 0
 
         reviewBinding = historyBinding.reviewLayout
+        reviewBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         mBottomSheetReview = BottomSheetBehavior.from(reviewBinding.root)
         mBottomSheetReview.isDraggable = false
         mBottomSheetReview.peekHeight = 0
@@ -91,7 +94,6 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         historyBinding.historyRV.adapter = HistoryFragmentAdapter(requireActivity(), arrayList, this)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setObserver() {
         progressDialog.show()
         jobHistoryViewModel!!.getJobHistoryData(jobHistoryMapData()).observe(viewLifecycleOwner, {
@@ -108,7 +110,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                     historyBinding.nestedScrollView.visibility = View.GONE
                 } else {
                     (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                         (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -122,8 +124,8 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
     private fun jobHistoryMapData(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code!!
-        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         mapDataVal["Order_Number"] = searOrderString
         return mapDataVal
     }
@@ -141,20 +143,20 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                 val postDataValue = PostJobPostDto()
                 postDataValue.jobDescription = arrayList[position].about_job
                 postDataValue.jobTime = arrayList[position].job_offer_time!!.split(" ")[0]
-                postDataValue.jobAmount = String.format("%.2f",arrayList[position].job_sub_total?.toFloat())
-                postDataValue.grandTotal = String.format("%.2f",arrayList[position].job_total_amount?.toFloat())
+                postDataValue.jobAmount = String.format("%.2f", arrayList[position].job_sub_total?.toFloat())
+                postDataValue.grandTotal = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
                 postDataValue.jobPaymentMode = arrayList[position].payment_mode
                 try {
                     postDataValue.job_tax_amount = String.format("%.2f", arrayList[position].job_tax_amount?.toFloat())
-                }catch (e:Exception){
+                } catch (e: Exception) {
 
                 }
-                postDataValue.Charge_for_Jobs = String.format("%.2f",arrayList[position].Charge_for_Jobs?.toFloat())
+                postDataValue.Charge_for_Jobs = String.format("%.2f", arrayList[position].Charge_for_Jobs?.toFloat())
                 postDataValue.Charge_for_Jobs_percentage = arrayList[position].Charge_for_Jobs_percentage
                 postDataValue.Charge_for_Jobs_Admin_percentage = arrayList[position].Charge_for_Jobs_Admin_percentage
                 postDataValue.Charge_for_Jobs_Delivery_percentage = arrayList[position].Charge_for_Jobs_Delivery_percentage
-                postDataValue.admin_service_fees = String.format("%.2f",arrayList[position].admin_service_fees?.toFloat())
-                postDataValue.delivery_employee_fee = String.format("%.2f",arrayList[position].delivery_employee_fee?.toFloat())
+                postDataValue.admin_service_fees = String.format("%.2f", arrayList[position].admin_service_fees?.toFloat())
+                postDataValue.delivery_employee_fee = String.format("%.2f", arrayList[position].delivery_employee_fee?.toFloat())
                 postDataValue.jobId = arrayList[position].job_order_id
 
                 jobViewBinding.jobDetails = postDataValue
@@ -176,7 +178,6 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun writeReviewData(jobOrderId: String, totalRating: String, reviewContent: String, position: Int) {
         jobHistoryViewModel!!.getWriteReviewJobData(reviewDataMap(jobOrderId, totalRating, reviewContent)).observe(viewLifecycleOwner, {
             reviewBinding.submitButton.revertAnimation()
@@ -185,7 +186,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
             if (it.status_code == "0") {
                 (activity as BaseActivity).bottomSheetDialog.show()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -199,7 +200,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
             } else {
                 (activity as BaseActivity).bottomSheetDialog.show()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -215,7 +216,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         mapDataValue["job_order_id"] = jobOrderId
         mapDataValue["total_tating"] = totalRating
         mapDataValue["review_content"] = (activity as BaseActivity).base64Encoded(reviewContent)
-        mapDataValue["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataValue
     }
 }

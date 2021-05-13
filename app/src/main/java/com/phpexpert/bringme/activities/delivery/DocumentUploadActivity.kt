@@ -16,6 +16,8 @@ class DocumentUploadActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         uploadDocumentActivity = DataBindingUtil.setContentView(this, R.layout.upload_doucment_activity)
+
+        uploadDocumentActivity.languageModel = sharedPrefrenceManager.getLanguageData()
         uploadDocumentActivity.backArrow.setOnClickListener {
             finish()
         }

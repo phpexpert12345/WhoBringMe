@@ -4,16 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="model"
             type="com.phpexpert.bringme.dtos.LatestJobDeliveryDataList" />
+
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
     </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_minus10sdp"
+        app:cardElevation="@dimen/_10sdp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -34,8 +41,9 @@
 
                     <ImageView
                         android:id="@+id/userImage"
-                        android:layout_width="@dimen/_45sdp"
-                        android:layout_height="@dimen/_45sdp"
+                        android:layout_width="@dimen/_50sdp"
+                        android:layout_height="@dimen/_50sdp"
+                        android:scaleType="centerCrop"
                         tools:ignore="ContentDescription" />
 
                     <TextView
@@ -46,8 +54,7 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{model.client_name}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_11sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_11sdp" />
                 </LinearLayout>
 
                 <ImageView
@@ -80,10 +87,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Order#"
+                        android:text="@{languageModel.order}"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="@dimen/_11sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_11sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -91,8 +97,7 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{model.job_order_id}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_11sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_11sdp" />
 
                 </LinearLayout>
 
@@ -102,13 +107,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/grey_rounded_rectangle"
+                    android:fontFamily="@font/poppins_medium"
                     android:paddingStart="@dimen/_15sdp"
                     android:paddingTop="@dimen/_5sdp"
                     android:paddingEnd="@dimen/_15sdp"
                     android:paddingBottom="@dimen/_5sdp"
-                    android:textColor="@color/text_color"
-                    android:fontFamily="@font/poppins_medium"
                     android:text="@{model.order_status_msg}"
+                    android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp"
                     tools:ignore="RelativeOverlap" />
             </RelativeLayout>
@@ -131,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@string/job_description"
+                        android:text="@{languageModel.job_description}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp" />
 
@@ -160,26 +165,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_12sdp"
-                android:visibility='@{model.order_status_msg.equalsIgnoreCase("Pending") ? View.GONE : View.VISIBLE}'
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility='@{model.order_status_msg.equalsIgnoreCase("Pending") ? View.GONE : View.VISIBLE}'>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/accepted_time"
+                    android:text="@{languageModel.accepted_time}"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_7sdp" />
+                    android:textSize="@dimen/_8sdp" />
 
                 <TextView
                     android:id="@+id/acceptedDateTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
                     android:layout_marginStart="@dimen/_3sdp"
+                    android:fontFamily="@font/poppins_regular"
                     android:textColor="@color/text_color_dark"
-                    android:textSize="@dimen/_7sdp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="@dimen/_8sdp" />
 
             </LinearLayout>
 
@@ -205,7 +209,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@string/receiver_time"
+                        android:text="@{languageModel.receiver_time}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp" />
 
@@ -215,8 +219,7 @@
                         android:layout_gravity="center_horizontal"
                         android:text="@{model.job_posted_time}"
                         android:textColor="@color/text_color_dark"
-                        android:textSize="@dimen/_9sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_9sdp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -231,18 +234,17 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@string/order_date"
+                        android:text="@{languageModel.order_date}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp" />
 
                     <TextView
+                        android:id="@+id/orderDateValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="@{model.job_post_date}"
                         android:textColor="@color/text_color_dark"
-                        android:textSize="@dimen/_9sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_9sdp" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -261,10 +263,11 @@
                 android:layout_marginBottom="@dimen/_20sdp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:orientation="horizontal"
+                    android:layout_toStartOf="@+id/layoutAccept"
                     tools:ignore="UseCompoundDrawables">
 
                     <ImageView
@@ -281,11 +284,11 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{model.job_total_amount}"
                         android:textColor="@color/text_color_dark"
-                        android:textSize="@dimen/_13sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_13sdp" />
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layoutAccept"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -293,30 +296,26 @@
 
                     <TextView
                         android:id="@+id/acceptViewLayout"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_80sdp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_rectangle_green"
                         android:fontFamily="@font/poppins_medium"
-                        android:paddingStart="@dimen/_25sdp"
                         android:paddingTop="@dimen/_5sdp"
-                        android:paddingEnd="@dimen/_25sdp"
+                        android:gravity="center_horizontal"
                         android:paddingBottom="@dimen/_5sdp"
-                        android:text="@string/accept"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_13sdp" />
 
                     <TextView
                         android:id="@+id/declineFinishedLayout"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_80sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:background="@color/red"
+                        android:gravity="center_horizontal"
                         android:fontFamily="@font/poppins_medium"
-                        android:paddingStart="@dimen/_25sdp"
                         android:paddingTop="@dimen/_5sdp"
-                        android:paddingEnd="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_5sdp"
-                        android:text="@string/decline"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_13sdp" />
                 </LinearLayout>

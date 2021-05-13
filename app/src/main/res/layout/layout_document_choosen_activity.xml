@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,6 +22,7 @@
                 android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/_20sdp"
                 android:background="@color/colorLoginButton"
                 android:gravity="center_vertical">
 
@@ -25,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_marginStart="-20dp"
+                    android:layout_marginStart="@dimen/_minus19sdp"
                     android:src="@drawable/back_arrow"
                     tools:ignore="ContentDescription" />
 
@@ -53,7 +59,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_semi_bold"
-                        android:text="@string/document_upload"
+                        android:text="@{languageModel.document_upload}"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_19sdp"
                         android:textStyle="bold" />
@@ -66,11 +72,11 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_regular"
-                android:text="Country/Region of Issue"
-                android:textColor="@color/colorDarkGrey"
-                tools:ignore="HardcodedText" />
+                android:text="@{languageModel.country_region_of_issue}"
+                android:textColor="@color/colorDarkGrey" />
 
             <com.hbb20.CountryCodePicker
+                android:id="@+id/countryCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -99,10 +105,9 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:text="Select Document Type"
+                android:text="@{languageModel.select_document_type}"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_13sdp"
-                tools:ignore="HardcodedText" />
+                android:textSize="@dimen/_13sdp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -132,10 +137,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="ID Card"
+                        android:text="@{languageModel.id_card}"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="@dimen/_13sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_13sdp" />
                 </LinearLayout>
 
                 <ImageView
@@ -177,10 +181,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Passport"
+                        android:text="@{languageModel.passport}"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="@dimen/_13sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_13sdp" />
                 </LinearLayout>
 
                 <ImageView
@@ -222,10 +225,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Driver's License"
+                        android:text="@{languageModel.driver_s_license}"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="@dimen/_13sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_13sdp" />
                 </LinearLayout>
 
                 <ImageView
@@ -248,12 +250,11 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/button_rectangle_green"
             android:fontFamily="@font/poppins_medium"
-            android:text="Continue"
+            android:text="@{languageModel.continue_data}"
             android:layout_centerVertical="true"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/_11sdp"
-            app:spinning_bar_color="@color/colorGreen"
-            tools:ignore="HardcodedText" />
+            app:spinning_bar_color="@color/colorGreen" />
     </RelativeLayout>
 </layout>

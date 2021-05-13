@@ -13,7 +13,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
             <ImageView
                 android:id="@+id/closeIcon"
@@ -33,7 +34,6 @@
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/please_wait_we_will_auto_verify_nthe_otp_sent_to"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_15sdp" />
 
@@ -152,7 +152,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:fontFamily="@font/poppins_regular"
-                android:text="@string/auto_verifying_your_otp_in_00_12"
                 android:textAlignment="center"
                 android:textColor="@color/colorGrey"
                 android:textSize="@dimen/_9sdp"
@@ -169,7 +168,6 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/verify"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_11sdp"
@@ -185,21 +183,21 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/didNotReceive"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/don_t_receive_code_resend_code"
                     android:textColor="@color/color_text_grey"
                     android:textSize="@dimen/_9sdp"
                     android:textStyle="bold"
                     android:visibility="visible" />
 
                 <TextView
+                    android:id="@+id/resendText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/resend_code"
                     android:textColor="@color/colorGreen"
                     android:textSize="@dimen/_11sdp" />
 

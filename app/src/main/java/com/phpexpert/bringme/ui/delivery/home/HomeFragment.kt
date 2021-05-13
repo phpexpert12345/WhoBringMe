@@ -21,7 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.activities.NotificationActivity
 import com.phpexpert.bringme.databinding.*
-import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.LatestJobDeliveryDataList
 import com.phpexpert.bringme.models.LatestJobDeliveryViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
@@ -58,30 +58,37 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
     private lateinit var progressDialog: ProgressDialog
     private var searOrderString: String = ""
+    private lateinit var languageDtoData: LanguageDtoData
 
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
         homeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.delivery_fragment_home, container, false)
-
+        homeFragmentBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
+        languageDtoData = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         latestJobViewModel = ViewModelProvider(this).get(LatestJobDeliveryViewModel::class.java)
+
         jobViewBinding = homeFragmentBinding.jobViewLayout
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
+        jobViewBinding.languageModel = languageDtoData
         mBottomSheetFilter.isDraggable = false
         mBottomSheetFilter.peekHeight = 0
 
         orderAcceptBinding = homeFragmentBinding.orderAcceptLayout
         orderAcceptBehavior = BottomSheetBehavior.from(orderAcceptBinding.root)
+        orderAcceptBinding.languageModel = languageDtoData
         orderAcceptBehavior.isDraggable = false
         orderAcceptBehavior.peekHeight = 0
 
         orderFinishedBinding = homeFragmentBinding.finishedOrderLayout
         orderFinishedBehavior = BottomSheetBehavior.from(orderFinishedBinding.root)
+        orderFinishedBinding.languageModel = languageDtoData
         orderFinishedBehavior.isDraggable = false
         orderFinishedBehavior.peekHeight = 0
 
         orderDeclineBinding = homeFragmentBinding.declineOrderLayout
         orderDeclineBehavior = BottomSheetBehavior.from(orderDeclineBinding.root)
+        orderDeclineBinding.languageModel = languageDtoData
         orderDeclineBehavior.isDraggable = false
         orderDeclineBehavior.peekHeight = 0
         setActions()
@@ -94,7 +101,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     private fun initValues() {
 
         progressDialog = ProgressDialog(requireActivity())
-        progressDialog.setMessage("Please Wait...")
+        progressDialog.setMessage(languageDtoData.please_wait)
         progressDialog.setCancelable(false)
         progressDialog.show()
         val mLocationRequest = LocationRequest.create()
@@ -170,7 +177,6 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         homeFragmentBinding.homeRecyclerView.adapter = HomeFragmentAdapter(requireActivity(), arrayList, this)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setObserver() {
         if ((activity as BaseActivity).isOnline()) {
             latestJobViewModel!!.getLatestJobDeliveryData(mapData()).observe(viewLifecycleOwner, {
@@ -189,7 +195,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                         homeFragmentBinding.nestedScrollView.visibility = View.GONE
                     } else {
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                             (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -201,8 +207,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
         } else {
             progressDialog.dismiss()
-            (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -211,12 +217,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun orderAcceptObserver() {
         if ((activity as BaseActivity).isOnline()) {
             latestJobViewModel!!.orderAcceptData(orderMapData()).observe(viewLifecycleOwner, {
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
                     if (it.status_code == "0") {
@@ -227,8 +232,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
-            (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -237,12 +242,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun orderDeclineObserver() {
         if ((activity as BaseActivity).isOnline()) {
             latestJobViewModel!!.orderDeclineData(orderDeclineData()).observe(viewLifecycleOwner, {
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
                     if (it.status_code == "0") {
@@ -253,8 +257,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
-            (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -263,12 +267,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun orderFinishObserver() {
         if ((activity as BaseActivity).isOnline()) {
             latestJobViewModel!!.orderFinishData(orderFinishData()).observe(viewLifecycleOwner, {
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
                     if (it.status_code == "0") {
@@ -279,8 +282,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
-            (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -298,8 +301,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         mapDataVal["current_city"] = (activity as BaseActivity).base64Encoded(address.adminArea)
         mapDataVal["current_locality"] = (activity as BaseActivity).base64Encoded(address.locality)
         mapDataVal["current_zipcode"] = address.postalCode
-        mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code!!
-        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         mapDataVal["Order_Number"] = searOrderString
         return mapDataVal
     }
@@ -308,7 +311,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["job_order_id"] = arrayList[selectedPosition].job_order_id!!
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataVal
     }
 
@@ -317,7 +320,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         mapDataVal["job_order_id"] = arrayList[selectedPosition].job_order_id!!
         mapDataVal["order_decline_reason"] = (activity as BaseActivity).base64Encoded(orderDelcineString)
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataVal["auth_key"] =(activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataVal
     }
 
@@ -326,7 +329,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         mapDataVal["job_order_id"] = arrayList[selectedPosition].job_order_id!!
         mapDataVal["job_OTP_code"] = orderFinishedBinding.otp1.text.toString() + orderFinishedBinding.otp2.text.toString() + orderFinishedBinding.otp3.text.toString() + orderFinishedBinding.otp4.text.toString()
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataVal
     }
 
@@ -366,7 +369,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 orderFinishedBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 homeFragmentBinding.blurView.visibility = View.VISIBLE
                 orderFinishedBinding.orderId.text = arrayList[position].job_order_id!!
-
+                orderFinishedBinding.orderFinishData.text = "${languageDtoData.enter_job_code_which_is_provide_by_raj_nkaushal_to_finish_your_job}\n${arrayList[position].Client_name} ${languageDtoData.to_finish_your_job}"
                 orderFinishedBinding.noLayout.setOnClickListener {
                     orderFinishedBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     homeFragmentBinding.blurView.visibility = View.GONE
@@ -402,8 +405,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                         orderDelcineString = orderDeclineBinding.orderReason.text.toString()
                         orderDeclineObserver()
                     } else {
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter order decline reason"
-                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.please_enter_order_decline_reason
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                             (activity as BaseActivity).bottomSheetDialog.dismiss()

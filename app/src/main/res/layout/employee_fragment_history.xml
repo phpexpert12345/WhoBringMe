@@ -2,6 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -24,7 +29,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_semi_bold"
-                    android:text="@string/history"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_19sdp"
                     android:visibility="visible"
@@ -39,7 +43,7 @@
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/poppins_regular"
-                    android:hint="@string/enter_order_number"
+                    android:hint="@{languageModel.enter_order_number}"
                     android:singleLine="true"
                     android:textColor="@color/white"
                     android:textColorHint="#CFCFCF"
@@ -97,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/no_history_yet"
+                    android:text="@{languageModel.no_history_yet}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14sdp" />
             </LinearLayout>

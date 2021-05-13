@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutAddNewCardBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.PaymentConfigurationSingleton
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobPostModel
@@ -39,6 +39,7 @@ class NewCardActivity : BaseActivity() {
     private lateinit var jobPostViewModel: JobPostModel
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private lateinit var languageDtoData: LanguageDtoData
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -53,13 +54,14 @@ class NewCardActivity : BaseActivity() {
         @Suppress("DEPRECATION")
         window.statusBarColor = resources.getColor(R.color.colorLoginButton)
         cardActivityBinding = DataBindingUtil.setContentView(this, R.layout.layout_add_new_card)
+        cardActivityBinding.languageModel = sharedPrefrenceManager.getLanguageData()
+        languageDtoData = sharedPrefrenceManager.getLanguageData()
         jobPostViewModel = ViewModelProvider(this).get(JobPostModel::class.java)
         servicePostValue = intent.getSerializableExtra("postValues") as PostJobPostDto
         setPaymentAuthKeyObserver()
         setValues()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setValues() {
 
         cardActivityBinding.cardName.addTextChangedListener(object : TextWatcher {
@@ -90,7 +92,6 @@ class NewCardActivity : BaseActivity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
-            @SuppressLint("SetTextI18n")
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (p3 == 0) {
                     if (cardActivityBinding.expiryDate.text.toString().trim() != "") {
@@ -147,8 +148,8 @@ class NewCardActivity : BaseActivity() {
 
         cardActivityBinding.payNowButton.setOnClickListener {
             if (cardActivityBinding.cardNumber.text.toString().length != 19) {
-                bottomSheetDialogMessageText.text = "Card Number not valid"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.card_number_not_valid
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -206,7 +207,6 @@ class NewCardActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setPaymentTokenObserver(stripToken: String) {
         if (isOnline()) {
             jobPostViewModel.getPaymentGenerateToken(getMapDataToken(stripToken)).observe(this, {
@@ -214,8 +214,8 @@ class NewCardActivity : BaseActivity() {
                     setJobPostDataObserver((TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())).toString())
                 } else {
                     cardActivityBinding.payNowButton.revertAnimation()
-                    bottomSheetDialogMessageText.text = getString(R.string.network_error)
-                    bottomSheetDialogMessageOkButton.text = "Ok"
+                    bottomSheetDialogMessageText.text = languageDtoData.network_error
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     bottomSheetDialogMessageOkButton.setOnClickListener {
                         bottomSheetDialog.dismiss()
@@ -225,8 +225,8 @@ class NewCardActivity : BaseActivity() {
             })
         } else {
             cardActivityBinding.payNowButton.revertAnimation()
-            bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageText.text = languageDtoData.network_error
+            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()
@@ -235,7 +235,7 @@ class NewCardActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("MissingPermission", "SetTextI18n")
+    @SuppressLint("MissingPermission")
     private fun setJobPostDataObserver(paymentTransactionId: String) {
         if (isOnline()) {
             if (isCheckPermissions(this, perission)) {
@@ -243,7 +243,7 @@ class NewCardActivity : BaseActivity() {
                 mLocationRequest.interval = 60000
                 mLocationRequest.fastestInterval = 5000
                 mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                var mLocation: Location? = null
+                var mLocation: Location?
                 mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
                 mLocationCallback = object : LocationCallback() {
                     override fun onLocationResult(locationResult: LocationResult) {
@@ -253,7 +253,7 @@ class NewCardActivity : BaseActivity() {
                                 jobPostViewModel.getPostJobData(getPostJobMap(paymentTransactionId, mLocation!!)).observe(this@NewCardActivity, {
                                     cardActivityBinding.payNowButton.revertAnimation()
                                     bottomSheetDialogMessageText.text = it.status_message
-                                    bottomSheetDialogMessageOkButton.text = "Ok"
+                                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
                                     if (it.status_code == "0") {
                                         bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
@@ -273,8 +273,8 @@ class NewCardActivity : BaseActivity() {
                                 })
                                 break
                             } else {
-                                bottomSheetDialogMessageText.text = "Location not found"
-                                bottomSheetDialogMessageOkButton.text = "Ok"
+                                bottomSheetDialogMessageText.text = languageDtoData.location_not_found
+                                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                                 bottomSheetDialogMessageOkButton.setOnClickListener {
                                     bottomSheetDialog.dismiss()
@@ -288,8 +288,8 @@ class NewCardActivity : BaseActivity() {
                 mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
             } else {
                 cardActivityBinding.payNowButton.revertAnimation()
-                bottomSheetDialogMessageText.text = "Please Provide All Permission"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.please_provide_all_permission
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -298,8 +298,8 @@ class NewCardActivity : BaseActivity() {
             }
         } else {
             cardActivityBinding.payNowButton.revertAnimation()
-            bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageText.text = languageDtoData.network_error
+            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()
@@ -312,9 +312,9 @@ class NewCardActivity : BaseActivity() {
         val mapDataValue = HashMap<String, String>()
         mapDataValue["stripeToken"] = stripToken
         mapDataValue["amount"] = servicePostValue.grandTotal!!
-        mapDataValue["currency"] = AuthSingleton.authObject.currency_code!!
+        mapDataValue["currency"] = sharedPrefrenceManager.getAuthData().currency_code!!
         mapDataValue["description"] = servicePostValue.jobDescription!!
-        mapDataValue["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataValue
     }
 
@@ -347,18 +347,17 @@ class NewCardActivity : BaseActivity() {
         for (i in 0..addresses[0]!!.maxAddressLineIndex)
             stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
         mapDataValue["job_posted_address"] = base64Encoded(stringBuilder.toString())
-        mapDataValue["lang_code"] = AuthSingleton.authObject.lang_code!!
-        mapDataValue["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataValue["lang_code"] =sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataValue
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setPaymentAuthKeyObserver() {
         if (isOnline()) {
-            jobPostViewModel.getPaymentAuthKey(AuthSingleton.authObject.auth_key!!)
+            jobPostViewModel.getPaymentAuthKey(sharedPrefrenceManager.getAuthData().auth_key!!)
                     .observe(this, {
                         bottomSheetDialogMessageText.text = it.status_message
-                        bottomSheetDialogMessageOkButton.text = "Ok"
+                        bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         if (it.status_code == "0") {
                             PaymentConfigurationSingleton.paymentConfiguration = it.data!!
@@ -370,8 +369,8 @@ class NewCardActivity : BaseActivity() {
                         }
                     })
         } else {
-            bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageText.text = languageDtoData.network_error
+            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()

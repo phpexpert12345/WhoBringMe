@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,10 +26,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Order#"
+                android:text="@{languageModel.order}"
                 android:textColor="@color/text_color_dark"
-                android:textSize="@dimen/_17sdp"
-                tools:ignore="HardcodedText" />
+                android:textSize="@dimen/_17sdp" />
 
             <TextView
                 android:id="@+id/orderId"
@@ -32,8 +36,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_17sdp"
-                tools:ignore="HardcodedText" />
+                android:textSize="@dimen/_17sdp"/>
         </LinearLayout>
 
         <ImageView
@@ -45,16 +48,16 @@
             tools:ignore="ContentDescription" />
 
         <TextView
+            android:id="@+id/orderFinishData"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/_15sdp"
             android:fontFamily="@font/poppins_medium"
             android:gravity="center_horizontal"
-            android:text="Enter Job Code which is provide by Raj\nKaushal to finish your job"
+            android:text="@{languageModel.enter_job_code_which_is_provide_by_raj_nkaushal_to_finish_your_job}"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/_11sdp"
-            tools:ignore="HardcodedText" />
+            android:textSize="@dimen/_11sdp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,7 +82,7 @@
                 android:singleLine="true"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_17sdp"
-                tools:ignore="Autofill,HardcodedText,LabelFor,TextFields" />
+                tools:ignore="Autofill,LabelFor,TextFields" />
 
             <EditText
                 android:id="@+id/otp2"
@@ -97,7 +100,7 @@
                 android:singleLine="true"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_17sdp"
-                tools:ignore="Autofill,HardcodedText,LabelFor" />
+                tools:ignore="Autofill,LabelFor" />
 
             <EditText
                 android:id="@+id/otp3"
@@ -115,7 +118,7 @@
                 android:singleLine="true"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_17sdp"
-                tools:ignore="Autofill,HardcodedText,LabelFor" />
+                tools:ignore="Autofill,LabelFor" />
 
             <EditText
                 android:id="@+id/otp4"
@@ -133,7 +136,7 @@
                 android:singleLine="true"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_17sdp"
-                tools:ignore="Autofill,HardcodedText,LabelFor,TextFields" />
+                tools:ignore="Autofill,LabelFor,TextFields" />
         </LinearLayout>
 
         <LinearLayout
@@ -149,7 +152,7 @@
                 android:layout_weight="1"
                 android:background="@color/red"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/no"
+                android:text="@{languageModel.no}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13sdp" />
 
@@ -161,7 +164,7 @@
                 android:layout_weight="1"
                 android:background="@color/colorGreen"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Yes"
+                android:text="@{languageModel.yes}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13sdp"
                 tools:ignore="HardcodedText" />

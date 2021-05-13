@@ -16,6 +16,7 @@ class WithdrawActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         layoutWithdrawActivity = DataBindingUtil.setContentView(this, R.layout.layout_withdraw_activity)
+        layoutWithdrawActivity.languageModel = sharedPrefrenceManager.getLanguageData()
 
         Glide.with(this).load(sharedPrefrenceManager.getProfile().login_photo).circleCrop().placeholder(R.drawable.user_placeholder).into(layoutWithdrawActivity.userImage)
         layoutWithdrawActivity.backArrow.setOnClickListener {

@@ -1,6 +1,7 @@
+@file:Suppress("DEPRECATION")
+
 package com.phpexpert.bringme.ui.delivery.myjob
 
-import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.FragmentMyJobBinding
 import com.phpexpert.bringme.databinding.MyJobViewLayoutDeliveryBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.MyJobDtoList
 import com.phpexpert.bringme.models.MyJobDataModel
 import com.phpexpert.bringme.utilities.BaseActivity
@@ -28,13 +29,19 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
     private lateinit var myJobModel: MyJobDataModel
     private lateinit var mBottomSheetFilter: BottomSheetBehavior<View>
     private lateinit var jobViewBinding: MyJobViewLayoutDeliveryBinding
-    private lateinit var progressDialog:ProgressDialog
+    private lateinit var progressDialog: ProgressDialog
+    private lateinit var languageDtoData: LanguageDtoData
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         myJobBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_job, container, false)
         myJobModel = ViewModelProvider(this).get(MyJobDataModel::class.java)
+        myJobBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
+        languageDtoData = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
+
         jobViewBinding = myJobBinding.jobViewLayout
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
+        jobViewBinding.languageModel = languageDtoData
+
         mBottomSheetFilter.isDraggable = false
         mBottomSheetFilter.peekHeight = 0
         myJobBinding.jobRV.layoutManager = LinearLayoutManager(requireActivity())
@@ -42,7 +49,7 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
         arrayList = ArrayList()
         myJobBinding.jobRV.adapter = MyJobAdapter(requireActivity(), arrayList, this)
         progressDialog = ProgressDialog(requireActivity())
-        progressDialog.setMessage("Please Wait...")
+        progressDialog.setMessage(languageDtoData.please_wait)
         progressDialog.setCancelable(false)
         progressDialog.show()
         setObserver()
@@ -50,7 +57,6 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
         return myJobBinding.root
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setObserver() {
         if ((activity as BaseActivity).isOnline()) {
             myJobModel.getMyJobData(getMapData()).observe(viewLifecycleOwner, {
@@ -70,7 +76,7 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
                         myJobBinding.nestedScrollView.visibility = View.GONE
                     } else {
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                             (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -80,9 +86,9 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
                 }
             })
         } else {
-                progressDialog.dismiss()
-            (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+            progressDialog.dismiss()
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -94,8 +100,8 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
     private fun getMapData(): Map<String, String> {
         val mapDataValue = HashMap<String, String>()
         mapDataValue["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataValue["lang_code"] = AuthSingleton.authObject.lang_code!!
-        mapDataValue["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataValue["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataValue
     }
 
@@ -108,9 +114,9 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
         }
 
         Glide.with(requireActivity()).load(arrayList[position]).centerCrop().placeholder(R.drawable.user_placeholder).into(jobViewBinding.userImage)
-        arrayList[position].job_sub_total = String.format("%.2f",arrayList[position].job_sub_total?.toFloat())
-        arrayList[position].Charge_for_Jobs = String.format("%.2f",arrayList[position].Charge_for_Jobs?.toFloat())
-        arrayList[position].job_total_amount = String.format("%.2f",arrayList[position].job_total_amount?.toFloat())
+        arrayList[position].job_sub_total = String.format("%.2f", arrayList[position].job_sub_total?.toFloat())
+        arrayList[position].Charge_for_Jobs = String.format("%.2f", arrayList[position].Charge_for_Jobs?.toFloat())
+        arrayList[position].job_total_amount = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
         jobViewBinding.data = arrayList[position]
     }
 }

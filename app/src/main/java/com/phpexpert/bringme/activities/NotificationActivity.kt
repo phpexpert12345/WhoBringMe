@@ -1,6 +1,5 @@
 package com.phpexpert.bringme.activities
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
@@ -9,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.adapters.NotificationAdapter
 import com.phpexpert.bringme.databinding.NotificationActivityBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.NotificationDtoList
 import com.phpexpert.bringme.models.NotificationViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
@@ -18,11 +17,15 @@ class NotificationActivity : BaseActivity() {
     private lateinit var notificationsViewModel: NotificationViewModel
     private lateinit var notificationBinding: NotificationActivityBinding
     private lateinit var arrayList: ArrayList<NotificationDtoList>
+    private lateinit var languageDtoData: LanguageDtoData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         notificationBinding = DataBindingUtil.setContentView(this, R.layout.notification_activity)
         notificationsViewModel = ViewModelProvider(this).get(NotificationViewModel::class.java)
+        notificationBinding.languageModel = sharedPrefrenceManager.getLanguageData()
+        languageDtoData = sharedPrefrenceManager.getLanguageData()
+
         notificationBinding.backArrow.setOnClickListener {
             finish()
         }
@@ -37,7 +40,6 @@ class NotificationActivity : BaseActivity() {
         notificationBinding.notificationRV.adapter = NotificationAdapter(this, arrayList)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setObserver() {
         if (isOnline()) {
             notificationsViewModel.getNotificationData(getNotificationMap()).observe(this, {
@@ -50,7 +52,7 @@ class NotificationActivity : BaseActivity() {
                 } else {
                     if (it.status == "") {
                         bottomSheetDialogMessageText.text = it.status_message
-                        bottomSheetDialogMessageOkButton.text = "Ok"
+                        bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         bottomSheetDialogMessageOkButton.setOnClickListener {
                             bottomSheetDialog.dismiss()
@@ -63,8 +65,8 @@ class NotificationActivity : BaseActivity() {
                 }
             })
         } else {
-            bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageText.text = languageDtoData.network_error
+            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()
@@ -76,7 +78,7 @@ class NotificationActivity : BaseActivity() {
     private fun getNotificationMap(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["LoginId"] = sharedPrefrenceManager.getLoginId()
-        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataVal
     }
 }

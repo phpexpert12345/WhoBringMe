@@ -4,11 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
             name="jobDetails"
             type="com.phpexpert.bringme.dtos.PostJobPostDto" />
+
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
     </data>
 
     <RelativeLayout
@@ -37,10 +42,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Job View"
+                android:text="@{languageModel.job_view}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_13sdp"
-                tools:ignore="HardcodedText" />
+                tools:ignore="RelativeOverlap" />
 
             <ImageView
                 android:id="@+id/closeView"
@@ -83,7 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/job_post_preview"
+                    android:text="@{languageModel.job_post_preview}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_13sdp"
                     tools:ignore="RelativeOverlap" />
@@ -112,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/job_total_amount"
+                    android:text="@{languageModel.job_total_amount}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_9sdp" />
 
@@ -159,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/how_long_you_want_offer_this_job"
+                    android:text="@{languageModel.how_long_you_want_offer_this_job}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_9sdp" />
 
@@ -185,7 +190,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_3sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/mint"
+                        android:text="@{languageModel.mint}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp" />
                 </LinearLayout>
@@ -197,7 +202,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/job_description"
+                android:text="@{languageModel.job_description}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_11sdp" />
 
@@ -227,7 +232,7 @@
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/payment_methods"
+                android:text="@{languageModel.payment_methods}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_13sdp"
                 android:visibility="gone" />
@@ -289,7 +294,7 @@
                     android:layout_marginStart="@dimen/_11sdp"
                     android:layout_toEndOf="@+id/creditCardImage"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/paypal"
+                    android:text="@{languageModel.paypal}"
                     android:textColor="@color/text_color_dark"
                     android:textSize="@dimen/_13sdp"
                     tools:ignore="RelativeOverlap" />
@@ -345,10 +350,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_1sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Subtotal"
+                        android:text="@{languageModel.subtotal}"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="@dimen/_11sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_11sdp" />
 
                     <TextView
                         android:id="@+id/serviceChargePercentage"
@@ -356,7 +360,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text='@{"Charges for Job ("+jobDetails.charge_for_Jobs_percentage+"%)"}'
+                        android:text='@{languageModel.charges_for_job+" ("+jobDetails.charge_for_Jobs_percentage+"%)"}'
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -367,7 +371,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text='@{"Admin Charges for Job ("+jobDetails.charge_for_Jobs_Admin_percentage+"%)"}'
+                        android:text='@{languageModel.admin_charges_for_job+" ("+jobDetails.charge_for_Jobs_Admin_percentage+"%)"}'
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_11sdp"
                         android:visibility='@{jobDetails.job_tax_amount.equalsIgnoreCase("0") || jobDetails.job_tax_amount.equalsIgnoreCase("") ? View.GONE : View.VISIBLE}'
@@ -429,9 +433,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_1sdp"
-                            android:text="@{jobDetails.charge_for_Jobs}"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
+                            android:text="@{jobDetails.charge_for_Jobs}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -483,17 +487,16 @@
                     android:layout_centerVertical="true"
                     android:layout_marginTop="@dimen/_1sdp"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="Grand Total"
+                    android:text="@{languageModel.grand_total}"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_11sdp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="@dimen/_11sdp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                    tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -527,7 +530,7 @@
             android:background="@drawable/button_rectangle_green"
             android:fontFamily="@font/poppins_medium"
             android:inputType="textCapWords"
-            android:text="@string/proceed_to_pay"
+            android:text="@{languageModel.proceed_to_pay}"
             android:textColor="@color/white"
             android:textSize="@dimen/_11sdp"
             android:visibility="gone"

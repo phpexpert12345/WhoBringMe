@@ -78,7 +78,7 @@ class ImageCropActivity : BaseActivity() {
         if (cropped1 != null) {
             try {
                 val imgPath = saveBitmapIntoSDCardImage(cropped1!!)
-                mCropImageUri = Uri.parse(imgPath!!.absolutePath)
+                mCropImageUri = Uri.parse(imgPath.absolutePath)
                 val intent = Intent()
                 intent.putExtra("imgUri", mCropImageUri.toString())
                 setResult(Activity.RESULT_OK, intent)

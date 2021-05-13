@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -29,16 +29,12 @@
         tools:ignore="AllowBackup">
         <activity
             android:name=".activities.RegistrationActivity"
-            android:windowSoftInputMode="adjustPan|adjustResize"
-            android:theme="@style/RegistrationActivity" />
+            android:theme="@style/RegistrationActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.OTPActivity"
-            android:label="@string/title_activity_o_t_p"
             android:theme="@style/Theme.BringMe.NoActionBar" />
 
-        <activity
-            android:name=".activities.employee.PhoneVarificationActivity"
-            android:label="@string/title_activity_phone_varification" />
 
         <activity
             android:name=".activities.LoginActivity"
@@ -127,7 +123,7 @@
         <activity
             android:name=".activities.NotificationActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
-        <activity android:name=".utilities.ImageCropActivity"/>
+        <activity android:name=".utilities.ImageCropActivity" />
     </application>
 
 </manifest>

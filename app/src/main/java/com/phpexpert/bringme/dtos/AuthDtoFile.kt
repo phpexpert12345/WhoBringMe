@@ -27,7 +27,3 @@ class AuthDtoData {
     @SerializedName("lang_code")
     var lang_code: String? = ""
 }
-
-object AuthSingleton {
-    lateinit var authObject: AuthDtoData
-}

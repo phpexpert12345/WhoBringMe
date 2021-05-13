@@ -55,6 +55,7 @@ class ProfileEditActivity : BaseActivity() {
     private val arrayList = ArrayList<String>()
     private var POD1_URI: Uri? = null
     private val postDataOtp = PostDataOtp()
+    private lateinit var languageDtoData: LanguageDtoData
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -77,6 +78,8 @@ class ProfileEditActivity : BaseActivity() {
             }
         }
         profileEditLayoutBinding = DataBindingUtil.setContentView(this, R.layout.profile_edit_layout)
+        profileEditLayoutBinding.languageModel = sharedPrefrenceManager.getLanguageData()
+        languageDtoData = sharedPrefrenceManager.getLanguageData()
         profileEditLayoutBinding.autoComplete.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -118,8 +121,8 @@ class ProfileEditActivity : BaseActivity() {
                 if (checkValidations() && isCheckPermissions(this, perission))
                     editImageData()
             } else{
-                bottomSheetDialogMessageText.text = resources.getString(R.string.network_error)
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.network_error
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -161,12 +164,11 @@ class ProfileEditActivity : BaseActivity() {
         postDataOtp.addressPostCode = sharedPrefrenceManager.getProfile().login_postcode
     }
 
-    @SuppressLint("SetTextI18n")
     private fun checkValidations(): Boolean {
         return when {
             profileEditLayoutBinding.firstNameEt.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter First Name"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.enter_first_name
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -175,8 +177,8 @@ class ProfileEditActivity : BaseActivity() {
                 false
             }
             profileEditLayoutBinding.lastName.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter Last Name"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.enter_last_name
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -185,8 +187,8 @@ class ProfileEditActivity : BaseActivity() {
                 false
             }
             profileEditLayoutBinding.emailEt.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter Email"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.enter_email
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -195,8 +197,8 @@ class ProfileEditActivity : BaseActivity() {
                 false
             }
             !profileEditLayoutBinding.emailEt.text.toString().isValidEmail() -> {
-                bottomSheetDialogMessageText.text = "Enter Valid Email"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.enater_valid_email
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -206,8 +208,8 @@ class ProfileEditActivity : BaseActivity() {
                 false
             }
             profileEditLayoutBinding.autoComplete.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter Address"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.entera_address
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -216,8 +218,8 @@ class ProfileEditActivity : BaseActivity() {
                 false
             }
             profileEditLayoutBinding.stateEt.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter State"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.enter_state
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -226,8 +228,8 @@ class ProfileEditActivity : BaseActivity() {
                 false
             }
             profileEditLayoutBinding.cityET.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter City"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.enter_city
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -236,8 +238,8 @@ class ProfileEditActivity : BaseActivity() {
                 false
             }
             profileEditLayoutBinding.postCodeEt.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter Post Code"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.enter_post_code
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -286,7 +288,7 @@ class ProfileEditActivity : BaseActivity() {
             }
         }
         allIntents.remove(mainIntent)
-        val chooserIntent = Intent.createChooser(mainIntent, "Select Source")
+        val chooserIntent = Intent.createChooser(mainIntent, languageDtoData.select_ource)
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, allIntents.toTypedArray<Parcelable>())
         return chooserIntent
     }
@@ -391,7 +393,7 @@ class ProfileEditActivity : BaseActivity() {
 
     private fun getPredictions(Query: String): ArrayList<PlaceAutocomplete> {
         val results: ArrayList<PlaceAutocomplete> = ArrayList<PlaceAutocomplete>()
-        ServiceGeneratorLocation.createService(ProfileRetro::class.java).getPlaces(Query, AuthSingleton.authObject.GOOGLE_MAP_KEY).enqueue(object : Callback<PlaceMainClass> {
+        ServiceGeneratorLocation.createService(ProfileRetro::class.java).getPlaces(Query, sharedPrefrenceManager.getAuthData().GOOGLE_MAP_KEY).enqueue(object : Callback<PlaceMainClass> {
             override fun onResponse(call: Call<PlaceMainClass>, response: Response<PlaceMainClass>) {
                 mResultList.clear()
                 mResultList.addAll(response.body()!!.results)
@@ -424,8 +426,8 @@ class ProfileEditActivity : BaseActivity() {
         map["address_postcode"] = createRequestBody(base64Encoded(profileEditLayoutBinding.postCodeEt.text.toString()))
         map["account_lat"] = createRequestBody(postDataOtp.accountLat!!)
         map["account_long"] = createRequestBody(postDataOtp.accountLong!!)
-        map["auth_key"] = createRequestBody(AuthSingleton.authObject.auth_key!!)
-        map["lang_code"] = createRequestBody(AuthSingleton.authObject.lang_code!!)
+        map["auth_key"] = createRequestBody(sharedPrefrenceManager.getAuthData().auth_key!!)
+        map["lang_code"] = createRequestBody(sharedPrefrenceManager.getAuthData().lang_code!!)
         ServiceGenerator.createService(ProfileRetro::class.java)
                 .editPhotoData(map, createMultiPartBody(POD1_URI, "account_photo"))
                 .enqueue(object : Callback<EditProfileDto> {
@@ -457,8 +459,8 @@ class ProfileEditActivity : BaseActivity() {
                             }
                             bottomSheetDialog.show()
                         } else {
-                            bottomSheetDialogMessageText.text = "Edit profile api error"
-                            bottomSheetDialogMessageOkButton.text = "Ok"
+                            bottomSheetDialogMessageText.text = languageDtoData.edit_profile_api_error
+                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                             bottomSheetDialogMessageCancelButton.visibility = View.GONE
                             bottomSheetDialogMessageOkButton.setOnClickListener {
                                 bottomSheetDialog.dismiss()
@@ -467,10 +469,9 @@ class ProfileEditActivity : BaseActivity() {
                         }
                     }
 
-                    @SuppressLint("SetTextI18n")
                     override fun onFailure(call: Call<EditProfileDto>, t: Throwable) {
-                        bottomSheetDialogMessageText.text = "Edit profile api error"
-                        bottomSheetDialogMessageOkButton.text = "Ok"
+                        bottomSheetDialogMessageText.text = languageDtoData.edit_profile_api_error
+                        bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         bottomSheetDialogMessageOkButton.setOnClickListener {
                             bottomSheetDialog.dismiss()

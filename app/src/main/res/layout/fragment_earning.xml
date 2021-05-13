@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semi_bold"
-                    android:text="@string/my_earning"
+                    android:text="@{languageModel.my_earning}"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_19sdp"
                     tools:ignore="RelativeOverlap" />
@@ -84,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/delivered_orders"
+                        android:text="@{languageModel.delivered_orders}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp" />
                 </LinearLayout>
@@ -129,7 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/cancel_order"
+                        android:text="@{languageModel.cancel_order}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp" />
                 </LinearLayout>
@@ -174,7 +179,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/total_amount"
+                        android:text="@{languageModel.total_amount}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp" />
                 </LinearLayout>
@@ -209,7 +214,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
@@ -236,9 +241,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
+                        android:layout_marginTop="@dimen/_13sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/total_earning"
+                        android:text="@{languageModel.total_earning}"
                         android:textColor="@color/text_color_dark"
                         tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
@@ -246,7 +251,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -259,7 +264,7 @@
                         android:gravity="center"
                         android:paddingTop="@dimen/_7sdp"
                         android:paddingBottom="@dimen/_7sdp"
-                        android:text="@string/transactions_history"
+                        android:text="@{languageModel.transactions_history}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_9sdp" />
 
@@ -273,7 +278,7 @@
                         android:gravity="center"
                         android:paddingTop="@dimen/_7sdp"
                         android:paddingBottom="@dimen/_7sdp"
-                        android:text="@string/withdraw_request"
+                        android:text="@{languageModel.withdraw_request}"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_9sdp" />
                 </LinearLayout>
@@ -292,7 +297,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/monthly_earning"
+                android:text="@{languageModel.monthly_earning}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_11sdp"
                 tools:ignore="RelativeOverlap" />

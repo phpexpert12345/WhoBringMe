@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -41,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/welcome_to"
+                    android:text="@{languageModel.welcome_to}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_16sdp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -99,7 +104,7 @@
                         android:fontFamily="@font/poppins_semi_bold"
                         android:textColorHint="@color/colorDarkGrey"
                         android:gravity="center_vertical"
-                        android:hint="@string/enter_mobile_number"
+                        android:hint="@{languageModel.enter_mobile_number}"
                         android:inputType="number"
                         android:paddingTop="@dimen/_5sdp"
                         android:textColor="@color/text_color"
@@ -135,7 +140,7 @@
                         android:singleLine="true"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:gravity="center_vertical"
-                        android:hint="@string/enter_password"
+                        android:hint="@{languageModel.enter_password}"
                         android:textColorHint="@color/colorDarkGrey"
                         android:inputType="numberPassword"
                         android:paddingTop="@dimen/_5sdp"
@@ -172,7 +177,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_20sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/forgot_password"
+                    android:text="@{languageModel.forgot_password}"
                     android:textColor="@color/color_text_grey"
                     android:textSize="@dimen/_11sdp"
                     app:layout_constraintRight_toRightOf="parent"
@@ -188,7 +193,7 @@
                     android:background="@drawable/button_rectangle_green"
                     android:fontFamily="@font/poppins_medium"
                     android:gravity="center"
-                    android:text="@string/login"
+                    android:text="@{languageModel.login}"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_13sdp"
@@ -211,7 +216,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/don_t_have_account_yet"
+                        android:text="@{languageModel.don_t_have_account_yet}"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_11sdp" />
 
@@ -220,7 +225,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_2sdp"
-                        android:text="@string/create_account"
+                        android:text="@{languageModel.create_account}"
                         android:textColor="#00A8EC"
                         android:textSize="@dimen/_13sdp" />
                 </LinearLayout>
@@ -244,10 +249,5 @@
             android:id="@+id/forgotPasswordTwo"
             layout="@layout/layout_forgot_password_two"
             android:visibility="visible" />-->
-
-        <include
-            android:id="@+id/forgotPasswordThree"
-            layout="@layout/layout_forgot_password_three"
-            android:visibility="gone" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

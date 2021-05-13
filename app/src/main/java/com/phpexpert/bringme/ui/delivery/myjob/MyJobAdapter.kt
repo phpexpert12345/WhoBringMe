@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutJobCellBinding
 import com.phpexpert.bringme.dtos.MyJobDtoList
+import com.phpexpert.bringme.utilities.BaseActivity
 import java.lang.Exception
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -37,6 +38,7 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyJobViewModel, position: Int) {
         jobCellBinding = holder.viewBinding as LayoutJobCellBinding
+        jobCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
         arrayList[position].job_sub_total = String.format("%.2f", arrayList[position].job_sub_total?.toFloat())
         arrayList[position].Charge_for_Jobs = String.format("%.2f", arrayList[position].Charge_for_Jobs?.toFloat())
         arrayList[position].job_total_amount = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
@@ -51,10 +53,10 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
 
         jobCellBinding.completeCancelText.text = if (arrayList[position].order_status_msg == "Accepted") {
             jobCellBinding.jobAcceptCancelTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
-            "Accepted Time"
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted_time
         } else {
             jobCellBinding.jobAcceptCancelTime.text = changeAcceptDateTime(arrayList[position].job_completed_date + " " + arrayList[position].job_completed_time)
-            context.resources.getString(R.string.complete_time)
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().complete_time
         }
 
         try{

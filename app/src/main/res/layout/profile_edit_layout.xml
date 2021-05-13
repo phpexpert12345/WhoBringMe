@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,10 +41,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Edit"
+                android:text="@{languageModel.edit}"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_13sdp"
-                tools:ignore="HardcodedText" />
+                android:textSize="@dimen/_13sdp" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -91,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@string/first_name"
+                        android:hint="@{languageModel.first_name}"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
@@ -115,7 +119,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@string/last_name"
+                        android:hint="@{languageModel.last_name}"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
@@ -139,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@string/email"
+                        android:hint="@{languageModel.email}"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
@@ -168,7 +172,7 @@
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/poppins_medium"
                             android:gravity="center_vertical"
-                            android:hint="@string/address"
+                            android:hint="@{languageModel.address}"
                             android:minHeight="@dimen/_50sdp"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
@@ -202,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@string/state"
+                        android:hint="@{languageModel.state}"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
@@ -226,7 +230,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@string/city"
+                        android:hint="@{languageModel.city}"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
@@ -250,7 +254,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@string/post_code"
+                        android:hint="@{languageModel.post_code}"
                         android:inputType="number"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
@@ -273,7 +277,7 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/button_rectangle_green"
             android:fontFamily="@font/poppins_medium"
-            android:text="@string/update_profile"
+            android:text="@{languageModel.update_profile}"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/_11sdp"

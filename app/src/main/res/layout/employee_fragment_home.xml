@@ -2,6 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -54,8 +59,7 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_9sdp"
-                            tools:ignore="HardcodedText" />
+                            android:textSize="@dimen/_9sdp" />
 
                     </LinearLayout>
                 </RelativeLayout>
@@ -82,7 +86,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/there_are_no_job"
+                        android:text="@{languageModel.there_are_no_job}"
                         android:textColor="@color/color_text_grey"
                         android:textSize="@dimen/_13sdp" />
 
@@ -98,7 +102,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="@string/please_click_this"
+                            android:text="@{languageModel.please_click_this}"
                             android:textColor="@color/color_text_grey"
                             android:textSize="@dimen/_13sdp" />
 
@@ -128,7 +132,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="@string/icon_and"
+                            android:text="@{languageModel.icon_and}"
                             android:textColor="@color/color_text_grey"
                             android:textSize="@dimen/_13sdp" />
                     </LinearLayout>
@@ -139,7 +143,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/post_a_job"
+                        android:text="@{languageModel.post_a_job}"
                         android:textColor="@color/color_text_grey"
                         android:textSize="@dimen/_13sdp" />
                 </LinearLayout>

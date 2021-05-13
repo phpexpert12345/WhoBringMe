@@ -53,11 +53,11 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
+                    android:id="@+id/minuteTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/minute"
                     android:textColor="@color/colorDarkGrey"
                     android:textSize="@dimen/_15sdp" />
 
@@ -69,7 +69,6 @@
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OK"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_gravity="end"
             android:layout_marginStart="@dimen/_15sdp"
@@ -80,7 +79,6 @@
             android:paddingTop="@dimen/_5sdp"
             android:paddingBottom="@dimen/_5sdp"
             android:paddingStart="@dimen/_15sdp"
-            android:paddingEnd="@dimen/_15sdp"
-            tools:ignore="HardcodedText" />
+            android:paddingEnd="@dimen/_15sdp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

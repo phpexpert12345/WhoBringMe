@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/please_wait_we_will_auto_verify_nthe_otp_sent_to"
+                android:text="@{languageModel.please_wait_we_will_auto_verify_nthe_otp_sent_to}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_15sdp" />
 
@@ -148,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:fontFamily="@font/poppins_regular"
-                android:text="@string/auto_verifying_your_otp_in_00_12"
+                android:text="@{languageModel.auto_verifying_your_otp_in_00_12}"
                 android:textAlignment="center"
                 android:textColor="@color/colorGrey"
                 android:textSize="@dimen/_9sdp"
@@ -165,7 +170,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/verify"
+                android:text="@{languageModel.verify}"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_11sdp"
@@ -184,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/don_t_receive_code_resend_code"
+                    android:text="@{languageModel.don_t_receive_code_resend_code}"
                     android:textColor="@color/color_text_grey"
                     android:textSize="@dimen/_9sdp"
                     android:textStyle="bold"
@@ -195,7 +200,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/resend_code"
+                    android:text="@{languageModel.resend_code}"
                     android:textColor="@color/colorGreen"
                     android:textSize="@dimen/_11sdp" />
 

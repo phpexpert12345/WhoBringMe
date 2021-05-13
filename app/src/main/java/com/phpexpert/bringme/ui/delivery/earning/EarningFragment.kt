@@ -14,12 +14,15 @@ import com.phpexpert.bringme.activities.delivery.WithdrawActivity
 import com.phpexpert.bringme.databinding.FragmentEarningBinding
 import com.phpexpert.bringme.databinding.FragmentMyJobBinding
 import com.phpexpert.bringme.ui.delivery.earning.EarningAdapter
+import com.phpexpert.bringme.utilities.BaseActivity
 
 class EarningFragment : Fragment() {
 
     private lateinit var fragmentEarningBinding: FragmentEarningBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentEarningBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_earning, container, false)
+        fragmentEarningBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
+
         fragmentEarningBinding.earningRV.layoutManager = LinearLayoutManager(requireActivity())
         fragmentEarningBinding.earningRV.isNestedScrollingEnabled = false
         val arrayList = ArrayList<String>()

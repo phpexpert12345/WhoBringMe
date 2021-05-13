@@ -11,13 +11,16 @@ import androidx.fragment.app.Fragment
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.activities.LoginActivity
 import com.phpexpert.bringme.databinding.FragmentThreeBinding
+import com.phpexpert.bringme.utilities.BaseActivity
 
+@Suppress("DEPRECATION")
 class SwipeFragmentThree : Fragment() {
     lateinit var layoutSwipeFragmentThree: FragmentThreeBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         layoutSwipeFragmentThree = DataBindingUtil.inflate(inflater, R.layout.fragment_three, container, false)
 
+        layoutSwipeFragmentThree.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         layoutSwipeFragmentThree.buttonGetStart.setOnClickListener {
             layoutSwipeFragmentThree.buttonGetStart.startAnimation()
             Handler().postDelayed({

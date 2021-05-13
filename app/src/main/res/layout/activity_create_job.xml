@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:text="@string/create_a_job"
+                android:text="@{languageModel.create_a_job}"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_centerHorizontal="true"
                 android:textColor="@color/white"
@@ -64,10 +69,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="James Symonds"
                 android:textColor="@color/text_color_dark"
-                android:textSize="@dimen/_13sdp"
-                tools:ignore="HardcodedText" />
+                android:textSize="@dimen/_13sdp"/>
         </LinearLayout>
 
         <EditText
@@ -81,7 +84,7 @@
             android:background="@null"
             android:fontFamily="@font/poppins_regular"
             android:gravity="start"
-            android:hint="@string/what_do_you_want_to_post_about"
+            android:hint="@{languageModel.what_do_you_want_to_post_about}"
             android:minHeight="@dimen/_100sdp"
             android:textColor="@color/text_color"
             android:textColorHint="@color/text_color_light"
@@ -101,7 +104,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_regular"
-                android:text="@string/how_long_you_want_offer_this_job"
+                android:text="@{languageModel.how_long_you_want_offer_this_job}"
                 android:textColor="@color/colorDarkGrey"
                 android:textSize="@dimen/_13sdp" />
 
@@ -151,7 +154,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/minute"
+                        android:text="@{languageModel.minute}"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_15sdp" />
 
@@ -169,14 +172,12 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:inputType="numberDecimal"
                 android:fontFamily="@font/poppins_regular"
-                android:hint="@string/job_total_amount"
+                android:hint="@{languageModel.job_total_amount}"
                 android:digits="1234567890."
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/colorDarkGrey"
                 android:textSize="@dimen/_13sdp"
                 tools:ignore="Autofill,TextFields" />
-
-
         </LinearLayout>
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
@@ -191,9 +192,8 @@
             app:spinning_bar_color="@color/white"
             app:spinning_bar_padding="@dimen/_5sdp"
             android:textAllCaps="false"
-            android:text="@string/submit"
+            android:text="@{languageModel.submit}"
             android:textColor="@color/white"
-            android:textSize="@dimen/_11sdp"
-            tools:ignore="HardcodedText" />
+            android:textSize="@dimen/_11sdp" />
     </RelativeLayout>
 </layout>

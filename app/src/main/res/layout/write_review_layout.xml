@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_365sdp"
@@ -21,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/write_reviews"
+                android:text="@{languageModel.write_reviews}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_11sdp"
                 tools:ignore="RelativeOverlap" />
@@ -67,7 +72,7 @@
             android:layout_marginEnd="@dimen/_14sdp"
             android:maxLength="250"
             android:fontFamily="@font/poppins_medium"
-            android:hint="@string/write_your_review"
+            android:hint="@{languageModel.write_your_review}"
             android:inputType="textCapSentences"
             android:textColor="@color/text_color"
             android:textColorHint="@color/colorDarkGrey"
@@ -80,10 +85,9 @@
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:fontFamily="@font/poppins_regular"
-            android:text="Maximum Characters : 250"
+            android:text="@{languageModel.maximum_characters_250}"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/_11sdp"
-            tools:ignore="HardcodedText" />
+            android:textSize="@dimen/_11sdp" />
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/submitButton"
@@ -92,7 +96,7 @@
             android:layout_marginTop="@dimen/_15sdp"
             android:background="@color/colorGreen"
             android:fontFamily="@font/poppins_medium"
-            android:text="@string/submit"
+            android:text="@{languageModel.submit}"
             android:textAllCaps="false"
             app:spinning_bar_color="@color/white"
             android:textColor="@color/white"

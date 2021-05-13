@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutEarningCellBinding
 import com.phpexpert.bringme.databinding.LayoutJobCellBinding
+import com.phpexpert.bringme.utilities.BaseActivity
 
 class EarningAdapter(var context: Context, var arrayList: ArrayList<String>) : RecyclerView.Adapter<EarningAdapter.MyJobViewModel>() {
 
@@ -25,6 +26,7 @@ class EarningAdapter(var context: Context, var arrayList: ArrayList<String>) : R
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyJobViewModel, position: Int) {
         earningCellBinding = holder.viewBinding as LayoutEarningCellBinding
+        earningCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
         if (position == 1) {
             earningCellBinding.deliveryImageView.visibility = View.VISIBLE
             earningCellBinding.deliveryImageViewLayout.visibility = View.VISIBLE

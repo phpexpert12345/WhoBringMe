@@ -1,9 +1,9 @@
 package com.phpexpert.bringme.ui.employee.history
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutHistroyCellBinding
 import com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoList
+import com.phpexpert.bringme.utilities.BaseActivity
 import java.text.ParseException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -34,7 +35,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
 
     override fun onBindViewHolder(holder: HistoryFragmentViewHolder, position: Int) {
         historyFragmentCellBinding = holder.viewBinding as LayoutHistroyCellBinding
-
+        historyFragmentCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
         arrayList[position].job_total_amount = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
         historyFragmentCellBinding.model = arrayList[position]
 
@@ -75,6 +76,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
         return arrayList.size
     }
 
+    /*@SuppressLint("SimpleDateFormat")
     private fun changeReviewTime(dateInput: String) {
         val inputPattern = "yyyy-MM-dd HH:mm:ss"
         val outputPattern = "dd-MMM-yyyy h:mm a"
@@ -90,5 +92,5 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
         } catch (e: ParseException) {
             e.printStackTrace()
         }
-    }
+    }*/
 }

@@ -10,13 +10,16 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutDocumentChoosenActivityBinding
 import com.phpexpert.bringme.utilities.BaseActivity
 
+@Suppress("DEPRECATION")
 class UploadDocumentSelectActivity : BaseActivity() {
 
     private lateinit var documentSelectActivity: LayoutDocumentChoosenActivityBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         documentSelectActivity = DataBindingUtil.setContentView(this, R.layout.layout_document_choosen_activity)
+        documentSelectActivity.languageModel = sharedPrefrenceManager.getLanguageData()
 
+        documentSelectActivity.countryCode.setArrowSize(70)
         documentSelectActivity.continueButton.setOnClickListener {
             documentSelectActivity.continueButton.startAnimation()
             Handler().postDelayed({

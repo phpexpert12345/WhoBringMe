@@ -1,6 +1,5 @@
 package com.phpexpert.bringme.activities
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
@@ -10,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutChangePasswordBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.models.ProfileViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
 
@@ -21,11 +20,14 @@ class ChangePasswordActivity : BaseActivity() {
     private var oldPassword: Boolean = false
     private var passwordNewVisible: Boolean = false
     private var passwordConfirmVisible: Boolean = false
+    private lateinit var languageDtoData: LanguageDtoData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         changePasswordActivity = DataBindingUtil.setContentView(this, R.layout.layout_change_password)
+        changePasswordActivity.languageModel = sharedPrefrenceManager.getLanguageData()
         changePasswordViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+        languageDtoData = sharedPrefrenceManager.getLanguageData()
 
         changePasswordActivity.continueButton.setOnClickListener {
             if (validationData()) {
@@ -74,12 +76,11 @@ class ChangePasswordActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun validationData(): Boolean {
         return when {
             changePasswordActivity.oldPassword.text.isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Please Enter old password  first"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.please_enter_old_password_first
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -88,8 +89,8 @@ class ChangePasswordActivity : BaseActivity() {
                 false
             }
             changePasswordActivity.oldPassword.text.length != 6 -> {
-                bottomSheetDialogMessageText.text = "Please Enter 6 digit old password"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.please_enter_6_digit_old_password
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -98,8 +99,8 @@ class ChangePasswordActivity : BaseActivity() {
                 false
             }
             changePasswordActivity.newPasswordET.text.isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Please Enter new password first"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.please_enter_new_password_first
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -108,8 +109,8 @@ class ChangePasswordActivity : BaseActivity() {
                 false
             }
             changePasswordActivity.newPasswordET.text.length != 6 -> {
-                bottomSheetDialogMessageText.text = "Please Enter 6 digit new password"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.please_enter_6_digit_new_password
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -118,8 +119,8 @@ class ChangePasswordActivity : BaseActivity() {
                 false
             }
             changePasswordActivity.confirmPasswordET.text.isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Please Enter confirm password first"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.please_enter_confirm_password_first
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -128,8 +129,8 @@ class ChangePasswordActivity : BaseActivity() {
                 false
             }
             changePasswordActivity.confirmPasswordET.text.length != 6 -> {
-                bottomSheetDialogMessageText.text = "Please Enter 6 digit confirm password"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.please_enter_6_digit_confirm_password
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -138,8 +139,8 @@ class ChangePasswordActivity : BaseActivity() {
                 false
             }
             changePasswordActivity.newPasswordET.text.toString() != changePasswordActivity.confirmPasswordET.text.toString() -> {
-                bottomSheetDialogMessageText.text = "Password not match"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.password_not_match
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -152,13 +153,12 @@ class ChangePasswordActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setObserver() {
         if (isOnline()) {
             changePasswordViewModel.changePassword(mapData()).observe(this, {
                 changePasswordActivity.continueButton.revertAnimation()
                 bottomSheetDialogMessageText.text = it.status_message
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
                     if (it.status_code == "0") {
@@ -170,8 +170,8 @@ class ChangePasswordActivity : BaseActivity() {
             })
         } else {
             changePasswordActivity.continueButton.revertAnimation()
-            bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageText.text = languageDtoData.network_error
+            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()
@@ -186,8 +186,8 @@ class ChangePasswordActivity : BaseActivity() {
         mapDataValue["confirm_password"] = changePasswordActivity.confirmPasswordET.text.toString()
         mapDataValue["LoginId"] = sharedPrefrenceManager.getLoginId()
         mapDataValue["Old_Password"] = changePasswordActivity.oldPassword.text.toString()
-        mapDataValue["auth_key"] = AuthSingleton.authObject.auth_key!!
-        mapDataValue["lang_code"] = AuthSingleton.authObject.lang_code!!
+        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
         return mapDataValue
     }
 

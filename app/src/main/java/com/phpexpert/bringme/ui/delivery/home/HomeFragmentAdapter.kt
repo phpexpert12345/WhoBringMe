@@ -9,7 +9,6 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.DeliveryHomeCellBinding
 import com.phpexpert.bringme.dtos.LatestJobDeliveryDataList
+import com.phpexpert.bringme.utilities.BaseActivity
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,7 +39,6 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HomeFragmentViewHolder, position: Int) {
         homeFragmentCellBinding = holder.viewBinding as DeliveryHomeCellBinding
-
         arrayList[position].job_total_amount = String.format("%.2f",arrayList[position].job_total_amount?.toFloat())
         homeFragmentCellBinding.model = arrayList[position]
 
@@ -54,6 +53,11 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        try{
+            homeFragmentCellBinding.orderDateValue.text = orderDateValue(arrayList[position].job_post_date!!)
+        }catch (e:java.lang.Exception){
+            e.printStackTrace()
+        }
         when (arrayList[position].order_status_msg) {
             "Accepted" -> {
                 try {
@@ -61,26 +65,26 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
-                homeFragmentCellBinding.acceptViewLayout.text = "View"
-                homeFragmentCellBinding.declineFinishedLayout.text = "Finished"
+                (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
+                (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().finished
                 homeFragmentCellBinding.cs.setImageResource(R.drawable.cs1)
                 homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.colorLoginButton))
             }
             "Decline" -> {
                 homeFragmentCellBinding.declineFinishedLayout.visibility = View.GONE
                 homeFragmentCellBinding.cs.setImageResource(R.drawable.cs)
-                homeFragmentCellBinding.acceptViewLayout.text = "View"
+                homeFragmentCellBinding.acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
             }
             else -> {
-                homeFragmentCellBinding.acceptViewLayout.text = "Accept"
+                (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accept
                 homeFragmentCellBinding.cs.setImageResource(R.drawable.cs)
-                homeFragmentCellBinding.declineFinishedLayout.text = "Decline"
+                (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().decline
                 homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.red))
             }
         }
 
         homeFragmentCellBinding.acceptViewLayout.setOnClickListener {
-            if ((holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text.toString() == "View") {
+            if ((holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text.toString() == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view) {
                 onClickListener.onClick("viewData", position)
             } else {
                 onClickListener.onClick("acceptData", position)
@@ -88,12 +92,14 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         }
 
         homeFragmentCellBinding.declineFinishedLayout.setOnClickListener {
-            if ((holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text.toString() == "Finished") {
+            if ((holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text.toString() == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().finished) {
                 onClickListener.onClick("finishedJob", position)
             } else {
                 onClickListener.onClick("declineJob", position)
             }
         }
+        (holder.viewBinding as DeliveryHomeCellBinding).languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
+
     }
 
     override fun getItemCount(): Int {
@@ -107,7 +113,26 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         val inputFormat = SimpleDateFormat(inputPattern)
         val outputFormat = SimpleDateFormat(outputPattern)
 
-        var date: Date? = null
+        val date: Date?
+        var str: String? = null
+
+        try {
+            date = inputFormat.parse(dateTime)
+            str = outputFormat.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return str
+    }
+    @SuppressLint("SimpleDateFormat")
+    private fun orderDateValue(dateTime: String): String? {
+        val inputPattern = "yyyy-MM-dd"
+        val outputPattern = "dd MMM yyyy"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+
+        val date: Date?
         var str: String? = null
 
         try {

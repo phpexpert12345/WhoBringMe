@@ -23,7 +23,7 @@ class SwipeViewActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         swipeViewBinding = DataBindingUtil.setContentView(this, R.layout.activity_swipe_view)
-
+        swipeViewBinding.languageModel = sharedPrefrenceManager.getLanguageData()
         myAdapter = ViewPagerAdapter(supportFragmentManager)
         swipeViewBinding.viewPager.adapter = myAdapter
         setActions()

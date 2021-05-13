@@ -14,7 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.PaymentLayoutBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobPostModel
 import com.phpexpert.bringme.utilities.BaseActivity
@@ -28,6 +28,7 @@ class PaymentActivity : BaseActivity() {
     private lateinit var jobPostViewModel: JobPostModel
     private var grandTotal: Float? = 0f
     private lateinit var progressDialog: ProgressDialog
+    private lateinit var languageDtoData: LanguageDtoData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,21 +37,23 @@ class PaymentActivity : BaseActivity() {
         @Suppress("DEPRECATION")
         window.statusBarColor = resources.getColor(R.color.colorLoginButton)
         paymentActivityBinding = DataBindingUtil.setContentView(this, R.layout.payment_layout)
-
+        paymentActivityBinding.languageModel = sharedPrefrenceManager.getLanguageData()
+        languageDtoData =  sharedPrefrenceManager.getLanguageData()
         jobPostViewModel = ViewModelProvider(this).get(JobPostModel::class.java)
 
         progressDialog = ProgressDialog(this)
+        progressDialog.setMessage(languageDtoData.please_wait)
+        progressDialog.setCancelable(false)
         setValues()
         setActions()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setActions() {
         paymentActivityBinding.proceedButton.setOnClickListener {
             when (selectionByString) {
                 "paypal" -> {
-                    bottomSheetDialogMessageText.text = "Coming Soon"
-                    bottomSheetDialogMessageOkButton.text = "Ok"
+                    bottomSheetDialogMessageText.text = languageDtoData.coming_soon
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
                     bottomSheetDialogMessageOkButton.setOnClickListener {
                         bottomSheetDialog.dismiss()
@@ -67,8 +70,8 @@ class PaymentActivity : BaseActivity() {
 
                 }
                 else -> {
-                    bottomSheetDialogMessageText.text = "Please Select Payment Method"
-                    bottomSheetDialogMessageOkButton.text = "Ok"
+                    bottomSheetDialogMessageText.text = languageDtoData.please_select_payment_method
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
                     bottomSheetDialogMessageOkButton.setOnClickListener {
                         bottomSheetDialog.dismiss()
@@ -88,8 +91,8 @@ class PaymentActivity : BaseActivity() {
 
         paymentActivityBinding.payPalSelection.setOnClickListener {
             if (selectionByString != "paypal") {
-                bottomSheetDialogMessageText.text = "Coming Soon"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = languageDtoData.coming_soon
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -118,16 +121,16 @@ class PaymentActivity : BaseActivity() {
     private fun setObserver() {
         if (isOnline()) {
             progressDialog.show()
-            jobPostViewModel.getServiceCharges(servicePostValue.jobAmount!!, AuthSingleton.authObject.auth_key!!)
+            jobPostViewModel.getServiceCharges(servicePostValue.jobAmount!!, sharedPrefrenceManager.getAuthData().auth_key!!)
                     .observe(this, {
                         progressDialog.dismiss()
                         bottomSheetDialogMessageText.text = it.status_message
-                        bottomSheetDialogMessageOkButton.text = "Ok"
+                        bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
                         if (it.status_code == "0") {
 
                             grandTotal = servicePostValue.jobAmount!!.toFloat()
-                            paymentActivityBinding.serviceChargePercentage.text = "Charges for Job (${it.data!!.Charge_for_Jobs_percentage} %)"
+                            paymentActivityBinding.serviceChargePercentage.text = "${languageDtoData.charges_for_job} (${it.data!!.Charge_for_Jobs_percentage} %)"
                             paymentActivityBinding.serviceCharges.text = String.format("%.2f", it.data!!.Charge_for_Jobs!!.toFloat())
                             grandTotal = grandTotal!! + it.data!!.Charge_for_Jobs!!.toFloat()
                             if (it.data!!.job_tax_amount == "" || it.data!!.job_tax_amount == "0") {
@@ -136,7 +139,7 @@ class PaymentActivity : BaseActivity() {
                             } else {
                                 paymentActivityBinding.adminServiceFees.visibility = View.VISIBLE
                                 paymentActivityBinding.adminServiceFeesLayout.visibility = View.VISIBLE
-                                paymentActivityBinding.adminServiceFees.text = "Admin Charges (${it.data!!.Charge_for_Jobs_Admin_percentage} %)"
+                                paymentActivityBinding.adminServiceFees.text = "${languageDtoData.admin_charges} (${it.data!!.Charge_for_Jobs_Admin_percentage} %)"
                                 paymentActivityBinding.adminServiceFeesCharge.text = String.format("%.2f", it.data!!.admin_service_fees!!.toFloat().toString())
                                 grandTotal = grandTotal!! + it.data!!.admin_service_fees!!.toFloat()
                             }
@@ -160,8 +163,8 @@ class PaymentActivity : BaseActivity() {
                     })
 
         } else {
-            bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageText.text = languageDtoData.network_error
+            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()

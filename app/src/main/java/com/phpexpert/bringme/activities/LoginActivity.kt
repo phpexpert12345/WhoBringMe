@@ -10,14 +10,12 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityLoginBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
 import com.phpexpert.bringme.models.LoginViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.utilities.CONSTANTS
@@ -33,11 +31,6 @@ class LoginActivity : BaseActivity() {
 
     private lateinit var forgotPasswordOneDialog: BottomSheetDialog
     private lateinit var forgotPasswordTwoDialog: BottomSheetDialog
-//    private lateinit var forgotPasswordOneBehavior: BottomSheetBehavior<View>
-//    private lateinit var forgotPasswordOneBinding: LayoutForgotPasswordOneBinding
-
-//    private lateinit var forgotPasswordTwoBehavior: BottomSheetBehavior<View>
-//    private lateinit var forgotPasswordTwoBinding: LayoutForgotPasswordTwoBinding
 
     private var passwordVisible: Boolean = false
     private var passwordNewVisible: Boolean = false
@@ -48,6 +41,8 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+
+        loginBinding.languageModel = sharedPrefrenceManager.getLanguageData()
 
         initValues() // method to init values
 
@@ -66,11 +61,30 @@ class LoginActivity : BaseActivity() {
 
         forgotPasswordOneDialog = BottomSheetDialog(this, R.style.SheetDialog)
         forgotPasswordOneDialog.setContentView(R.layout.layout_forgot_password_one)
+        forgotPasswordOneDialog.findViewById<TextView>(R.id.forgotPasswordText)?.text = sharedPrefrenceManager.getLanguageData().forgot_password
+        forgotPasswordOneDialog.findViewById<TextView>(R.id.weWillSendText)?.text = sharedPrefrenceManager.getLanguageData().we_will_send_you_an
+        forgotPasswordOneDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = sharedPrefrenceManager.getLanguageData().one_time_password
+        forgotPasswordOneDialog.findViewById<TextView>(R.id.onThisMobile)?.text = sharedPrefrenceManager.getLanguageData().on_this_mobile_number
+        forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.hint = sharedPrefrenceManager.getLanguageData().register_mobile
+        forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = sharedPrefrenceManager.getLanguageData().get_otp
+
         forgotPasswordOneDialog.setCancelable(false)
         forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.setTypeFace(Typeface.DEFAULT_BOLD)
 
         forgotPasswordTwoDialog = BottomSheetDialog(this, R.style.SheetDialog)
         forgotPasswordTwoDialog.setContentView(R.layout.layout_forgot_password_two)
+        forgotPasswordTwoDialog.findViewById<TextView>(R.id.otpVerificationText)?.text = sharedPrefrenceManager.getLanguageData().otp_verification
+        forgotPasswordTwoDialog.findViewById<TextView>(R.id.weSendOtp)?.text = sharedPrefrenceManager.getLanguageData().we_ve_sent_an_otp_to
+        forgotPasswordTwoDialog.findViewById<TextView>(R.id.weSendOtp)?.text = sharedPrefrenceManager.getLanguageData().we_ve_sent_an_otp_to
+        forgotPasswordTwoDialog.findViewById<EditText>(R.id.otpNumberET)?.hint = sharedPrefrenceManager.getLanguageData().enter_otp
+        forgotPasswordTwoDialog.findViewById<EditText>(R.id.newPasswordET)?.hint = sharedPrefrenceManager.getLanguageData().new_password
+        forgotPasswordTwoDialog.findViewById<EditText>(R.id.confirmPasswordET)?.hint = sharedPrefrenceManager.getLanguageData().confirm_password
+        forgotPasswordTwoDialog.findViewById<TextView>(R.id.didNotReceive)?.text = sharedPrefrenceManager.getLanguageData().did_not_receive_the_otp
+        forgotPasswordTwoDialog.findViewById<TextView>(R.id.resendText)?.text = sharedPrefrenceManager.getLanguageData().resend_otp
+        forgotPasswordTwoDialog.findViewById<TextView>(R.id.waitForOtp)?.text = sharedPrefrenceManager.getLanguageData().waiting_for_otp
+        forgotPasswordTwoDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = sharedPrefrenceManager.getLanguageData().one_time_password
+        forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)?.text = sharedPrefrenceManager.getLanguageData().save_amp_continue
+
         forgotPasswordTwoDialog.setCancelable(false)
 //        forgotPasswordTwoBinding = loginBinding.forgotPasswordTwo
 //        forgotPasswordTwoBehavior = BottomSheetBehavior.from(forgotPasswordTwoBinding.root)
@@ -86,31 +100,35 @@ class LoginActivity : BaseActivity() {
 
 
     //method to set action of all buttons
-    @SuppressLint("SetTextI18n")
     @Suppress("DEPRECATION")
     private fun setAction() {
 
         //login button
         loginBinding.loginButton.setOnClickListener {
-            if (loginBinding.mobileNumber.text.length !in 10..14) {
-                bottomSheetDialogMessageText.text = "Enter valid mobile number"
-                bottomSheetDialogMessageOkButton.text = "Ok"
-                bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
+            when {
+                loginBinding.mobileNumber.text.length !in 10..14 -> {
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_valid_mobile_number
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
-                bottomSheetDialog.show()
-            } else if(loginBinding.passwordET.text.length<6){
-                bottomSheetDialogMessageText.text = "Password must contain 6 digits"
-                bottomSheetDialogMessageOkButton.text = "Ok"
-                bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
+                loginBinding.passwordET.text.length < 6 -> {
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().password_must_contain_6_digits
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
-                bottomSheetDialog.show()
-            }else
-                loginBinding.loginButton.startAnimation()
-            observerDataLogin()
+                else -> {
+                    loginBinding.loginButton.startAnimation()
+                    observerDataLogin()
+                }
+            }
         }
 
         //forgot password button in login screen
@@ -179,10 +197,22 @@ class LoginActivity : BaseActivity() {
         forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.setOnClickListener {
             when {
                 forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.isEmpty() -> {
-                    Toast.makeText(this, "Please enter your registered mobile number.", Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_register_mobile_text
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
                 forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString().length !in 10..14 -> {
-                    Toast.makeText(this, "Enter valid mobile number.", Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_valid_mobile_number
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
                 else -> {
                     forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.startAnimation()
@@ -207,22 +237,58 @@ class LoginActivity : BaseActivity() {
         forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)!!.setOnClickListener {
             when {
                 forgotPasswordTwoDialog.findViewById<EditText>(R.id.otpNumberET)!!.text.isEmpty() -> {
-                    Toast.makeText(this, "Otp not enter", Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().otp_not_enter
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
                 forgotPasswordTwoDialog.findViewById<EditText>(R.id.newPasswordET)!!.text.isEmpty() -> {
-                    Toast.makeText(this, "Enter new password", Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_new_password
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
                 forgotPasswordTwoDialog.findViewById<EditText>(R.id.newPasswordET)!!.text.length != 6 -> {
-                    Toast.makeText(this, "Please enter 6 digit password", Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_6_digit_password
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
                 forgotPasswordTwoDialog.findViewById<EditText>(R.id.confirmPasswordET)!!.text.isEmpty() -> {
-                    Toast.makeText(this, "Enter Confirm password", Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_confirm_password
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
                 forgotPasswordTwoDialog.findViewById<EditText>(R.id.confirmPasswordET)!!.text.length != 6 -> {
-                    Toast.makeText(this, "Please enter 6 digit confirm password", Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData()._enter_6_digit_confirm_password
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
                 forgotPasswordTwoDialog.findViewById<EditText>(R.id.newPasswordET)!!.text.toString() != forgotPasswordTwoDialog.findViewById<EditText>(R.id.confirmPasswordET)!!.text.toString() -> {
-                    Toast.makeText(this, "Password not match", Toast.LENGTH_LONG).show()
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().password_not_match
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
                 else -> {
 //                    forgotPasswordOneBinding.mobileNumber.text = Editable.Factory.getInstance().newEditable("")
@@ -234,13 +300,12 @@ class LoginActivity : BaseActivity() {
     }
 
     //method to observe login data
-    @SuppressLint("SetTextI18n")
     private fun observerDataLogin() {
         if (isOnline()) {
             loginViewModel.getLoginData(mapDataLogin()).observe(this, {
                 loginBinding.loginButton.revertAnimation()
                 bottomSheetDialogMessageText.text = it.status_message
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 if (it.status_code == "0") {
                     bottomSheetDialog.findViewById<ImageView>(R.id.companyLogo)!!.visibility = View.VISIBLE
@@ -251,7 +316,7 @@ class LoginActivity : BaseActivity() {
                     if (sharedPrefrenceManager.getProfile().account_type == "1") {
                         bottomSheetDialogMessageOkButton.setOnClickListener {
                             bottomSheetDialog.findViewById<ImageView>(R.id.companyLogo)!!.visibility = View.GONE
-                            bottomSheetDialog.findViewById<TextView>(R.id.textHeading)!!.text = resources.getString(R.string.alert_text)
+                            bottomSheetDialog.findViewById<TextView>(R.id.textHeading)!!.text = sharedPrefrenceManager.getLanguageData().alert_text
                             intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
                             bottomSheetDialog.dismiss()
                             startActivity(intent)
@@ -276,8 +341,8 @@ class LoginActivity : BaseActivity() {
             })
         } else {
             loginBinding.loginButton.revertAnimation()
-            bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()
@@ -288,13 +353,13 @@ class LoginActivity : BaseActivity() {
 
 
     //Observe data for forgot password send otp
-    @SuppressLint("SetTextI18n", "CutPasteId")
+    @SuppressLint("CutPasteId", "SetTextI18n")
     private fun observeForgotPasswordOtpSendData() {
         if (isOnline()) {
             loginViewModel.getOtpForgotPasswordSendData(mapDataOtpForgotSend()).observe(this, {
                 forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
                 bottomSheetDialogMessageText.text = it.status_message
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 if (it.status_code == "0") {
                     bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
@@ -315,8 +380,8 @@ class LoginActivity : BaseActivity() {
             })
         } else {
             forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
-            bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
@@ -327,18 +392,18 @@ class LoginActivity : BaseActivity() {
     }
 
     //observer for reset password
-    @SuppressLint("SetTextI18n")
     private fun observeForgotPasswordResetData() {
         if (isOnline()) {
             loginViewModel.getOtpForgotPasswordReset(mapDataResetPassword()).observe(this, {
                 forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)!!.revertAnimation()
                 forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
                 bottomSheetDialogMessageText.text = it.status_message
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 if (it.status_code == "0") {
                     bottomSheetDialogMessageOkButton.setOnClickListener {
                         bottomSheetDialog.dismiss()
+                        loginBinding.forgotPasswordView.visibility = View.GONE
                         forgotPasswordTwoDialog.dismiss()
                     }
                 } else {
@@ -350,8 +415,8 @@ class LoginActivity : BaseActivity() {
             })
         } else {
             forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)!!.revertAnimation()
-            bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()
@@ -368,8 +433,8 @@ class LoginActivity : BaseActivity() {
         mapDataValue["account_password"] = loginBinding.passwordET.text.toString()
         mapDataValue["device_id"] = getIMEI(this)!!
         mapDataValue["device_platform"] = "Android"
-        mapDataValue["auth_key"] = AuthSingleton.authObject.auth_key!!
-        mapDataValue["lang_code"] = "en"
+        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
         return mapDataValue
     }
 
@@ -378,8 +443,8 @@ class LoginActivity : BaseActivity() {
         val mapDataValue = HashMap<String, String>()
         mapDataValue["account_mobile"] = forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
         mapDataValue["account_phone_code"] = forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
-        mapDataValue["auth_key"] = AuthSingleton.authObject.auth_key!!
-        mapDataValue["lang_code"] = AuthSingleton.authObject.lang_code!!
+        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
         return mapDataValue
     }
 
@@ -390,8 +455,8 @@ class LoginActivity : BaseActivity() {
         mapDataValue["confirm_password"] = forgotPasswordTwoDialog.findViewById<EditText>(R.id.confirmPasswordET)!!.text.toString()
         mapDataValue["LoginId"] = loginId
         mapDataValue["Mobile_OTP"] = forgotPasswordTwoDialog.findViewById<EditText>(R.id.otpNumberET)!!.text.toString()
-        mapDataValue["auth_key"] = AuthSingleton.authObject.auth_key!!
-        mapDataValue["lang_code"] = AuthSingleton.authObject.lang_code!!
+        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
         return mapDataValue
     }
 

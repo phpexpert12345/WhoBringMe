@@ -14,16 +14,16 @@ import android.util.Base64
 import android.util.Patterns
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.phpexpert.bringme.R
-import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.AuthModel
+import org.w3c.dom.Text
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -44,28 +44,34 @@ open class BaseActivity : AppCompatActivity() {
     @Inject
     lateinit var sharedPrefrenceManager: SharedPrefrenceManager
 
+    @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerSharedPreferComponent.builder()
                 .sharedPreferModule(SharedPreferModule(this))
                 .build()
                 .inject(this)
         super.onCreate(savedInstanceState)
+        sharedPrefrenceManager.saveLanguageData(LanguageDtoData())
         bottomSheetDialog = BottomSheetDialog(this, R.style.SheetDialog)
         bottomSheetDialog.setContentView(R.layout.bottom_dialog_layout)
+        bottomSheetDialog.findViewById<TextView>(R.id.textHeading)?.text = sharedPrefrenceManager.getLanguageData().alert_text
+        bottomSheetDialog.findViewById<TextView>(R.id.cancelText)?.text = sharedPrefrenceManager.getLanguageData().cancel
+        bottomSheetDialog.findViewById<TextView>(R.id.okText)?.text = sharedPrefrenceManager.getLanguageData().ok_text
         bottomSheetDialogMessageText = bottomSheetDialog.findViewById(R.id.message)!!
         bottomSheetDialogMessageOkButton = bottomSheetDialog.findViewById(R.id.okText)!!
         bottomSheetDialogMessageCancelButton = bottomSheetDialog.findViewById(R.id.cancelText)!!
     }
 
-    @SuppressLint("SetTextI18n")
     fun hitAuthApi(authData: AuthInterface) = if (isOnline()) {
+
         authViewModel = ViewModelProvider(this).get(AuthModel::class.java)
         authViewModel.getAuthDataModel().observe(this, {
             bottomSheetDialogMessageText.text = it.status_message
-            bottomSheetDialogMessageOkButton.text = "OK"
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             if (it.status_code == "0") {
-                AuthSingleton.authObject = it.data!![0]
+//                AuthSingleton.authObject = it.data!![0]
+                sharedPrefrenceManager.saveAuthData(it.data!![0])
                 authData.isAuthHit(true)
             } else {
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -77,8 +83,8 @@ open class BaseActivity : AppCompatActivity() {
         })
 
     } else {
-        bottomSheetDialogMessageText.text = getString(R.string.network_error)
-        bottomSheetDialogMessageOkButton.text = "OK"
+        bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+        bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
         bottomSheetDialogMessageCancelButton.visibility = View.GONE
         bottomSheetDialogMessageOkButton.setOnClickListener {
             authData.isAuthHit(false)

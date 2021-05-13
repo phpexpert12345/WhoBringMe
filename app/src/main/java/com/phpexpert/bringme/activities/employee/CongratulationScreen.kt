@@ -20,7 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.JobViewLayoutBinding
 import com.phpexpert.bringme.databinding.PaymentSuccessfullPageBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobPostModel
 import com.phpexpert.bringme.utilities.BaseActivity
@@ -37,6 +37,7 @@ class CongratulationScreen : BaseActivity() {
     private lateinit var jobViewModel: JobPostModel
     private lateinit var progressDialog: ProgressDialog
     private lateinit var countDownTimer: CountDownTimer
+    private lateinit var languageDtoData: LanguageDtoData
     private var counting: Int = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,17 +47,20 @@ class CongratulationScreen : BaseActivity() {
         @Suppress("DEPRECATION")
         window.statusBarColor = resources.getColor(R.color.colorLoginButton)
         congratulationScreenBinding = DataBindingUtil.setContentView(this, R.layout.payment_successfull_page)
-
+        congratulationScreenBinding.languageModel = sharedPrefrenceManager.getLanguageData()
+        languageDtoData = sharedPrefrenceManager.getLanguageData()
         initValues()
         setActions()
         setCountDownTimer()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initValues() {
-        congratulationScreenBinding.userName.text = "Hello "+sharedPrefrenceManager.getProfile().login_name+","
-        congratulationScreenBinding.userName1.text = "Hello "+sharedPrefrenceManager.getProfile().login_name+","
+        congratulationScreenBinding.userName.text = "${languageDtoData.hello} ${sharedPrefrenceManager.getProfile().login_name},"
+        congratulationScreenBinding.userName1.text = "${languageDtoData.hello} ${sharedPrefrenceManager.getProfile().login_name},"
         servicePostValue = intent.getSerializableExtra("postValue") as PostJobPostDto
         jobViewBinding = congratulationScreenBinding.jobViewLayout
+        jobViewBinding.languageModel = languageDtoData
         servicePostValue.Charge_for_Jobs = String.format("%.2f", servicePostValue.Charge_for_Jobs!!.toFloat())
         servicePostValue.admin_service_fees = String.format("%.2f", servicePostValue.admin_service_fees!!.toFloat())
         servicePostValue.grandTotal = String.format("%.2f", servicePostValue.grandTotal!!.toFloat())
@@ -64,7 +68,9 @@ class CongratulationScreen : BaseActivity() {
         jobViewBinding.jobDetails = servicePostValue
 
         congratulationScreenBinding.orderId.text = servicePostValue.jobId
-        congratulationScreenBinding.grandTotalAmount.text = String.format("%.2f",servicePostValue.grandTotal?.toFloat())
+        congratulationScreenBinding.orderId1.text = servicePostValue.jobId
+        congratulationScreenBinding.grandTotalAmount.text = String.format("%.2f", servicePostValue.grandTotal?.toFloat())
+        congratulationScreenBinding.grandTotalAmount1.text = String.format("%.2f", servicePostValue.grandTotal?.toFloat())
 
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
         mBottomSheetFilter.isDraggable = false
@@ -72,14 +78,21 @@ class CongratulationScreen : BaseActivity() {
         mBottomSheetFilter.peekHeight = 0
 
         progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Please Wait...")
+        progressDialog.setMessage(languageDtoData.please_wait)
         progressDialog.setCancelable(false)
 
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setActions() {
         congratulationScreenBinding.viewJobIcon.setOnClickListener {
+            mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
+            congratulationScreenBinding.jobViewBlur.visibility = View.VISIBLE
+            jobViewBinding.closeView.setOnClickListener {
+                mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
+                congratulationScreenBinding.jobViewBlur.visibility = View.GONE
+            }
+        }
+        congratulationScreenBinding.viewJobIcon1.setOnClickListener {
             mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
             congratulationScreenBinding.jobViewBlur.visibility = View.VISIBLE
             jobViewBinding.closeView.setOnClickListener {
@@ -98,9 +111,9 @@ class CongratulationScreen : BaseActivity() {
         }
 
         congratulationScreenBinding.cancelButton.setOnClickListener {
-            bottomSheetDialogMessageText.text = "Are you sure you want to cancel this job?"
-            bottomSheetDialogMessageCancelButton.text = "No"
-            bottomSheetDialogMessageOkButton.text = "Yes"
+            bottomSheetDialogMessageText.text = languageDtoData.are_you_sure_you_want_to_cancel_this_job
+            bottomSheetDialogMessageCancelButton.text = languageDtoData.no
+            bottomSheetDialogMessageOkButton.text = languageDtoData.yes
             bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 congratulationScreenBinding.cancelButton.startAnimation()
@@ -148,15 +161,17 @@ class CongratulationScreen : BaseActivity() {
                     }
                 }
 
-                @SuppressLint("SetTextI18n")
+                @SuppressLint("CutPasteId")
                 override fun onFinish() {
-                    bottomSheetDialogMessageText.text = "Sorry ! We did not find any delivery employee within your job offer time. Do you want to update your job offer time?"
-                    bottomSheetDialogMessageOkButton.text = "Yes"
-                    bottomSheetDialogMessageCancelButton.text = "No"
+                    bottomSheetDialogMessageText.text = languageDtoData.we_did_not_find_any_delivery_employee_within
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.yes
+                    bottomSheetDialogMessageCancelButton.text = languageDtoData.no
                     bottomSheetDialogMessageOkButton.setOnClickListener {
                         bottomSheetDialog.dismiss()
                         val updateTimeDialog = BottomSheetDialog(this@CongratulationScreen)
                         updateTimeDialog.setContentView(R.layout.update_time_layout)
+                        updateTimeDialog.findViewById<TextView>(R.id.minuteTv)?.text = languageDtoData.minute
+                        updateTimeDialog.findViewById<TextView>(R.id.okText)?.text = languageDtoData.ok_text
                         val minusImageView = updateTimeDialog.findViewById<ImageView>(R.id.minusIcon)
                         val plusImageView = updateTimeDialog.findViewById<ImageView>(R.id.plusIcon)
                         val okTextView = updateTimeDialog.findViewById<TextView>(R.id.okText)
@@ -194,7 +209,7 @@ class CongratulationScreen : BaseActivity() {
                 }
 
             }.start()
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -214,7 +229,6 @@ class CongratulationScreen : BaseActivity() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun cancelJobObserver() {
         jobViewModel.cancelJob(getCancelMap()).observe(this, {
             try {
@@ -224,7 +238,7 @@ class CongratulationScreen : BaseActivity() {
             }
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageText.text = it.status_message
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             if (it.status_code == "0") {
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     countDownTimer.cancel()
@@ -241,7 +255,6 @@ class CongratulationScreen : BaseActivity() {
         })
     }
 
-    @SuppressLint("SetTextI18n")
     private fun updateJobObserver() {
         jobViewModel.updateJob(getUpdateMap()).observe(this, {
             progressDialog.dismiss()
@@ -252,7 +265,7 @@ class CongratulationScreen : BaseActivity() {
             }
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageText.text = it.status_message
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             if (it.status_code == "0") {
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -289,7 +302,7 @@ class CongratulationScreen : BaseActivity() {
         val mapData = HashMap<String, String>()
         mapData["job_order_id"] = servicePostValue.jobId!!
         mapData["LoginId"] = sharedPrefrenceManager.getLoginId()
-        mapData["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapData["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
         return mapData
     }
 
@@ -297,7 +310,7 @@ class CongratulationScreen : BaseActivity() {
         val mapData = HashMap<String, String>()
         mapData["job_order_id"] = servicePostValue.jobId!!
         mapData["LoginId"] = sharedPrefrenceManager.getLoginId()
-        mapData["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapData["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
         return mapData
     }
 
@@ -306,7 +319,7 @@ class CongratulationScreen : BaseActivity() {
         mapData["job_order_id"] = servicePostValue.jobId!!
         mapData["job_offer_time"] = servicePostValue.jobTime!! + " minutes"
         mapData["LoginId"] = sharedPrefrenceManager.getLoginId()
-        mapData["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapData["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
         return mapData
     }
 }

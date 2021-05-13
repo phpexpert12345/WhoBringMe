@@ -1,13 +1,9 @@
 package com.phpexpert.bringme.activities.employee
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.phpexpert.bringme.R
@@ -15,6 +11,7 @@ import com.phpexpert.bringme.databinding.ActivityCreateJobBinding
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.utilities.BaseActivity
 
+@Suppress("DEPRECATION")
 class CreateJobActivity : BaseActivity() {
 
     private var counting: Int = 10
@@ -23,6 +20,7 @@ class CreateJobActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createJobBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_job)
+        createJobBinding.languageModel = sharedPrefrenceManager.getLanguageData()
 
         Glide.with(this).load(sharedPrefrenceManager.getProfile().login_photo)
                 .circleCrop()
@@ -46,8 +44,6 @@ class CreateJobActivity : BaseActivity() {
                     intent.putExtra("postValue", postJobPostDto)
                     startActivity(intent)
                 }, 1000)
-            }else{
-
             }
         }
 
@@ -69,12 +65,11 @@ class CreateJobActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun checkValidation(): Boolean {
         return when {
             createJobBinding.postInfo.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Post description is mandatory"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().post_description_is_mandatory
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -83,8 +78,8 @@ class CreateJobActivity : BaseActivity() {
                 false
             }
             createJobBinding.totalAmount.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Total amount is mandatory"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().total_amount_is_mandatory
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -93,8 +88,8 @@ class CreateJobActivity : BaseActivity() {
                 false
             }
             createJobBinding.totalAmount.text.toString().toFloat()==0.0f -> {
-                bottomSheetDialogMessageText.text = "Total amount should be more than 0"
-                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().total_amount_should_be_more_than_0
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()

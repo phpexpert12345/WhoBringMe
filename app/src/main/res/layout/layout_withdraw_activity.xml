@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -10,11 +17,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/_190sdp"
-            android:paddingTop="@dimen/_20sdp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:background="@color/colorLoginButton"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="@dimen/_20sdp">
 
             <RelativeLayout
                 android:id="@+id/headerLayout"
@@ -53,10 +60,10 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="Request Withdraw"
+                    android:text="@{languageModel.request_withdraw}"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="RelativeOverlap" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -92,10 +99,9 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Withdraw Amount"
+                android:text="@{languageModel.withdraw_amount}"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_19sdp"
-                tools:ignore="HardcodedText" />
+                android:textSize="@dimen/_19sdp" />
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
@@ -121,12 +127,12 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:paddingTop="@dimen/_5sdp"
+                    android:layout_toEndOf="@+id/euroImage"
                     android:background="@null"
                     android:fontFamily="@font/poppins_regular"
                     android:inputType="numberDecimal"
+                    android:paddingTop="@dimen/_5sdp"
                     android:text="200"
-                    android:layout_toEndOf="@+id/euroImage"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_13sdp"
                     tools:ignore="Autofill,HardcodedText,LabelFor" />
@@ -151,7 +157,7 @@
             android:layout_below="@+id/amountTransaction"
             android:layout_marginStart="@dimen/_10sdp"
             android:fontFamily="@font/poppins_semi_bold"
-            android:text="@string/payment_methods_colun"
+            android:text="@{languageModel.payment_methods_colun}"
             android:textColor="@color/text_color"
             android:textSize="@dimen/_13sdp" />
 
@@ -176,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_toEndOf="@+id/bankIcon"
-                android:text="@string/bank"
+                android:text="@{languageModel.bank}"
                 android:textColor="@color/text_color_dark"
                 android:textSize="@dimen/_13sdp"
                 tools:ignore="RelativeOverlap" />
@@ -194,12 +200,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@drawable/button_rectangle_green"
-            android:text="Submit Request"
-            app:spinning_bar_color="@color/colorGreen"
-            android:textColor="@color/white"
-            android:textAllCaps="false"
-            android:textSize="@dimen/_11sdp"
             android:fontFamily="@font/poppins_medium"
-            tools:ignore="HardcodedText" />
+            android:text="@{languageModel.submit_request}"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_11sdp"
+            app:spinning_bar_color="@color/colorGreen" />
     </RelativeLayout>
 </layout>

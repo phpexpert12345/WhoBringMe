@@ -22,7 +22,6 @@ import com.phpexpert.bringme.activities.employee.CreateJobActivity
 import com.phpexpert.bringme.databinding.EmployeeFragmentHomeBinding
 import com.phpexpert.bringme.databinding.JobViewLayoutBinding
 import com.phpexpert.bringme.databinding.WriteReviewLayoutBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
 import com.phpexpert.bringme.dtos.OrderListData
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobHistoryModel
@@ -31,7 +30,6 @@ import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-
 
 @Suppress("DEPRECATION", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
@@ -55,6 +53,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
         homeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.employee_fragment_home, container, false)
+        homeFragmentBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         (activity as BaseActivity).isCheckPermissions(requireActivity(), perission)
         initValues()
         setActions()
@@ -100,18 +99,20 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
 
         jobViewBinding = homeFragmentBinding.bottomHistryLayout
+        jobViewBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
         mBottomSheetFilter.isDraggable = false
         mBottomSheetFilter.peekHeight = 0
 
         writeReviewBinding = homeFragmentBinding.writeReviewLayout
+        writeReviewBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         writeReviewBehaviour = BottomSheetBehavior.from(writeReviewBinding.root)
         writeReviewBehaviour.isDraggable = false
         writeReviewBehaviour.peekHeight = 0
 
         progressDialog = ProgressDialog(requireActivity())
         progressDialog.setCancelable(false)
-        progressDialog.setMessage("Please Wait")
+        progressDialog.setMessage((activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_wait)
         jobHistoryModel = ViewModelProvider(this).get(JobHistoryModel::class.java)
     }
 
@@ -136,7 +137,6 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         homeFragmentBinding.homeRv.adapter = HomeFragmentAdapter(requireActivity(), orderListData, this)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setObserver() {
         progressDialog.show()
         jobHistoryModel.getLatestJobData(getMapData()).observe(viewLifecycleOwner, {
@@ -151,7 +151,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
             } else {
                 if (it.status == "") {
                     (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                         (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -169,8 +169,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     private fun getMapData(): Map<String, String> {
         val mapData = HashMap<String, String>()
         mapData["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapData["lang_code"] = AuthSingleton.authObject.lang_code!!
-        mapData["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapData["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
+        mapData["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         return mapData
     }
 
@@ -227,7 +227,6 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun writeReviewData(jobOrderId: String, totalRating: String, reviewContent: String, position: Int) {
         jobHistoryModel.getWriteReviewJobData(reviewDataMap(jobOrderId, totalRating, reviewContent)).observe(viewLifecycleOwner, {
             writeReviewBinding.submitButton.revertAnimation()
@@ -236,7 +235,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
             if (it.status_code == "0") {
                 (activity as BaseActivity).bottomSheetDialog.show()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -250,7 +249,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
             } else {
                 (activity as BaseActivity).bottomSheetDialog.show()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -266,7 +265,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         mapDataValue["job_order_id"] = jobOrderId
         mapDataValue["total_tating"] = totalRating
         mapDataValue["review_content"] = (activity as BaseActivity).base64Encoded(reviewContent)
-        mapDataValue["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataValue
     }
 }

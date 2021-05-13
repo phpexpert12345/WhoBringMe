@@ -8,6 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.TransactionHistoryCellBinding
+import com.phpexpert.bringme.utilities.BaseActivity
 
 class TransactionHistoryAdapter(var context: Context, var arrayList: ArrayList<String>) : RecyclerView.Adapter<TransactionHistoryAdapter.TransactionViewModel>() {
     private lateinit var transactionBinding: TransactionHistoryCellBinding
@@ -20,6 +21,7 @@ class TransactionHistoryAdapter(var context: Context, var arrayList: ArrayList<S
 
     override fun onBindViewHolder(holder: TransactionViewModel, position: Int) {
         transactionBinding = holder.viewBinding as TransactionHistoryCellBinding
+        transactionBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
     }
 
     override fun getItemCount(): Int {

@@ -30,7 +30,7 @@ import com.phpexpert.bringme.activities.LoginActivity
 import com.phpexpert.bringme.activities.delivery.UploadDocumentSelectActivity
 import com.phpexpert.bringme.activities.employee.ProfileEditActivity
 import com.phpexpert.bringme.databinding.DeliveryProfileFragmentBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.ui.employee.profile.ProfileViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
 
@@ -41,6 +41,7 @@ class ProfileFragment : Fragment() {
     private lateinit var mobileNumberDialog: BottomSheetDialog
     private lateinit var otpDataDialog: BottomSheetDialog
     private lateinit var progressDialog: ProgressDialog
+    private lateinit var languageData: LanguageDtoData
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -55,6 +56,9 @@ class ProfileFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         profileFragmentBinding = DataBindingUtil.inflate(layoutInflater, R.layout.delivery_profile_fragment, container, false)
+        profileFragmentBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
+        languageData = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
+
         profileViewMode = ViewModelProvider(this).get(com.phpexpert.bringme.models.ProfileViewModel::class.java)
         initValues()
         setActions()
@@ -64,13 +68,25 @@ class ProfileFragment : Fragment() {
         return profileFragmentBinding.root
     }
 
+    @SuppressLint("CutPasteId")
     private fun initValues() {
         mobileNumberDialog = BottomSheetDialog(requireActivity(), R.style.SheetDialog)
         mobileNumberDialog.setContentView(R.layout.layout_change_phone_number)
+        mobileNumberDialog.findViewById<TextView>(R.id.textHeading)?.text = languageData.change_phone_number
+        mobileNumberDialog.findViewById<TextView>(R.id.weWillSendText)?.text = languageData.we_will_send_you_an
+        mobileNumberDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = languageData.one_time_password
+        mobileNumberDialog.findViewById<TextView>(R.id.onThisMobile)?.text = languageData.on_this_mobile_number
+        mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.hint = languageData.enter_your_phone_number
+        mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = languageData.get_otp
         mobileNumberDialog.setCancelable(false)
 
         otpDataDialog = BottomSheetDialog(requireActivity(), R.style.SheetDialog)
         otpDataDialog.setContentView(R.layout.otp_verify_layout)
+        otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to
+        otpDataDialog.findViewById<TextView>(R.id.timeText)?.text = languageData.auto_verifying_your_otp_in_00_12
+        otpDataDialog.findViewById<TextView>(R.id.didNotReceive)?.text = languageData.don_t_receive_code_resend_code
+        otpDataDialog.findViewById<TextView>(R.id.resendText)?.text = languageData.resend_code
+        otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)?.text = languageData.verify
         otpDataDialog.setCancelable(false)
 
         mobileNumberDialog.findViewById<ImageView>(R.id.closeIcon)!!.setOnClickListener {
@@ -81,8 +97,8 @@ class ProfileFragment : Fragment() {
         mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.setOnClickListener {
             when {
                 mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString().trim() == "" -> {
-                    (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter mobile number first"
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_enter_mobile_number_first
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text =  (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                         (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -90,8 +106,8 @@ class ProfileFragment : Fragment() {
                     (activity as BaseActivity).bottomSheetDialog.show()
                 }
                 mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text?.length !in 10..14 -> {
-                    (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter valid phone number"
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_enter_valid_phone_number
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                         (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -120,7 +136,7 @@ class ProfileFragment : Fragment() {
         }
 
         progressDialog = ProgressDialog(requireActivity())
-        progressDialog.setMessage("Please Wait...")
+        progressDialog.setMessage(languageData.please_wait)
         progressDialog.setCancelable(false)
         handleOtpET()
 
@@ -131,7 +147,7 @@ class ProfileFragment : Fragment() {
         object : CountDownTimer(30000, 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                otpDataDialog.findViewById<TextView>(R.id.timeText)!!.text = "${resources.getString(R.string.auto_verifying_your_otp_in_00_12)} (00:${counter[0]})"
+                otpDataDialog.findViewById<TextView>(R.id.timeText)!!.text = "${(activity as BaseActivity).sharedPrefrenceManager.getLanguageData().auto_verifying_your_otp_in_00_12} (00:${counter[0]})"
                 counter[0]--
             }
 
@@ -142,7 +158,6 @@ class ProfileFragment : Fragment() {
         }.start()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setActions() {
         profileFragmentBinding.editImage.setOnClickListener {
             if ((activity as BaseActivity).isCheckPermissions(requireActivity(), perission)) {
@@ -158,9 +173,9 @@ class ProfileFragment : Fragment() {
         }
 
         profileFragmentBinding.logoutLayout.setOnClickListener {
-            (activity as BaseActivity).bottomSheetDialogMessageText.text = "Are you sure you want to logout"
-            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Yes"
-            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.text = "No"
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().are_you_sure_you_want_to_logout
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().yes
+            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().no
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -180,6 +195,7 @@ class ProfileFragment : Fragment() {
         setObserver()
         ProfileViewModel.changeModel.postValue(false)
     }
+
     @SuppressLint("SetTextI18n")
     private fun setObserver() {
         ProfileViewModel.getChangeModel().observe(viewLifecycleOwner, {
@@ -197,12 +213,12 @@ class ProfileFragment : Fragment() {
         })
     }
 
-    @SuppressLint("SetTextI18n")
     private fun getOtpNumberObserver() {
         if ((activity as BaseActivity).isOnline()) {
             profileViewMode.changeMobileNumber(getOtpDataMap()).observe(viewLifecycleOwner, {
+                mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
                     if (it.status_code == "0") {
@@ -215,8 +231,9 @@ class ProfileFragment : Fragment() {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
-            (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+            mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -225,12 +242,11 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun verifyOtpObserver() {
         if ((activity as BaseActivity).isOnline()) {
             profileViewMode.otpVerifyData(getOtpVerify()).observe(viewLifecycleOwner, {
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
                     if (it.status_code == "0") {
@@ -242,8 +258,8 @@ class ProfileFragment : Fragment() {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
-            (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -252,12 +268,11 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun resendOtpObserver() {
         if ((activity as BaseActivity).isOnline()) {
             profileViewMode.otpResendData(getResendOtp()).observe(viewLifecycleOwner, {
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                     otpDataDialog.findViewById<LinearLayout>(R.id.resendLayout)!!.visibility = View.GONE
@@ -267,8 +282,8 @@ class ProfileFragment : Fragment() {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
-            (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
-            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+            (activity as BaseActivity).bottomSheetDialogMessageText.text =  (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -281,16 +296,16 @@ class ProfileFragment : Fragment() {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["account_mobile"] = mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
         mapDataVal["account_phone_code"] = mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
-        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
-        mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
         return mapDataVal
     }
 
     private fun getOtpVerify(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["otp_number"] = mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
-        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
-        mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
         return mapDataVal
     }
 
@@ -298,8 +313,8 @@ class ProfileFragment : Fragment() {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["account_mobile"] = mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
         mapDataVal["account_phone_code"] = mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
-        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
-        mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
         return mapDataVal
     }
 
@@ -311,7 +326,7 @@ class ProfileFragment : Fragment() {
     }
 
     inner class GenericTextWatcher(var view: View) : TextWatcher {
-        @SuppressLint("SetTextI18n", "CutPasteId")
+        @SuppressLint("CutPasteId")
         override fun afterTextChanged(editable: Editable) {
             val text = editable.toString()
             when (view.id) {
@@ -322,12 +337,12 @@ class ProfileFragment : Fragment() {
                 R.id.otpPass3 -> if (text.length == 1) otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!.requestFocus() else if (text.isEmpty()) otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.requestFocus()
                 R.id.otpPass4 -> if (text.isEmpty()) {
                     otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.requestFocus()
-                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = "Verify"
+                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().verify
                     otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setBackgroundResource(R.drawable.button_shape_gray)
                     otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusableInTouchMode = false
                     otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusable = false
                 } else {
-                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = "Submit"
+                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().submit
                     otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setBackgroundResource(R.drawable.button_rectangle_green)
                     otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusableInTouchMode = true
                     otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusable = true
@@ -342,7 +357,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             100 -> {
@@ -353,8 +367,8 @@ class ProfileFragment : Fragment() {
                         grantResults[4] == PackageManager.PERMISSION_GRANTED) {
                     startActivity(Intent(requireActivity(), ProfileEditActivity::class.java))
                 } else {
-                    (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please allow all permission"
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Pk"
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_allow_all_permission
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                         (activity as BaseActivity).bottomSheetDialog.dismiss()

@@ -17,7 +17,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityOTPBinding
-import com.phpexpert.bringme.dtos.AuthSingleton
+import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.PostDataOtp
 import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
@@ -30,12 +30,14 @@ class OTPActivity : BaseActivity() {
     private lateinit var postDataOtp: PostDataOtp
     private lateinit var viewDataModel: RegistrationModel
     private lateinit var progressDialog: ProgressDialog
+    private lateinit var languageDtoData: LanguageDtoData
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         otpActivity = DataBindingUtil.setContentView(this, R.layout.activity_o_t_p)
-
+        otpActivity.languageModel = sharedPrefrenceManager.getLanguageData()
+        languageDtoData = sharedPrefrenceManager.getLanguageData()
         postDataOtp = intent.getSerializableExtra("postDataModel") as PostDataOtp
 
         otpActivity.btnVerify.setOnClickListener {
@@ -43,14 +45,14 @@ class OTPActivity : BaseActivity() {
                 otpActivity.btnVerify.startAnimation()
                 setObserver()
             } else {
-                Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, languageDtoData.network_error, Toast.LENGTH_LONG).show()
             }
         }
 
         viewDataModel = ViewModelProvider(this).get(RegistrationModel::class.java)
 
         timerRestriction()
-        otpActivity.headerText.text = "${resources.getString(R.string.please_wait_we_will_auto_verify_nthe_otp_sent_to)} ${postDataOtp.accountPhoneCode + postDataOtp.accountMobile}"
+        otpActivity.headerText.text = "${languageDtoData.please_wait_we_will_auto_verify_nthe_otp_sent_to} ${postDataOtp.accountPhoneCode + postDataOtp.accountMobile}"
 
         otpActivity.backArrow.setOnClickListener {
             finish()
@@ -62,7 +64,7 @@ class OTPActivity : BaseActivity() {
         }
 
         progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Please Wait...")
+        progressDialog.setMessage(languageDtoData.please_wait)
         progressDialog.setCancelable(false)
         handleOtpET()
     }
@@ -76,7 +78,6 @@ class OTPActivity : BaseActivity() {
     }
 
     inner class GenericTextWatcher(var view: View) : TextWatcher {
-        @SuppressLint("SetTextI18n")
         override fun afterTextChanged(editable: Editable) {
             val text = editable.toString()
             when (view.id) {
@@ -87,12 +88,12 @@ class OTPActivity : BaseActivity() {
                 R.id.otpPass3 -> if (text.length == 1) otpActivity.otpPass4.requestFocus() else if (text.isEmpty()) otpActivity.otpPass2.requestFocus()
                 R.id.otpPass4 -> if (text.isEmpty()) {
                     otpActivity.otpPass3.requestFocus()
-                    otpActivity.btnVerify.text = "Verify"
+                    otpActivity.btnVerify.text = languageDtoData.verify
                     otpActivity.btnVerify.setBackgroundResource(R.drawable.button_shape_gray)
                     otpActivity.btnVerify.isFocusableInTouchMode = false
                     otpActivity.btnVerify.isFocusable = false
                 } else {
-                    otpActivity.btnVerify.text = "Submit"
+                    otpActivity.btnVerify.text = languageDtoData.submit
                     otpActivity.btnVerify.setBackgroundResource(R.drawable.button_rectangle_green)
                     otpActivity.btnVerify.isFocusableInTouchMode = true
                     otpActivity.btnVerify.isFocusable = true
@@ -120,7 +121,7 @@ class OTPActivity : BaseActivity() {
         object : CountDownTimer(30000, 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                otpActivity.timeText.text = "${resources.getString(R.string.auto_verifying_your_otp_in_00_12)} (00:${counter[0]})"
+                otpActivity.timeText.text = "${languageDtoData.auto_verifying_your_otp_in_00_12} (00:${counter[0]})"
                 counter[0]--
             }
 
@@ -131,12 +132,11 @@ class OTPActivity : BaseActivity() {
         }.start()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setObserver() {
         viewDataModel.registerViewModel(mapData()).observe(this, {
             otpActivity.btnVerify.revertAnimation()
             bottomSheetDialogMessageText.text = it.status_message
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             if (it.status_code == "0") {
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -155,15 +155,14 @@ class OTPActivity : BaseActivity() {
         })
     }
 
-    @SuppressLint("SetTextI18n")
     private fun resendOtpObserver() {
         viewDataModel.resendOtpModel(resendData()).observe(this, {
             progressDialog.dismiss()
             bottomSheetDialogMessageText.text = it.status_message
-            bottomSheetDialogMessageOkButton.text = "Ok"
+            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
-            bottomSheetDialogMessageOkButton.setOnClickListener {_->
-                if (it.status_code=="0") {
+            bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                if (it.status_code == "0") {
                     otpActivity.timeText.visibility = View.VISIBLE
                     otpActivity.resendLayout.visibility = View.GONE
                     timerRestriction()
@@ -194,16 +193,16 @@ class OTPActivity : BaseActivity() {
         mapDataVal["referral_code"] = postDataOtp.accountReferralCode
         mapDataVal["device_token_id"] = postDataOtp.deviceTokenId
         mapDataVal["device_platform"] = postDataOtp.devicePlatform
-        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
-        mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code
+        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
         return mapDataVal
     }
 
     private fun resendData(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
-        mapDataVal["auth_key"] = AuthSingleton.authObject.auth_key!!
+        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
         mapDataVal["Token_ID"] = postDataOtp.deviceTokenId!!
-        mapDataVal["lang_code"] = AuthSingleton.authObject.lang_code!!
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
         return mapDataVal
     }
 }

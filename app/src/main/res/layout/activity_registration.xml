@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/create_account"
+                    android:text="@{languageModel.create_account}"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15sdp" />
 
@@ -86,7 +93,7 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="@string/you_have_selected"
+                            android:text="@{languageModel.you_have_selected}"
                             android:textColor="@color/text_color_dark"
                             android:textSize="@dimen/_11sdp" />
 
@@ -97,10 +104,8 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_3sdp"
                             android:fontFamily="@font/poppins_semi_bold"
-                            android:text="Delivery Employee"
                             android:textColor="@color/text_color"
-                            android:textSize="@dimen/_11sdp"
-                            tools:ignore="HardcodedText" />
+                            android:textSize="@dimen/_11sdp" />
 
                     </LinearLayout>
 
@@ -138,7 +143,7 @@
                             android:background="@android:color/transparent"
                             android:backgroundTint="@color/colorDarkGrey"
                             android:fontFamily="@font/poppins_regular"
-                            android:hint="@string/first_name"
+                            android:hint="@{languageModel.first_name}"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
@@ -163,7 +168,7 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/poppins_regular"
-                            android:hint="@string/last_name"
+                            android:hint="@{languageModel.last_name}"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
@@ -188,7 +193,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="@string/mobile_number"
+                            android:text="@{languageModel.mobile_number}"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="@dimen/_12sdp"
                             android:visibility="gone" />
@@ -197,6 +202,7 @@
                             android:id="@+id/mobileNumberInputText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="@{languageModel.mobile_number}"
                             app:hintTextColor="@color/colorDarkGrey">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -207,7 +213,6 @@
                                 android:background="@android:color/transparent"
                                 android:digits="0123456789"
                                 android:fontFamily="@font/poppins_regular"
-                                android:hint="@string/mobile_number"
                                 android:imeOptions="actionDone"
                                 android:inputType="number"
                                 android:maxLength="10"
@@ -254,7 +259,7 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/poppins_regular"
-                            android:hint="@string/email_id"
+                            android:hint="@{languageModel.email_id}"
                             android:inputType="textEmailAddress"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
@@ -276,7 +281,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/_5sdp"
-                            android:hint="@string/_6_digit_mpin_number"
+                            android:hint="@{languageModel._6_digit_mpin_number}"
                             app:hintTextColor="@color/colorDarkGrey">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -319,7 +324,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:background="@drawable/button_rectangle_green"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/submit"
+                    android:text="@{languageModel.submit}"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp"
@@ -333,7 +338,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/by_continuing_you_agree_that_you_have_read_and_accept_our_t_amp_cs_and_privacy_policy"
+                    android:text="@{languageModel.by_continuing_you_agree_that_you_have_read_and_accept_our_t_amp_cs_and_privacy_policy}"
                     android:textColor="@color/text_color_dark"
                     android:textSize="@dimen/_9sdp" />
             </LinearLayout>

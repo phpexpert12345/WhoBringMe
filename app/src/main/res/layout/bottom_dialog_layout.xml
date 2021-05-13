@@ -36,10 +36,8 @@
                     android:layout_gravity="center_horizontal"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:gravity="center_horizontal"
-                    android:text="@string/alert_text"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_15sdp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="@dimen/_15sdp" />
 
                 <TextView
                     android:id="@+id/message"
@@ -49,10 +47,8 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_medium"
                     android:gravity="center_horizontal"
-                    android:text="Message"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_11sdp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="@dimen/_11sdp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -72,10 +68,8 @@
                         android:paddingTop="@dimen/_5sdp"
                         android:paddingEnd="@dimen/_15sdp"
                         android:paddingBottom="@dimen/_5sdp"
-                        android:text="Cancel"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_11sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_11sdp"/>
 
                     <TextView
                         android:id="@+id/okText"
@@ -89,10 +83,8 @@
                         android:paddingTop="@dimen/_5sdp"
                         android:paddingEnd="@dimen/_15sdp"
                         android:paddingBottom="@dimen/_5sdp"
-                        android:text="OK"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_11sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_11sdp"/>
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

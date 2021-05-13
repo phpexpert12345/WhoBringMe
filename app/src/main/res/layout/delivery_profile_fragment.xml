@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -57,10 +64,9 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="James Sinha"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_13sdp"
-                        tools:ignore="HardcodedText" />
+                        tools:ignore="RelativeOverlap" />
 
                     <ImageView
                         android:id="@+id/editImage"
@@ -92,10 +98,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="+91 8900123456"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_9sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_9sdp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -118,10 +122,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="nehasinha1234@gmail. com"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_9sdp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="@dimen/_9sdp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -133,13 +135,14 @@
             android:layout_below="@+id/profileDataLayout"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_10sdp">
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
-                android:text="@string/job_post_limit"
+                android:text="@{languageModel.job_post_limit}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_11sdp"
                 tools:ignore="RelativeOverlap" />
@@ -161,7 +164,8 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:background="@color/text_color_light" />
+            android:background="@color/text_color_light"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/changeMPinLayout"
@@ -176,7 +180,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
-                android:text="@string/change_mpin"
+                android:text="@{languageModel.change_mpin}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_11sdp"
                 tools:ignore="RelativeOverlap" />
@@ -213,7 +217,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
-                android:text="@string/document_upload"
+                android:text="@{languageModel.document_upload}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_11sdp"
                 tools:ignore="RelativeOverlap" />
@@ -250,7 +254,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
-                android:text="@string/change_phone_number"
+                android:text="@{languageModel.change_phone_number}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_11sdp"
                 tools:ignore="RelativeOverlap" />
@@ -287,7 +291,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
-                android:text="@string/logout"
+                android:text="@{languageModel.logout}"
                 android:textColor="@color/red"
                 android:textSize="@dimen/_11sdp"
                 tools:ignore="RelativeOverlap" />

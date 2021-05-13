@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +43,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="@string/order"
+                            android:text="@{languageModel.order}"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="@dimen/_11sdp" />
 
@@ -88,7 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@string/job_code"
+                        android:text="@{languageModel.job_code}"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_11sdp" />
 
@@ -119,7 +126,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="@string/job_description"
+                            android:text="@{languageModel.job_description}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp" />
 
@@ -168,7 +175,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@string/write_a_review"
+                        android:text="@{languageModel.write_a_review}"
                         android:textColor="@color/colorGreen"
                         android:textSize="@dimen/_8sdp"
                         tools:ignore="RelativeOverlap" />
@@ -184,13 +191,14 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        tools:ignore="RelativeOverlap">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="When you want to get the product"
+                            android:text="@{languageModel.when_you_want_to_get_the_product}"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="@dimen/_7sdp"
                             tools:ignore="HardcodedText" />
@@ -210,7 +218,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_3sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="Mint"
+                            android:text="@{languageModel.mint}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_7sdp"
                             tools:ignore="HardcodedText" />
@@ -240,8 +248,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -282,9 +290,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/it_is_a_long_established_fact_that_a_reader_will_be_n_distracted_by_the_readable_content_of_a_page_n_when_looking_at_its_layout"
+                    android:text="@{languageModel.it_is_a_long_established_fact_that_a_reader_will_be_n_distracted_by_the_readable_content_of_a_page_n_when_looking_at_its_layout}"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_11sdp"/>
+                    android:textSize="@dimen/_11sdp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -302,8 +310,8 @@
                 android:id="@+id/deliveryDataLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:layout_margin="@dimen/_10sdp">
+                android:layout_margin="@dimen/_10sdp"
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/deliveryImageView"
@@ -315,28 +323,28 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/deliveryImageView"
-                    android:layout_marginStart="@dimen/_10sdp"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_toEndOf="@+id/deliveryImageView"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
                         android:text="Jerry Thomas"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
-                        android:fontFamily="@font/poppins_medium"
                         tools:ignore="HardcodedText" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_medium"
                         android:text="+49 8900123456"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:fontFamily="@font/poppins_medium"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
 
@@ -345,27 +353,26 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="RelativeOverlap">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Accepted Time"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_7sdp"
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/poppins_medium"
-                        tools:ignore="HardcodedText" />
+                        android:text="@{languageModel.accepted_time_text}"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_7sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="19 Mar'2021, Friday"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_7sdp"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/poppins_medium"
-                        tools:ignore="HardcodedText" />
+                        android:text="19 Mar'2021, Friday"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_7sdp"/>
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

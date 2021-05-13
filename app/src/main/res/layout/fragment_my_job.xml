@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="languageModel"
+            type="com.phpexpert.bringme.dtos.LanguageDtoData" />
+    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -23,7 +28,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_semi_bold"
-                    android:text="@string/my_job"
+                    android:text="@{languageModel.my_job}"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_19sdp"
                     tools:ignore="RelativeOverlap" />
@@ -96,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/running_orders"
+                        android:text="@{languageModel.running_orders}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_9sdp" />
                 </LinearLayout>
@@ -142,7 +147,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/total_amount"
+                        android:text="@{languageModel.total_amount}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_9sdp" />
                 </LinearLayout>
@@ -191,7 +196,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@string/there_are_no_job"
+                    android:text="@{languageModel.there_are_no_job}"
                     android:textColor="@color/color_text_grey"
                     android:textSize="@dimen/_13sdp" />
             </LinearLayout>

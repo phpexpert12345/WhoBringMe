@@ -75,7 +75,7 @@ object ServiceGeneratorLocation {
             interceptor.level = HttpLoggingInterceptor.Level.BODY
             builder.addInterceptor(interceptor)
             builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
-            builder.hostnameVerifier { hostname, session -> true }
+            builder.hostnameVerifier { _, _ -> true }
             builder
         } catch (e: Exception) {
             throw RuntimeException(e)
