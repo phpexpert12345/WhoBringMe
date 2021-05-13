@@ -73,8 +73,8 @@ class RegistrationMainDto {
 }
 
 class ResendOtpMain : BaseResponseDto() {
-    @SerializedName("data")
-    var data: ArrayList<ResendOtpData>? = ArrayList()
+//    @SerializedName("data")
+//    var data: ArrayList<ResendOtpData>? = ArrayList()
 }
 
 class ResendOtpData {

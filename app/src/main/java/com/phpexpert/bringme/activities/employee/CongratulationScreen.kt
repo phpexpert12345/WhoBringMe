@@ -36,6 +36,7 @@ class CongratulationScreen : BaseActivity() {
     private lateinit var servicePostValue: PostJobPostDto
     private lateinit var jobViewModel: JobPostModel
     private lateinit var progressDialog: ProgressDialog
+    private lateinit var countDownTimer: CountDownTimer
     private var counting: Int = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,14 +53,18 @@ class CongratulationScreen : BaseActivity() {
     }
 
     private fun initValues() {
-        congratulationScreenBinding.userName.text = sharedPrefrenceManager.getProfile().login_name
-        congratulationScreenBinding.userName1.text = sharedPrefrenceManager.getProfile().login_name
+        congratulationScreenBinding.userName.text = "Hello "+sharedPrefrenceManager.getProfile().login_name+","
+        congratulationScreenBinding.userName1.text = "Hello "+sharedPrefrenceManager.getProfile().login_name+","
         servicePostValue = intent.getSerializableExtra("postValue") as PostJobPostDto
         jobViewBinding = congratulationScreenBinding.jobViewLayout
+        servicePostValue.Charge_for_Jobs = String.format("%.2f", servicePostValue.Charge_for_Jobs!!.toFloat())
+        servicePostValue.admin_service_fees = String.format("%.2f", servicePostValue.admin_service_fees!!.toFloat())
+        servicePostValue.grandTotal = String.format("%.2f", servicePostValue.grandTotal!!.toFloat())
+
         jobViewBinding.jobDetails = servicePostValue
 
         congratulationScreenBinding.orderId.text = servicePostValue.jobId
-        congratulationScreenBinding.grandTotalAmount.text = servicePostValue.grandTotal
+        congratulationScreenBinding.grandTotalAmount.text = String.format("%.2f",servicePostValue.grandTotal?.toFloat())
 
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
         mBottomSheetFilter.isDraggable = false
@@ -119,7 +124,7 @@ class CongratulationScreen : BaseActivity() {
             }
             var countMint = intArrayOf((servicePostValue.jobTime!!.toInt() % 60) - 1)
             var countSecond = intArrayOf(59)
-            object : CountDownTimer(TimeUnit.MINUTES.toMillis(servicePostValue.jobTime!!.toLong()), 1000) {
+            countDownTimer = object : CountDownTimer(TimeUnit.MINUTES.toMillis(servicePostValue.jobTime!!.toLong()), 1000) {
                 override fun onTick(p0: Long) {
                     congratulationScreenBinding.hoursTV.text = counterHour[0].toString()
                     congratulationScreenBinding.minute1TV.text = (countMint[0] / 10).toString()
@@ -204,6 +209,7 @@ class CongratulationScreen : BaseActivity() {
 
     override fun onPause() {
         super.onPause()
+
         val window: Window = window
         window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     }
@@ -221,6 +227,7 @@ class CongratulationScreen : BaseActivity() {
             bottomSheetDialogMessageOkButton.text = "Ok"
             if (it.status_code == "0") {
                 bottomSheetDialogMessageOkButton.setOnClickListener {
+                    countDownTimer.cancel()
                     bottomSheetDialog.dismiss()
                     startActivity(Intent(this, DashboardActivity::class.java))
                     finishAffinity()
@@ -249,6 +256,7 @@ class CongratulationScreen : BaseActivity() {
             if (it.status_code == "0") {
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
+                    countDownTimer.cancel()
                     setCountDownTimer()
                 }
             } else {
@@ -265,10 +273,10 @@ class CongratulationScreen : BaseActivity() {
         jobViewModel.getJobDetails(getJobDetailsMap()).observe(this, {
             if (it.status_code == "0") {
                 if (it.data!!.OrderDetailList!![0].order_status_msg == "Accepted") {
-
                     congratulationScreenBinding.timingDataLayout.visibility = View.GONE
-                    congratulationScreenBinding.deliveryDataLayout.visibility = View.VISIBLE
+                    congratulationScreenBinding.userAcceptedData.visibility = View.VISIBLE
                     congratulationScreenBinding.homeButton.visibility = View.VISIBLE
+                    countDownTimer.cancel()
                     Glide.with(this).load(it.data!!.OrderDetailList!![0].Delivery_Employee_photo).placeholder(R.drawable.user_placeholder).into(congratulationScreenBinding.deliveryImageView)
                     congratulationScreenBinding.userName2.text = it.data!!.OrderDetailList!![0].Delivery_Employee_name
                     congratulationScreenBinding.userMobileNo.text = it.data!!.OrderDetailList!![0].Delivery_Employee_phone_code + " " + it.data!!.OrderDetailList!![0].Delivery_Employee_phone

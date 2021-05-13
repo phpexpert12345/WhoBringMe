@@ -37,6 +37,9 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyJobViewModel, position: Int) {
         jobCellBinding = holder.viewBinding as LayoutJobCellBinding
+        arrayList[position].job_sub_total = String.format("%.2f", arrayList[position].job_sub_total?.toFloat())
+        arrayList[position].Charge_for_Jobs = String.format("%.2f", arrayList[position].Charge_for_Jobs?.toFloat())
+        arrayList[position].job_total_amount = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
         jobCellBinding.model = arrayList[position]
         Glide.with(context).load(arrayList[position].Client_photo).circleCrop().placeholder(R.drawable.user_placeholder).into(jobCellBinding.userImage)
 

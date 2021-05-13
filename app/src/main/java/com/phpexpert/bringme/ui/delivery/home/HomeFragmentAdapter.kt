@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.DataBindingUtil
@@ -38,28 +39,44 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HomeFragmentViewHolder, position: Int) {
         homeFragmentCellBinding = holder.viewBinding as DeliveryHomeCellBinding
+
+        arrayList[position].job_total_amount = String.format("%.2f",arrayList[position].job_total_amount?.toFloat())
         homeFragmentCellBinding.model = arrayList[position]
 
         Glide.with(context).load(arrayList[position].Client_photo).centerCrop().placeholder(R.drawable.user_placeholder).into(homeFragmentCellBinding.userImage)
 
         homeFragmentCellBinding.clientCall.setOnClickListener {
-            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + arrayList[position].Client_phone_code+arrayList[position].Client_phone))
+            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + arrayList[position].Client_phone_code + arrayList[position].Client_phone))
             context.startActivity(intent)
         }
         try {
             homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-        if (arrayList[position].job_accept_time != null) {
-            homeFragmentCellBinding.acceptedDateTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
-            homeFragmentCellBinding.acceptViewLayout.text = "View"
-            homeFragmentCellBinding.declineFinishedLayout.text = "Finished"
-            homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.colorLoginButton))
-        } else {
-            homeFragmentCellBinding.acceptViewLayout.text = "Accept"
-            homeFragmentCellBinding.declineFinishedLayout.text = "Decline"
-            homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.red))
+        when (arrayList[position].order_status_msg) {
+            "Accepted" -> {
+                try {
+                    homeFragmentCellBinding.acceptedDateTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+                homeFragmentCellBinding.acceptViewLayout.text = "View"
+                homeFragmentCellBinding.declineFinishedLayout.text = "Finished"
+                homeFragmentCellBinding.cs.setImageResource(R.drawable.cs1)
+                homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.colorLoginButton))
+            }
+            "Decline" -> {
+                homeFragmentCellBinding.declineFinishedLayout.visibility = View.GONE
+                homeFragmentCellBinding.cs.setImageResource(R.drawable.cs)
+                homeFragmentCellBinding.acceptViewLayout.text = "View"
+            }
+            else -> {
+                homeFragmentCellBinding.acceptViewLayout.text = "Accept"
+                homeFragmentCellBinding.cs.setImageResource(R.drawable.cs)
+                homeFragmentCellBinding.declineFinishedLayout.text = "Decline"
+                homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.red))
+            }
         }
 
         homeFragmentCellBinding.acceptViewLayout.setOnClickListener {
@@ -84,7 +101,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun changeAcceptDateTime(dateTime: String): String {
+    private fun changeAcceptDateTime(dateTime: String): String? {
         val inputPattern = "yyyy-MM-dd HH:mm:ss"
         val outputPattern = "dd MMM yyyy EEEE h:mm a"
         val inputFormat = SimpleDateFormat(inputPattern)
@@ -100,6 +117,6 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
             e.printStackTrace()
         }
 
-        return str!!
+        return str
     }
 }

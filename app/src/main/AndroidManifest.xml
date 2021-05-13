@@ -124,6 +124,9 @@
         <activity
             android:name=".activities.ChangePasswordActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
+        <activity
+            android:name=".activities.NotificationActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity android:name=".utilities.ImageCropActivity"/>
     </application>
 

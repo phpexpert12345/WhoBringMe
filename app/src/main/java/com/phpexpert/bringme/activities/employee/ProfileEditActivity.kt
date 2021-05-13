@@ -117,10 +117,15 @@ class ProfileEditActivity : BaseActivity() {
             if (isOnline()) {
                 if (checkValidations() && isCheckPermissions(this, perission))
                     editImageData()
-                else
-                    Toast.makeText(this, "All fields are mandatory", Toast.LENGTH_LONG).show()
-            } else
-                Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show()
+            } else{
+                bottomSheetDialogMessageText.text = resources.getString(R.string.network_error)
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
+            }
         }
         setValues()
     }
@@ -189,7 +194,7 @@ class ProfileEditActivity : BaseActivity() {
                 bottomSheetDialog.show()
                 false
             }
-            !profileEditLayoutBinding.emailEt.text.toString().isValidEmail()->{
+            !profileEditLayoutBinding.emailEt.text.toString().isValidEmail() -> {
                 bottomSheetDialogMessageText.text = "Enter Valid Email"
                 bottomSheetDialogMessageOkButton.text = "Ok"
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -437,7 +442,7 @@ class ProfileEditActivity : BaseActivity() {
                                     val loginData = sharedPrefrenceManager.getProfile()
                                     loginData.login_photo = ""
                                     loginData.login_email = profileEditLayoutBinding.emailEt.text.toString()
-                                    loginData.login_name = profileEditLayoutBinding.firstNameEt.text.toString()+" "+profileEditLayoutBinding.lastName.text.toString()
+                                    loginData.login_name = profileEditLayoutBinding.firstNameEt.text.toString() + " " + profileEditLayoutBinding.lastName.text.toString()
                                     loginData.login_address = profileEditLayoutBinding.autoComplete.text.toString()
                                     loginData.login_country = postDataOtp.accountCountry
                                     loginData.login_city = postDataOtp.accountCity

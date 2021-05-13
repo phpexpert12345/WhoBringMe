@@ -61,18 +61,51 @@ class NewCardActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun setValues() {
+
+        cardActivityBinding.cardName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                cardActivityBinding.cardHolderNameText.text = p0
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
+        cardActivityBinding.cvv.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                cardActivityBinding.cvvNumberText.text = p0
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
         cardActivityBinding.expiryDate.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             @SuppressLint("SetTextI18n")
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (p1 == 1 && p1 + p3 == 2 && p0?.contains('/') == false) {
-                    cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("$p0/")
-                } else if (p1 == 3 && p1 - p2 == 2 && p0?.contains('/') == true) {
-                    cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable(p0.toString().replace("/", ""))
+                if (p3 == 0) {
+                    if (cardActivityBinding.expiryDate.text.toString().trim() != "") {
+                        cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("")
+                        cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
+                    }
+                } else {
+                    if (p1 == 1 && p1 + p3 == 2 && p0?.contains('/') == false) {
+                        cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("$p0/")
+                    } else if (p1 == 3 && p1 - p2 == 2 && p0?.contains('/') == true) {
+                        cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable(p0.toString().replace("/", ""))
+                    }
+                    cardActivityBinding.expiryDate.setSelection(cardActivityBinding.expiryDate.text.toString().length)
+                    cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
                 }
-                cardActivityBinding.expiryDate.setSelection(cardActivityBinding.expiryDate.text.toString().length)
 
             }
 
@@ -86,6 +119,7 @@ class NewCardActivity : BaseActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                cardActivityBinding.cardNumberText.text = p0
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -105,14 +139,14 @@ class NewCardActivity : BaseActivity() {
                             s.insert(s.length - 1, java.lang.String.valueOf(' '))
                         }
                     }
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         })
 
         cardActivityBinding.payNowButton.setOnClickListener {
-            if (cardActivityBinding.cardNumber.text.toString().length!=19){
+            if (cardActivityBinding.cardNumber.text.toString().length != 19) {
                 bottomSheetDialogMessageText.text = "Card Number not valid"
                 bottomSheetDialogMessageOkButton.text = "Ok"
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -120,7 +154,7 @@ class NewCardActivity : BaseActivity() {
                     bottomSheetDialog.dismiss()
                 }
                 bottomSheetDialog.show()
-            }else {
+            } else {
                 cardActivityBinding.payNowButton.startAnimation()
                 try {
                     val cardData = Card.create(cardActivityBinding.cardNumber.text.toString().replace("\\s".toRegex(), ""),
@@ -129,7 +163,7 @@ class NewCardActivity : BaseActivity() {
                             cardActivityBinding.cvv.text.toString()
                     )
                     createPaymentCall(cardData)
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
@@ -167,7 +201,7 @@ class NewCardActivity : BaseActivity() {
                     setPaymentTokenObserver(token.id)
                 }
             })
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

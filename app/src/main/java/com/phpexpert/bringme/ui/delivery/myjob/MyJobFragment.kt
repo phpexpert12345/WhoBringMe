@@ -1,6 +1,7 @@
 package com.phpexpert.bringme.ui.delivery.myjob
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.phpexpert.bringme.dtos.MyJobDtoList
 import com.phpexpert.bringme.models.MyJobDataModel
 import com.phpexpert.bringme.utilities.BaseActivity
 
+@Suppress("DEPRECATION")
 class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
 
     private lateinit var myJobBinding: FragmentMyJobBinding
@@ -26,6 +28,7 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
     private lateinit var myJobModel: MyJobDataModel
     private lateinit var mBottomSheetFilter: BottomSheetBehavior<View>
     private lateinit var jobViewBinding: MyJobViewLayoutDeliveryBinding
+    private lateinit var progressDialog:ProgressDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         myJobBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_job, container, false)
@@ -38,7 +41,12 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
         myJobBinding.jobRV.isNestedScrollingEnabled = false
         arrayList = ArrayList()
         myJobBinding.jobRV.adapter = MyJobAdapter(requireActivity(), arrayList, this)
+        progressDialog = ProgressDialog(requireActivity())
+        progressDialog.setMessage("Please Wait...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
         setObserver()
+
         return myJobBinding.root
     }
 
@@ -46,11 +54,12 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
     private fun setObserver() {
         if ((activity as BaseActivity).isOnline()) {
             myJobModel.getMyJobData(getMapData()).observe(viewLifecycleOwner, {
+                progressDialog.dismiss()
                 if (it.status_code == "0") {
-                    myJobBinding.noDataFoundLayout.visibility = View.VISIBLE
-                    myJobBinding.nestedScrollView.visibility = View.GONE
+                    myJobBinding.noDataFoundLayout.visibility = View.GONE
+                    myJobBinding.nestedScrollView.visibility = View.VISIBLE
                     myJobBinding.runningOrders.text = it.Total_Orders
-                    myJobBinding.totalAmount.text = String.format("%.2f", it.Total_Order_Amount)
+                    myJobBinding.totalAmount.text = String.format("%.2f", it.Total_Order_Amount?.toFloat())
                     arrayList.clear()
                     arrayList.addAll(it.data!!.OrderList!!)
                     myJobBinding.jobRV.adapter!!.notifyDataSetChanged()
@@ -71,6 +80,7 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
                 }
             })
         } else {
+                progressDialog.dismiss()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -98,6 +108,9 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
         }
 
         Glide.with(requireActivity()).load(arrayList[position]).centerCrop().placeholder(R.drawable.user_placeholder).into(jobViewBinding.userImage)
+        arrayList[position].job_sub_total = String.format("%.2f",arrayList[position].job_sub_total?.toFloat())
+        arrayList[position].Charge_for_Jobs = String.format("%.2f",arrayList[position].Charge_for_Jobs?.toFloat())
+        arrayList[position].job_total_amount = String.format("%.2f",arrayList[position].job_total_amount?.toFloat())
         jobViewBinding.data = arrayList[position]
     }
 }

@@ -41,15 +41,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:backgroundTint="@color/white"
+                        android:layout_marginBottom="@dimen/_minus5sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="@string/enter_order_number"
                         android:singleLine="true"
                         android:textColor="@color/white"
                         android:textColorHint="#CFCFCF"
-                        android:textSize="@dimen/_15sdp"
+                        android:textSize="@dimen/_13sdp"
                         android:visibility="gone"
                         tools:ignore="Autofill,TextFields" />
 
@@ -82,6 +82,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/close"
+                            android:visibility="gone"
+                            android:layout_marginEnd="@dimen/_15sdp"
                             tools:ignore="ContentDescription" />
                     </LinearLayout>
                 </RelativeLayout>

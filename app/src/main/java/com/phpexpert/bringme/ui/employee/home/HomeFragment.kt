@@ -188,16 +188,20 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 val postDataValue = PostJobPostDto()
                 postDataValue.jobDescription = orderListData[position].about_job
                 postDataValue.jobTime = orderListData[position].job_offer_time!!.split(" ")[0]
-                postDataValue.jobAmount = orderListData[position].job_sub_total
-                postDataValue.grandTotal = orderListData[position].job_total_amount
+                postDataValue.jobAmount = String.format("%.2f",orderListData[position].job_sub_total?.toFloat())
+                postDataValue.grandTotal = String.format("%.2f",orderListData[position].job_total_amount?.toFloat())
                 postDataValue.jobPaymentMode = orderListData[position].payment_mode
-                postDataValue.job_tax_amount = orderListData[position].job_tax_amount
-                postDataValue.Charge_for_Jobs = orderListData[position].Charge_for_Jobs
+                try {
+                    postDataValue.job_tax_amount = String.format("%.2f", orderListData[position].job_tax_amount?.toFloat())
+                }catch (e:Exception){
+                    postDataValue.job_tax_amount = orderListData[position].job_tax_amount
+                }
+                postDataValue.Charge_for_Jobs = String.format("%.2f",orderListData[position].Charge_for_Jobs?.toFloat())
                 postDataValue.Charge_for_Jobs_percentage = orderListData[position].Charge_for_Jobs_percentage
                 postDataValue.Charge_for_Jobs_Admin_percentage = orderListData[position].Charge_for_Jobs_Admin_percentage
                 postDataValue.Charge_for_Jobs_Delivery_percentage = orderListData[position].Charge_for_Jobs_Delivery_percentage
-                postDataValue.admin_service_fees = orderListData[position].admin_service_fees
-                postDataValue.delivery_employee_fee = orderListData[position].delivery_employee_fee
+                postDataValue.admin_service_fees = String.format("%.2f",orderListData[position].admin_service_fees?.toFloat())
+                postDataValue.delivery_employee_fee = String.format("%.2f",orderListData[position].delivery_employee_fee?.toFloat())
                 postDataValue.jobId = orderListData[position].job_order_id
 
                 jobViewBinding.jobDetails = postDataValue

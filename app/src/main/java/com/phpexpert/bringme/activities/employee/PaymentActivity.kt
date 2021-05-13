@@ -10,13 +10,11 @@ import android.os.Handler
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.PaymentLayoutBinding
 import com.phpexpert.bringme.dtos.AuthSingleton
-import com.phpexpert.bringme.dtos.PaymentConfigurationSingleton
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobPostModel
 import com.phpexpert.bringme.utilities.BaseActivity
@@ -25,7 +23,7 @@ import com.phpexpert.bringme.utilities.BaseActivity
 class PaymentActivity : BaseActivity() {
 
     private lateinit var paymentActivityBinding: PaymentLayoutBinding
-    private var selectionByString: String = "paypal"
+    private var selectionByString: String = ""
     private lateinit var servicePostValue: PostJobPostDto
     private lateinit var jobPostViewModel: JobPostModel
     private var grandTotal: Float? = 0f
@@ -46,22 +44,37 @@ class PaymentActivity : BaseActivity() {
         setActions()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setActions() {
         paymentActivityBinding.proceedButton.setOnClickListener {
-            paymentActivityBinding.proceedButton.startAnimation()
-            if (selectionByString == "paypal") {
-                /* Handler().postDelayed({
-                     val intent = Intent(this, CongratulationScreen::class.java)
-                     intent.putExtra("postValue", servicePostValue)
-                     startActivity(intent)
-                 }, 1000)*/
-            } else {
-                Handler().postDelayed({
-                    val intent = Intent(this, NewCardActivity::class.java)
-                    intent.putExtra("postValues", servicePostValue)
-                    startActivity(intent)
-                }, 1000)
+            when (selectionByString) {
+                "paypal" -> {
+                    bottomSheetDialogMessageText.text = "Coming Soon"
+                    bottomSheetDialogMessageOkButton.text = "Ok"
+                    bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
+                }
+                "credit_card" -> {
+                    paymentActivityBinding.proceedButton.startAnimation()
+                    Handler().postDelayed({
+                        val intent = Intent(this, NewCardActivity::class.java)
+                        intent.putExtra("postValues", servicePostValue)
+                        startActivity(intent)
+                    }, 1000)
 
+                }
+                else -> {
+                    bottomSheetDialogMessageText.text = "Please Select Payment Method"
+                    bottomSheetDialogMessageOkButton.text = "Ok"
+                    bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
+                }
             }
         }
 
@@ -75,13 +88,17 @@ class PaymentActivity : BaseActivity() {
 
         paymentActivityBinding.payPalSelection.setOnClickListener {
             if (selectionByString != "paypal") {
-                selectionByString = "paypal"
-                paymentActivityBinding.payPalSelection.setImageResource(R.drawable.dot_selected)
-                paymentActivityBinding.creditCardSelection.setImageResource(R.drawable.dot_unselected)
+                bottomSheetDialogMessageText.text = "Coming Soon"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
             }
         }
         paymentActivityBinding.creditCardSelection.setOnClickListener {
-            if (selectionByString == "paypal") {
+            if (selectionByString != "credit_card") {
                 selectionByString = "credit_card"
                 paymentActivityBinding.payPalSelection.setImageResource(R.drawable.dot_unselected)
                 paymentActivityBinding.creditCardSelection.setImageResource(R.drawable.dot_selected)
@@ -91,6 +108,8 @@ class PaymentActivity : BaseActivity() {
 
     private fun setValues() {
         servicePostValue = intent.getSerializableExtra("postValue") as PostJobPostDto
+        servicePostValue.jobAmount = String.format("%.2f", servicePostValue.jobAmount!!.toFloat())
+
         paymentActivityBinding.postJobData = servicePostValue
         setObserver()
     }
@@ -109,7 +128,7 @@ class PaymentActivity : BaseActivity() {
 
                             grandTotal = servicePostValue.jobAmount!!.toFloat()
                             paymentActivityBinding.serviceChargePercentage.text = "Charges for Job (${it.data!!.Charge_for_Jobs_percentage} %)"
-                            paymentActivityBinding.serviceCharges.text = it.data!!.Charge_for_Jobs!!.toFloat().toString()
+                            paymentActivityBinding.serviceCharges.text = String.format("%.2f", it.data!!.Charge_for_Jobs!!.toFloat())
                             grandTotal = grandTotal!! + it.data!!.Charge_for_Jobs!!.toFloat()
                             if (it.data!!.job_tax_amount == "" || it.data!!.job_tax_amount == "0") {
                                 paymentActivityBinding.adminServiceFees.visibility = View.GONE
@@ -118,10 +137,10 @@ class PaymentActivity : BaseActivity() {
                                 paymentActivityBinding.adminServiceFees.visibility = View.VISIBLE
                                 paymentActivityBinding.adminServiceFeesLayout.visibility = View.VISIBLE
                                 paymentActivityBinding.adminServiceFees.text = "Admin Charges (${it.data!!.Charge_for_Jobs_Admin_percentage} %)"
-                                paymentActivityBinding.adminServiceFeesCharge.text = it.data!!.admin_service_fees!!.toFloat().toString()
+                                paymentActivityBinding.adminServiceFeesCharge.text = String.format("%.2f", it.data!!.admin_service_fees!!.toFloat().toString())
                                 grandTotal = grandTotal!! + it.data!!.admin_service_fees!!.toFloat()
                             }
-                            paymentActivityBinding.grandTotalAmount.text = grandTotal.toString()
+                            paymentActivityBinding.grandTotalAmount.text = String.format("%.2f", grandTotal)
                             servicePostValue.grandTotal = grandTotal.toString()
                             servicePostValue.Charge_for_Jobs = it.data!!.Charge_for_Jobs!!.toFloat().toString()
                             servicePostValue.Charge_for_Jobs_Admin_percentage = it.data!!.Charge_for_Jobs_Admin_percentage

@@ -16,7 +16,7 @@ class MyJobRepo {
         ServiceGenerator.createService(MyJobRetro::class.java).getMyJobData(map).enqueue(object : Callback<MyJobDtoMain>{
             override fun onResponse(call: Call<MyJobDtoMain>, response: Response<MyJobDtoMain>) {
                 if (response.isSuccessful){
-
+                    myJobData.postValue(response.body())
                 }else{
                     val postJobDataMain = MyJobDtoMain()
                     postJobDataMain.status_message = "My Job Api Error"

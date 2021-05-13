@@ -333,7 +333,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_1sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text='@{"Your Charges ("+model.charge_for_Jobs_percentage+"%)"}'
+                        android:text='@{"Sub Total"}'
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -343,7 +343,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text='@{"Admin Fees ("+model.charge_for_Jobs_Admin_percentage+"%)"}'
+                        android:text='@{"Your Charges ("+model.charge_for_Jobs_percentage+"%)"}'
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />
@@ -378,7 +378,7 @@
                             android:layout_marginStart="@dimen/_3sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="@{model.charge_for_Jobs}"
+                            android:text="@{model.job_sub_total}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -405,7 +405,7 @@
                             android:layout_marginStart="@dimen/_3sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="@{model.admin_service_fees}"
+                            android:text="@{model.charge_for_Jobs}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />

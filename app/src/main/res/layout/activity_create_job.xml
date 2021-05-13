@@ -52,8 +52,9 @@
 
             <ImageView
                 android:id="@+id/userImage"
-                android:layout_width="@dimen/_45sdp"
-                android:layout_height="@dimen/_45sdp"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:scaleType="centerCrop"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -164,6 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_15sdp"
+                android:singleLine="true"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:inputType="numberDecimal"
                 android:fontFamily="@font/poppins_regular"

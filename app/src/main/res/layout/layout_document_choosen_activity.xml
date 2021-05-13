@@ -80,6 +80,7 @@
                 app:ccp_autoDetectCountry="true"
                 app:ccp_contentColor="@color/text_color"
                 app:ccp_showFullName="true"
+                app:ccpDialog_showCloseIcon="true"
                 app:ccp_showNameCode="false"
                 app:ccp_showPhoneCode="false"
                 app:ccp_textGravity="LEFT"

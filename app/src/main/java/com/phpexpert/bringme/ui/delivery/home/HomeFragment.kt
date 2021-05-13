@@ -4,6 +4,7 @@ package com.phpexpert.bringme.ui.delivery.home
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -18,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.phpexpert.bringme.R
+import com.phpexpert.bringme.activities.NotificationActivity
 import com.phpexpert.bringme.databinding.*
 import com.phpexpert.bringme.dtos.AuthSingleton
 import com.phpexpert.bringme.dtos.LatestJobDeliveryDataList
@@ -124,6 +126,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     }
 
     private fun setActions() {
+
+        homeFragmentBinding.notificationIcon.setOnClickListener {
+            startActivity(Intent(requireActivity(), NotificationActivity::class.java))
+        }
         homeFragmentBinding.searchIcon.setOnClickListener {
             if (homeFragmentBinding.textHeading.visibility == View.VISIBLE) {
                 homeFragmentBinding.textHeading.visibility = View.GONE
@@ -132,6 +138,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 homeFragmentBinding.closeIcon.visibility = View.VISIBLE
             } else {
                 searOrderString = homeFragmentBinding.searchET.text.toString()
+                progressDialog.show()
                 setObserver()
             }
         }
@@ -143,6 +150,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
             homeFragmentBinding.searchET.visibility = View.GONE
             homeFragmentBinding.notificationIcon.visibility = View.VISIBLE
             homeFragmentBinding.closeIcon.visibility = View.GONE
+            progressDialog.show()
             setObserver()
         }
     }
@@ -174,7 +182,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                     arrayList.addAll(it.data!!.OrderList)
                     homeFragmentBinding.homeRecyclerView.adapter!!.notifyDataSetChanged()
                     homeFragmentBinding.runningOrders.text = it.Total_Running_Orders
-                    homeFragmentBinding.totalAmount.text = it.Total_Running_Order_Amount
+                    homeFragmentBinding.totalAmount.text = String.format("%.2f",it.Total_Running_Order_Amount?.toFloat())
                 } else {
                     if (it.status == "") {
                         homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
@@ -335,6 +343,9 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 }
 
                 Glide.with(requireActivity()).load(arrayList[position]).centerCrop().placeholder(R.drawable.user_placeholder).into(jobViewBinding.userImage)
+                arrayList[position].job_sub_total = String.format("%.2f",arrayList[position].job_sub_total?.toFloat())
+                arrayList[position].Charge_for_Jobs = String.format("%.2f",arrayList[position].Charge_for_Jobs?.toFloat())
+                arrayList[position].job_total_amount = String.format("%.2f",arrayList[position].job_total_amount?.toFloat())
                 jobViewBinding.data = arrayList[position]
             }
             "acceptData" -> {
@@ -361,19 +372,19 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                     homeFragmentBinding.blurView.visibility = View.GONE
                 }
                 orderFinishedBinding.yesLayout.setOnClickListener {
-                    if (orderFinishedBinding.otp1.text.toString().trim() != "" && orderFinishedBinding.otp2.text.toString().trim() != "" && orderFinishedBinding.otp3.text.toString().trim() != "" && orderFinishedBinding.otp4.text.toString().trim() != "") {
+//                    if (orderFinishedBinding.otp1.text.toString().trim() != "" && orderFinishedBinding.otp2.text.toString().trim() != "" && orderFinishedBinding.otp3.text.toString().trim() != "" && orderFinishedBinding.otp4.text.toString().trim() != "") {
                         orderFinishedBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                         homeFragmentBinding.blurView.visibility = View.GONE
                         orderFinishObserver()
-                    } else {
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter order otp first"
-                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
-                        (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
-                            (activity as BaseActivity).bottomSheetDialog.dismiss()
-                        }
-                        (activity as BaseActivity).bottomSheetDialog.show()
-                    }
+//                    } else {
+//                        (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter order otp first"
+//                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+//                        (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+//                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+//                            (activity as BaseActivity).bottomSheetDialog.dismiss()
+//                        }
+//                        (activity as BaseActivity).bottomSheetDialog.show()
+//                    }
                 }
             }
             "declineJob" -> {

@@ -92,6 +92,14 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
             finishAffinity()
         }
 
+        registrationActivity.mobileNumberEditText.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            if (b) {
+                registrationActivity.mobileNumberTextHint.visibility = View.VISIBLE
+            } else {
+                if (registrationActivity.mobileNumberEditText.text!!.isEmpty())
+                    registrationActivity.mobileNumberTextHint.visibility = View.GONE
+            }
+        }
         registrationActivity.digitPin.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
             if (p1) {
                 registrationActivity.textData.hint = "Password"
@@ -100,6 +108,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                     registrationActivity.textData.hint = "6 digit mPin Number"
             }
         }
+
+
 
         registrationActivity.passwordEye.setOnClickListener {
             if (passwordVisible) {
@@ -235,7 +245,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     private fun checkValidations(): Boolean {
         return when {
             registrationActivity.firstNameEt.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter First Name"
+                bottomSheetDialogMessageText.text = "First name is required field."
                 bottomSheetDialogMessageOkButton.text = "Ok"
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -245,7 +255,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             registrationActivity.lastNameEt.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter Last Name First"
+                bottomSheetDialogMessageText.text = "Last name is required field."
                 bottomSheetDialogMessageOkButton.text = "Ok"
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -255,7 +265,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             registrationActivity.mobileNumberEditText.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter Mobile Number first"
+                bottomSheetDialogMessageText.text = "Mobile Number is required field."
                 bottomSheetDialogMessageOkButton.text = "Ok"
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -264,7 +274,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 bottomSheetDialog.show()
                 false
             }
-            registrationActivity.mobileNumberEditText.text.toString().length in 10..14 ->{
+            registrationActivity.mobileNumberEditText.text.toString().length !in 10..14 -> {
                 bottomSheetDialogMessageText.text = "Enter Valid Mobile Number"
                 bottomSheetDialogMessageOkButton.text = "Ok"
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -275,7 +285,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             registrationActivity.emailEt.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter Email"
+                bottomSheetDialogMessageText.text = "Email ID is required field."
                 bottomSheetDialogMessageOkButton.text = "Ok"
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -284,7 +294,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 bottomSheetDialog.show()
                 false
             }
-            !registrationActivity.emailEt.text.toString().isValidEmail()->{
+            !registrationActivity.emailEt.text.toString().isValidEmail() -> {
                 bottomSheetDialogMessageText.text = "Enter Valid Email"
                 bottomSheetDialogMessageOkButton.text = "Ok"
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -295,7 +305,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             registrationActivity.digitPin.text.toString().isEmpty() -> {
-                bottomSheetDialogMessageText.text = "Enter Pin First"
+                bottomSheetDialogMessageText.text = "Please create a 6 digit password for account login."
                 bottomSheetDialogMessageOkButton.text = "Ok"
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -305,7 +315,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                 false
             }
             registrationActivity.digitPin.text.toString().length != 6 -> {
-                bottomSheetDialogMessageText.text = "Password must contains atleast 6 digits"
+                bottomSheetDialogMessageText.text = "Password must contain only 6 digits."
                 bottomSheetDialogMessageOkButton.text = "Ok"
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {

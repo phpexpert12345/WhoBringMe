@@ -273,7 +273,7 @@
                 <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                     android:id="@+id/cancelButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_30sdp"
                     android:background="@color/red"
@@ -529,6 +529,6 @@
         <include
             android:id="@+id/jobViewLayout"
             layout="@layout/job_view_layout"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

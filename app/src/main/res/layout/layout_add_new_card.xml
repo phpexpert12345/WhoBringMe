@@ -52,8 +52,123 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="fitXY"
-                    android:src="@drawable/credit_cardimage"
+                    android:src="@drawable/card_bg"
                     tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/credit_cardimage"
+                    android:visibility="gone"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/vidaTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_17sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="VISA"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/cardNumberText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/vidaTextView"
+                    android:layout_marginStart="@dimen/_17sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14sdp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/cardNumberText"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_22sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_toStartOf="@+id/expiryLayout"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/card_holder"
+                        android:textColor="#D5D5D5"
+                        android:textSize="@dimen/_10sdp" />
+
+                    <TextView
+                        android:id="@+id/cardHolderNameText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_minus5sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/expiryLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/cardNumberText"
+                    android:layout_marginTop="@dimen/_22sdp"
+                    android:layout_marginEnd="@dimen/_50sdp"
+                    android:layout_toStartOf="@+id/cvvLayout"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/expires"
+                        android:textColor="#D5D5D5"
+                        android:textSize="@dimen/_10sdp" />
+
+                    <TextView
+                        android:id="@+id/expireDateText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_minus5sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cvvLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/cardNumberText"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_22sdp"
+                    android:layout_marginEnd="@dimen/_40sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/cvv"
+                        android:textColor="#D5D5D5"
+                        android:textSize="@dimen/_10sdp" />
+
+                    <TextView
+                        android:id="@+id/cvvNumberText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_minus5sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
             </RelativeLayout>
 
             <TextView
@@ -79,13 +194,14 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:digits="1234567890 "
-                    android:maxLength="19"
                     android:fontFamily="@font/poppins_regular"
                     android:hint="Card Number"
                     android:inputType="number"
+                    android:maxLength="19"
                     android:paddingStart="0dp"
                     android:paddingLeft="0dp"
                     android:paddingTop="@dimen/_25sdp"
+                    android:paddingBottom="@dimen/_minus40sdp"
                     android:singleLine="true"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_light"
@@ -109,9 +225,12 @@
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/poppins_regular"
                     android:hint="Name On Card"
+                    android:inputType="textCapSentences"
+                    android:maxLength="24"
                     android:paddingStart="0dp"
                     android:paddingLeft="0dp"
                     android:paddingTop="@dimen/_25sdp"
+                    android:paddingBottom="@dimen/_minus40sdp"
                     android:singleLine="true"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_light"
@@ -147,6 +266,7 @@
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
+                        android:paddingBottom="@dimen/_minus40sdp"
                         android:singleLine="true"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_light"
@@ -172,10 +292,12 @@
                         android:digits="0123456789"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="CVV"
+                        android:inputType="number"
                         android:maxLength="3"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
+                        android:paddingBottom="@dimen/_minus40sdp"
                         android:singleLine="true"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_light"

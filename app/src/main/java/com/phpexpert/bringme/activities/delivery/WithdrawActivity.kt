@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutWithdrawActivityBinding
 import com.phpexpert.bringme.utilities.BaseActivity
@@ -15,6 +16,8 @@ class WithdrawActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         layoutWithdrawActivity = DataBindingUtil.setContentView(this, R.layout.layout_withdraw_activity)
+
+        Glide.with(this).load(sharedPrefrenceManager.getProfile().login_photo).circleCrop().placeholder(R.drawable.user_placeholder).into(layoutWithdrawActivity.userImage)
         layoutWithdrawActivity.backArrow.setOnClickListener {
             finish()
         }

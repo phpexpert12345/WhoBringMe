@@ -63,6 +63,7 @@ class ProfileFragment : Fragment() {
         return profileFragmentBinding.root
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initValues() {
         mobileNumberDialog = BottomSheetDialog(requireActivity(), R.style.SheetDialog)
         mobileNumberDialog.setContentView(R.layout.layout_change_phone_number)
@@ -78,11 +79,29 @@ class ProfileFragment : Fragment() {
         }
 
         mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.setOnClickListener {
-            if (mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString().trim() == "") {
-                Toast.makeText(requireActivity(), "Please enter mobile number first", Toast.LENGTH_LONG).show()
-            } else {
-                mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.startAnimation()
-                getOtpNumberObserver()
+            when {
+                mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString().trim() == "" -> {
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter mobile number first"
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                }
+                mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text?.length !in 10..14 -> {
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter valid phone number"
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                }
+                else -> {
+                    mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.startAnimation()
+                    getOtpNumberObserver()
+                }
             }
         }
 
@@ -239,6 +258,7 @@ class ProfileFragment : Fragment() {
     private fun resendOtpObserver() {
         if ((activity as BaseActivity).isOnline()) {
             profileViewMode.otpResendData(getResendOtp()).observe(viewLifecycleOwner, {
+                progressDialog.dismiss()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -250,6 +270,7 @@ class ProfileFragment : Fragment() {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
+            progressDialog.dismiss()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.network_error)
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE

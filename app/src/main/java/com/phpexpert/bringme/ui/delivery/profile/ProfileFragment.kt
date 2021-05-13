@@ -79,10 +79,29 @@ class ProfileFragment : Fragment() {
         }
 
         mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.setOnClickListener {
-            if (mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString().trim() == "") {
-                Toast.makeText(requireActivity(), "Please enter mobile number first", Toast.LENGTH_LONG).show()
-            } else {
-                getOtpNumberObserver()
+            when {
+                mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString().trim() == "" -> {
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter mobile number first"
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                }
+                mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text?.length !in 10..14 -> {
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter valid phone number"
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                }
+                else -> {
+                    mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.startAnimation()
+                    getOtpNumberObserver()
+                }
             }
         }
 

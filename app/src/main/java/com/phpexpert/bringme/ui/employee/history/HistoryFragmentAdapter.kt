@@ -34,11 +34,13 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
 
     override fun onBindViewHolder(holder: HistoryFragmentViewHolder, position: Int) {
         historyFragmentCellBinding = holder.viewBinding as LayoutHistroyCellBinding
+
+        arrayList[position].job_total_amount = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
         historyFragmentCellBinding.model = arrayList[position]
 
         try {
             historyFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -47,12 +49,15 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
         } else {
             historyFragmentCellBinding.jobReviewLayout.visibility = View.VISIBLE
             historyFragmentCellBinding.reviewRatingBar.rating = arrayList[position].job_rating!!.toFloat()
+//            historyFragmentCellBinding.jobReviewTime.text = arrayList[position]
         }
 
         if (arrayList[position].order_status_msg == "Accepted") {
             historyFragmentCellBinding.jobAcceptLayout.visibility = View.VISIBLE
+            historyFragmentCellBinding.csImage.setImageResource(R.drawable.cs1)
         } else {
             historyFragmentCellBinding.jobAcceptLayout.visibility = View.GONE
+            historyFragmentCellBinding.csImage.setImageResource(R.drawable.cs)
         }
         Glide.with(context).load(arrayList[position].Client_photo).circleCrop().placeholder(R.drawable.user_placeholder).into(historyFragmentCellBinding.userImage)
         Glide.with(context).load(arrayList[position].Delivery_Employee_photo).circleCrop().placeholder(R.drawable.user_placeholder).into(historyFragmentCellBinding.deliveryImageView)

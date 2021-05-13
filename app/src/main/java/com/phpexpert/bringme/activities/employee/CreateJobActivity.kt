@@ -1,5 +1,6 @@
 package com.phpexpert.bringme.activities.employee
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -46,7 +47,7 @@ class CreateJobActivity : BaseActivity() {
                     startActivity(intent)
                 }, 1000)
             }else{
-                Toast.makeText(this, "All fields are mandatory", Toast.LENGTH_LONG).show()
+
             }
         }
 
@@ -68,12 +69,37 @@ class CreateJobActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun checkValidation(): Boolean {
         return when {
             createJobBinding.postInfo.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Post description is mandatory"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             createJobBinding.totalAmount.text.toString().isEmpty() -> {
+                bottomSheetDialogMessageText.text = "Total amount is mandatory"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
+                false
+            }
+            createJobBinding.totalAmount.text.toString().toFloat()==0.0f -> {
+                bottomSheetDialogMessageText.text = "Total amount should be more than 0"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             else -> {

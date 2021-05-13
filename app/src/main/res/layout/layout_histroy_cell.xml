@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
+                        tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -195,7 +195,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        tools:ignore="RelativeOverlap">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -252,7 +253,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -274,7 +275,7 @@
                         android:text="@{model.client_name}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_13sdp"
-                        tools:ignore="HardcodedText" />
+                        tools:ignore="HardcodedText,RelativeOverlap" />
 
                     <RatingBar
                         android:id="@+id/reviewRatingBar"
@@ -357,7 +358,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="RelativeOverlap">
 
                     <TextView
                         android:layout_width="wrap_content"

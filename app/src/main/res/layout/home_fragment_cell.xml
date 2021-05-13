@@ -304,7 +304,6 @@
                     android:layout_gravity="end"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="22 March'21, 10:00 Am"
                     android:textColor="@color/text_color_dark"
                     android:textSize="@dimen/_9sdp"
                     tools:ignore="HardcodedText" />

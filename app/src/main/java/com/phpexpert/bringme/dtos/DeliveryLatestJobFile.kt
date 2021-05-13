@@ -197,7 +197,7 @@ class LatestJobDeliveryDataList {
     var review_status: String? = ""
 
     @SerializedName("order_status_msg")
-    var order_status_msg: String? = ""
+    var order_status_msg: String? = "Decline"
 
     @SerializedName("order_status_close")
     var order_status_close: String? = ""

@@ -56,7 +56,7 @@
     <string name="enter_password">Enter Password</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="login">Login</string>
-    <string name="don_t_have_account_yet">Don\'t have account yet?</string>
+    <string name="don_t_have_account_yet">Don\'t have an account yet?</string>
     <string name="create_account">Create Account</string>
     <string name="client_receiver">Client/ Receiver</string>
     <string name="delivery_employee">Delivery Employee</string>
@@ -164,5 +164,10 @@
     <string name="change_password">Change Password</string>
     <string name="declineOrderText">Are you sure you want to Decline\nthis order?</string>
     <string name="enter_order_number">Enter Order Number</string>
+    <string name="alert_text">Alert</string>
+    <string name="card_holder">CARD HOLDER</string>
+    <string name="expires">EXPIRES</string>
+    <string name="cvv">CVV</string>
+    <string name="register_mobile">Enter registered mobile number</string>
 
 </resources>

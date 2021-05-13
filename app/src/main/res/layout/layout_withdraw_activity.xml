@@ -32,12 +32,12 @@
                     tools:ignore="ContentDescription" />
 
                 <ImageView
+                    android:id="@+id/userImage"
                     android:layout_width="@dimen/_40sdp"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
-                    android:src="@drawable/mask_group"
                     tools:ignore="ContentDescription" />
 
 
@@ -121,18 +121,20 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_5sdp"
                     android:background="@null"
                     android:fontFamily="@font/poppins_regular"
                     android:inputType="numberDecimal"
                     android:text="200"
+                    android:layout_toEndOf="@+id/euroImage"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_13sdp"
                     tools:ignore="Autofill,HardcodedText,LabelFor" />
 
                 <ImageView
+                    android:id="@+id/euroImage"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
                     android:background="@drawable/withdrow_amount_symbol_bg"
                     android:paddingStart="@dimen/_20sdp"
                     android:paddingEnd="@dimen/_20sdp"

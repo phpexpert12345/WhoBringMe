@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -33,10 +34,21 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
 
     override fun onBindViewHolder(holder: HomeFragmentViewHolder, position: Int) {
         homeFragmentCellBinding = holder.viewBinding as HomeFragmentCellBinding
+        try {
+            arrayList[position].job_total_amount = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
         homeFragmentCellBinding.model = arrayList[position]
+        if (arrayList[position].order_status_msg == "Accepted") {
+            homeFragmentCellBinding.csImage.setImageResource(R.drawable.cs1)
+        } else {
+            homeFragmentCellBinding.csImage.setImageResource(R.drawable.cs)
+        }
         try {
             homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         homeFragmentCellBinding.viewJobImageView.setOnClickListener {

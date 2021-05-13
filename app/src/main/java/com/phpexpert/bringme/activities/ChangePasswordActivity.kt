@@ -6,7 +6,6 @@ import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.phpexpert.bringme.R
@@ -75,34 +74,77 @@ class ChangePasswordActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun validationData(): Boolean {
         return when {
             changePasswordActivity.oldPassword.text.isEmpty() -> {
-                Toast.makeText(this, "Please Enter old password  first", Toast.LENGTH_LONG).show()
+                bottomSheetDialogMessageText.text = "Please Enter old password  first"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             changePasswordActivity.oldPassword.text.length != 6 -> {
-                Toast.makeText(this, "Please Enter 6 digit old password", Toast.LENGTH_LONG).show()
+                bottomSheetDialogMessageText.text = "Please Enter 6 digit old password"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             changePasswordActivity.newPasswordET.text.isEmpty() -> {
-                Toast.makeText(this, "Please Enter new password first", Toast.LENGTH_LONG).show()
+                bottomSheetDialogMessageText.text = "Please Enter new password first"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             changePasswordActivity.newPasswordET.text.length != 6 -> {
-                Toast.makeText(this, "Please Enter 6 digit new password", Toast.LENGTH_LONG).show()
+                bottomSheetDialogMessageText.text = "Please Enter 6 digit new password"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             changePasswordActivity.confirmPasswordET.text.isEmpty() -> {
-                Toast.makeText(this, "Please Enter confirm password first", Toast.LENGTH_LONG).show()
+                bottomSheetDialogMessageText.text = "Please Enter confirm password first"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             changePasswordActivity.confirmPasswordET.text.length != 6 -> {
-                Toast.makeText(this, "Please Enter 6 digit confirm password", Toast.LENGTH_LONG).show()
+                bottomSheetDialogMessageText.text = "Please Enter 6 digit confirm password"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
             changePasswordActivity.newPasswordET.text.toString() != changePasswordActivity.confirmPasswordET.text.toString() -> {
-                Toast.makeText(this, "Password not match", Toast.LENGTH_LONG).show()
+                bottomSheetDialogMessageText.text = "Password not match"
+                bottomSheetDialogMessageOkButton.text = "Ok"
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
                 false
             }
 
@@ -124,6 +166,7 @@ class ChangePasswordActivity : BaseActivity() {
                     }
                     bottomSheetDialog.dismiss()
                 }
+                bottomSheetDialog.show()
             })
         } else {
             changePasswordActivity.continueButton.revertAnimation()

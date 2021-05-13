@@ -65,6 +65,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
                         android:text="@string/job_post_preview"
+                        android:layout_marginTop="@dimen/_3sdp"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_13sdp"
                         tools:ignore="RelativeOverlap" />
@@ -243,7 +244,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:src="@drawable/dot_selected"
+                        android:src="@drawable/dot_unselected"
                         tools:ignore="ContentDescription" />
                 </RelativeLayout>
 

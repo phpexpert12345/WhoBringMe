@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.phpexpert.bringme.ui.employee.history
 
 import android.annotation.SuppressLint
@@ -21,6 +23,7 @@ import com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoList
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobHistoryModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import java.lang.Exception
 
 @Suppress("DEPRECATION")
 class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
@@ -138,16 +141,20 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                 val postDataValue = PostJobPostDto()
                 postDataValue.jobDescription = arrayList[position].about_job
                 postDataValue.jobTime = arrayList[position].job_offer_time!!.split(" ")[0]
-                postDataValue.jobAmount = arrayList[position].job_sub_total
-                postDataValue.grandTotal = arrayList[position].job_total_amount
+                postDataValue.jobAmount = String.format("%.2f",arrayList[position].job_sub_total?.toFloat())
+                postDataValue.grandTotal = String.format("%.2f",arrayList[position].job_total_amount?.toFloat())
                 postDataValue.jobPaymentMode = arrayList[position].payment_mode
-                postDataValue.job_tax_amount = arrayList[position].job_tax_amount
-                postDataValue.Charge_for_Jobs = arrayList[position].Charge_for_Jobs
+                try {
+                    postDataValue.job_tax_amount = String.format("%.2f", arrayList[position].job_tax_amount?.toFloat())
+                }catch (e:Exception){
+
+                }
+                postDataValue.Charge_for_Jobs = String.format("%.2f",arrayList[position].Charge_for_Jobs?.toFloat())
                 postDataValue.Charge_for_Jobs_percentage = arrayList[position].Charge_for_Jobs_percentage
                 postDataValue.Charge_for_Jobs_Admin_percentage = arrayList[position].Charge_for_Jobs_Admin_percentage
                 postDataValue.Charge_for_Jobs_Delivery_percentage = arrayList[position].Charge_for_Jobs_Delivery_percentage
-                postDataValue.admin_service_fees = arrayList[position].admin_service_fees
-                postDataValue.delivery_employee_fee = arrayList[position].delivery_employee_fee
+                postDataValue.admin_service_fees = String.format("%.2f",arrayList[position].admin_service_fees?.toFloat())
+                postDataValue.delivery_employee_fee = String.format("%.2f",arrayList[position].delivery_employee_fee?.toFloat())
                 postDataValue.jobId = arrayList[position].job_order_id
 
                 jobViewBinding.jobDetails = postDataValue

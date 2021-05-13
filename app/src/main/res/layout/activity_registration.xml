@@ -48,11 +48,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/poppins_medium"
                     android:text="@string/create_account"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_15sdp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/_15sdp" />
 
             </RelativeLayout>
         </RelativeLayout>
@@ -142,6 +142,7 @@
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
+                            android:paddingBottom="@dimen/_minus40sdp"
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/colorDarkGrey"
                             android:textSize="@dimen/_12sdp"
@@ -166,6 +167,7 @@
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
+                            android:paddingBottom="@dimen/_minus40sdp"
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/colorDarkGrey"
                             android:textSize="@dimen/_12sdp"
@@ -181,8 +183,18 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/_4sdp">
 
+                        <TextView
+                            android:id="@+id/mobileNumberTextHint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="@string/mobile_number"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="gone" />
 
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/mobileNumberInputText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:hintTextColor="@color/colorDarkGrey">
@@ -202,6 +214,7 @@
                                 android:paddingStart="@dimen/_65sdp"
                                 android:paddingLeft="@dimen/_65sdp"
                                 android:paddingTop="@dimen/_25sdp"
+                                android:paddingBottom="@dimen/_minus40sdp"
                                 android:textColor="@color/text_color"
                                 android:textColorHint="@color/colorDarkGrey"
                                 android:textSize="@dimen/_12sdp"
@@ -246,6 +259,7 @@
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
+                            android:paddingBottom="@dimen/_minus40sdp"
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/colorDarkGrey"
                             android:textSize="@dimen/_12sdp"
@@ -276,6 +290,7 @@
                                 android:paddingStart="0dp"
                                 android:paddingLeft="0dp"
                                 android:paddingTop="@dimen/_25sdp"
+                                android:paddingBottom="@dimen/_minus40sdp"
                                 android:textColor="@color/text_color"
                                 android:textColorHint="@color/colorDarkGrey"
                                 android:textSize="@dimen/_12sdp"
@@ -299,7 +314,7 @@
                 <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                     android:id="@+id/btn_submit"
                     android:layout_width="@dimen/_180sdp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:background="@drawable/button_rectangle_green"
