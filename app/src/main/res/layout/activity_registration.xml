@@ -134,6 +134,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5sdp"
+                        android:hint="@{languageModel.first_name}"
                         app:hintTextColor="@color/colorDarkGrey">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -143,7 +144,6 @@
                             android:background="@android:color/transparent"
                             android:backgroundTint="@color/colorDarkGrey"
                             android:fontFamily="@font/poppins_regular"
-                            android:hint="@{languageModel.first_name}"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
@@ -160,6 +160,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5sdp"
+                        android:hint="@{languageModel.last_name}"
                         app:hintTextColor="@color/colorDarkGrey">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -168,7 +169,6 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/poppins_regular"
-                            android:hint="@{languageModel.last_name}"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
@@ -219,7 +219,7 @@
                                 android:paddingStart="@dimen/_65sdp"
                                 android:paddingLeft="@dimen/_65sdp"
                                 android:paddingTop="@dimen/_25sdp"
-                                android:paddingBottom="@dimen/_minus40sdp"
+                                android:paddingBottom="@dimen/_minus10sdp"
                                 android:textColor="@color/text_color"
                                 android:textColorHint="@color/colorDarkGrey"
                                 android:textSize="@dimen/_12sdp"
@@ -251,6 +251,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5sdp"
+                        android:hint="@{languageModel.email_id}"
                         app:hintTextColor="@color/colorDarkGrey">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -259,7 +260,6 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/poppins_regular"
-                            android:hint="@{languageModel.email_id}"
                             android:inputType="textEmailAddress"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"

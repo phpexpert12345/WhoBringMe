@@ -20,7 +20,6 @@ import com.phpexpert.bringme.databinding.ActivityRegistrationBinding
 import com.phpexpert.bringme.dtos.PostDataOtp
 import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
-import com.phpexpert.bringme.utilities.SoftInputAssist
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -33,7 +32,6 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private var passwordVisible: Boolean = false
-    private lateinit var softInputAssist: SoftInputAssist
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -45,7 +43,6 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
         super.onCreate(savedInstanceState)
         registrationActivity = DataBindingUtil.setContentView(this, R.layout.activity_registration)
         registrationActivity.languageModel = sharedPrefrenceManager.getLanguageData()
-        softInputAssist = SoftInputAssist(this)
         if (mGoogleApiClient == null) {
             buildGoogleApiClient()
         }
@@ -82,10 +79,14 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
 
         registrationActivity.mobileNumberEditText.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
             if (b) {
+                registrationActivity.mobileNumberInputText.hint = ""
                 registrationActivity.mobileNumberTextHint.visibility = View.VISIBLE
             } else {
-                if (registrationActivity.mobileNumberEditText.text!!.isEmpty())
+                if (registrationActivity.mobileNumberEditText.text!!.isEmpty()) {
+                    registrationActivity.mobileNumberInputText.hint = sharedPrefrenceManager.getLanguageData().mobile_number
                     registrationActivity.mobileNumberTextHint.visibility = View.GONE
+                }
+
             }
         }
         registrationActivity.digitPin.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
@@ -334,22 +335,6 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
-    }
-
-    override fun onPause() {
-        softInputAssist.onPause()
-        super.onPause()
-    }
-
-    override fun onResume() {
-        softInputAssist.onResume()
-        super.onResume()
-    }
-
-    override fun onDestroy() {
-        softInputAssist.onDestroy()
-        super.onDestroy()
-
     }
 
 }

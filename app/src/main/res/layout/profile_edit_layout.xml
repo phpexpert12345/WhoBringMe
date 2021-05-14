@@ -87,6 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
+                    android:hint="@{languageModel.first_name}"
                     app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -95,8 +96,8 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@{languageModel.first_name}"
                         android:paddingStart="0dp"
+                        android:maxLength="15"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
@@ -111,6 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
+                    android:hint="@{languageModel.last_name}"
                     app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -119,8 +121,8 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@{languageModel.last_name}"
                         android:paddingStart="0dp"
+                        android:maxLength="15"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
@@ -135,6 +137,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
+                    android:hint="@{languageModel.email}"
                     app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -143,7 +146,6 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@{languageModel.email}"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
@@ -163,6 +165,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5sdp"
+                        android:hint="@{languageModel.address}"
                         app:hintTextColor="@color/lightColor">
 
                         <AutoCompleteTextView
@@ -172,7 +175,6 @@
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/poppins_medium"
                             android:gravity="center_vertical"
-                            android:hint="@{languageModel.address}"
                             android:minHeight="@dimen/_50sdp"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
@@ -181,7 +183,7 @@
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_13sdp"
                             app:boxBackgroundColor="@android:color/transparent"
-                            tools:ignore="RtlHardcoded,RtlSymmetry" />
+                            tools:ignore="LabelFor,RtlHardcoded,RtlSymmetry" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageView
@@ -198,6 +200,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
+                    android:hint="@{languageModel.state}"
                     app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -206,7 +209,6 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@{languageModel.state}"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
@@ -222,6 +224,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
+                    android:hint="@{languageModel.city}"
                     app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -230,7 +233,6 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@{languageModel.city}"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
@@ -246,6 +248,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
+                    android:hint="@{languageModel.post_code}"
                     app:hintTextColor="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -254,7 +257,6 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:hint="@{languageModel.post_code}"
                         android:inputType="number"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"

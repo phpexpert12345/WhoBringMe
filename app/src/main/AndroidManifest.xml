@@ -40,7 +40,7 @@
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".activities.employee.SwipeViewActivity"
@@ -98,6 +98,7 @@
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.employee.ProfileEditActivity"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/RegistrationActivity" />
         <activity
             android:name=".activities.employee.NewCardActivity"

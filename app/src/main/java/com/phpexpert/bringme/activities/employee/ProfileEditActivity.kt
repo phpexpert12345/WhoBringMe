@@ -100,7 +100,14 @@ class ProfileEditActivity : BaseActivity() {
             postDataOtp.accountLat = mResultList[i].geometry!!.location!!.lat
             postDataOtp.accountLong = mResultList[i].geometry!!.location!!.lng
             postDataOtp.accountCountry = addresses[0]!!.countryName
-            profileEditLayoutBinding.stateEt.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.adminArea)
+            if (addresses[0].adminArea != "") {
+                profileEditLayoutBinding.stateEt.isFocusable = false
+                profileEditLayoutBinding.stateEt.isFocusableInTouchMode = false
+                profileEditLayoutBinding.stateEt.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.adminArea)
+            } else {
+                profileEditLayoutBinding.stateEt.isFocusable = true
+                profileEditLayoutBinding.stateEt.isFocusableInTouchMode = true
+            }
             profileEditLayoutBinding.cityET.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.locality)
             profileEditLayoutBinding.postCodeEt.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.postalCode)
             postDataOtp.accountState = addresses[0]!!.adminArea
@@ -120,7 +127,7 @@ class ProfileEditActivity : BaseActivity() {
             if (isOnline()) {
                 if (checkValidations() && isCheckPermissions(this, perission))
                     editImageData()
-            } else{
+            } else {
                 bottomSheetDialogMessageText.text = languageDtoData.network_error
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
