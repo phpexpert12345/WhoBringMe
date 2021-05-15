@@ -215,10 +215,10 @@
                         android:textSize="@dimen/_11sdp" />
 
                     <TextView
+                        android:id="@+id/jobPostedTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="@{model.job_posted_time}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_9sdp" />
                 </LinearLayout>
@@ -240,10 +240,10 @@
                         android:textSize="@dimen/_11sdp" />
 
                     <TextView
+                        android:id="@+id/jobPostedDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="@{model.job_post_date}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_9sdp"/>
                 </LinearLayout>

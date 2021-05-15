@@ -10,17 +10,20 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityCreateJobBinding
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.SoftInputAssist
 
 @Suppress("DEPRECATION")
 class CreateJobActivity : BaseActivity() {
 
     private var counting: Int = 10
+    private lateinit var softInputAssist: SoftInputAssist
 
     private lateinit var createJobBinding: ActivityCreateJobBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createJobBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_job)
         createJobBinding.languageModel = sharedPrefrenceManager.getLanguageData()
+        softInputAssist = SoftInputAssist(this)
 
         Glide.with(this).load(sharedPrefrenceManager.getProfile().login_photo)
                 .circleCrop()
@@ -51,7 +54,7 @@ class CreateJobActivity : BaseActivity() {
             finish()
         }
         createJobBinding.plusIcon.setOnClickListener {
-            if (counting<170) {
+            if (counting < 170) {
                 counting += 10
                 createJobBinding.mintsTextView.text = counting.toString()
             }
@@ -87,7 +90,7 @@ class CreateJobActivity : BaseActivity() {
                 bottomSheetDialog.show()
                 false
             }
-            createJobBinding.totalAmount.text.toString().toFloat()==0.0f -> {
+            createJobBinding.totalAmount.text.toString().toFloat() == 0.0f -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().total_amount_should_be_more_than_0
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -104,7 +107,19 @@ class CreateJobActivity : BaseActivity() {
     }
 
     override fun onPause() {
+        softInputAssist.onPause()
         super.onPause()
         createJobBinding.submitButton.revertAnimation()
+    }
+
+    override fun onResume() {
+        softInputAssist.onResume()
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        softInputAssist.onDestroy()
+        super.onDestroy()
+
     }
 }

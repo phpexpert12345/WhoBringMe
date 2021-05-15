@@ -8,8 +8,10 @@ import android.content.Intent
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.text.Html
 import android.text.method.PasswordTransformationMethod
 import android.view.View
+import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.ConnectionResult
@@ -20,6 +22,7 @@ import com.phpexpert.bringme.databinding.ActivityRegistrationBinding
 import com.phpexpert.bringme.dtos.PostDataOtp
 import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.SoftInputAssist
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -32,6 +35,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private var passwordVisible: Boolean = false
+    private lateinit var softInputAssist: SoftInputAssist
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -43,6 +47,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
         super.onCreate(savedInstanceState)
         registrationActivity = DataBindingUtil.setContentView(this, R.layout.activity_registration)
         registrationActivity.languageModel = sharedPrefrenceManager.getLanguageData()
+        registrationActivity.continueMessage.text = Html.fromHtml(sharedPrefrenceManager.getLanguageData().by_continuing_you_agree_that_you_have_read_and_accept_our_t_amp_cs_and_privacy_policy)
+        softInputAssist = SoftInputAssist(this)
         if (mGoogleApiClient == null) {
             buildGoogleApiClient()
         }
@@ -81,14 +87,48 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
             if (b) {
                 registrationActivity.mobileNumberInputText.hint = ""
                 registrationActivity.mobileNumberTextHint.visibility = View.VISIBLE
+                val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+                lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._19sdp), 0, 0)
+                registrationActivity.searchCountyCountry.layoutParams = lp
             } else {
                 if (registrationActivity.mobileNumberEditText.text!!.isEmpty()) {
                     registrationActivity.mobileNumberInputText.hint = sharedPrefrenceManager.getLanguageData().mobile_number
+                    val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+                    lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._7sdp), 0, 0)
+                    registrationActivity.searchCountyCountry.layoutParams = lp
                     registrationActivity.mobileNumberTextHint.visibility = View.GONE
                 }
 
             }
         }
+
+        registrationActivity.firstNameEt.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+            if (p1) {
+                registrationActivity.firstNameLayout.hint = sharedPrefrenceManager.getLanguageData().first_name
+            } else {
+                if (registrationActivity.firstNameEt.text!!.isEmpty())
+                    registrationActivity.firstNameLayout.hint = sharedPrefrenceManager.getLanguageData().first_name
+            }
+        }
+
+        registrationActivity.lastNameEt.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+            if (p1) {
+                registrationActivity.lastNameLayout.hint = sharedPrefrenceManager.getLanguageData().last_name
+            } else {
+                if (registrationActivity.lastNameEt.text!!.isEmpty())
+                    registrationActivity.lastNameLayout.hint = sharedPrefrenceManager.getLanguageData().last_name
+            }
+        }
+
+        registrationActivity.emailEt.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+            if (p1) {
+                registrationActivity.emailLayout.hint = sharedPrefrenceManager.getLanguageData().email_id
+            } else {
+                if (registrationActivity.emailEt.text!!.isEmpty())
+                    registrationActivity.emailLayout.hint = sharedPrefrenceManager.getLanguageData().email_id
+            }
+        }
+
         registrationActivity.digitPin.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
             if (p1) {
                 registrationActivity.textData.hint = sharedPrefrenceManager.getLanguageData().password
@@ -335,6 +375,22 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
+    }
+
+    override fun onPause() {
+        softInputAssist.onPause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        softInputAssist.onResume()
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        softInputAssist.onDestroy()
+        super.onDestroy()
+
     }
 
 }

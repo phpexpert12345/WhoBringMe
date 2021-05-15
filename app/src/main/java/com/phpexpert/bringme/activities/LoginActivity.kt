@@ -65,7 +65,7 @@ class LoginActivity : BaseActivity() {
         forgotPasswordOneDialog.findViewById<TextView>(R.id.weWillSendText)?.text = sharedPrefrenceManager.getLanguageData().we_will_send_you_an
         forgotPasswordOneDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = sharedPrefrenceManager.getLanguageData().one_time_password
         forgotPasswordOneDialog.findViewById<TextView>(R.id.onThisMobile)?.text = sharedPrefrenceManager.getLanguageData().on_this_mobile_number
-        forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.hint = sharedPrefrenceManager.getLanguageData().register_mobile
+        forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
         forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = sharedPrefrenceManager.getLanguageData().get_otp
 
         forgotPasswordOneDialog.setCancelable(false)

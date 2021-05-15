@@ -37,7 +37,7 @@ import com.phpexpert.bringme.utilities.BaseActivity
 class ProfileFragment : Fragment() {
     private lateinit var profileFragmentBinding: EmployeeProfileFragmentBinding
     private lateinit var profileViewMode: com.phpexpert.bringme.models.ProfileViewModel
-    private lateinit var languageData:LanguageDtoData
+    private lateinit var languageData: LanguageDtoData
     private lateinit var mobileNumberDialog: BottomSheetDialog
     private lateinit var otpDataDialog: BottomSheetDialog
     private lateinit var progressDialog: ProgressDialog
@@ -98,7 +98,7 @@ class ProfileFragment : Fragment() {
             when {
                 mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString().trim() == "" -> {
                     (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_enter_mobile_number_first
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text =  (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                         (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -148,13 +148,19 @@ class ProfileFragment : Fragment() {
         object : CountDownTimer(30000, 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                otpDataDialog.findViewById<TextView>(R.id.timeText)!!.text = "${(activity as BaseActivity).sharedPrefrenceManager.getLanguageData().auto_verifying_your_otp_in_00_12} (00:${counter[0]})"
-                counter[0]--
+                try {
+                    otpDataDialog.findViewById<TextView>(R.id.timeText)!!.text = "${(activity as BaseActivity).sharedPrefrenceManager.getLanguageData().auto_verifying_your_otp_in_00_12} (00:${counter[0]})"
+                    counter[0]--
+                } catch (e: Exception) {
+                }
             }
 
             override fun onFinish() { //                textView.setText("FINISH!!");
-                otpDataDialog.findViewById<TextView>(R.id.timeText)!!.visibility = View.GONE
-                otpDataDialog.findViewById<LinearLayout>(R.id.resendLayout)!!.visibility = View.VISIBLE
+                try {
+                    otpDataDialog.findViewById<TextView>(R.id.timeText)!!.visibility = View.GONE
+                    otpDataDialog.findViewById<LinearLayout>(R.id.resendLayout)!!.visibility = View.VISIBLE
+                } catch (e: Exception) {
+                }
             }
         }.start()
     }

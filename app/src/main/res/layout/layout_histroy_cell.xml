@@ -85,7 +85,7 @@
                             android:fontFamily="@font/poppins_regular"
                             android:text="@{model.job_total_amount}"
                             android:textColor="@color/colorGreen"
-                            android:textSize="@dimen/_13sdp"/>
+                            android:textSize="@dimen/_13sdp" />
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -109,7 +109,7 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text='@{" "+model.job_order_id}'
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_11sdp"/>
+                        android:textSize="@dimen/_11sdp" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -262,10 +262,12 @@
                         tools:ignore="ContentDescription" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_toStartOf="@+id/reviewRatingBar"
                         android:layout_toEndOf="@+id/userImage"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:text="@{model.client_name}"
@@ -343,7 +345,7 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{model.delivery_Employee_phone_code+model.delivery_Employee_phone}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_7sdp" />
+                        android:textSize="@dimen/_8sdp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -361,16 +363,17 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{languageModel.accepted_time}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_7sdp"/>
+                        android:textSize="@dimen/_8sdp" />
 
                     <TextView
+                        android:id="@+id/acceptedDateTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@{model.job_accept_date}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_7sdp"/>
+                        android:textSize="@dimen/_8sdp" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

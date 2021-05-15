@@ -45,6 +45,9 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
         jobCellBinding.model = arrayList[position]
         Glide.with(context).load(arrayList[position].Client_photo).circleCrop().placeholder(R.drawable.user_placeholder).into(jobCellBinding.userImage)
 
+        jobCellBinding.jobPostedDate.text = orderDateValue(arrayList[position].job_post_date!!)
+        jobCellBinding.jobPostedTime.text = jobPostedTime(arrayList[position].job_posted_time!!)
+
         try {
             jobCellBinding.completeCancelStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
         } catch (e: Exception) {
@@ -91,5 +94,45 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
         }
 
         return str!!
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun orderDateValue(dateTime: String): String? {
+        val inputPattern = "yyyy-MM-dd"
+        val outputPattern = "dd MMM yyyy"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+
+        val date: Date?
+        var str: String? = null
+
+        try {
+            date = inputFormat.parse(dateTime)
+            str = outputFormat.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return str
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun jobPostedTime(dateTime: String): String? {
+        val inputPattern = "hh:mm"
+        val outputPattern = "hh:mm aa"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+
+        val date: Date?
+        var str: String? = null
+
+        try {
+            date = inputFormat.parse(dateTime)
+            str = outputFormat.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return str
     }
 }

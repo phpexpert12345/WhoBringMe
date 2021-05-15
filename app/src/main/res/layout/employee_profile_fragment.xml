@@ -50,7 +50,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:orientation="vertical">
 
@@ -60,11 +60,12 @@
 
                     <TextView
                         android:id="@+id/userName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_13sdp"
+                        android:layout_toStartOf="@+id/editImage"
                         tools:ignore="HardcodedText,RelativeOverlap" />
 
                     <ImageView
@@ -164,7 +165,7 @@
             android:layout_height="@dimen/_1sdp"
             android:layout_below="@id/jobLimitLayout"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:background="@color/text_color_light"
             android:visibility="gone" />
@@ -175,7 +176,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/jonLimitView"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp">
 
             <TextView
@@ -202,7 +203,7 @@
             android:layout_height="@dimen/_1sdp"
             android:layout_below="@id/changeMPinLayout"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:background="@color/text_color_light" />
 
@@ -212,7 +213,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/pinChangeView"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp">
 
             <TextView
@@ -239,7 +240,7 @@
             android:layout_height="@dimen/_1sdp"
             android:layout_below="@id/phoneChangeLayout"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:background="@color/text_color_light" />
 
@@ -249,7 +250,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/phoneChangeView"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp">
 
             <TextView
@@ -275,7 +276,7 @@
             android:layout_height="@dimen/_1sdp"
             android:layout_below="@id/logoutLayout"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:background="@color/text_color_light" />
     </RelativeLayout>

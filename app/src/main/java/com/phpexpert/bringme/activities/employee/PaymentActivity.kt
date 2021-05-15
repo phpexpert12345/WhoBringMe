@@ -32,10 +32,6 @@ class PaymentActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
         paymentActivityBinding = DataBindingUtil.setContentView(this, R.layout.payment_layout)
         paymentActivityBinding.languageModel = sharedPrefrenceManager.getLanguageData()
         languageDtoData =  sharedPrefrenceManager.getLanguageData()
@@ -54,7 +50,7 @@ class PaymentActivity : BaseActivity() {
                 "paypal" -> {
                     bottomSheetDialogMessageText.text = languageDtoData.coming_soon
                     bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                    bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     bottomSheetDialogMessageOkButton.setOnClickListener {
                         bottomSheetDialog.dismiss()
                     }
@@ -93,7 +89,7 @@ class PaymentActivity : BaseActivity() {
             if (selectionByString != "paypal") {
                 bottomSheetDialogMessageText.text = languageDtoData.coming_soon
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
                 }
@@ -171,20 +167,5 @@ class PaymentActivity : BaseActivity() {
             }
             bottomSheetDialog.show()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        val window: Window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        paymentActivityBinding.proceedButton.revertAnimation()
     }
 }

@@ -222,4 +222,13 @@ class LanguageDtoData {
     var driver_s_license = "Driver\'s License"
     var continue_data = "Continue"
     var submit_request = "Submit Request"
+    var please_provide_rating = "Please provide rating"
+    var please_enter_review = "Please enter review"
+    var job_id_colon = "Job ID :"
+    var enter_card_holder_name_first = "Enter Card Holder Name First"
+    var enter_expiry_date_first = "Enter Expiry Date First"
+    var enter_valid_expiry_date = "Enter valid expiry date"
+    var enter_cvv_first = "Enter cvv first"
+    var enter_valid_cvv = "Enter valid CVV"
+
 }

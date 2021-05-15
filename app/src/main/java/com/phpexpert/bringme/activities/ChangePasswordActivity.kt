@@ -3,8 +3,6 @@ package com.phpexpert.bringme.activities
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.phpexpert.bringme.R
@@ -12,6 +10,7 @@ import com.phpexpert.bringme.databinding.LayoutChangePasswordBinding
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.models.ProfileViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.SoftInputAssist
 
 class ChangePasswordActivity : BaseActivity() {
 
@@ -21,11 +20,13 @@ class ChangePasswordActivity : BaseActivity() {
     private var passwordNewVisible: Boolean = false
     private var passwordConfirmVisible: Boolean = false
     private lateinit var languageDtoData: LanguageDtoData
+    private lateinit var softInputAssist: SoftInputAssist
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         changePasswordActivity = DataBindingUtil.setContentView(this, R.layout.layout_change_password)
         changePasswordActivity.languageModel = sharedPrefrenceManager.getLanguageData()
+        softInputAssist = SoftInputAssist(this)
         changePasswordViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         languageDtoData = sharedPrefrenceManager.getLanguageData()
 
@@ -78,7 +79,7 @@ class ChangePasswordActivity : BaseActivity() {
 
     private fun validationData(): Boolean {
         return when {
-            changePasswordActivity.oldPassword.text.isEmpty() -> {
+            changePasswordActivity.oldPassword.text!!.isEmpty() -> {
                 bottomSheetDialogMessageText.text = languageDtoData.please_enter_old_password_first
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -88,7 +89,7 @@ class ChangePasswordActivity : BaseActivity() {
                 bottomSheetDialog.show()
                 false
             }
-            changePasswordActivity.oldPassword.text.length != 6 -> {
+            changePasswordActivity.oldPassword.text?.length != 6 -> {
                 bottomSheetDialogMessageText.text = languageDtoData.please_enter_6_digit_old_password
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -98,7 +99,7 @@ class ChangePasswordActivity : BaseActivity() {
                 bottomSheetDialog.show()
                 false
             }
-            changePasswordActivity.newPasswordET.text.isEmpty() -> {
+            changePasswordActivity.newPasswordET.text!!.isEmpty() -> {
                 bottomSheetDialogMessageText.text = languageDtoData.please_enter_new_password_first
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -108,7 +109,7 @@ class ChangePasswordActivity : BaseActivity() {
                 bottomSheetDialog.show()
                 false
             }
-            changePasswordActivity.newPasswordET.text.length != 6 -> {
+            changePasswordActivity.newPasswordET.text?.length != 6 -> {
                 bottomSheetDialogMessageText.text = languageDtoData.please_enter_6_digit_new_password
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -118,7 +119,7 @@ class ChangePasswordActivity : BaseActivity() {
                 bottomSheetDialog.show()
                 false
             }
-            changePasswordActivity.confirmPasswordET.text.isEmpty() -> {
+            changePasswordActivity.confirmPasswordET.text!!.isEmpty() -> {
                 bottomSheetDialogMessageText.text = languageDtoData.please_enter_confirm_password_first
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -128,7 +129,7 @@ class ChangePasswordActivity : BaseActivity() {
                 bottomSheetDialog.show()
                 false
             }
-            changePasswordActivity.confirmPasswordET.text.length != 6 -> {
+            changePasswordActivity.confirmPasswordET.text?.length != 6 -> {
                 bottomSheetDialogMessageText.text = languageDtoData.please_enter_6_digit_confirm_password
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -191,18 +192,20 @@ class ChangePasswordActivity : BaseActivity() {
         return mapDataValue
     }
 
-    override fun onResume() {
-        super.onResume()
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
+    override fun onPause() {
+        softInputAssist.onPause()
+        super.onPause()
     }
 
-    override fun onPause() {
-        super.onPause()
-        val window: Window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    override fun onResume() {
+        softInputAssist.onResume()
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        softInputAssist.onDestroy()
+        super.onDestroy()
+
     }
 
 }

@@ -54,6 +54,7 @@ open class BaseActivity : AppCompatActivity() {
         sharedPrefrenceManager.saveLanguageData(LanguageDtoData())
         bottomSheetDialog = BottomSheetDialog(this, R.style.SheetDialog)
         bottomSheetDialog.setContentView(R.layout.bottom_dialog_layout)
+        bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.findViewById<TextView>(R.id.textHeading)?.text = sharedPrefrenceManager.getLanguageData().alert_text
         bottomSheetDialog.findViewById<TextView>(R.id.cancelText)?.text = sharedPrefrenceManager.getLanguageData().cancel
         bottomSheetDialog.findViewById<TextView>(R.id.okText)?.text = sharedPrefrenceManager.getLanguageData().ok_text

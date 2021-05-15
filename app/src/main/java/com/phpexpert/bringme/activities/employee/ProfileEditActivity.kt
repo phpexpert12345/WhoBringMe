@@ -36,6 +36,7 @@ import com.phpexpert.bringme.retro.ServiceGeneratorLocation
 import com.phpexpert.bringme.ui.employee.profile.ProfileViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.utilities.ImageCropActivity
+import com.phpexpert.bringme.utilities.SoftInputAssist
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -56,6 +57,7 @@ class ProfileEditActivity : BaseActivity() {
     private var POD1_URI: Uri? = null
     private val postDataOtp = PostDataOtp()
     private lateinit var languageDtoData: LanguageDtoData
+    private lateinit var softInputAssist: SoftInputAssist
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -79,6 +81,7 @@ class ProfileEditActivity : BaseActivity() {
         }
         profileEditLayoutBinding = DataBindingUtil.setContentView(this, R.layout.profile_edit_layout)
         profileEditLayoutBinding.languageModel = sharedPrefrenceManager.getLanguageData()
+        softInputAssist = SoftInputAssist(this)
         languageDtoData = sharedPrefrenceManager.getLanguageData()
         profileEditLayoutBinding.autoComplete.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -384,18 +387,20 @@ class ProfileEditActivity : BaseActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
+    override fun onPause() {
+        softInputAssist.onPause()
+        super.onPause()
     }
 
-    override fun onPause() {
-        super.onPause()
-        val window: Window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    override fun onResume() {
+        softInputAssist.onResume()
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        softInputAssist.onDestroy()
+        super.onDestroy()
+
     }
 
     private fun getPredictions(Query: String): ArrayList<PlaceAutocomplete> {

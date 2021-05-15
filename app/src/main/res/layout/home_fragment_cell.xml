@@ -367,7 +367,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@{languageModel.accepted_time}"
+                        android:text="@{languageModel.accepted_time_text}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp" />
 
@@ -378,7 +378,6 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@{model.job_accept_date}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp"
                         tools:ignore="HardcodedText" />

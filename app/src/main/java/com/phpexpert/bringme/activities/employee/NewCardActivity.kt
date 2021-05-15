@@ -10,8 +10,6 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +21,7 @@ import com.phpexpert.bringme.dtos.PaymentConfigurationSingleton
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobPostModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.SoftInputAssist
 import com.stripe.android.ApiResultCallback
 import com.stripe.android.Stripe
 import com.stripe.android.model.Card
@@ -40,6 +39,7 @@ class NewCardActivity : BaseActivity() {
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var languageDtoData: LanguageDtoData
+    private lateinit var softInputAssist: SoftInputAssist
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -49,13 +49,10 @@ class NewCardActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
         cardActivityBinding = DataBindingUtil.setContentView(this, R.layout.layout_add_new_card)
         cardActivityBinding.languageModel = sharedPrefrenceManager.getLanguageData()
         languageDtoData = sharedPrefrenceManager.getLanguageData()
+        softInputAssist = SoftInputAssist(this)
         jobPostViewModel = ViewModelProvider(this).get(JobPostModel::class.java)
         servicePostValue = intent.getSerializableExtra("postValues") as PostJobPostDto
         setPaymentAuthKeyObserver()
@@ -147,25 +144,73 @@ class NewCardActivity : BaseActivity() {
         })
 
         cardActivityBinding.payNowButton.setOnClickListener {
-            if (cardActivityBinding.cardNumber.text.toString().length != 19) {
-                bottomSheetDialogMessageText.text = languageDtoData.card_number_not_valid
-                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
+            when {
+                cardActivityBinding.cardNumber.text.toString().length != 19 -> {
+                    bottomSheetDialogMessageText.text = languageDtoData.card_number_not_valid
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
-                bottomSheetDialog.show()
-            } else {
-                cardActivityBinding.payNowButton.startAnimation()
-                try {
-                    val cardData = Card.create(cardActivityBinding.cardNumber.text.toString().replace("\\s".toRegex(), ""),
-                            cardActivityBinding.expiryDate.text.toString().split("/")[0].toInt(),
-                            cardActivityBinding.expiryDate.text.toString().split("/")[1].toInt(),
-                            cardActivityBinding.cvv.text.toString()
-                    )
-                    createPaymentCall(cardData)
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                cardActivityBinding.cardName.text.toString().trim() == "" -> {
+                    bottomSheetDialogMessageText.text = languageDtoData.enter_card_holder_name_first
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
+                }
+                cardActivityBinding.expireDateText.text.toString().trim() == "" -> {
+                    bottomSheetDialogMessageText.text = languageDtoData.enter_expiry_date_first
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
+                }
+                cardActivityBinding.expireDateText.text.toString().length != 5 -> {
+                    bottomSheetDialogMessageText.text = languageDtoData.enter_valid_expiry_date
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
+                }
+                cardActivityBinding.cvv.text.toString().trim() == "" -> {
+                    bottomSheetDialogMessageText.text = languageDtoData.enter_cvv_first
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
+                }
+                cardActivityBinding.cvv.text.toString().length != 3 -> {
+                    bottomSheetDialogMessageText.text = languageDtoData.enter_valid_cvv
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
+                }
+                else -> {
+                    cardActivityBinding.payNowButton.startAnimation()
+                    try {
+                        val cardData = Card.create(cardActivityBinding.cardNumber.text.toString().replace("\\s".toRegex(), ""),
+                                cardActivityBinding.expiryDate.text.toString().split("/")[0].toInt(),
+                                cardActivityBinding.expiryDate.text.toString().split("/")[1].toInt(),
+                                cardActivityBinding.cvv.text.toString()
+                        )
+                        createPaymentCall(cardData)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
             }
         }
@@ -175,25 +220,12 @@ class NewCardActivity : BaseActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        val window: Window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-    }
-
     private fun createPaymentCall(card_details: Card) {
         try {
             val stripe = Stripe(this, PaymentConfigurationSingleton.paymentConfiguration.stripe_publishKey!!)
             stripe.createToken(card_details, object : ApiResultCallback<Token?> {
                 override fun onError(error: Exception) {
+                    cardActivityBinding.payNowButton.revertAnimation()
                     Toast.makeText(this@NewCardActivity, "Please try again", Toast.LENGTH_SHORT).show()
                     //progressBar.setVisibility(View.GONE);
                 }
@@ -347,7 +379,7 @@ class NewCardActivity : BaseActivity() {
         for (i in 0..addresses[0]!!.maxAddressLineIndex)
             stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
         mapDataValue["job_posted_address"] = base64Encoded(stringBuilder.toString())
-        mapDataValue["lang_code"] =sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataValue
     }
@@ -377,5 +409,21 @@ class NewCardActivity : BaseActivity() {
             }
             bottomSheetDialog.show()
         }
+    }
+
+    override fun onPause() {
+        softInputAssist.onPause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        softInputAssist.onResume()
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        softInputAssist.onDestroy()
+        super.onDestroy()
+
     }
 }

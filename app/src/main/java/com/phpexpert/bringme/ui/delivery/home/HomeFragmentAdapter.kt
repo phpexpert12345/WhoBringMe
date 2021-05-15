@@ -43,7 +43,6 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         homeFragmentCellBinding.model = arrayList[position]
 
         Glide.with(context).load(arrayList[position].Client_photo).centerCrop().placeholder(R.drawable.user_placeholder).into(homeFragmentCellBinding.userImage)
-
         homeFragmentCellBinding.clientCall.setOnClickListener {
             val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + arrayList[position].Client_phone_code + arrayList[position].Client_phone))
             context.startActivity(intent)
@@ -55,6 +54,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         }
         try{
             homeFragmentCellBinding.orderDateValue.text = orderDateValue(arrayList[position].job_post_date!!)
+            homeFragmentCellBinding.jobPostedTime.text = jobPostedTime(arrayList[position].job_posted_time!!)
         }catch (e:java.lang.Exception){
             e.printStackTrace()
         }
@@ -129,6 +129,26 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
     private fun orderDateValue(dateTime: String): String? {
         val inputPattern = "yyyy-MM-dd"
         val outputPattern = "dd MMM yyyy"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+
+        val date: Date?
+        var str: String? = null
+
+        try {
+            date = inputFormat.parse(dateTime)
+            str = outputFormat.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return str
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun jobPostedTime(dateTime: String): String? {
+        val inputPattern = "hh:mm"
+        val outputPattern = "hh:mm aa"
         val inputFormat = SimpleDateFormat(inputPattern)
         val outputFormat = SimpleDateFormat(outputPattern)
 

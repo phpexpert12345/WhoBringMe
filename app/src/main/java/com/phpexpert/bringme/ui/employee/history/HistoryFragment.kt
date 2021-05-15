@@ -169,10 +169,34 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                     historyBinding.blurView.visibility = View.GONE
                 }
                 reviewBinding.submitButton.setOnClickListener {
-                    reviewBinding.submitButton.startAnimation()
-                    writeReviewData(arrayList[position].job_order_id!!, reviewBinding.ratingData.rating.toString(), reviewBinding.writeReviewET.text.toString(), position)
-                    reviewBinding.ratingData.rating = 0f
-                    reviewBinding.writeReviewET.text = Editable.Factory.getInstance().newEditable("")
+                    when {
+                        reviewBinding.ratingData.rating == 0f -> {
+                            (activity as BaseActivity).bottomSheetDialog.show()
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_provide_rating
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                                (activity as BaseActivity).bottomSheetDialog.dismiss()
+                            }
+                            (activity as BaseActivity).bottomSheetDialog.show()
+                        }
+                        reviewBinding.writeReviewET.text.toString()=="" -> {
+                            (activity as BaseActivity).bottomSheetDialog.show()
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_enter_review
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                                (activity as BaseActivity).bottomSheetDialog.dismiss()
+                            }
+                            (activity as BaseActivity).bottomSheetDialog.show()
+                        }
+                        else -> {
+                            reviewBinding.submitButton.startAnimation()
+                            writeReviewData(arrayList[position].job_order_id!!, reviewBinding.ratingData.rating.toString(), reviewBinding.writeReviewET.text.toString(), position)
+                            reviewBinding.ratingData.rating = 0f
+                            reviewBinding.writeReviewET.text = Editable.Factory.getInstance().newEditable("")
+                        }
+                    }
                 }
             }
         }

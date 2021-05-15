@@ -2,6 +2,7 @@
 
 package com.phpexpert.bringme.ui.delivery.myjob
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,8 +21,13 @@ import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.MyJobDtoList
 import com.phpexpert.bringme.models.MyJobDataModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
 
     private lateinit var myJobBinding: FragmentMyJobBinding
@@ -118,5 +124,47 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
         arrayList[position].Charge_for_Jobs = String.format("%.2f", arrayList[position].Charge_for_Jobs?.toFloat())
         arrayList[position].job_total_amount = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
         jobViewBinding.data = arrayList[position]
+        jobViewBinding.jobPostedDate.text = orderDateValue(arrayList[position].job_post_date!!)
+        jobViewBinding.jobPostedTime.text = jobPostedTime(arrayList[position].job_posted_time!!)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun orderDateValue(dateTime: String): String? {
+        val inputPattern = "yyyy-MM-dd"
+        val outputPattern = "dd MMM yyyy"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+
+        val date: Date?
+        var str: String? = null
+
+        try {
+            date = inputFormat.parse(dateTime)
+            str = outputFormat.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return str
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun jobPostedTime(dateTime: String): String? {
+        val inputPattern = "hh:mm"
+        val outputPattern = "hh:mm aa"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+
+        val date: Date?
+        var str: String? = null
+
+        try {
+            date = inputFormat.parse(dateTime)
+            str = outputFormat.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return str
     }
 }

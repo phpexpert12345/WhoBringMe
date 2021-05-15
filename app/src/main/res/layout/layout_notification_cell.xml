@@ -67,7 +67,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_13sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@{languageModel.order}"
+                    android:text="@{languageModel.job_id_colon}"
                     android:textColor="@color/colorDarkGrey"
                     android:textSize="@dimen/_13sdp" />
 
@@ -101,7 +101,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_13sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:text="@{languageModel.title}"
@@ -138,7 +137,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_13sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:text="@{languageModel.message}"

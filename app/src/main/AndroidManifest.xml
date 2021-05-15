@@ -35,7 +35,6 @@
             android:name=".activities.OTPActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />
 
-
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
@@ -86,7 +85,8 @@
 
         <activity
             android:name=".activities.employee.CreateJobActivity"
-            android:theme="@style/Theme.BringMe.NoActionBar" />
+            android:theme="@style/Theme.BringMe.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.RegistrationSelectionActivity"
             android:theme="@style/Theme.BringMe.NoActionBarn" />
@@ -98,11 +98,12 @@
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.employee.ProfileEditActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/RegistrationActivity" />
+            android:theme="@style/RegistrationActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.employee.NewCardActivity"
-            android:theme="@style/Theme.BringMe.NoActionBar" />
+            android:theme="@style/RegistrationActivity"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".activities.delivery.TransactionActivity"
@@ -120,7 +121,8 @@
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.ChangePasswordActivity"
-            android:theme="@style/Theme.BringMe.NoActionBar" />
+            android:theme="@style/RegistrationActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.NotificationActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />

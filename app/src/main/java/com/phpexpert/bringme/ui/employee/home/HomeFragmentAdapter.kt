@@ -1,5 +1,6 @@
 package com.phpexpert.bringme.ui.employee.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -18,9 +19,13 @@ import com.phpexpert.bringme.databinding.HomeFragmentCellBinding
 import com.phpexpert.bringme.dtos.OrderListData
 import com.phpexpert.bringme.utilities.BaseActivity
 import java.lang.Exception
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
-@Suppress("DEPRECATION")
-class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderListData>, var onClickListener: OnClickView) : RecyclerView.Adapter<HomeFragmentAdapter.HomeFragmentViewHolder>() {
+@Suppress("DEPRECATION", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderListData>, private var onClickListener: OnClickView) : RecyclerView.Adapter<HomeFragmentAdapter.HomeFragmentViewHolder>() {
 
     private lateinit var homeFragmentCellBinding: HomeFragmentCellBinding
 
@@ -41,10 +46,14 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         homeFragmentCellBinding.model = arrayList[position]
         if (arrayList[position].order_status_msg == "Accepted") {
             homeFragmentCellBinding.csImage.setImageResource(R.drawable.cs1)
+            try{
+                homeFragmentCellBinding.timeData.text = orderDateValue(arrayList[position].job_accept_date!!)
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
         } else {
             homeFragmentCellBinding.csImage.setImageResource(R.drawable.cs)
         }
@@ -82,5 +91,25 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
 
     override fun getItemCount(): Int {
         return arrayList.size
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun orderDateValue(dateTime: String): String? {
+        val inputPattern = "yyyy-MM-dd"
+        val outputPattern = "dd MMM yyyy"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+
+        val date: Date?
+        var str: String? = null
+
+        try {
+            date = inputFormat.parse(dateTime)
+            str = outputFormat.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return str
     }
 }

@@ -28,6 +28,7 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.activities.ChangePasswordActivity
 import com.phpexpert.bringme.activities.LoginActivity
 import com.phpexpert.bringme.activities.delivery.UploadDocumentSelectActivity
+import com.phpexpert.bringme.activities.employee.DashboardActivity
 import com.phpexpert.bringme.activities.employee.ProfileEditActivity
 import com.phpexpert.bringme.databinding.DeliveryProfileFragmentBinding
 import com.phpexpert.bringme.dtos.LanguageDtoData
@@ -147,13 +148,19 @@ class ProfileFragment : Fragment() {
         object : CountDownTimer(30000, 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                otpDataDialog.findViewById<TextView>(R.id.timeText)!!.text = "${(activity as BaseActivity).sharedPrefrenceManager.getLanguageData().auto_verifying_your_otp_in_00_12} (00:${counter[0]})"
-                counter[0]--
+                try {
+                    otpDataDialog.findViewById<TextView>(R.id.timeText)!!.text = "${(activity as BaseActivity).sharedPrefrenceManager.getLanguageData().auto_verifying_your_otp_in_00_12} (00:${counter[0]})"
+                    counter[0]--
+                } catch (e: Exception) {
+                }
             }
 
             override fun onFinish() { //                textView.setText("FINISH!!");
-                otpDataDialog.findViewById<TextView>(R.id.timeText)!!.visibility = View.GONE
-                otpDataDialog.findViewById<LinearLayout>(R.id.resendLayout)!!.visibility = View.VISIBLE
+                try {
+                    otpDataDialog.findViewById<TextView>(R.id.timeText)!!.visibility = View.GONE
+                    otpDataDialog.findViewById<LinearLayout>(R.id.resendLayout)!!.visibility = View.VISIBLE
+                } catch (e: Exception) {
+                }
             }
         }.start()
     }
@@ -178,8 +185,12 @@ class ProfileFragment : Fragment() {
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().no
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
-                (activity as BaseActivity).bottomSheetDialog.dismiss()
-                (activity as BaseActivity).sharedPrefrenceManager.clearData()
+                (activity as DashboardActivity).bottomSheetDialog.dismiss()
+                val languageDtoData = (activity as DashboardActivity).sharedPrefrenceManager.getLanguageData()
+                val authData = (activity as DashboardActivity).sharedPrefrenceManager.getAuthData()
+                (activity as DashboardActivity).sharedPrefrenceManager.clearData()
+                (activity as DashboardActivity).sharedPrefrenceManager.saveLanguageData(languageDtoData)
+                (activity as DashboardActivity).sharedPrefrenceManager.saveAuthData(authData)
                 startActivity(Intent(requireActivity(), LoginActivity::class.java))
                 requireActivity().finishAffinity()
             }

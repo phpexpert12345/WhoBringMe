@@ -34,9 +34,10 @@
                 android:layout_margin="@dimen/_10sdp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_toStartOf="@+id/clientCall"
                     tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                     <ImageView
@@ -214,10 +215,10 @@
                         android:textSize="@dimen/_11sdp" />
 
                     <TextView
+                        android:id="@+id/jobPostedTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="@{model.job_posted_time}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_9sdp" />
                 </LinearLayout>

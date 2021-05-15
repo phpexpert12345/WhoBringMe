@@ -16,10 +16,12 @@ import com.phpexpert.bringme.databinding.LayoutHistroyCellBinding
 import com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoList
 import com.phpexpert.bringme.utilities.BaseActivity
 import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<EmployeeJobHistoryDtoList>, var onClickListener: OnClickView) : RecyclerView.Adapter<HistoryFragmentAdapter.HistoryFragmentViewHolder>() {
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<EmployeeJobHistoryDtoList>, private var onClickListener: OnClickView) : RecyclerView.Adapter<HistoryFragmentAdapter.HistoryFragmentViewHolder>() {
 
     private lateinit var historyFragmentCellBinding: LayoutHistroyCellBinding
 
@@ -56,6 +58,11 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
         if (arrayList[position].order_status_msg == "Accepted") {
             historyFragmentCellBinding.jobAcceptLayout.visibility = View.VISIBLE
             historyFragmentCellBinding.csImage.setImageResource(R.drawable.cs1)
+            try{
+                historyFragmentCellBinding.acceptedDateTime.text = orderDateValue(arrayList[position].job_accept_date!!+" "+arrayList[position].job_accept_time)
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
         } else {
             historyFragmentCellBinding.jobAcceptLayout.visibility = View.GONE
             historyFragmentCellBinding.csImage.setImageResource(R.drawable.cs)
@@ -74,6 +81,26 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
 
     override fun getItemCount(): Int {
         return arrayList.size
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun orderDateValue(dateTime: String): String? {
+        val inputPattern = "yyyy-MM-dd HH:mm:ss"
+        val outputPattern = "dd MMM yyyy h:mm a"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+
+        val date: Date?
+        var str: String? = null
+
+        try {
+            date = inputFormat.parse(dateTime)
+            str = outputFormat.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return str
     }
 
     /*@SuppressLint("SimpleDateFormat")
