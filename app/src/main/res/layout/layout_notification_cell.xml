@@ -94,8 +94,8 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:src="@drawable/job_card_icon"
+                    android:layout_marginTop="@dimen/_3sdp"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -130,8 +130,8 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:src="@drawable/job_card_icon"
+                    android:layout_marginTop="@dimen/_3sdp"
                     tools:ignore="ContentDescription" />
 
                 <TextView

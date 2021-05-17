@@ -24,8 +24,8 @@ import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobPostModel
 import com.phpexpert.bringme.utilities.BaseActivity
-import java.lang.Exception
 import java.util.concurrent.TimeUnit
+import kotlin.Exception
 
 @Suppress("DEPRECATION")
 class CongratulationScreen : BaseActivity() {
@@ -56,21 +56,30 @@ class CongratulationScreen : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun initValues() {
+
+        congratulationScreenBinding.currencyCode.text = getCurrencySymbol()
         congratulationScreenBinding.userName.text = "${languageDtoData.hello} ${sharedPrefrenceManager.getProfile().login_name},"
         congratulationScreenBinding.userName1.text = "${languageDtoData.hello} ${sharedPrefrenceManager.getProfile().login_name},"
         servicePostValue = intent.getSerializableExtra("postValue") as PostJobPostDto
         jobViewBinding = congratulationScreenBinding.jobViewLayout
         jobViewBinding.languageModel = languageDtoData
-        servicePostValue.Charge_for_Jobs = String.format("%.2f", servicePostValue.Charge_for_Jobs!!.toFloat())
-        servicePostValue.admin_service_fees = String.format("%.2f", servicePostValue.admin_service_fees!!.toFloat())
-        servicePostValue.grandTotal = String.format("%.2f", servicePostValue.grandTotal!!.toFloat())
-
+        servicePostValue.Charge_for_Jobs = servicePostValue.Charge_for_Jobs.formatChange()
+        servicePostValue.admin_service_fees = servicePostValue.admin_service_fees.formatChange()
+        servicePostValue.grandTotal = servicePostValue.grandTotal.formatChange()
+        servicePostValue.jobAmount = servicePostValue.jobAmount.formatChange()
         jobViewBinding.jobDetails = servicePostValue
 
+        jobViewBinding.currencyCode.text = getCurrencySymbol()
+        jobViewBinding.currencyCode1.text = getCurrencySymbol()
+        jobViewBinding.currencyCode2.text = getCurrencySymbol()
+        jobViewBinding.currencyCode3.text = getCurrencySymbol()
+        jobViewBinding.currencyCode4.text = getCurrencySymbol()
         congratulationScreenBinding.orderId.text = servicePostValue.jobId
         congratulationScreenBinding.orderId1.text = servicePostValue.jobId
-        congratulationScreenBinding.grandTotalAmount.text = String.format("%.2f", servicePostValue.grandTotal?.toFloat())
-        congratulationScreenBinding.grandTotalAmount1.text = String.format("%.2f", servicePostValue.grandTotal?.toFloat())
+        congratulationScreenBinding.grandTotalAmount.text = servicePostValue.grandTotal.formatChange()
+        congratulationScreenBinding.grandTotalAmount1.text = servicePostValue.grandTotal.formatChange()
+        congratulationScreenBinding.currencyCode.text = getCurrencySymbol()
+        congratulationScreenBinding.currencyCode1.text = getCurrencySymbol()
 
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
         mBottomSheetFilter.isDraggable = false

@@ -122,15 +122,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:gravity="center_vertical"
                         tools:ignore="UseCompoundDrawables">
-
-                        <ImageView
+                        <TextView
+                            android:id="@+id/currencyCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_9sdp"
-                            android:src="@drawable/euro_currency_symbol_large"
-                            tools:ignore="ContentDescription" />
-
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="€"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_21sdp"
+                            tools:ignore="HardcodedText" />
                         <TextView
                             android:id="@+id/totalAmount"
                             android:layout_width="wrap_content"
@@ -138,6 +140,7 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:fontFamily="@font/poppins_medium"
                             android:text="0"
+                            android:layout_marginTop="@dimen/_1sdp"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_25sdp"
                             tools:ignore="HardcodedText" />
@@ -148,6 +151,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
                         android:text="@{languageModel.total_amount}"
+                        android:layout_marginTop="@dimen/_minus1sdp"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_9sdp" />
                 </LinearLayout>

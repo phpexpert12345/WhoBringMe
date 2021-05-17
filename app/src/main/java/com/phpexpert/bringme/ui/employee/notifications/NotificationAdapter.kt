@@ -11,6 +11,10 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutNotificationCellBinding
 import com.phpexpert.bringme.dtos.NotificationDtoList
 import com.phpexpert.bringme.utilities.BaseActivity
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class NotificationAdapter(var context: Context, var arrayList: ArrayList<NotificationDtoList>) : RecyclerView.Adapter<NotificationAdapter.NotificationFragmentViewHolder>() {
 
@@ -26,7 +30,7 @@ class NotificationAdapter(var context: Context, var arrayList: ArrayList<Notific
     override fun onBindViewHolder(holder: NotificationFragmentViewHolder, position: Int) {
         notificationFragmentCellBinding = holder.viewBinding as LayoutNotificationCellBinding
         notificationFragmentCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
-        notificationFragmentCellBinding.notificationTime.text = arrayList[position].notification_date + " " + arrayList[position].notification_time
+        notificationFragmentCellBinding.notificationTime.text = orderDateValue(arrayList[position].notification_date + " " + arrayList[position].notification_time)
         notificationFragmentCellBinding.orderId.text = arrayList[position].order_id
         notificationFragmentCellBinding.title.text = arrayList[position].notification_subject
         notificationFragmentCellBinding.notificationMessage.text = arrayList[position].notification_message
@@ -34,5 +38,25 @@ class NotificationAdapter(var context: Context, var arrayList: ArrayList<Notific
 
     override fun getItemCount(): Int {
         return arrayList.size
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun orderDateValue(dateTime: String): String? {
+        val inputPattern = "yyyy-MM-dd HH:mm"
+        val outputPattern = "dd MMM yyyy h:mm a"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+
+        val date: Date?
+        var str: String? = null
+
+        try {
+            date = inputFormat.parse(dateTime)
+            str = outputFormat.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return str
     }
 }

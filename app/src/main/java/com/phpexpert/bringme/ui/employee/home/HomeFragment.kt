@@ -4,13 +4,18 @@ package com.phpexpert.bringme.ui.employee.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
+import android.icu.text.NumberFormat
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +31,7 @@ import com.phpexpert.bringme.dtos.OrderListData
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobHistoryModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.SharedPrefrenceManager
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
@@ -43,6 +49,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     private lateinit var orderListData: ArrayList<OrderListData>
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var mLocationCallback: LocationCallback
+    private lateinit var sharedPreference: SharedPrefrenceManager
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -55,6 +62,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         homeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.employee_fragment_home, container, false)
         homeFragmentBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         (activity as BaseActivity).isCheckPermissions(requireActivity(), perission)
+        sharedPreference = (activity as BaseActivity).sharedPrefrenceManager
         initValues()
         setActions()
         setList()
@@ -65,6 +73,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
     @SuppressLint("MissingPermission")
     private fun initValues() {
+        homeFragmentBinding.clientCurrentLocation.text = sharedPreference.getLanguageData().fetching_location
         val mLocationRequest = LocationRequest.create()
         mLocationRequest.interval = 60000
         mLocationRequest.fastestInterval = 5000
@@ -83,13 +92,12 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                             for (i in 0..addresses[0]!!.maxAddressLineIndex)
                                 stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
                             homeFragmentBinding.clientCurrentLocation.text = stringBuilder.toString()
-                        }catch (e:Exception){
-                            e.printStackTrace()
-                            homeFragmentBinding.clientCurrentLocation.text = ""
+                        } catch (e: Exception) {
+                            homeFragmentBinding.clientCurrentLocation.text = sharedPreference.getProfile().login_address
                         }
                         break
                     } else {
-                        homeFragmentBinding.clientCurrentLocation.text = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_address
+                        homeFragmentBinding.clientCurrentLocation.text = sharedPreference.getProfile().login_address
                     }
                 }
                 mFusedLocationClient.removeLocationUpdates(mLocationCallback)
@@ -188,31 +196,33 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 val postDataValue = PostJobPostDto()
                 postDataValue.jobDescription = orderListData[position].about_job
                 postDataValue.jobTime = orderListData[position].job_offer_time!!.split(" ")[0]
-                postDataValue.jobAmount = String.format("%.2f",orderListData[position].job_sub_total?.toFloat())
-                postDataValue.grandTotal = String.format("%.2f",orderListData[position].job_total_amount?.toFloat())
+                postDataValue.jobAmount = orderListData[position].job_sub_total.formatChange()
+                postDataValue.grandTotal = orderListData[position].job_total_amount.formatChange()
                 postDataValue.jobPaymentMode = orderListData[position].payment_mode
-                try {
-                    postDataValue.job_tax_amount = String.format("%.2f", orderListData[position].job_tax_amount?.toFloat())
-                }catch (e:Exception){
-                    postDataValue.job_tax_amount = orderListData[position].job_tax_amount
-                }
-                postDataValue.Charge_for_Jobs = String.format("%.2f",orderListData[position].Charge_for_Jobs?.toFloat())
+                postDataValue.job_tax_amount = orderListData[position].job_tax_amount.formatChange()
+                postDataValue.Charge_for_Jobs = orderListData[position].Charge_for_Jobs.formatChange()
                 postDataValue.Charge_for_Jobs_percentage = orderListData[position].Charge_for_Jobs_percentage
                 postDataValue.Charge_for_Jobs_Admin_percentage = orderListData[position].Charge_for_Jobs_Admin_percentage
                 postDataValue.Charge_for_Jobs_Delivery_percentage = orderListData[position].Charge_for_Jobs_Delivery_percentage
-                postDataValue.admin_service_fees = String.format("%.2f",orderListData[position].admin_service_fees?.toFloat())
-                postDataValue.delivery_employee_fee = String.format("%.2f",orderListData[position].delivery_employee_fee?.toFloat())
+                postDataValue.admin_service_fees = orderListData[position].admin_service_fees.formatChange()
+                postDataValue.delivery_employee_fee = orderListData[position].delivery_employee_fee.formatChange()
                 postDataValue.jobId = orderListData[position].job_order_id
 
                 jobViewBinding.jobDetails = postDataValue
+
+                jobViewBinding.currencyCode.text = (activity as BaseActivity).getCurrencySymbol()
+                jobViewBinding.currencyCode1.text = (activity as BaseActivity).getCurrencySymbol()
+                jobViewBinding.currencyCode2.text = (activity as BaseActivity).getCurrencySymbol()
+                jobViewBinding.currencyCode3.text = (activity as BaseActivity).getCurrencySymbol()
+                jobViewBinding.currencyCode4.text = (activity as BaseActivity).getCurrencySymbol()
             }
             "writeReview" -> {
                 writeReviewBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
                 homeFragmentBinding.blurView.visibility = View.VISIBLE
 
                 writeReviewBinding.closeIcon.setOnClickListener {
-                    writeReviewBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
-                    homeFragmentBinding.blurView.visibility = View.GONE
+//                    writeReviewBinding.writeReviewET.clearFocus()
+                    this.hideKeyboard()
                 }
 
                 writeReviewBinding.submitButton.setOnClickListener {
@@ -228,7 +238,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                             }
                             (activity as BaseActivity).bottomSheetDialog.show()
                         }
-                        writeReviewBinding.writeReviewET.text.toString()=="" -> {
+                        writeReviewBinding.writeReviewET.text.toString() == "" -> {
                             (activity as BaseActivity).bottomSheetDialog.show()
                             (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_enter_review
                             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
@@ -261,7 +271,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
-                    writeReviewBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
+                    this.hideKeyboard()
                     orderListData[position].review_status = "Done"
                     orderListData[position].job_review_description = reviewContent
                     orderListData[position].job_rating = totalRating
@@ -290,4 +300,28 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataValue
     }
+
+    private fun String?.formatChange() = run {
+        try {
+            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            formatter.format(this?.toFloat())
+        } catch (e: Exception) {
+            this
+        }
+    }
+
+    private fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+
+        Handler().postDelayed({
+        writeReviewBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
+        homeFragmentBinding.blurView.visibility = View.GONE
+        }, 100)
+    }
+
 }

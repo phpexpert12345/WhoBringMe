@@ -41,8 +41,8 @@
 
                     <ImageView
                         android:id="@+id/userImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_45sdp"
+                        android:layout_height="@dimen/_45sdp"
                         android:src="@drawable/mask_group"
                         tools:ignore="ContentDescription" />
 
@@ -172,7 +172,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@{languageModel.complete_time}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
@@ -245,7 +244,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:textColor="@color/text_color_dark"
-                        android:textSize="@dimen/_9sdp"/>
+                        android:textSize="@dimen/_9sdp" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -362,12 +361,17 @@
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
-                        <ImageView
+                        <TextView
+                            android:id="@+id/currencyCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/euro_currency_black"
-                            tools:ignore="ContentDescription" />
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="€"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_12sdp"
+                            tools:ignore="HardcodedText" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -389,12 +393,17 @@
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
-                        <ImageView
+                        <TextView
+                            android:id="@+id/currencyCode1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/euro_currency_black"
-                            tools:ignore="ContentDescription" />
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="€"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_12sdp"
+                            tools:ignore="HardcodedText" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -437,12 +446,17 @@
                     android:orientation="horizontal"
                     tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
-                    <ImageView
-                        android:layout_width="@dimen/_15sdp"
-                        android:layout_height="@dimen/_15sdp"
+                    <TextView
+                        android:id="@+id/currencyCode3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/euro_currency_symbol"
-                        tools:ignore="ContentDescription" />
+                        android:layout_marginTop="@dimen/_1sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="€"
+                        android:textColor="@color/yellow"
+                        android:textSize="@dimen/_19sdp"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -452,7 +466,6 @@
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:text='@{model.job_total_amount+"/-"}'
-
                         android:textColor="@color/yellow"
                         android:textSize="@dimen/_17sdp"
                         tools:ignore="HardcodedText" />
@@ -475,12 +488,15 @@
                     android:orientation="horizontal"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/currencyCode4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:src="@drawable/euro_grey"
-                        tools:ignore="ContentDescription" />
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="€"
+                        android:textColor="@color/text_color_dark"
+                        android:textSize="@dimen/_15sdp"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -492,7 +508,6 @@
                         android:textSize="@dimen/_13sdp"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

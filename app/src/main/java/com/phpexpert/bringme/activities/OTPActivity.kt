@@ -5,6 +5,8 @@ package com.phpexpert.bringme.activities
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
@@ -12,9 +14,9 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.location.*
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityOTPBinding
 import com.phpexpert.bringme.dtos.LanguageDtoData
@@ -22,6 +24,8 @@ import com.phpexpert.bringme.dtos.PostDataOtp
 import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.utilities.CONSTANTS
+import java.util.*
+import kotlin.collections.HashMap
 
 @Suppress("DEPRECATION")
 class OTPActivity : BaseActivity() {
@@ -31,6 +35,8 @@ class OTPActivity : BaseActivity() {
     private lateinit var viewDataModel: RegistrationModel
     private lateinit var progressDialog: ProgressDialog
     private lateinit var languageDtoData: LanguageDtoData
+    private lateinit var mLocationCallback: LocationCallback
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,9 +49,15 @@ class OTPActivity : BaseActivity() {
         otpActivity.btnVerify.setOnClickListener {
             if (isOnline()) {
                 otpActivity.btnVerify.startAnimation()
-                setObserver()
+                gettingLocation()
             } else {
-                Toast.makeText(this, languageDtoData.network_error, Toast.LENGTH_LONG).show()
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
             }
         }
 
@@ -141,7 +153,6 @@ class OTPActivity : BaseActivity() {
             if (it.status_code == "0") {
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
-                    sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
                     finishAffinity()
@@ -204,5 +215,79 @@ class OTPActivity : BaseActivity() {
         mapDataVal["Token_ID"] = postDataOtp.deviceTokenId!!
         mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
         return mapDataVal
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun gettingLocation(){
+        try {
+            val mLocationRequest = LocationRequest.create()
+            mLocationRequest.interval = 60000
+            mLocationRequest.fastestInterval = 5000
+            mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            var mLocation: Location?
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            mLocationCallback = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    for (location in locationResult.locations) {
+                        try {
+                            if (location != null) {
+                                mLocation = location
+                                val geocoder = Geocoder(this@OTPActivity, Locale.getDefault())
+                                val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                                postDataOtp.accountLat = mLocation!!.latitude.toString()
+                                postDataOtp.accountLong = mLocation!!.longitude.toString()
+                                postDataOtp.accountCountry = addresses[0]!!.countryName
+                                postDataOtp.accountState = addresses[0]!!.adminArea
+                                postDataOtp.accountCity = addresses[0]!!.locality
+                                val stringBuilder = StringBuilder()
+                                for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                                    stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                                postDataOtp.accountAddress = stringBuilder.toString()
+                                postDataOtp.addressPostCode = addresses[0]!!.postalCode
+                                setObserver()
+                            } else {
+                                otpActivity.btnVerify.revertAnimation()
+                                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_not_found
+                                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                                bottomSheetDialogMessageOkButton.setOnClickListener {
+                                    bottomSheetDialog.dismiss()
+                                }
+                                bottomSheetDialog.show()
+
+                            }
+                            break
+                        } catch (e: Exception) {
+                            otpActivity.btnVerify.revertAnimation()
+                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_not_found
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
+                            bottomSheetDialog.show()
+                        }
+                    }
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+//                    v.putExtra("postDataModel", postDataOtp)
+//                    startActivity(v)
+                }
+            }
+            @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
+
+//                        val mLocation =
+//                                LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
+
+        } catch (e: Exception) {
+            otpActivity.btnVerify.revertAnimation()
+            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().something_is_wrong
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        }
     }
 }

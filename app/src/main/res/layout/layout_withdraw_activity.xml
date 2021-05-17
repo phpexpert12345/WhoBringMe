@@ -71,15 +71,15 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                    tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/currencyCode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_6sdp"
-                        android:src="@drawable/euro"
-                        app:tint="@color/white"
-                        tools:ignore="ContentDescription" />
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_15sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_toEndOf="@+id/euroImage"
+                    android:layout_toEndOf="@+id/currencyCode1"
                     android:background="@null"
                     android:fontFamily="@font/poppins_regular"
                     android:inputType="numberDecimal"
@@ -137,16 +137,18 @@
                     android:textSize="@dimen/_13sdp"
                     tools:ignore="Autofill,HardcodedText,LabelFor" />
 
-                <ImageView
-                    android:id="@+id/euroImage"
+                <TextView
+                    android:id="@+id/currencyCode1"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/withdrow_amount_symbol_bg"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
                     android:paddingStart="@dimen/_20sdp"
+                    android:paddingTop="@dimen/_4sdp"
                     android:paddingEnd="@dimen/_20sdp"
-                    android:src="@drawable/euro_currency_symbol_large"
-                    app:tint="@color/white"
-                    tools:ignore="ContentDescription" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_20sdp" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 

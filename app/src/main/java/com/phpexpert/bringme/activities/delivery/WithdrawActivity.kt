@@ -18,6 +18,8 @@ class WithdrawActivity : BaseActivity() {
         layoutWithdrawActivity = DataBindingUtil.setContentView(this, R.layout.layout_withdraw_activity)
         layoutWithdrawActivity.languageModel = sharedPrefrenceManager.getLanguageData()
 
+        layoutWithdrawActivity.currencyCode.text = getCurrencySymbol()
+        layoutWithdrawActivity.currencyCode1.text = getCurrencySymbol()
         Glide.with(this).load(sharedPrefrenceManager.getProfile().login_photo).circleCrop().placeholder(R.drawable.user_placeholder).into(layoutWithdrawActivity.userImage)
         layoutWithdrawActivity.backArrow.setOnClickListener {
             finish()

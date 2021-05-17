@@ -137,7 +137,7 @@ class ProfileFragment : Fragment() {
         }
 
         progressDialog = ProgressDialog(requireActivity())
-        progressDialog.setMessage((activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text)
+        progressDialog.setMessage((activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_wait)
         progressDialog.setCancelable(false)
         handleOtpET()
 
@@ -220,6 +220,7 @@ class ProfileFragment : Fragment() {
         })
     }
 
+    @SuppressLint("CutPasteId")
     private fun getOtpNumberObserver() {
         if ((activity as BaseActivity).isOnline()) {
             profileViewMode.changeMobileNumber(getOtpDataMap()).observe(viewLifecycleOwner, {
@@ -231,6 +232,10 @@ class ProfileFragment : Fragment() {
                     if (it.status_code == "0") {
                         mobileNumberDialog.dismiss()
                         timerRestriction()
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text = Editable.Factory.getInstance().newEditable("")
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text = Editable.Factory.getInstance().newEditable("")
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text = Editable.Factory.getInstance().newEditable("")
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text = Editable.Factory.getInstance().newEditable("")
                         otpDataDialog.show()
                     }
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -345,20 +350,16 @@ class ProfileFragment : Fragment() {
                     otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.requestFocus()
                 }
                 R.id.otpPass2 -> if (text.length == 1) otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.requestFocus() else if (text.isEmpty()) otpDataDialog.findViewById<EditText>(R.id.otpPass1)!!.requestFocus()
-                R.id.otpPass3 -> if (text.length == 1) otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!.requestFocus() else if (text.isEmpty()) otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.requestFocus()
+                R.id.otpPass3 -> if (text.length == 1) {
+                    otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!.requestFocus()
+                } else if (text.isEmpty()) {
+                    otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.requestFocus()
+                }
                 R.id.otpPass4 -> if (text.isEmpty()) {
                     otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.requestFocus()
-                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().verify
-                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setBackgroundResource(R.drawable.button_shape_gray)
-                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusableInTouchMode = false
-                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusable = false
-                } else {
-                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().submit
-                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setBackgroundResource(R.drawable.button_rectangle_green)
-                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusableInTouchMode = true
-                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusable = true
                 }
             }
+            setSubButton()
         }
 
         override fun beforeTextChanged(arg0: CharSequence, arg1: Int, arg2: Int, arg3: Int) {
@@ -388,6 +389,21 @@ class ProfileFragment : Fragment() {
                     (activity as DashboardActivity).bottomSheetDialog.show()
                 }
             }
+        }
+    }
+
+    @SuppressLint("CutPasteId")
+    private fun setSubButton() {
+        if (otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text.toString().trim() == "" && otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text.toString().trim() == "" || otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text.toString().trim() == "" || otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text.toString().trim() == "") {
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().verify
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setBackgroundResource(R.drawable.button_shape_gray)
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusableInTouchMode = false
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusable = false
+        } else {
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().submit
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setBackgroundResource(R.drawable.button_rectangle_green)
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusableInTouchMode = true
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusable = true
         }
     }
 }

@@ -4,12 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.method.PasswordTransformationMethod
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
@@ -19,6 +18,7 @@ import com.phpexpert.bringme.databinding.ActivityLoginBinding
 import com.phpexpert.bringme.models.LoginViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.utilities.CONSTANTS
+import com.phpexpert.bringme.utilities.SoftInputAssist
 import java.lang.Exception
 
 
@@ -28,6 +28,7 @@ class LoginActivity : BaseActivity() {
     private lateinit var loginBinding: ActivityLoginBinding
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var loginId: String
+    private lateinit var tokenId: String
 
     private lateinit var forgotPasswordOneDialog: BottomSheetDialog
     private lateinit var forgotPasswordTwoDialog: BottomSheetDialog
@@ -35,6 +36,7 @@ class LoginActivity : BaseActivity() {
     private var passwordVisible: Boolean = false
     private var passwordNewVisible: Boolean = false
     private var passwordConfirmVisible: Boolean = false
+    private lateinit var softInputAssist: SoftInputAssist
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +47,9 @@ class LoginActivity : BaseActivity() {
         loginBinding.languageModel = sharedPrefrenceManager.getLanguageData()
 
         initValues() // method to init values
+        softInputAssist = SoftInputAssist(this)
 
-        loginBinding.countyCode.setTypeFace(Typeface.DEFAULT_BOLD)
+        loginBinding.searchCountyCountry.setTypeFace(Typeface.DEFAULT_BOLD)
 
         setAction()  // method to set all button actions
     }
@@ -106,7 +109,7 @@ class LoginActivity : BaseActivity() {
         //login button
         loginBinding.loginButton.setOnClickListener {
             when {
-                loginBinding.mobileNumber.text.length !in 10..14 -> {
+                loginBinding.mobileNumberEditText.text!!.length !in 10..14 -> {
                     bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_valid_mobile_number
                     bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -115,7 +118,7 @@ class LoginActivity : BaseActivity() {
                     }
                     bottomSheetDialog.show()
                 }
-                loginBinding.passwordET.text.length < 6 -> {
+                loginBinding.digitPin.text!!.length < 6 -> {
                     bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().password_must_contain_6_digits
                     bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -140,15 +143,43 @@ class LoginActivity : BaseActivity() {
         }
 
         //login screen eye handling button
-        loginBinding.eyeIcon.setOnClickListener {
+        loginBinding.passwordEye.setOnClickListener {
             if (passwordVisible) {
-                loginBinding.eyeIcon.setImageResource(R.drawable.eye_close)
+                loginBinding.passwordEye.setImageResource(R.drawable.eye_close)
                 passwordVisible = false
-                loginBinding.passwordET.transformationMethod = PasswordTransformationMethod()
+                loginBinding.digitPin.transformationMethod = PasswordTransformationMethod()
             } else {
-                loginBinding.eyeIcon.setImageResource(R.drawable.eye_open)
+                loginBinding.passwordEye.setImageResource(R.drawable.eye_open)
                 passwordVisible = true
-                loginBinding.passwordET.transformationMethod = null
+                loginBinding.digitPin.transformationMethod = null
+            }
+        }
+
+        loginBinding.digitPin.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+            if (p1) {
+                loginBinding.textData.hint = sharedPrefrenceManager.getLanguageData().password
+            } else {
+                if (loginBinding.digitPin.text!!.isEmpty())
+                    loginBinding.textData.hint = sharedPrefrenceManager.getLanguageData().enter_password
+            }
+        }
+
+        loginBinding.mobileNumberEditText.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            if (b) {
+                loginBinding.mobileNumberInputText.hint = ""
+                loginBinding.mobileNumberTextHint.visibility = View.VISIBLE
+                val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+                lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._19sdp), 0, 0)
+                loginBinding.searchCountyCountry.layoutParams = lp
+            } else {
+                if (loginBinding.mobileNumberEditText.text!!.isEmpty()) {
+                    loginBinding.mobileNumberInputText.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
+                    val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+                    lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._7sdp), 0, 0)
+                    loginBinding.searchCountyCountry.layoutParams = lp
+                    loginBinding.mobileNumberTextHint.visibility = View.GONE
+                }
+
             }
         }
 
@@ -175,6 +206,7 @@ class LoginActivity : BaseActivity() {
                 forgotPasswordTwoDialog.findViewById<EditText>(R.id.confirmPasswordET)!!.transformationMethod = null
             }
         }
+
 
         //create account button
         loginBinding.createAccount.setOnClickListener {
@@ -297,6 +329,10 @@ class LoginActivity : BaseActivity() {
                 }
             }
         }
+
+        forgotPasswordTwoDialog.findViewById<LinearLayout>(R.id.resendOtpLayout)?.setOnClickListener {
+            resendOtpObserver()
+        }
     }
 
     //method to observe login data
@@ -365,8 +401,10 @@ class LoginActivity : BaseActivity() {
                     bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
                         bottomSheetDialog.dismiss()
                         loginId = it.data!!.LoginId!!
+                        tokenId = it.data!!.Token_ID!!
                         forgotPasswordTwoDialog.findViewById<TextView>(R.id.mobileNUmberTV)!!.text = forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString() + forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
                         forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
+                        timerRestriction()
                         forgotPasswordTwoDialog.show()
                         forgotPasswordOneDialog.dismiss()
                     }
@@ -428,9 +466,9 @@ class LoginActivity : BaseActivity() {
     //map data for login api
     private fun mapDataLogin(): Map<String, String> {
         val mapDataValue = HashMap<String, String>()
-        mapDataValue["account_phone_code"] = loginBinding.countyCode.textView_selectedCountry.text.toString()
-        mapDataValue["account_mobile"] = loginBinding.mobileNumber.text.toString()
-        mapDataValue["account_password"] = loginBinding.passwordET.text.toString()
+        mapDataValue["account_phone_code"] = loginBinding.searchCountyCountry.textView_selectedCountry.text.toString()
+        mapDataValue["account_mobile"] = loginBinding.mobileNumberEditText.text.toString()
+        mapDataValue["account_password"] = loginBinding.digitPin.text.toString()
         mapDataValue["device_id"] = getIMEI(this)!!
         mapDataValue["device_platform"] = "Android"
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
@@ -460,8 +498,63 @@ class LoginActivity : BaseActivity() {
         return mapDataValue
     }
 
+    private fun resendData(): Map<String, String> {
+        val mapDataVal = HashMap<String, String>()
+        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["Token_ID"] = tokenId
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
+        return mapDataVal
+    }
+
+    private fun resendOtpObserver() {
+        loginViewModel.getLoginDetailsData(resendData()).observe(this, {
+            bottomSheetDialogMessageText.text = it.status_message
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                if (it.status_code == "0") {
+                    forgotPasswordTwoDialog.findViewById<TextView>(R.id.waitForOtp)?.visibility = View.VISIBLE
+                    forgotPasswordTwoDialog.findViewById<LinearLayout>(R.id.waitLayout)?.visibility = View.GONE
+                    forgotPasswordTwoDialog.findViewById<LinearLayout>(R.id.resendOtpLayout)?.visibility = View.GONE
+                    timerRestriction()
+                }
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        })
+    }
+
+    private fun timerRestriction() {
+        val counter = intArrayOf(30)
+        object : CountDownTimer(30000, 1000) {
+            @SuppressLint("SetTextI18n")
+            override fun onTick(millisUntilFinished: Long) {
+                forgotPasswordTwoDialog.findViewById<TextView>(R.id.timeData)?.text = "(00:${counter[0]})"
+                counter[0]--
+            }
+
+            override fun onFinish() { //                textView.setText("FINISH!!");
+                forgotPasswordTwoDialog.findViewById<LinearLayout>(R.id.waitLayout)?.visibility = View.GONE
+                forgotPasswordTwoDialog.findViewById<TextView>(R.id.waitForOtp)?.visibility = View.GONE
+                forgotPasswordTwoDialog.findViewById<LinearLayout>(R.id.resendOtpLayout)?.visibility = View.VISIBLE
+            }
+        }.start()
+    }
+
     override fun onPause() {
+        softInputAssist.onPause()
         super.onPause()
         forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
+    }
+
+    override fun onResume() {
+        softInputAssist.onResume()
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        softInputAssist.onDestroy()
+        super.onDestroy()
+
     }
 }

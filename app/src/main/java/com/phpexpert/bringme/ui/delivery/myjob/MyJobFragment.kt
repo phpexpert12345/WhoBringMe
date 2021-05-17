@@ -4,6 +4,7 @@ package com.phpexpert.bringme.ui.delivery.myjob
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.icu.text.NumberFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -71,7 +72,8 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
                     myJobBinding.noDataFoundLayout.visibility = View.GONE
                     myJobBinding.nestedScrollView.visibility = View.VISIBLE
                     myJobBinding.runningOrders.text = it.Total_Orders
-                    myJobBinding.totalAmount.text = String.format("%.2f", it.Total_Order_Amount?.toFloat())
+
+                    myJobBinding.totalAmount.text = it.Total_Order_Amount.formatChange()
                     arrayList.clear()
                     arrayList.addAll(it.data!!.OrderList!!)
                     myJobBinding.jobRV.adapter!!.notifyDataSetChanged()
@@ -119,10 +121,15 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
             myJobBinding.blurView.visibility = View.GONE
         }
 
+        jobViewBinding.currencyCode.text = (activity as BaseActivity).getCurrencySymbol()
+        jobViewBinding.currencyCode1.text = (activity as BaseActivity).getCurrencySymbol()
+        jobViewBinding.currencyCode2.text = (activity as BaseActivity).getCurrencySymbol()
+        jobViewBinding.currencyCode4.text = (activity as BaseActivity).getCurrencySymbol()
+
         Glide.with(requireActivity()).load(arrayList[position]).centerCrop().placeholder(R.drawable.user_placeholder).into(jobViewBinding.userImage)
-        arrayList[position].job_sub_total = String.format("%.2f", arrayList[position].job_sub_total?.toFloat())
-        arrayList[position].Charge_for_Jobs = String.format("%.2f", arrayList[position].Charge_for_Jobs?.toFloat())
-        arrayList[position].job_total_amount = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
+        arrayList[position].job_sub_total =arrayList[position].job_sub_total.formatChange()
+        arrayList[position].Charge_for_Jobs = arrayList[position].Charge_for_Jobs.formatChange()
+        arrayList[position].job_total_amount = arrayList[position].job_total_amount.formatChange()
         jobViewBinding.data = arrayList[position]
         jobViewBinding.jobPostedDate.text = orderDateValue(arrayList[position].job_post_date!!)
         jobViewBinding.jobPostedTime.text = jobPostedTime(arrayList[position].job_posted_time!!)
@@ -166,5 +173,13 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
         }
 
         return str
+    }
+    private fun String?.formatChange() = run {
+        try {
+            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            formatter.format(this?.toFloat())
+        } catch (e: Exception) {
+            this
+        }
     }
 }

@@ -17,11 +17,10 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -30,6 +29,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ProfileEditLayoutBinding
 import com.phpexpert.bringme.dtos.*
+import com.phpexpert.bringme.models.EditProfileViewModel
 import com.phpexpert.bringme.retro.ProfileRetro
 import com.phpexpert.bringme.retro.ServiceGenerator
 import com.phpexpert.bringme.retro.ServiceGeneratorLocation
@@ -47,6 +47,7 @@ import java.io.File
 import java.lang.reflect.Method
 import java.net.URI
 import java.util.*
+import kotlin.collections.HashMap
 
 
 @Suppress("LocalVariableName", "DEPRECATION", "PrivatePropertyName", "SameParameterValue")
@@ -58,6 +59,7 @@ class ProfileEditActivity : BaseActivity() {
     private val postDataOtp = PostDataOtp()
     private lateinit var languageDtoData: LanguageDtoData
     private lateinit var softInputAssist: SoftInputAssist
+    private lateinit var editProfileViewModel: EditProfileViewModel
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -81,6 +83,7 @@ class ProfileEditActivity : BaseActivity() {
         }
         profileEditLayoutBinding = DataBindingUtil.setContentView(this, R.layout.profile_edit_layout)
         profileEditLayoutBinding.languageModel = sharedPrefrenceManager.getLanguageData()
+        editProfileViewModel = ViewModelProvider(this).get(EditProfileViewModel::class.java)
         softInputAssist = SoftInputAssist(this)
         languageDtoData = sharedPrefrenceManager.getLanguageData()
         profileEditLayoutBinding.autoComplete.addTextChangedListener(object : TextWatcher {
@@ -128,8 +131,10 @@ class ProfileEditActivity : BaseActivity() {
 
         profileEditLayoutBinding.updateButton.setOnClickListener {
             if (isOnline()) {
-                if (checkValidations() && isCheckPermissions(this, perission))
+                if (checkValidations() && isCheckPermissions(this, perission)) {
+                    profileEditLayoutBinding.updateButton.startAnimation()
                     editImageData()
+                }
             } else {
                 bottomSheetDialogMessageText.text = languageDtoData.network_error
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
@@ -390,6 +395,7 @@ class ProfileEditActivity : BaseActivity() {
     override fun onPause() {
         softInputAssist.onPause()
         super.onPause()
+        profileEditLayoutBinding.updateButton.revertAnimation()
     }
 
     override fun onResume() {
@@ -448,29 +454,19 @@ class ProfileEditActivity : BaseActivity() {
                         if (response.isSuccessful) {
                             val responseData = response.body()
                             bottomSheetDialogMessageText.text = responseData!!.status_message
-                            bottomSheetDialogMessageOkButton.text = "Ok"
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                             bottomSheetDialogMessageCancelButton.visibility = View.GONE
                             bottomSheetDialogMessageOkButton.setOnClickListener {
+                                profileEditLayoutBinding.updateButton.revertAnimation()
                                 bottomSheetDialog.dismiss()
-                                if (responseData.status_code == "0") {
-                                    val loginData = sharedPrefrenceManager.getProfile()
-                                    loginData.login_photo = ""
-                                    loginData.login_email = profileEditLayoutBinding.emailEt.text.toString()
-                                    loginData.login_name = profileEditLayoutBinding.firstNameEt.text.toString() + " " + profileEditLayoutBinding.lastName.text.toString()
-                                    loginData.login_address = profileEditLayoutBinding.autoComplete.text.toString()
-                                    loginData.login_country = postDataOtp.accountCountry
-                                    loginData.login_city = postDataOtp.accountCity
-                                    loginData.login_state = postDataOtp.accountState
-                                    loginData.login_postcode = postDataOtp.addressPostCode
-                                    loginData.login_lat = postDataOtp.accountLat
-                                    loginData.login_long = postDataOtp.accountLong
-                                    sharedPrefrenceManager.saveProfile(loginData)
-                                    ProfileViewModel.changeModel.postValue(true)
-                                    finish()
-                                }
                             }
-                            bottomSheetDialog.show()
+                            if (responseData.status_code != "0") {
+                                bottomSheetDialog.show()
+                            } else if (responseData.status_code == "0") {
+                                setLoginObserver()
+                            }
                         } else {
+                            profileEditLayoutBinding.updateButton.revertAnimation()
                             bottomSheetDialogMessageText.text = languageDtoData.edit_profile_api_error
                             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                             bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -482,6 +478,7 @@ class ProfileEditActivity : BaseActivity() {
                     }
 
                     override fun onFailure(call: Call<EditProfileDto>, t: Throwable) {
+                        profileEditLayoutBinding.updateButton.revertAnimation()
                         bottomSheetDialogMessageText.text = languageDtoData.edit_profile_api_error
                         bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -515,4 +512,43 @@ class ProfileEditActivity : BaseActivity() {
             null
         }
     }
+
+
+    private fun setLoginObserver() {
+        editProfileViewModel.getLoginDetailsData(getLoginDetailsDto()).observe(this, {
+            profileEditLayoutBinding.updateButton.revertAnimation()
+            bottomSheetDialogMessageText.text = it.status_message
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                bottomSheetDialog.dismiss()
+                if (it.status_code == "0") {
+                    val loginData = sharedPrefrenceManager.getProfile()
+                    loginData.login_photo = it.data.login_photo
+                    loginData.login_email = profileEditLayoutBinding.emailEt.text.toString()
+                    loginData.login_name = profileEditLayoutBinding.firstNameEt.text.toString() + " " + profileEditLayoutBinding.lastName.text.toString()
+                    loginData.login_address = profileEditLayoutBinding.autoComplete.text.toString()
+                    loginData.login_country = postDataOtp.accountCountry
+                    loginData.login_city = postDataOtp.accountCity
+                    loginData.login_state = postDataOtp.accountState
+                    loginData.login_postcode = postDataOtp.addressPostCode
+                    loginData.login_lat = postDataOtp.accountLat
+                    loginData.login_long = postDataOtp.accountLong
+                    sharedPrefrenceManager.saveProfile(loginData)
+                    ProfileViewModel.changeModel.postValue(true)
+                    finish()
+                }
+            }
+            bottomSheetDialog.show()
+        })
+    }
+
+    private fun getLoginDetailsDto(): Map<String, String> {
+        val mapDataVal = HashMap<String, String>()
+        mapDataVal["LoginId"] = sharedPrefrenceManager.getLoginId()
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        return mapDataVal
+    }
+
 }

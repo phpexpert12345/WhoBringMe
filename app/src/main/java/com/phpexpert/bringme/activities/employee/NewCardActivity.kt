@@ -10,7 +10,6 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
@@ -226,7 +225,13 @@ class NewCardActivity : BaseActivity() {
             stripe.createToken(card_details, object : ApiResultCallback<Token?> {
                 override fun onError(error: Exception) {
                     cardActivityBinding.payNowButton.revertAnimation()
-                    Toast.makeText(this@NewCardActivity, "Please try again", Toast.LENGTH_SHORT).show()
+                    bottomSheetDialogMessageText.text = error.message
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                     //progressBar.setVisibility(View.GONE);
                 }
 

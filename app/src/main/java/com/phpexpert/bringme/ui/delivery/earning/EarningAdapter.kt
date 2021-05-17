@@ -27,6 +27,7 @@ class EarningAdapter(var context: Context, var arrayList: ArrayList<String>) : R
     override fun onBindViewHolder(holder: MyJobViewModel, position: Int) {
         earningCellBinding = holder.viewBinding as LayoutEarningCellBinding
         earningCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
+        earningCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
         if (position == 1) {
             earningCellBinding.deliveryImageView.visibility = View.VISIBLE
             earningCellBinding.deliveryImageViewLayout.visibility = View.VISIBLE

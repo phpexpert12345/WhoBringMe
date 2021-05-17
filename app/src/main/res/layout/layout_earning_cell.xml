@@ -62,14 +62,16 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
+                        tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
-                        <ImageView
+                        <TextView
+                            android:id="@+id/currencyCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/euro"
-                            tools:ignore="ContentDescription" />
+                            android:fontFamily="@font/poppins_regular"
+                            android:textColor="@color/colorGreen"
+                            android:textSize="@dimen/_14sdp"
+                            tools:ignore="HardcodedText" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -372,7 +374,8 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text="19 Mar'2021, Friday"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_7sdp"/>
+                        android:textSize="@dimen/_7sdp"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

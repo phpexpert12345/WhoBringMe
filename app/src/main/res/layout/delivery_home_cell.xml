@@ -173,7 +173,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@{languageModel.accepted_time}"
+                    android:text='@{model.order_status_msg.equalsIgnoreCase("Accepted") ? languageModel.accepted_time : languageModel.complete_time}'
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
@@ -271,19 +271,20 @@
                     android:layout_toStartOf="@+id/layoutAccept"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/currencyCode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:src="@drawable/euro_grey"
-                        tools:ignore="ContentDescription" />
-
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/text_color_dark"
+                        android:textSize="@dimen/_15sdp" />
                     <TextView
+                        android:id="@+id/jobTotalAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_4sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@{model.job_total_amount}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_13sdp" />
                 </LinearLayout>

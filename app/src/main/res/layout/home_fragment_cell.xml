@@ -57,7 +57,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="@{model.order_id}"
+                            android:text="@{model.job_order_id}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -70,21 +70,26 @@
                         android:orientation="horizontal"
                         tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/euro"
-                            tools:ignore="ContentDescription" />
-
                         <TextView
+                            android:id="@+id/currencyCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_marginTop="@dimen/_1sdp"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textColor="@color/colorGreen"
+                            android:textSize="@dimen/_16sdp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/jobTotalAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_2sdp"
+                            android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="@{model.job_total_amount}"
                             android:textColor="@color/colorGreen"
                             android:textSize="@dimen/_13sdp"
                             tools:ignore="HardcodedText" />
@@ -109,7 +114,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text='@{" "+model.job_order_id}'
+                        android:text='@{" "+model.job_OTP_code}'
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="HardcodedText" />

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.phpexpert.bringme.dtos.ForgotPasswordChangeDtoMain
 import com.phpexpert.bringme.dtos.ForgotPasswordDtoMain
 import com.phpexpert.bringme.dtos.LoginDtoMain
+import com.phpexpert.bringme.dtos.ResendOtpMain
 import com.phpexpert.bringme.repositories.LoginRepo
 
 class LoginViewModel : ViewModel() {
@@ -14,6 +15,7 @@ class LoginViewModel : ViewModel() {
     private var loginData = MutableLiveData<LoginDtoMain>()
     private var otpForgotPasswordSend = MutableLiveData<ForgotPasswordDtoMain>()
     private var otpForgotPasswordReset = MutableLiveData<ForgotPasswordChangeDtoMain>()
+    private var loginDetailsData = MutableLiveData<ResendOtpMain>()
 
 
     fun getLoginData(mapData: Map<String, String>): LiveData<LoginDtoMain> {
@@ -30,4 +32,9 @@ class LoginViewModel : ViewModel() {
         otpForgotPasswordReset = LoginRepo().getForgotPasswordReset(mapData)
         return otpForgotPasswordReset
     }
+    fun getLoginDetailsData(mapData: Map<String, String>): LiveData<ResendOtpMain> {
+        loginDetailsData = LoginRepo().getLoginDetailsData(mapData)
+        return loginDetailsData
+    }
+
 }

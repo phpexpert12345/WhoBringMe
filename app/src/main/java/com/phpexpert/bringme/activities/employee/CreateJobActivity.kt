@@ -3,6 +3,8 @@ package com.phpexpert.bringme.activities.employee
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
@@ -35,11 +37,32 @@ class CreateJobActivity : BaseActivity() {
     }
 
     private fun setActions() {
+
+        createJobBinding.totalAmount.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (p0.toString().trim() == "(${getCurrencySymbol()})") {
+                    createJobBinding.totalAmount.text = Editable.Factory.getInstance().newEditable("")
+                } else {
+                    if (!createJobBinding.totalAmount.text.toString().contains(getCurrencySymbol()!!) && p0.toString().trim() != "") {
+                        createJobBinding.totalAmount.text = Editable.Factory.getInstance().newEditable("(${getCurrencySymbol()}) $p0")
+                        createJobBinding.totalAmount.setSelection(createJobBinding.totalAmount.text.toString().length)
+                    }
+
+                }
+            }
+        })
         createJobBinding.submitButton.setOnClickListener {
             if (checkValidation()) {
                 createJobBinding.submitButton.startAnimation()
                 val postJobPostDto = PostJobPostDto()
-                postJobPostDto.jobAmount = createJobBinding.totalAmount.text.toString().toFloat().toString()
+                postJobPostDto.jobAmount = createJobBinding.totalAmount.text.toString().split(" ")[1].toFloat().toString()
                 postJobPostDto.jobDescription = createJobBinding.postInfo.text.toString()
                 postJobPostDto.jobTime = createJobBinding.mintsTextView.text.toString()
                 Handler().postDelayed({
@@ -90,7 +113,7 @@ class CreateJobActivity : BaseActivity() {
                 bottomSheetDialog.show()
                 false
             }
-            createJobBinding.totalAmount.text.toString().toFloat() == 0.0f -> {
+            createJobBinding.totalAmount.text.toString().split(" ")[1].toFloat() == 0.0f -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().total_amount_should_be_more_than_0
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE

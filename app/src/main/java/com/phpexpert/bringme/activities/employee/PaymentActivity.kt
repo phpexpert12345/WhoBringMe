@@ -6,10 +6,7 @@ import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.phpexpert.bringme.R
@@ -34,9 +31,14 @@ class PaymentActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         paymentActivityBinding = DataBindingUtil.setContentView(this, R.layout.payment_layout)
         paymentActivityBinding.languageModel = sharedPrefrenceManager.getLanguageData()
-        languageDtoData =  sharedPrefrenceManager.getLanguageData()
+        languageDtoData = sharedPrefrenceManager.getLanguageData()
         jobPostViewModel = ViewModelProvider(this).get(JobPostModel::class.java)
 
+        paymentActivityBinding.currencyCode.text = getCurrencySymbol()
+        paymentActivityBinding.currencyCode1.text = getCurrencySymbol()
+        paymentActivityBinding.currencyCode2.text = getCurrencySymbol()
+        paymentActivityBinding.currencyCode3.text = getCurrencySymbol()
+        paymentActivityBinding.currencyCode4.text = getCurrencySymbol()
         progressDialog = ProgressDialog(this)
         progressDialog.setMessage(languageDtoData.please_wait)
         progressDialog.setCancelable(false)
@@ -58,17 +60,15 @@ class PaymentActivity : BaseActivity() {
                 }
                 "credit_card" -> {
                     paymentActivityBinding.proceedButton.startAnimation()
-                    Handler().postDelayed({
-                        val intent = Intent(this, NewCardActivity::class.java)
-                        intent.putExtra("postValues", servicePostValue)
-                        startActivity(intent)
-                    }, 1000)
+                    val intent = Intent(this, NewCardActivity::class.java)
+                    intent.putExtra("postValues", servicePostValue)
+                    startActivity(intent)
 
                 }
                 else -> {
                     bottomSheetDialogMessageText.text = languageDtoData.please_select_payment_method
                     bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                    bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     bottomSheetDialogMessageOkButton.setOnClickListener {
                         bottomSheetDialog.dismiss()
                     }
@@ -107,8 +107,7 @@ class PaymentActivity : BaseActivity() {
 
     private fun setValues() {
         servicePostValue = intent.getSerializableExtra("postValue") as PostJobPostDto
-        servicePostValue.jobAmount = String.format("%.2f", servicePostValue.jobAmount!!.toFloat())
-
+        servicePostValue.jobAmount = servicePostValue.jobAmount.formatChange()
         paymentActivityBinding.postJobData = servicePostValue
         setObserver()
     }
@@ -122,12 +121,12 @@ class PaymentActivity : BaseActivity() {
                         progressDialog.dismiss()
                         bottomSheetDialogMessageText.text = it.status_message
                         bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                        bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+                        bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         if (it.status_code == "0") {
 
                             grandTotal = servicePostValue.jobAmount!!.toFloat()
                             paymentActivityBinding.serviceChargePercentage.text = "${languageDtoData.charges_for_job} (${it.data!!.Charge_for_Jobs_percentage} %)"
-                            paymentActivityBinding.serviceCharges.text = String.format("%.2f", it.data!!.Charge_for_Jobs!!.toFloat())
+                            paymentActivityBinding.serviceCharges.text = it.data!!.Charge_for_Jobs.formatChange()
                             grandTotal = grandTotal!! + it.data!!.Charge_for_Jobs!!.toFloat()
                             if (it.data!!.job_tax_amount == "" || it.data!!.job_tax_amount == "0") {
                                 paymentActivityBinding.adminServiceFees.visibility = View.GONE
@@ -136,10 +135,10 @@ class PaymentActivity : BaseActivity() {
                                 paymentActivityBinding.adminServiceFees.visibility = View.VISIBLE
                                 paymentActivityBinding.adminServiceFeesLayout.visibility = View.VISIBLE
                                 paymentActivityBinding.adminServiceFees.text = "${languageDtoData.admin_charges} (${it.data!!.Charge_for_Jobs_Admin_percentage} %)"
-                                paymentActivityBinding.adminServiceFeesCharge.text = String.format("%.2f", it.data!!.admin_service_fees!!.toFloat().toString())
+                                    paymentActivityBinding.adminServiceFeesCharge.text = it.data!!.admin_service_fees.formatChange()
                                 grandTotal = grandTotal!! + it.data!!.admin_service_fees!!.toFloat()
                             }
-                            paymentActivityBinding.grandTotalAmount.text = String.format("%.2f", grandTotal)
+                            paymentActivityBinding.grandTotalAmount.text = grandTotal.toString().formatChange()
                             servicePostValue.grandTotal = grandTotal.toString()
                             servicePostValue.Charge_for_Jobs = it.data!!.Charge_for_Jobs!!.toFloat().toString()
                             servicePostValue.Charge_for_Jobs_Admin_percentage = it.data!!.Charge_for_Jobs_Admin_percentage
@@ -161,11 +160,16 @@ class PaymentActivity : BaseActivity() {
         } else {
             bottomSheetDialogMessageText.text = languageDtoData.network_error
             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-            bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()
             }
             bottomSheetDialog.show()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        paymentActivityBinding.proceedButton.revertAnimation()
     }
 }

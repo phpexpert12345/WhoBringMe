@@ -2,12 +2,17 @@
 
 package com.phpexpert.bringme.ui.employee.history
 
+import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
+import android.icu.text.NumberFormat
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +27,9 @@ import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobHistoryModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import java.lang.Exception
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 @Suppress("DEPRECATION")
 class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
@@ -83,6 +91,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
             historyBinding.textHeading.visibility = View.VISIBLE
             historyBinding.searchET.visibility = View.GONE
             historyBinding.closeIcon.visibility = View.GONE
+            this.hideKeyboard()
             setObserver()
         }
     }
@@ -143,30 +152,35 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                 val postDataValue = PostJobPostDto()
                 postDataValue.jobDescription = arrayList[position].about_job
                 postDataValue.jobTime = arrayList[position].job_offer_time!!.split(" ")[0]
-                postDataValue.jobAmount = String.format("%.2f", arrayList[position].job_sub_total?.toFloat())
-                postDataValue.grandTotal = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
+                postDataValue.jobAmount = arrayList[position].job_sub_total.formatChange()
+                postDataValue.grandTotal = arrayList[position].job_total_amount.formatChange()
                 postDataValue.jobPaymentMode = arrayList[position].payment_mode
                 try {
-                    postDataValue.job_tax_amount = String.format("%.2f", arrayList[position].job_tax_amount?.toFloat())
+                    postDataValue.job_tax_amount = arrayList[position].job_tax_amount.formatChange()
                 } catch (e: Exception) {
 
                 }
-                postDataValue.Charge_for_Jobs = String.format("%.2f", arrayList[position].Charge_for_Jobs?.toFloat())
+                postDataValue.Charge_for_Jobs = arrayList[position].Charge_for_Jobs.formatChange()
                 postDataValue.Charge_for_Jobs_percentage = arrayList[position].Charge_for_Jobs_percentage
                 postDataValue.Charge_for_Jobs_Admin_percentage = arrayList[position].Charge_for_Jobs_Admin_percentage
                 postDataValue.Charge_for_Jobs_Delivery_percentage = arrayList[position].Charge_for_Jobs_Delivery_percentage
-                postDataValue.admin_service_fees = String.format("%.2f", arrayList[position].admin_service_fees?.toFloat())
-                postDataValue.delivery_employee_fee = String.format("%.2f", arrayList[position].delivery_employee_fee?.toFloat())
+                postDataValue.admin_service_fees = arrayList[position].admin_service_fees.formatChange()
+                postDataValue.delivery_employee_fee = arrayList[position].delivery_employee_fee.formatChange()
                 postDataValue.jobId = arrayList[position].job_order_id
 
                 jobViewBinding.jobDetails = postDataValue
+
+                jobViewBinding.currencyCode.text = (activity as BaseActivity).getCurrencySymbol()
+                jobViewBinding.currencyCode1.text = (activity as BaseActivity).getCurrencySymbol()
+                jobViewBinding.currencyCode2.text = (activity as BaseActivity).getCurrencySymbol()
+                jobViewBinding.currencyCode3.text = (activity as BaseActivity).getCurrencySymbol()
+                jobViewBinding.currencyCode4.text = (activity as BaseActivity).getCurrencySymbol()
             }
             else -> {
                 mBottomSheetReview.state = BottomSheetBehavior.STATE_EXPANDED
                 historyBinding.blurView.visibility = View.VISIBLE
                 reviewBinding.closeIcon.setOnClickListener {
-                    mBottomSheetReview.state = BottomSheetBehavior.STATE_COLLAPSED
-                    historyBinding.blurView.visibility = View.GONE
+                    this.hideKeyboard()
                 }
                 reviewBinding.submitButton.setOnClickListener {
                     when {
@@ -180,7 +194,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                             }
                             (activity as BaseActivity).bottomSheetDialog.show()
                         }
-                        reviewBinding.writeReviewET.text.toString()=="" -> {
+                        reviewBinding.writeReviewET.text.toString() == "" -> {
                             (activity as BaseActivity).bottomSheetDialog.show()
                             (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_enter_review
                             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
@@ -214,7 +228,8 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
-                    mBottomSheetReview.state = BottomSheetBehavior.STATE_COLLAPSED
+                    this.hideKeyboard()
+
                     arrayList[position].review_status = "Done"
                     arrayList[position].job_review_description = reviewContent
                     arrayList[position].job_rating = totalRating
@@ -242,5 +257,31 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         mapDataValue["review_content"] = (activity as BaseActivity).base64Encoded(reviewContent)
         mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataValue
+    }
+
+    private fun String?.formatChange() = run {
+        try {
+            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
+            formatter.format(this?.toFloat())
+        } catch (e: Exception) {
+            this
+        }
+    }
+
+    private fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+
+        Handler().postDelayed({
+            try {
+                reviewBinding.writeReviewET.text = Editable.Factory.getInstance().newEditable("")
+                mBottomSheetReview.state = BottomSheetBehavior.STATE_COLLAPSED
+                historyBinding.blurView.visibility = View.GONE
+            }catch (e:Exception){}
+        }, 100)
     }
 }

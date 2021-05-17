@@ -39,7 +39,8 @@
                 android:fontFamily="@font/poppins_medium"
                 android:text="@{languageModel.job_view}"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_13sdp" />
+                android:textSize="@dimen/_13sdp"
+                tools:ignore="RelativeOverlap" />
 
             <ImageView
                 android:id="@+id/closeView"
@@ -264,15 +265,16 @@
                         android:text="@{data.job_sub_total}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_15sdp" />
-
+<!--@{data.job_sub_total}-->
                     <TextView
+                        android:id="@+id/currencyCode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_gravity="center_vertical"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/euro"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_7sdp" />
+                        android:textSize="@dimen/_13sdp" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -485,11 +487,14 @@
                         android:orientation="horizontal"
                         tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
-                        <ImageView
+                        <TextView
+                            android:id="@+id/currencyCode1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/euro_currency_black"
+                            android:textColor="@color/text_color"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textSize="@dimen/_13sdp"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -528,11 +533,14 @@
                         android:orientation="horizontal"
                         tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
-                        <ImageView
+                        <TextView
+                            android:id="@+id/currencyCode2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/euro_currency_black"
+                            android:textColor="@color/text_color"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textSize="@dimen/_13sdp"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -573,11 +581,14 @@
                     android:orientation="horizontal"
                     tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/currencyCode4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/euro_currency_symbol"
+                        android:textColor="@color/yellow"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textSize="@dimen/_19sdp"
                         tools:ignore="ContentDescription" />
 
                     <TextView
@@ -588,7 +599,6 @@
                         android:layout_marginTop="@dimen/_1sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:text='@{data.job_total_amount+"/-"}'
-
                         android:textColor="@color/yellow"
                         android:textSize="@dimen/_17sdp" />
                 </LinearLayout>

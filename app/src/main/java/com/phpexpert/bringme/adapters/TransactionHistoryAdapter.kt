@@ -22,6 +22,7 @@ class TransactionHistoryAdapter(var context: Context, var arrayList: ArrayList<S
     override fun onBindViewHolder(holder: TransactionViewModel, position: Int) {
         transactionBinding = holder.viewBinding as TransactionHistoryCellBinding
         transactionBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
+        transactionBinding.currencyCode.text=(context as BaseActivity).getCurrencySymbol()
     }
 
     override fun getItemCount(): Int {

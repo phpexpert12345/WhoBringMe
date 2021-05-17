@@ -24,12 +24,14 @@ class EarningFragment : Fragment() {
         fragmentEarningBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
 
         fragmentEarningBinding.earningRV.layoutManager = LinearLayoutManager(requireActivity())
+
+        fragmentEarningBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
+        fragmentEarningBinding.currencyCode1.text = (context as BaseActivity).getCurrencySymbol()
         fragmentEarningBinding.earningRV.isNestedScrollingEnabled = false
         val arrayList = ArrayList<String>()
         arrayList.add("abc")
         arrayList.add("abc")
         fragmentEarningBinding.earningRV.adapter = EarningAdapter(requireActivity(), arrayList)
-
         fragmentEarningBinding.transactionLayout.setOnClickListener {
             startActivity(Intent(requireActivity(), TransactionActivity::class.java))
         }

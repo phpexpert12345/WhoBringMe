@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.icu.text.NumberFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -39,10 +40,15 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
     override fun onBindViewHolder(holder: MyJobViewModel, position: Int) {
         jobCellBinding = holder.viewBinding as LayoutJobCellBinding
         jobCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
-        arrayList[position].job_sub_total = String.format("%.2f", arrayList[position].job_sub_total?.toFloat())
-        arrayList[position].Charge_for_Jobs = String.format("%.2f", arrayList[position].Charge_for_Jobs?.toFloat())
-        arrayList[position].job_total_amount = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
+        arrayList[position].job_sub_total = arrayList[position].job_sub_total.formatChange()
+        arrayList[position].Charge_for_Jobs = arrayList[position].Charge_for_Jobs.formatChange()
+        arrayList[position].job_total_amount = arrayList[position].job_total_amount.formatChange()
         jobCellBinding.model = arrayList[position]
+
+        jobCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
+        jobCellBinding.currencyCode1.text = (context as BaseActivity).getCurrencySymbol()
+        jobCellBinding.currencyCode4.text = (context as BaseActivity).getCurrencySymbol()
+        jobCellBinding.currencyCode3.text = (context as BaseActivity).getCurrencySymbol()
         Glide.with(context).load(arrayList[position].Client_photo).circleCrop().placeholder(R.drawable.user_placeholder).into(jobCellBinding.userImage)
 
         jobCellBinding.jobPostedDate.text = orderDateValue(arrayList[position].job_post_date!!)
@@ -134,5 +140,14 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
         }
 
         return str
+    }
+
+    private fun String?.formatChange() = run {
+        try {
+            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            formatter.format(this?.toFloat())
+        } catch (e: Exception) {
+            this
+        }
     }
 }

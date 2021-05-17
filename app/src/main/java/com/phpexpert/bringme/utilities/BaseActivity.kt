@@ -3,10 +3,16 @@ package com.phpexpert.bringme.utilities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.icu.text.NumberFormat
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.telephony.TelephonyManager
@@ -19,11 +25,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.AuthModel
-import org.w3c.dom.Text
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -40,6 +46,7 @@ open class BaseActivity : AppCompatActivity() {
     lateinit var bottomSheetDialogMessageText: TextView
     lateinit var bottomSheetDialogMessageOkButton: TextView
     lateinit var bottomSheetDialogMessageCancelButton: TextView
+    private var currencyLocaleMap: SortedMap<Currency, Locale>? = null
 
     @Inject
     lateinit var sharedPrefrenceManager: SharedPrefrenceManager
@@ -61,6 +68,15 @@ open class BaseActivity : AppCompatActivity() {
         bottomSheetDialogMessageText = bottomSheetDialog.findViewById(R.id.message)!!
         bottomSheetDialogMessageOkButton = bottomSheetDialog.findViewById(R.id.okText)!!
         bottomSheetDialogMessageCancelButton = bottomSheetDialog.findViewById(R.id.cancelText)!!
+
+        currencyLocaleMap = TreeMap { c1, c2 -> c1.currencyCode.compareTo(c2.currencyCode) }
+        for (locale in Locale.getAvailableLocales()) {
+            try {
+                val currency = Currency.getInstance(locale)
+                (currencyLocaleMap as TreeMap<Currency, Locale>)[currency] = locale!!
+            } catch (e: java.lang.Exception) {
+            }
+        }
     }
 
     fun hitAuthApi(authData: AuthInterface) = if (isOnline()) {
@@ -129,6 +145,35 @@ open class BaseActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+
+            100 -> { // Allowed was selected so Permission granted
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                   //nothing else
+                } else {
+                    // User selected the Never Ask Again Option Change settings in app settings manually
+                    val alertDialogBuilder = AlertDialog.Builder(this)
+                    alertDialogBuilder.setTitle("Change Permissions in Settings")
+                    alertDialogBuilder
+                            .setMessage("" +
+                                    "\nClick SETTINGS to Manually Set\n" + "Permissions to use Database Storage")
+                            .setCancelable(false)
+                            .setPositiveButton("SETTINGS") { _: DialogInterface, _: Int ->
+                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                val uri = Uri.fromParts("package", packageName, null)
+                                intent.data = uri
+                                startActivityForResult(intent, 1000)
+                            }
+
+                    val alertDialog = alertDialogBuilder.create()
+                    alertDialog.show()
+                }
+            }
+        }
+    }
+
     fun base64Encoded(dataValue: String?): String {
         val data = dataValue?.toByteArray(charset("UTF-8"))
         return Base64.encodeToString(data, Base64.DEFAULT)
@@ -187,4 +232,18 @@ open class BaseActivity : AppCompatActivity() {
 
     fun CharSequence?.isValidEmail() = !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
+    fun String?.formatChange() = run {
+        try {
+            val formatter = NumberFormat.getInstance(Locale(sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
+            formatter.format(this?.toFloat())
+        } catch (e: Exception) {
+            this
+        }
+    }
+
+    open fun getCurrencySymbol(): String? {
+        val currency = Currency.getInstance(sharedPrefrenceManager.getAuthData().currency_code)
+        println(sharedPrefrenceManager.getAuthData().currency_code + ":-" + currency.getSymbol(currencyLocaleMap?.get(currency)))
+        return currency.getSymbol(currencyLocaleMap?.get(currency))
+    }
 }

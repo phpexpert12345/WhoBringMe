@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.icu.text.NumberFormat
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -39,8 +40,9 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HomeFragmentViewHolder, position: Int) {
         homeFragmentCellBinding = holder.viewBinding as DeliveryHomeCellBinding
-        arrayList[position].job_total_amount = String.format("%.2f",arrayList[position].job_total_amount?.toFloat())
         homeFragmentCellBinding.model = arrayList[position]
+        homeFragmentCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
+        homeFragmentCellBinding.jobTotalAmount.text = arrayList[position].job_total_amount.formatChange()
 
         Glide.with(context).load(arrayList[position].Client_photo).centerCrop().placeholder(R.drawable.user_placeholder).into(homeFragmentCellBinding.userImage)
         homeFragmentCellBinding.clientCall.setOnClickListener {
@@ -52,10 +54,10 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        try{
+        try {
             homeFragmentCellBinding.orderDateValue.text = orderDateValue(arrayList[position].job_post_date!!)
             homeFragmentCellBinding.jobPostedTime.text = jobPostedTime(arrayList[position].job_posted_time!!)
-        }catch (e:java.lang.Exception){
+        } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
         when (arrayList[position].order_status_msg) {
@@ -67,6 +69,17 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
                 }
                 (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().finished
+                homeFragmentCellBinding.cs.setImageResource(R.drawable.cs1)
+                homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.colorLoginButton))
+            }
+            "Completed" -> {
+                try {
+                    homeFragmentCellBinding.acceptedDateTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+                (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
+                (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.visibility=View.GONE
                 homeFragmentCellBinding.cs.setImageResource(R.drawable.cs1)
                 homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.colorLoginButton))
             }
@@ -109,7 +122,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
     @SuppressLint("SimpleDateFormat")
     private fun changeAcceptDateTime(dateTime: String): String? {
         val inputPattern = "yyyy-MM-dd HH:mm:ss"
-        val outputPattern = "dd MMM yyyy EEEE h:mm a"
+        val outputPattern = "dd MMM yyyy EEEE h:mm aa"
         val inputFormat = SimpleDateFormat(inputPattern)
         val outputFormat = SimpleDateFormat(outputPattern)
 
@@ -125,6 +138,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
 
         return str
     }
+
     @SuppressLint("SimpleDateFormat")
     private fun orderDateValue(dateTime: String): String? {
         val inputPattern = "yyyy-MM-dd"
@@ -163,5 +177,14 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         }
 
         return str
+    }
+
+    private fun String?.formatChange() = run {
+        try {
+            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            formatter.format(this?.toFloat())
+        } catch (e: Exception) {
+            this
+        }
     }
 }

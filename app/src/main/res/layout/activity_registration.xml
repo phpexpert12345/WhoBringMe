@@ -147,6 +147,7 @@
                             android:fontFamily="@font/poppins_regular"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
+                            android:maxLength="255"
                             android:paddingTop="@dimen/_25sdp"
                             android:paddingBottom="@dimen/_minus40sdp"
                             android:textColor="@color/text_color"
@@ -174,6 +175,7 @@
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
+                            android:maxLength="255"
                             android:paddingBottom="@dimen/_minus40sdp"
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/colorDarkGrey"
@@ -196,7 +198,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
                             android:text="@{languageModel.mobile_number}"
-                            android:textColor="@color/colorDarkGrey"
+                            android:textColor="#808080"
                             android:textSize="@dimen/_10sdp"
                             android:visibility="gone" />
 
@@ -217,7 +219,7 @@
                                 android:fontFamily="@font/poppins_regular"
                                 android:imeOptions="actionDone"
                                 android:inputType="number"
-                                android:maxLength="10"
+                                android:maxLength="14"
                                 android:paddingStart="@dimen/_65sdp"
                                 android:paddingLeft="@dimen/_65sdp"
                                 android:paddingTop="@dimen/_25sdp"

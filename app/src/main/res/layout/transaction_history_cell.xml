@@ -72,13 +72,12 @@
                     android:textSize="@dimen/_9sdp"
                     tools:ignore="RelativeOverlap" />
 
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                    tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -90,14 +89,14 @@
                         android:textSize="@dimen/_12sdp"
                         tools:ignore="HardcodedText" />
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/currencyCode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_1sdp"
-                        android:src="@drawable/euro_currency_black"
-                        tools:ignore="ContentDescription" />
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/text_color"/>
                 </LinearLayout>
             </RelativeLayout>
 

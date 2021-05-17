@@ -59,12 +59,27 @@
             android:textColor="@color/text_color"
             android:textSize="@dimen/_11sdp" />
 
+        <EditText
+            android:id="@+id/jobCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_50sdp"
+            android:layout_marginStart="@dimen/_50sdp"
+            android:inputType="number"
+            android:textSize="@dimen/_13sdp"
+            android:hint="@string/enter_job_code"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/text_color"
+            android:textColorHint="@color/colorDarkGrey"
+            tools:ignore="Autofill" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginStart="@dimen/_50sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_50sdp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <EditText

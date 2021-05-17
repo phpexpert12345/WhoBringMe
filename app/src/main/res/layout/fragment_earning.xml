@@ -112,14 +112,6 @@
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_9sdp"
-                            android:src="@drawable/euro_currency_symbol_large"
-                            android:visibility="gone"
-                            tools:ignore="ContentDescription" />
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -155,14 +147,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/_minus3sdp"
                         tools:ignore="UseCompoundDrawables">
 
-                        <ImageView
+                        <TextView
+                            android:id="@+id/currencyCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_6sdp"
-                            android:src="@drawable/euro_currency_symbol_large"
-                            tools:ignore="ContentDescription" />
+                            android:fontFamily="@font/poppins_regular"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_21sdp"
+                            tools:ignore="HardcodedText" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -218,13 +213,15 @@
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
-                        <ImageView
+
+                        <TextView
+                            android:id="@+id/currencyCode1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_6sdp"
-                            android:src="@drawable/euro_grey"
-                            app:tint="@color/colorLoginButton"
-                            tools:ignore="ContentDescription" />
+                            android:fontFamily="@font/poppins_regular"
+                            android:textColor="@color/colorLoginButton"
+                            android:textSize="@dimen/_15sdp"
+                            tools:ignore="HardcodedText" />
 
                         <TextView
                             android:layout_width="wrap_content"

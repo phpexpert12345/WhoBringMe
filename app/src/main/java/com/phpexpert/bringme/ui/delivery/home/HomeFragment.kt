@@ -3,14 +3,19 @@
 package com.phpexpert.bringme.ui.delivery.home
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
+import android.icu.text.NumberFormat
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -103,7 +108,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     private fun initValues() {
 
         progressDialog = ProgressDialog(requireActivity())
-        progressDialog.setMessage(languageDtoData.please_wait)
+        progressDialog.setMessage(languageDtoData.fetching_location)
         progressDialog.setCancelable(false)
         progressDialog.show()
         val mLocationRequest = LocationRequest.create()
@@ -124,9 +129,25 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                             stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
                         currentLocation = mLocation!!
                         address = addresses[0]
+                        progressDialog.dismiss()
                         setObserver()
-                        break
+                    } else {
+                        val locationData = Location("")
+                        locationData.latitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_lat!!.toDouble()
+                        locationData.longitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_long!!.toDouble()
+                        mLocation = locationData
+                        val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+                        val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                        val stringBuilder = StringBuilder()
+                        for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                            stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                        currentLocation = mLocation!!
+                        address = addresses[0]
+                        progressDialog.dismiss()
+                        setObserver()
                     }
+                    break
+
                 }
                 mFusedLocationClient.removeLocationUpdates(mLocationCallback)
             }
@@ -180,6 +201,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     }
 
     private fun setObserver() {
+        progressDialog.setMessage(languageDtoData.please_wait)
+        progressDialog.show()
         if ((activity as BaseActivity).isOnline()) {
             latestJobViewModel!!.getLatestJobDeliveryData(mapData()).observe(viewLifecycleOwner, {
                 progressDialog.dismiss()
@@ -190,7 +213,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                     arrayList.addAll(it.data!!.OrderList)
                     homeFragmentBinding.homeRecyclerView.adapter!!.notifyDataSetChanged()
                     homeFragmentBinding.runningOrders.text = it.Total_Running_Orders
-                    homeFragmentBinding.totalAmount.text = String.format("%.2f",it.Total_Running_Order_Amount?.toFloat())
+                    homeFragmentBinding.totalAmount.text = it.Total_Running_Order_Amount.formatChange()
                 } else {
                     if (it.status == "") {
                         homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
@@ -245,8 +268,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     }
 
     private fun orderDeclineObserver() {
+        progressDialog.show()
         if ((activity as BaseActivity).isOnline()) {
             latestJobViewModel!!.orderDeclineData(orderDeclineData()).observe(viewLifecycleOwner, {
+                progressDialog.dismiss()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -259,6 +284,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
+            progressDialog.dismiss()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -270,20 +296,36 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     }
 
     private fun orderFinishObserver() {
+        progressDialog.show()
         if ((activity as BaseActivity).isOnline()) {
-            latestJobViewModel!!.orderFinishData(orderFinishData()).observe(viewLifecycleOwner, {
-                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+            if (orderFinishedBinding.jobCode.text.toString().trim() != "") {
+                latestJobViewModel!!.orderFinishData(orderFinishData()).observe(viewLifecycleOwner, {
+                    this.hideKeyboard()
+                    progressDialog.dismiss()
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                        if (it.status_code == "0") {
+                            setObserver()
+                        }
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                })
+            } else {
+                progressDialog.dismiss()
+                (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.enter_job_code_first)
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
-                    if (it.status_code == "0") {
-                        setObserver()
-                    }
+                (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
                 }
                 (activity as BaseActivity).bottomSheetDialog.show()
-            })
+            }
         } else {
+            this.hideKeyboard()
+            progressDialog.dismiss()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -322,14 +364,14 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         mapDataVal["job_order_id"] = arrayList[selectedPosition].job_order_id!!
         mapDataVal["order_decline_reason"] = (activity as BaseActivity).base64Encoded(orderDelcineString)
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataVal["auth_key"] =(activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataVal
     }
 
     private fun orderFinishData(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["job_order_id"] = arrayList[selectedPosition].job_order_id!!
-        mapDataVal["job_OTP_code"] = orderFinishedBinding.otp1.text.toString() + orderFinishedBinding.otp2.text.toString() + orderFinishedBinding.otp3.text.toString() + orderFinishedBinding.otp4.text.toString()
+        mapDataVal["job_OTP_code"] = orderFinishedBinding.jobCode.text.toString()
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
         return mapDataVal
@@ -347,10 +389,16 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                     homeFragmentBinding.blurView.visibility = View.GONE
                 }
 
+                jobViewBinding.currencyCode.text = (activity as BaseActivity).getCurrencySymbol()
+                jobViewBinding.currencyCode1.text = (activity as BaseActivity).getCurrencySymbol()
+                jobViewBinding.currencyCode2.text = (activity as BaseActivity).getCurrencySymbol()
+                jobViewBinding.currencyCode4.text = (activity as BaseActivity).getCurrencySymbol()
+
+
                 Glide.with(requireActivity()).load(arrayList[position]).centerCrop().placeholder(R.drawable.user_placeholder).into(jobViewBinding.userImage)
-                arrayList[position].job_sub_total = String.format("%.2f",arrayList[position].job_sub_total?.toFloat())
-                arrayList[position].Charge_for_Jobs = String.format("%.2f",arrayList[position].Charge_for_Jobs?.toFloat())
-                arrayList[position].job_total_amount = String.format("%.2f",arrayList[position].job_total_amount?.toFloat())
+                arrayList[position].job_sub_total = arrayList[position].job_sub_total.formatChange()
+                arrayList[position].Charge_for_Jobs = arrayList[position].Charge_for_Jobs.formatChange()
+                arrayList[position].job_total_amount = arrayList[position].job_total_amount.formatChange()
                 jobViewBinding.data = arrayList[position]
                 jobViewBinding.jobPostedDate.text = orderDateValue(arrayList[position].job_post_date!!)
                 jobViewBinding.jobPostedTime.text = jobPostedTime(arrayList[position].job_posted_time!!)
@@ -375,14 +423,12 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 orderFinishedBinding.orderId.text = arrayList[position].job_order_id!!
                 orderFinishedBinding.orderFinishData.text = "${languageDtoData.enter_job_code_which_is_provide_by_raj_nkaushal_to_finish_your_job}\n${arrayList[position].Client_name} ${languageDtoData.to_finish_your_job}"
                 orderFinishedBinding.noLayout.setOnClickListener {
-                    orderFinishedBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                    homeFragmentBinding.blurView.visibility = View.GONE
+                    this.hideKeyboard()
                 }
                 orderFinishedBinding.yesLayout.setOnClickListener {
 //                    if (orderFinishedBinding.otp1.text.toString().trim() != "" && orderFinishedBinding.otp2.text.toString().trim() != "" && orderFinishedBinding.otp3.text.toString().trim() != "" && orderFinishedBinding.otp4.text.toString().trim() != "") {
-                        orderFinishedBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                        homeFragmentBinding.blurView.visibility = View.GONE
-                        orderFinishObserver()
+
+                    orderFinishObserver()
 //                    } else {
 //                        (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter order otp first"
 //                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = "Ok"
@@ -399,13 +445,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 homeFragmentBinding.blurView.visibility = View.VISIBLE
                 orderDeclineBinding.orderId.text = arrayList[position].job_order_id!!
                 orderDeclineBinding.noLayout.setOnClickListener {
-                    orderDeclineBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                    homeFragmentBinding.blurView.visibility = View.GONE
+                    this.hideKeyboard()
                 }
                 orderDeclineBinding.yesLayout.setOnClickListener {
                     if (orderDeclineBinding.orderReason.text.toString().trim() != "") {
-                        orderDeclineBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                        homeFragmentBinding.blurView.visibility = View.GONE
+                        this.hideKeyboard()
                         orderDelcineString = orderDeclineBinding.orderReason.text.toString()
                         orderDeclineObserver()
                     } else {
@@ -460,5 +504,30 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         }
 
         return str
+    }
+
+    private fun String?.formatChange() = run {
+        try {
+            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            formatter.format(this?.toFloat())
+        } catch (e: Exception) {
+            this
+        }
+    }
+
+    private fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+
+        Handler().postDelayed({
+            orderDeclineBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            orderFinishedBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            orderFinishedBinding.jobCode.text = Editable.Factory.getInstance().newEditable("")
+            homeFragmentBinding.blurView.visibility = View.GONE
+        }, 100)
     }
 }

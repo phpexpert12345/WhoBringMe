@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.icu.text.NumberFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,8 +39,10 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
     override fun onBindViewHolder(holder: HistoryFragmentViewHolder, position: Int) {
         historyFragmentCellBinding = holder.viewBinding as LayoutHistroyCellBinding
         historyFragmentCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
-        arrayList[position].job_total_amount = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
         historyFragmentCellBinding.model = arrayList[position]
+
+        historyFragmentCellBinding.jobTotalAmount.text = arrayList[position].job_total_amount.formatChange()
+        historyFragmentCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
 
         try {
             historyFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
@@ -55,13 +58,21 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
 //            historyFragmentCellBinding.jobReviewTime.text = arrayList[position]
         }
 
-        if (arrayList[position].order_status_msg == "Accepted") {
+        if (arrayList[position].order_status_msg == "Accepted" || arrayList[position].order_status_msg == "Completed") {
             historyFragmentCellBinding.jobAcceptLayout.visibility = View.VISIBLE
             historyFragmentCellBinding.csImage.setImageResource(R.drawable.cs1)
-            try{
-                historyFragmentCellBinding.acceptedDateTime.text = orderDateValue(arrayList[position].job_accept_date!!+" "+arrayList[position].job_accept_time)
-            }catch (e:Exception){
-                e.printStackTrace()
+            if (arrayList[position].order_status_msg == "Accepted") {
+                try {
+                    historyFragmentCellBinding.acceptedDateTime.text = orderDateValue(arrayList[position].job_accept_date!! + " " + arrayList[position].job_accept_time)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            } else if (arrayList[position].order_status_msg == "Completed") {
+                try {
+                    historyFragmentCellBinding.acceptedDateTime.text = orderDateValue(arrayList[position].job_completed_date!! + " " + arrayList[position].job_completed_time)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         } else {
             historyFragmentCellBinding.jobAcceptLayout.visibility = View.GONE
@@ -119,5 +130,15 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
         } catch (e: ParseException) {
             e.printStackTrace()
         }
+
     }*/
+
+    private fun String?.formatChange() = run {
+        try {
+            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            formatter.format(this?.toFloat())
+        } catch (e: Exception) {
+            this
+        }
+    }
 }

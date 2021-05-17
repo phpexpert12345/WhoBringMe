@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.phpexpert.bringme.dtos.ForgotPasswordChangeDtoMain
 import com.phpexpert.bringme.dtos.ForgotPasswordDtoMain
 import com.phpexpert.bringme.dtos.LoginDtoMain
+import com.phpexpert.bringme.dtos.ResendOtpMain
 import com.phpexpert.bringme.retro.LoginRetro
 import com.phpexpert.bringme.retro.ServiceGenerator
 import retrofit2.Call
@@ -17,7 +18,7 @@ class LoginRepo {
     private var loginData: MutableLiveData<LoginDtoMain> = MutableLiveData()
     private var forgotOtpSendData: MutableLiveData<ForgotPasswordDtoMain> = MutableLiveData()
     private var forgotOtpReset: MutableLiveData<ForgotPasswordChangeDtoMain> = MutableLiveData()
-
+    private var loginDetailsData: MutableLiveData<ResendOtpMain> = MutableLiveData()
 
     fun getLoginData(mapData: Map<String, String>): MutableLiveData<LoginDtoMain> {
         ServiceGenerator.createService(LoginRetro::class.java).loginApi(mapData).enqueue(object : Callback<LoginDtoMain> {
@@ -89,6 +90,30 @@ class LoginRepo {
 
         })
         return forgotOtpReset
+    }
+
+    fun getLoginDetailsData(mapData: Map<String, String>): MutableLiveData<ResendOtpMain> {
+        ServiceGenerator.createService(LoginRetro::class.java).getLoginDetails(mapData).enqueue(object : Callback<ResendOtpMain> {
+            override fun onResponse(call: Call<ResendOtpMain>, response: Response<ResendOtpMain>) {
+                if (response.isSuccessful) {
+                    loginDetailsData.postValue(response.body())
+                } else {
+                    val loginDtoMain = ResendOtpMain()
+                    loginDtoMain.status_message = "Login error in api"
+                    loginDtoMain.status_code = "1"
+                    loginDetailsData.postValue(loginDtoMain)
+                }
+            }
+
+            override fun onFailure(call: Call<ResendOtpMain>, t: Throwable) {
+                val loginDtoMain = ResendOtpMain()
+                loginDtoMain.status_message = "Login error in api"
+                loginDtoMain.status_code = "1"
+                loginDetailsData.postValue(loginDtoMain)
+            }
+
+        })
+        return loginDetailsData
     }
 
 }

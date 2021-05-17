@@ -248,12 +248,22 @@
                         android:textSize="@dimen/_13sdp" />
 
                     <TextView
+                        android:id="@+id/currencyCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/totalPayText"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:layout_marginStart="@dimen/_20sdp"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_15sdp"
+                        tools:ignore="RelativeOverlap,UseCompatTextViewDrawableXml" />
+                    <TextView
                         android:id="@+id/grandTotalAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_20sdp"
-                        android:layout_toEndOf="@+id/totalPayText"
-                        android:drawableStart="@drawable/euro_currency_black"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_toEndOf="@+id/currencyCode"
                         android:drawablePadding="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color"
@@ -291,7 +301,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_60sdp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:background="@drawable/congratulate_bg"
                 android:orientation="vertical">
 
@@ -464,12 +474,22 @@
                         android:textSize="@dimen/_13sdp"/>
 
                     <TextView
+                        android:id="@+id/currencyCode1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/totalPayText1"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:layout_marginStart="@dimen/_20sdp"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_15sdp"
+                        tools:ignore="RelativeOverlap,UseCompatTextViewDrawableXml" />
+                    <TextView
                         android:id="@+id/grandTotalAmount1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_20sdp"
-                        android:layout_toEndOf="@+id/totalPayText1"
-                        android:drawableStart="@drawable/euro_currency_black"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_toEndOf="@+id/currencyCode1"
                         android:drawablePadding="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color"

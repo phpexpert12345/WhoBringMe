@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.icu.text.NumberFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -41,22 +42,23 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
     override fun onBindViewHolder(holder: HomeFragmentViewHolder, position: Int) {
         homeFragmentCellBinding = holder.viewBinding as HomeFragmentCellBinding
         homeFragmentCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
-        try {
-            arrayList[position].job_total_amount = String.format("%.2f", arrayList[position].job_total_amount?.toFloat())
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+//        arrayList[position].job_total_amount = arrayList[position].job_total_amount.formatChange()
         homeFragmentCellBinding.model = arrayList[position]
-        if (arrayList[position].order_status_msg == "Accepted") {
+
+        homeFragmentCellBinding.jobTotalAmount.text = arrayList[position].job_total_amount.formatChange()
+        homeFragmentCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
+
+        if (arrayList[position].order_status_msg == "Accepted" || arrayList[position].order_status_msg == "Completed") {
             homeFragmentCellBinding.csImage.setImageResource(R.drawable.cs1)
-            try{
-                homeFragmentCellBinding.timeData.text = orderDateValue(arrayList[position].job_accept_date!!)
-            }catch (e:Exception){
+            try {
+                homeFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_accept_date!!} ${arrayList[position].job_accept_time}")
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         } else {
             homeFragmentCellBinding.csImage.setImageResource(R.drawable.cs)
         }
+
         try {
             homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
         } catch (e: Exception) {
@@ -95,8 +97,8 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
 
     @SuppressLint("SimpleDateFormat")
     private fun orderDateValue(dateTime: String): String? {
-        val inputPattern = "yyyy-MM-dd"
-        val outputPattern = "dd MMM yyyy"
+        val inputPattern = "yyyy-MM-dd hh:mm:ss"
+        val outputPattern = "dd MMM yyyy hh:mm aa"
         val inputFormat = SimpleDateFormat(inputPattern)
         val outputFormat = SimpleDateFormat(outputPattern)
 
@@ -111,5 +113,14 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
         }
 
         return str
+    }
+
+    private fun String?.formatChange() = run {
+        try {
+            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            formatter.format(this?.toFloat())
+        } catch (e: Exception) {
+            this
+        }
     }
 }

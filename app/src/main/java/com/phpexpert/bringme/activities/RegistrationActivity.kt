@@ -5,8 +5,6 @@ package com.phpexpert.bringme.activities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
 import android.text.Html
 import android.text.method.PasswordTransformationMethod
@@ -14,8 +12,6 @@ import android.view.View
 import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.*
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityRegistrationBinding
@@ -28,12 +24,10 @@ import kotlin.collections.HashMap
 
 
 @Suppress("DEPRECATION", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+open class RegistrationActivity : BaseActivity(){
     private lateinit var registrationActivity: ActivityRegistrationBinding
     private lateinit var selectionString: String
-    private var mGoogleApiClient: GoogleApiClient? = null
-    private lateinit var mLocationCallback: LocationCallback
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+
     private var passwordVisible: Boolean = false
     private lateinit var softInputAssist: SoftInputAssist
 
@@ -49,9 +43,6 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
         registrationActivity.languageModel = sharedPrefrenceManager.getLanguageData()
         registrationActivity.continueMessage.text = Html.fromHtml(sharedPrefrenceManager.getLanguageData().by_continuing_you_agree_that_you_have_read_and_accept_our_t_amp_cs_and_privacy_policy)
         softInputAssist = SoftInputAssist(this)
-        if (mGoogleApiClient == null) {
-            buildGoogleApiClient()
-        }
         setActions()
         setValues()
     }
@@ -164,6 +155,7 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
             registrationActivity.btnSubmit.startAnimation()
             val otpSendViewModel = ViewModelProvider(this).get(RegistrationModel::class.java)
             otpSendViewModel.sendOtpModel(getMapData()).observe(this, {
+                registrationActivity.btnSubmit.revertAnimation()
                 bottomSheetDialogMessageText.text = it.status_message
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -181,62 +173,8 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
                         postDataOtp.mobilePinCode = registrationActivity.digitPin.text.toString()
                         postDataOtp.deviceTokenId = it.data!!.Token_ID
                         postDataOtp.devicePlatform = "Android"
-                        try {
-                            val mLocationRequest = LocationRequest.create()
-                            mLocationRequest.interval = 60000
-                            mLocationRequest.fastestInterval = 5000
-                            mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                            var mLocation: Location?
-                            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-                            mLocationCallback = object : LocationCallback() {
-                                override fun onLocationResult(locationResult: LocationResult) {
-                                    for (location in locationResult.locations) {
-                                        if (location != null) {
-                                            mLocation = location
-                                            val geocoder = Geocoder(this@RegistrationActivity, Locale.getDefault())
-                                            val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
-                                            postDataOtp.accountLat = mLocation!!.latitude.toString()
-                                            postDataOtp.accountLong = mLocation!!.longitude.toString()
-                                            postDataOtp.accountCountry = addresses[0]!!.countryName
-                                            postDataOtp.accountState = addresses[0]!!.adminArea
-                                            postDataOtp.accountCity = addresses[0]!!.locality
-                                            val stringBuilder = StringBuilder()
-                                            for (i in 0..addresses[0]!!.maxAddressLineIndex)
-                                                stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
-                                            postDataOtp.accountAddress = stringBuilder.toString()
-                                            postDataOtp.addressPostCode = addresses[0]!!.postalCode
-                                            break
-                                        } else {
-                                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_not_found
-                                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-                                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                                            bottomSheetDialogMessageOkButton.setOnClickListener {
-                                                bottomSheetDialog.dismiss()
-                                            }
-                                            bottomSheetDialog.show()
-
-                                        }
-                                    }
-                                    mFusedLocationClient.removeLocationUpdates(mLocationCallback)
-                                    v.putExtra("postDataModel", postDataOtp)
-                                    startActivity(v)
-                                }
-                            }
-                            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
-
-//                        val mLocation =
-//                                LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
-
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().something_is_wrong
-                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                            bottomSheetDialogMessageOkButton.setOnClickListener {
-                                bottomSheetDialog.dismiss()
-                            }
-                            bottomSheetDialog.show()
-                        }
+                        v.putExtra("postDataModel", postDataOtp)
+                        startActivity(v)
                     }
 
                 } else {
@@ -358,28 +296,10 @@ open class RegistrationActivity : BaseActivity(), GoogleApiClient.ConnectionCall
         }
     }
 
-    @Synchronized
-    protected fun buildGoogleApiClient() {
-        mGoogleApiClient = GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build()
-//        setAction()
-    }
-
-    override fun onConnected(p0: Bundle?) {
-    }
-
-    override fun onConnectionSuspended(p0: Int) {
-    }
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-    }
-
     override fun onPause() {
         softInputAssist.onPause()
         super.onPause()
+        registrationActivity.btnSubmit.revertAnimation()
     }
 
     override fun onResume() {

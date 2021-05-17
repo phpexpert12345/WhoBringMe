@@ -70,7 +70,3 @@ open class LoginDetailsDto {
     @SerializedName("login_address")
     var login_address: String? = ""
 }
-
-object LoginDetailsSingleton {
-    lateinit var loginDetailsDto: LoginDetailsDto
-}
