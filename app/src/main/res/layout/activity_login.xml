@@ -84,6 +84,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:text="@{languageModel.mobile_number}"
                         android:textColor="#808080"
                         android:textSize="@dimen/_10sdp"

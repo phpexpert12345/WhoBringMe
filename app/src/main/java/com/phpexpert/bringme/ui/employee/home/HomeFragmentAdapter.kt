@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.icu.text.NumberFormat
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -48,19 +49,73 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
         homeFragmentCellBinding.jobTotalAmount.text = arrayList[position].job_total_amount.formatChange()
         homeFragmentCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
 
-        if (arrayList[position].order_status_msg == "Accepted" || arrayList[position].order_status_msg == "Completed") {
-            homeFragmentCellBinding.csImage.setImageResource(R.drawable.cs1)
-            try {
-                homeFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_accept_date!!} ${arrayList[position].job_accept_time}")
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        if (arrayList[position].order_decline_reason == "") {
+            homeFragmentCellBinding.declineMessage.visibility = View.GONE
+            homeFragmentCellBinding.declineView.visibility = View.GONE
         } else {
-            homeFragmentCellBinding.csImage.setImageResource(R.drawable.cs)
+            homeFragmentCellBinding.declineMessage.visibility = View.VISIBLE
+            homeFragmentCellBinding.declineView.visibility = View.VISIBLE
+            homeFragmentCellBinding.declineMessage.text = arrayList[position].order_decline_reason
+            arrayList[position].order_status_msg = "Declined"
         }
+        when (arrayList[position].order_status_msg) {
+            "Accepted" -> {
+                try {
+                    homeFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_accept_date!!} ${arrayList[position].job_accept_time}")
+                    homeFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted_time_text
+                    homeFragmentCellBinding.writeReview.visibility = View.GONE
+                    homeFragmentCellBinding.deliveryDataLayout.visibility = View.VISIBLE
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            "Completed" -> {
+                try {
+                    homeFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_completed_date!!} ${arrayList[position].job_completed_time}")
+                    homeFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().complete_time_text
+                    if (arrayList[position].review_status == "Not Done") {
+                        homeFragmentCellBinding.reviewView.visibility = View.GONE
+                        homeFragmentCellBinding.writeReview.visibility = View.VISIBLE
+                    } else {
+                        homeFragmentCellBinding.reviewView.visibility = View.VISIBLE
+                        homeFragmentCellBinding.writeReview.visibility = View.GONE
+                    }
+                    homeFragmentCellBinding.deliveryDataLayout.visibility = View.VISIBLE
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            "Canceled", "Declined" -> {
+                try {
+                    if (arrayList[position].review_status == "Not Done") {
+                        homeFragmentCellBinding.reviewView.visibility = View.GONE
+                        homeFragmentCellBinding.writeReview.visibility = View.VISIBLE
+                    } else {
+                        homeFragmentCellBinding.reviewView.visibility = View.VISIBLE
+                        homeFragmentCellBinding.writeReview.visibility = View.GONE
+                    }
+                    homeFragmentCellBinding.deliveryDataLayout.visibility = View.GONE
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            "Pending" -> {
+                try {
+                    homeFragmentCellBinding.writeReview.visibility = View.GONE
+                    homeFragmentCellBinding.deliveryDataLayout.visibility = View.GONE
+                    homeFragmentCellBinding.reviewView.visibility = View.GONE
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+        Glide.with(context).asGif().load(arrayList[position].order_status_icon).placeholder(R.drawable.cs).into(homeFragmentCellBinding.csImage)
 
         try {
             homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+            homeFragmentCellBinding.orderStatus.setTextColor(Color.parseColor(arrayList[position].order_status_text_color_code))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -77,12 +132,14 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .apply(requestOptions)
+                .placeholder(R.drawable.user_placeholder)
                 .into(homeFragmentCellBinding.userImage)
 
         Glide.with(context)
                 .load(arrayList[position].Delivery_Employee_photo)
                 .placeholder(R.drawable.user_placeholder)
                 .apply(requestOptions)
+                .placeholder(R.drawable.user_placeholder)
                 .into(homeFragmentCellBinding.deliveryImageView)
 
         if (arrayList[position].job_rating!! != "") {
@@ -114,6 +171,7 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
 
         return str
     }
+
 
     private fun String?.formatChange() = run {
         try {

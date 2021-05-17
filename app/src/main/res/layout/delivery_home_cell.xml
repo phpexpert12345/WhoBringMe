@@ -167,7 +167,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:orientation="horizontal"
-                android:visibility='@{model.order_status_msg.equalsIgnoreCase("Pending") ? View.GONE : View.VISIBLE}'>
+                android:visibility='@{model.order_status_msg.equalsIgnoreCase("Pending") || model.order_status_msg.equalsIgnoreCase("Decline")? View.GONE : View.VISIBLE}'>
 
                 <TextView
                     android:layout_width="wrap_content"

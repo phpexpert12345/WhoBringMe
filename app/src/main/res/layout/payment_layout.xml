@@ -117,20 +117,20 @@
                             android:id="@+id/currencyCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_3sdp"
                             android:layout_gravity="center_vertical"
                             android:fontFamily="@font/poppins_regular"
                             android:text="@string/euro"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_13sdp" />
+
                         <TextView
+                            android:id="@+id/jobSubTotal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_3sdp"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="@{postJobData.jobAmount}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_15sdp" />
-
 
                     </LinearLayout>
                 </RelativeLayout>
@@ -372,22 +372,22 @@
                                 android:id="@+id/currencyCode1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/text_color"
                                 android:layout_marginTop="@dimen/_2sdp"
                                 android:fontFamily="@font/poppins_medium"
+                                android:textColor="@color/text_color"
                                 android:textSize="@dimen/_13sdp"
                                 tools:ignore="ContentDescription" />
 
                             <TextView
+                                android:id="@+id/jobSubTotal1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="@dimen/_1sdp"
                                 android:layout_marginTop="@dimen/_1sdp"
                                 android:fontFamily="@font/poppins_regular"
-                                android:text="@{postJobData.jobAmount}"
                                 android:textColor="@color/text_color"
-                                android:textSize="@dimen/_11sdp"/>
+                                android:textSize="@dimen/_11sdp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -401,9 +401,9 @@
                                 android:id="@+id/currencyCode2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/text_color"
                                 android:layout_marginTop="@dimen/_2sdp"
                                 android:fontFamily="@font/poppins_medium"
+                                android:textColor="@color/text_color"
                                 android:textSize="@dimen/_13sdp"
                                 tools:ignore="ContentDescription" />
 
@@ -432,9 +432,9 @@
                                 android:id="@+id/currencyCode3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/text_color"
                                 android:layout_marginTop="@dimen/_2sdp"
                                 android:fontFamily="@font/poppins_medium"
+                                android:textColor="@color/text_color"
                                 android:textSize="@dimen/_13sdp"
                                 tools:ignore="ContentDescription" />
 
@@ -456,9 +456,9 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_20sdp"
                     android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_10sdp">
+                    android:layout_marginEnd="@dimen/_20sdp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -468,7 +468,7 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{languageModel.grand_total}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_11sdp"/>
+                        android:textSize="@dimen/_11sdp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -481,9 +481,9 @@
                             android:id="@+id/currencyCode4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/yellow"
                             android:layout_marginTop="@dimen/_2sdp"
                             android:fontFamily="@font/poppins_medium"
+                            android:textColor="@color/yellow"
                             android:textSize="@dimen/_19sdp"
                             tools:ignore="ContentDescription" />
 

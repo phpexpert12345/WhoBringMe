@@ -99,6 +99,12 @@ class ProfileEditActivity : BaseActivity() {
             finish()
         }
         isCheckPermissions(this, perission)
+        profileEditLayoutBinding.stateEt.isFocusable = false
+        profileEditLayoutBinding.stateEt.isFocusableInTouchMode = false
+        profileEditLayoutBinding.cityET.isFocusable = false
+        profileEditLayoutBinding.cityET.isFocusableInTouchMode = false
+        profileEditLayoutBinding.postCodeEt.isFocusable = false
+        profileEditLayoutBinding.postCodeEt.isFocusableInTouchMode = false
         profileEditLayoutBinding.autoComplete.setOnItemClickListener { _, _, i, _ ->
 
             val geocoder = Geocoder(this@ProfileEditActivity, Locale.getDefault())
@@ -106,6 +112,7 @@ class ProfileEditActivity : BaseActivity() {
             postDataOtp.accountLat = mResultList[i].geometry!!.location!!.lat
             postDataOtp.accountLong = mResultList[i].geometry!!.location!!.lng
             postDataOtp.accountCountry = addresses[0]!!.countryName
+
             if (addresses[0].adminArea != "") {
                 profileEditLayoutBinding.stateEt.isFocusable = false
                 profileEditLayoutBinding.stateEt.isFocusableInTouchMode = false
@@ -114,8 +121,24 @@ class ProfileEditActivity : BaseActivity() {
                 profileEditLayoutBinding.stateEt.isFocusable = true
                 profileEditLayoutBinding.stateEt.isFocusableInTouchMode = true
             }
-            profileEditLayoutBinding.cityET.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.locality)
-            profileEditLayoutBinding.postCodeEt.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.postalCode)
+
+            if (addresses[0].locality != "") {
+                profileEditLayoutBinding.cityET.isFocusable = false
+                profileEditLayoutBinding.cityET.isFocusableInTouchMode = false
+                profileEditLayoutBinding.cityET.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.locality)
+            } else {
+                profileEditLayoutBinding.cityET.isFocusable = true
+                profileEditLayoutBinding.cityET.isFocusableInTouchMode = true
+            }
+
+            if (addresses[0].postalCode != "") {
+                profileEditLayoutBinding.postCodeEt.isFocusable = false
+                profileEditLayoutBinding.postCodeEt.isFocusableInTouchMode = false
+                profileEditLayoutBinding.postCodeEt.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.postalCode)
+            } else {
+                profileEditLayoutBinding.postCodeEt.isFocusable = true
+                profileEditLayoutBinding.postCodeEt.isFocusableInTouchMode = true
+            }
             postDataOtp.accountState = addresses[0]!!.adminArea
             postDataOtp.accountCity = addresses[0]!!.locality
             val stringBuilder = StringBuilder()
@@ -463,7 +486,20 @@ class ProfileEditActivity : BaseActivity() {
                             if (responseData.status_code != "0") {
                                 bottomSheetDialog.show()
                             } else if (responseData.status_code == "0") {
-                                setLoginObserver()
+                                val loginData = sharedPrefrenceManager.getProfile()
+                                loginData.login_photo = responseData.data.login_photo
+                                loginData.login_email = profileEditLayoutBinding.emailEt.text.toString()
+                                loginData.login_name = profileEditLayoutBinding.firstNameEt.text.toString() + " " + profileEditLayoutBinding.lastName.text.toString()
+                                loginData.login_address = profileEditLayoutBinding.autoComplete.text.toString()
+                                loginData.login_country = postDataOtp.accountCountry
+                                loginData.login_city = postDataOtp.accountCity
+                                loginData.login_state = postDataOtp.accountState
+                                loginData.login_postcode = postDataOtp.addressPostCode
+                                loginData.login_lat = postDataOtp.accountLat
+                                loginData.login_long = postDataOtp.accountLong
+                                sharedPrefrenceManager.saveProfile(loginData)
+                                ProfileViewModel.changeModel.postValue(true)
+                                finish()
                             }
                         } else {
                             profileEditLayoutBinding.updateButton.revertAnimation()
@@ -511,44 +547,6 @@ class ProfileEditActivity : BaseActivity() {
         } else {
             null
         }
-    }
-
-
-    private fun setLoginObserver() {
-        editProfileViewModel.getLoginDetailsData(getLoginDetailsDto()).observe(this, {
-            profileEditLayoutBinding.updateButton.revertAnimation()
-            bottomSheetDialogMessageText.text = it.status_message
-            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-            bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
-                bottomSheetDialog.dismiss()
-                if (it.status_code == "0") {
-                    val loginData = sharedPrefrenceManager.getProfile()
-                    loginData.login_photo = it.data.login_photo
-                    loginData.login_email = profileEditLayoutBinding.emailEt.text.toString()
-                    loginData.login_name = profileEditLayoutBinding.firstNameEt.text.toString() + " " + profileEditLayoutBinding.lastName.text.toString()
-                    loginData.login_address = profileEditLayoutBinding.autoComplete.text.toString()
-                    loginData.login_country = postDataOtp.accountCountry
-                    loginData.login_city = postDataOtp.accountCity
-                    loginData.login_state = postDataOtp.accountState
-                    loginData.login_postcode = postDataOtp.addressPostCode
-                    loginData.login_lat = postDataOtp.accountLat
-                    loginData.login_long = postDataOtp.accountLong
-                    sharedPrefrenceManager.saveProfile(loginData)
-                    ProfileViewModel.changeModel.postValue(true)
-                    finish()
-                }
-            }
-            bottomSheetDialog.show()
-        })
-    }
-
-    private fun getLoginDetailsDto(): Map<String, String> {
-        val mapDataVal = HashMap<String, String>()
-        mapDataVal["LoginId"] = sharedPrefrenceManager.getLoginId()
-        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
-        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
-        return mapDataVal
     }
 
 }

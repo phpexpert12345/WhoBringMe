@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class NotificationAdapter(var context: Context, var arrayList: ArrayList<NotificationDtoList>) : RecyclerView.Adapter<NotificationAdapter.NotificationFragmentViewHolder>() {
 
     private lateinit var notificationFragmentCellBinding: LayoutNotificationCellBinding
@@ -30,10 +31,10 @@ class NotificationAdapter(var context: Context, var arrayList: ArrayList<Notific
     override fun onBindViewHolder(holder: NotificationFragmentViewHolder, position: Int) {
         notificationFragmentCellBinding = holder.viewBinding as LayoutNotificationCellBinding
         notificationFragmentCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
-        notificationFragmentCellBinding.notificationTime.text = orderDateValue(arrayList[position].notification_date + " " + arrayList[position].notification_time)
-        notificationFragmentCellBinding.orderId.text = arrayList[position].order_id
+        notificationFragmentCellBinding.jobTime.text = orderDateValue(arrayList[position].notification_date + " " + arrayList[position].notification_time)
+        notificationFragmentCellBinding.jobId.text = arrayList[position].order_id
         notificationFragmentCellBinding.title.text = arrayList[position].notification_subject
-        notificationFragmentCellBinding.notificationMessage.text = arrayList[position].notification_message
+        notificationFragmentCellBinding.message.text = arrayList[position].notification_message
     }
 
     override fun getItemCount(): Int {

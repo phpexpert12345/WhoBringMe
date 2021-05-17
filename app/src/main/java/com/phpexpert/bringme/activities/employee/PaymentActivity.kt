@@ -107,8 +107,9 @@ class PaymentActivity : BaseActivity() {
 
     private fun setValues() {
         servicePostValue = intent.getSerializableExtra("postValue") as PostJobPostDto
-        servicePostValue.jobAmount = servicePostValue.jobAmount.formatChange()
         paymentActivityBinding.postJobData = servicePostValue
+        paymentActivityBinding.jobSubTotal.text = servicePostValue.jobAmount.formatChange()
+        paymentActivityBinding.jobSubTotal1.text = servicePostValue.jobAmount.formatChange()
         setObserver()
     }
 
@@ -127,7 +128,10 @@ class PaymentActivity : BaseActivity() {
                             grandTotal = servicePostValue.jobAmount!!.toFloat()
                             paymentActivityBinding.serviceChargePercentage.text = "${languageDtoData.charges_for_job} (${it.data!!.Charge_for_Jobs_percentage} %)"
                             paymentActivityBinding.serviceCharges.text = it.data!!.Charge_for_Jobs.formatChange()
-                            grandTotal = grandTotal!! + it.data!!.Charge_for_Jobs!!.toFloat()
+                            try {
+                                grandTotal = grandTotal!! + it.data!!.Charge_for_Jobs!!.toFloat()
+                            } catch (e: Exception) {
+                            }
                             if (it.data!!.job_tax_amount == "" || it.data!!.job_tax_amount == "0") {
                                 paymentActivityBinding.adminServiceFees.visibility = View.GONE
                                 paymentActivityBinding.adminServiceFeesLayout.visibility = View.GONE
@@ -135,19 +139,23 @@ class PaymentActivity : BaseActivity() {
                                 paymentActivityBinding.adminServiceFees.visibility = View.VISIBLE
                                 paymentActivityBinding.adminServiceFeesLayout.visibility = View.VISIBLE
                                 paymentActivityBinding.adminServiceFees.text = "${languageDtoData.admin_charges} (${it.data!!.Charge_for_Jobs_Admin_percentage} %)"
-                                    paymentActivityBinding.adminServiceFeesCharge.text = it.data!!.admin_service_fees.formatChange()
+                                paymentActivityBinding.adminServiceFeesCharge.text = it.data!!.admin_service_fees.formatChange()
                                 grandTotal = grandTotal!! + it.data!!.admin_service_fees!!.toFloat()
                             }
-                            paymentActivityBinding.grandTotalAmount.text = grandTotal.toString().formatChange()
+                            paymentActivityBinding.grandTotalAmount.text = "${grandTotal.toString().formatChange()}/-"
                             servicePostValue.grandTotal = grandTotal.toString()
-                            servicePostValue.Charge_for_Jobs = it.data!!.Charge_for_Jobs!!.toFloat().toString()
-                            servicePostValue.Charge_for_Jobs_Admin_percentage = it.data!!.Charge_for_Jobs_Admin_percentage
+                            servicePostValue.Charge_for_Jobs = try {
+                                it.data!!.Charge_for_Jobs!!.toString()
+                            } catch (e: Exception) {
+                                "0"
+                            }
+                            servicePostValue.Charge_for_Jobs_Admin_percentage = if (it.data!!.Charge_for_Jobs_Admin_percentage == "0") "0" else it.data!!.Charge_for_Jobs_Admin_percentage
                             servicePostValue.jobPaymentMode = "Card"
-                            servicePostValue.job_tax_amount = it.data!!.job_tax_amount
-                            servicePostValue.Charge_for_Jobs_percentage = it.data!!.Charge_for_Jobs_percentage
-                            servicePostValue.Charge_for_Jobs_Delivery_percentage = it.data!!.Charge_for_Jobs_Delivery_percentage
-                            servicePostValue.admin_service_fees = it.data!!.admin_service_fees
-                            servicePostValue.delivery_employee_fee = it.data!!.delivery_employee_fee
+                            servicePostValue.job_tax_amount = if (it.data!!.job_tax_amount == "0") "0" else it.data!!.job_tax_amount
+                            servicePostValue.Charge_for_Jobs_percentage = if (it.data!!.Charge_for_Jobs_percentage == "0") "0" else it.data!!.Charge_for_Jobs_percentage
+                            servicePostValue.Charge_for_Jobs_Delivery_percentage = if (it.data!!.Charge_for_Jobs_Delivery_percentage == "0") "0" else it.data!!.Charge_for_Jobs_Delivery_percentage
+                            servicePostValue.admin_service_fees = if (it.data!!.admin_service_fees == "0") "0" else it.data!!.admin_service_fees
+                            servicePostValue.delivery_employee_fee = if (it.data!!.delivery_employee_fee == "0") "0" else it.data!!.delivery_employee_fee
 
                         } else {
                             bottomSheetDialogMessageOkButton.setOnClickListener {

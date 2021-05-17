@@ -297,6 +297,7 @@
                                 android:fontFamily="@font/poppins_regular"
                                 android:inputType="numberPassword"
                                 android:paddingStart="0dp"
+                                android:maxLength="6"
                                 android:paddingLeft="0dp"
                                 android:paddingTop="@dimen/_25sdp"
                                 android:paddingBottom="@dimen/_minus40sdp"

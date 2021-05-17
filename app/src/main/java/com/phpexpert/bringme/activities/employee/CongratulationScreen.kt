@@ -76,8 +76,9 @@ class CongratulationScreen : BaseActivity() {
         jobViewBinding.currencyCode4.text = getCurrencySymbol()
         congratulationScreenBinding.orderId.text = servicePostValue.jobId
         congratulationScreenBinding.orderId1.text = servicePostValue.jobId
-        congratulationScreenBinding.grandTotalAmount.text = servicePostValue.grandTotal.formatChange()
-        congratulationScreenBinding.grandTotalAmount1.text = servicePostValue.grandTotal.formatChange()
+
+        congratulationScreenBinding.grandTotalAmount.text = servicePostValue.grandTotal
+        congratulationScreenBinding.grandTotalAmount1.text = servicePostValue.grandTotal
         congratulationScreenBinding.currencyCode.text = getCurrencySymbol()
         congratulationScreenBinding.currencyCode1.text = getCurrencySymbol()
 

@@ -98,7 +98,7 @@ class ProfileFragment : Fragment() {
             when {
                 mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString().trim() == "" -> {
                     (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_enter_mobile_number_first
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text =  (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                         (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -281,6 +281,7 @@ class ProfileFragment : Fragment() {
     private fun resendOtpObserver() {
         if ((activity as BaseActivity).isOnline()) {
             profileViewMode.otpResendData(getResendOtp()).observe(viewLifecycleOwner, {
+                progressDialog.dismiss()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -292,7 +293,8 @@ class ProfileFragment : Fragment() {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
-            (activity as BaseActivity).bottomSheetDialogMessageText.text =  (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
+            progressDialog.dismiss()
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {

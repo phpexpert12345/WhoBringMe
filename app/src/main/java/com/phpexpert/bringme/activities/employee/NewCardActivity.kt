@@ -251,7 +251,7 @@ class NewCardActivity : BaseActivity() {
                     setJobPostDataObserver((TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())).toString())
                 } else {
                     cardActivityBinding.payNowButton.revertAnimation()
-                    bottomSheetDialogMessageText.text = languageDtoData.network_error
+                    bottomSheetDialogMessageText.text = it.status_message
                     bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     bottomSheetDialogMessageOkButton.setOnClickListener {

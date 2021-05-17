@@ -6,7 +6,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.text.Html
+import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.RelativeLayout
@@ -119,6 +121,25 @@ open class RegistrationActivity : BaseActivity(){
                     registrationActivity.emailLayout.hint = sharedPrefrenceManager.getLanguageData().email_id
             }
         }
+
+        registrationActivity.emailEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            @SuppressLint("DefaultLocale")
+            override fun afterTextChanged(p0: Editable?) {
+                var s: String = p0.toString()
+                if (s != s.toUpperCase()) {
+                    s = s.toUpperCase()
+                    registrationActivity.emailEt.setText(s)
+                    registrationActivity.emailEt.setSelection(registrationActivity.emailEt.length()) //fix reverse texting
+                }
+            }
+
+        })
 
         registrationActivity.digitPin.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
             if (p1) {

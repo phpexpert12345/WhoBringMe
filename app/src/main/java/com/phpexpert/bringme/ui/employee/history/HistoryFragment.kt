@@ -114,7 +114,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                 arrayList.addAll(it.data!!.OrderList)
                 historyBinding.historyRV.adapter!!.notifyDataSetChanged()
             } else {
-                if (it.status == "") {
+                if (it.status != "") {
                     historyBinding.noJobHistroy.visibility = View.VISIBLE
                     historyBinding.nestedScrollView.visibility = View.GONE
                 } else {

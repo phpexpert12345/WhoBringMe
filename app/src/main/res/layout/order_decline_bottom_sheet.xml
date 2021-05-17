@@ -10,100 +10,104 @@
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
     </data>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/top_shadow_background"
-        android:orientation="vertical"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@{languageModel.order}"
+                    android:textColor="@color/text_color_dark"
+                    android:textSize="@dimen/_17sdp" />
+
+                <TextView
+                    android:id="@+id/orderId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_17sdp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:src="@drawable/cs"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@{languageModel.order}"
-                android:textColor="@color/text_color_dark"
-                android:textSize="@dimen/_17sdp" />
-
-            <TextView
-                android:id="@+id/orderId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_medium"
+                android:gravity="center_horizontal"
+                android:text="@{languageModel.declineOrderText}"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_17sdp" />
-        </LinearLayout>
+                android:textSize="@dimen/_11sdp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:src="@drawable/cs"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:fontFamily="@font/poppins_medium"
-            android:gravity="center_horizontal"
-            android:text="@{languageModel.declineOrderText}"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/_11sdp" />
-
-        <EditText
-            android:id="@+id/orderReason"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:fontFamily="@font/poppins_regular"
-            android:hint="@{languageModel.enter_the_reason}"
-            android:inputType="text"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/colorDarkGrey"
-            android:textSize="@dimen/_13sdp"
-            tools:ignore="Autofill,TextFields" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:orientation="horizontal">
-
-            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-                android:id="@+id/noLayout"
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/orderReason"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/red"
-                android:fontFamily="@font/poppins_medium"
-                android:text="@{languageModel.no}"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_13sdp" />
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="@{languageModel.enter_the_reason}"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/colorDarkGrey"
+                android:textSize="@dimen/_13sdp"
+                tools:ignore="Autofill,TextFields" />
 
-            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-                android:id="@+id/yesLayout"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_1sdp"
-                android:layout_weight="1"
-                android:background="@color/colorGreen"
-                android:fontFamily="@font/poppins_medium"
-                android:text="@{languageModel.yes}"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_13sdp" />
+                android:layout_marginTop="@dimen/_15sdp"
+                android:orientation="horizontal">
 
+                <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                    android:id="@+id/noLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/red"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@{languageModel.no}"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_13sdp" />
+
+                <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                    android:id="@+id/yesLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_1sdp"
+                    android:layout_weight="1"
+                    android:background="@color/colorGreen"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@{languageModel.yes}"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_13sdp" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </layout>

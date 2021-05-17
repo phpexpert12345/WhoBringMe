@@ -13,6 +13,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityLoginBinding
 import com.phpexpert.bringme.models.LoginViewModel
@@ -56,6 +58,7 @@ class LoginActivity : BaseActivity() {
 
 
     //method to init all values
+    @SuppressLint("CutPasteId")
     private fun initValues() {
 //        forgotPasswordOneBinding = loginBinding.forPasswordOne
 //        forgotPasswordOneBehavior = BottomSheetBehavior.from(forgotPasswordOneBinding.root)
@@ -68,8 +71,31 @@ class LoginActivity : BaseActivity() {
         forgotPasswordOneDialog.findViewById<TextView>(R.id.weWillSendText)?.text = sharedPrefrenceManager.getLanguageData().we_will_send_you_an
         forgotPasswordOneDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = sharedPrefrenceManager.getLanguageData().one_time_password
         forgotPasswordOneDialog.findViewById<TextView>(R.id.onThisMobile)?.text = sharedPrefrenceManager.getLanguageData().on_this_mobile_number
-        forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
+
+        forgotPasswordOneDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.text = sharedPrefrenceManager.getLanguageData().mobile_number
+        forgotPasswordOneDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
+
         forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = sharedPrefrenceManager.getLanguageData().get_otp
+        forgotPasswordOneDialog.findViewById<TextInputEditText>(R.id.mobileNumber)?.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            if (b) {
+                forgotPasswordOneDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = ""
+                forgotPasswordOneDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.visibility = View.VISIBLE
+                val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+                lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._19sdp), 0, 0)
+                forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.layoutParams = lp
+            } else {
+                if (loginBinding.mobileNumberEditText.text!!.isEmpty()) {
+                    forgotPasswordOneDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
+                    val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+                    lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._7sdp), 0, 0)
+                    forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.layoutParams = lp
+                    forgotPasswordOneDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.visibility = View.GONE
+                }
+
+            }
+        }
+
+
 
         forgotPasswordOneDialog.setCancelable(false)
         forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.setTypeFace(Typeface.DEFAULT_BOLD)
@@ -79,14 +105,41 @@ class LoginActivity : BaseActivity() {
         forgotPasswordTwoDialog.findViewById<TextView>(R.id.otpVerificationText)?.text = sharedPrefrenceManager.getLanguageData().otp_verification
         forgotPasswordTwoDialog.findViewById<TextView>(R.id.weSendOtp)?.text = sharedPrefrenceManager.getLanguageData().we_ve_sent_an_otp_to
         forgotPasswordTwoDialog.findViewById<TextView>(R.id.weSendOtp)?.text = sharedPrefrenceManager.getLanguageData().we_ve_sent_an_otp_to
-        forgotPasswordTwoDialog.findViewById<EditText>(R.id.otpNumberET)?.hint = sharedPrefrenceManager.getLanguageData().enter_otp
-        forgotPasswordTwoDialog.findViewById<EditText>(R.id.newPasswordET)?.hint = sharedPrefrenceManager.getLanguageData().new_password
-        forgotPasswordTwoDialog.findViewById<EditText>(R.id.confirmPasswordET)?.hint = sharedPrefrenceManager.getLanguageData().confirm_password
+        forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.otpData)?.hint = sharedPrefrenceManager.getLanguageData().enter_otp
+        forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.newPassword)?.hint = sharedPrefrenceManager.getLanguageData().enter_new_password
+        forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.confirmPassword)?.hint = sharedPrefrenceManager.getLanguageData().enter_confirm_password
         forgotPasswordTwoDialog.findViewById<TextView>(R.id.didNotReceive)?.text = sharedPrefrenceManager.getLanguageData().did_not_receive_the_otp
         forgotPasswordTwoDialog.findViewById<TextView>(R.id.resendText)?.text = sharedPrefrenceManager.getLanguageData().resend_otp
         forgotPasswordTwoDialog.findViewById<TextView>(R.id.waitForOtp)?.text = sharedPrefrenceManager.getLanguageData().waiting_for_otp
         forgotPasswordTwoDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = sharedPrefrenceManager.getLanguageData().one_time_password
-        forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)?.text = sharedPrefrenceManager.getLanguageData().save_amp_continue
+        forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)?.text = sharedPrefrenceManager.getLanguageData().submit
+
+        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+            if (p1) {
+                forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.otpData)?.hint = sharedPrefrenceManager.getLanguageData().otp
+            } else {
+                if (forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.text!!.isEmpty())
+                    forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.otpData)?.hint = sharedPrefrenceManager.getLanguageData().enter_otp
+            }
+        }
+
+        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+            if (p1) {
+                forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.newPassword)?.hint = sharedPrefrenceManager.getLanguageData().new_password
+            } else {
+                if (forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.text!!.isEmpty())
+                    forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.newPassword)?.hint = sharedPrefrenceManager.getLanguageData().enter_new_password
+            }
+        }
+
+        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+            if (p1) {
+                forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.confirmPassword)?.hint = sharedPrefrenceManager.getLanguageData().confirm_password
+            } else {
+                if (forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.text!!.isEmpty())
+                    forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.confirmPassword)?.hint = sharedPrefrenceManager.getLanguageData().enter_confirm_password
+            }
+        }
 
         forgotPasswordTwoDialog.setCancelable(false)
 //        forgotPasswordTwoBinding = loginBinding.forgotPasswordTwo
@@ -217,6 +270,7 @@ class LoginActivity : BaseActivity() {
         forgotPasswordOneDialog.findViewById<ImageView>(R.id.closeIcon)!!.setOnClickListener {
             try {
                 forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
+                forgotPasswordOneDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
             } catch (e: Exception) {
                 e.printStackTrace()
             }

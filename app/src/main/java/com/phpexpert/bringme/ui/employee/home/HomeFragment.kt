@@ -14,6 +14,7 @@ import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
@@ -182,6 +183,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         return mapData
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onClick(textInput: String, position: Int) {
         when (textInput) {
             "viewData" -> {
@@ -224,7 +226,20 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 //                    writeReviewBinding.writeReviewET.clearFocus()
                     this.hideKeyboard()
                 }
+                writeReviewBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${250}"
+                writeReviewBinding.writeReviewET.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    }
 
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    }
+
+                    @SuppressLint("SetTextI18n")
+                    override fun afterTextChanged(p0: Editable?) {
+                        writeReviewBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${250 - (p0.toString().length)}"
+                    }
+
+                })
                 writeReviewBinding.submitButton.setOnClickListener {
                     writeReviewBinding.submitButton.startAnimation()
                     when {
@@ -314,13 +329,18 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         view?.let { activity?.hideKeyboard(it) }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        hideKeyboard()
+    }
+
     private fun Context.hideKeyboard(view: View) {
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 
         Handler().postDelayed({
-        writeReviewBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
-        homeFragmentBinding.blurView.visibility = View.GONE
+            writeReviewBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
+            homeFragmentBinding.blurView.visibility = View.GONE
         }, 100)
     }
 

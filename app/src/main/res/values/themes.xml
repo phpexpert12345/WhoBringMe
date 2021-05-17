@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/colorLoginButton</item>
         <item name="colorOnSecondary">@color/colorLoginButton</item>
         <!-- Status bar color. -->
-<!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>-->
+        <!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>-->
         <!-- Customize your theme here. -->
     </style>
 
@@ -23,6 +23,7 @@
         <item name="colorSecondaryVariant">@color/colorDarkGrey</item>
         <item name="colorOnSecondary">@color/colorDarkGrey</item>
     </style>
+
     <style name="Theme.BringMe.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

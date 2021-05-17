@@ -24,10 +24,10 @@ class NotificationAdapter(var context: Context, var arrayList: ArrayList<Notific
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: NotificationFragmentViewHolder, position: Int) {
         notificationFragmentCellBinding = holder.viewBinding as LayoutNotificationCellBinding
-        notificationFragmentCellBinding.notificationTime.text = arrayList[position].notification_date + " " + arrayList[position].notification_time
-        notificationFragmentCellBinding.orderId.text = arrayList[position].order_id
+        notificationFragmentCellBinding.jobTime.text = arrayList[position].notification_date + " " + arrayList[position].notification_time
+        notificationFragmentCellBinding.jobId.text = arrayList[position].order_id
         notificationFragmentCellBinding.title.text = arrayList[position].notification_subject
-        notificationFragmentCellBinding.notificationMessage.text = arrayList[position].notification_message
+        notificationFragmentCellBinding.message.text = arrayList[position].notification_message
     }
 
     override fun getItemCount(): Int {

@@ -92,12 +92,12 @@
                     tools:ignore="Autofill,TextFields" />
 
                 <TextView
+                    android:id="@+id/maxCharacters"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_15sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@{languageModel.maximum_characters_250}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_11sdp" />
 

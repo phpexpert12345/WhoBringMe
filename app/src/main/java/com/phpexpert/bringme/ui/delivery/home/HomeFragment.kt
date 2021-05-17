@@ -7,6 +7,8 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.icu.text.NumberFormat
 import android.location.Address
 import android.location.Geocoder
@@ -119,35 +121,66 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         mLocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                for (location in locationResult.locations) {
-                    if (location != null) {
-                        mLocation = location
-                        val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
-                        val stringBuilder = StringBuilder()
-                        for (i in 0..addresses[0]!!.maxAddressLineIndex)
-                            stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
-                        currentLocation = mLocation!!
-                        address = addresses[0]
-                        progressDialog.dismiss()
-                        setObserver()
-                    } else {
-                        val locationData = Location("")
-                        locationData.latitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_lat!!.toDouble()
-                        locationData.longitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_long!!.toDouble()
-                        mLocation = locationData
-                        val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
-                        val stringBuilder = StringBuilder()
-                        for (i in 0..addresses[0]!!.maxAddressLineIndex)
-                            stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
-                        currentLocation = mLocation!!
-                        address = addresses[0]
-                        progressDialog.dismiss()
-                        setObserver()
+                try {
+                    for (location in locationResult.locations) {
+                        try {
+                            if (location != null) {
+                                mLocation = location
+                                val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+                                val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                                val stringBuilder = StringBuilder()
+                                for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                                    stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                                currentLocation = mLocation!!
+                                address = addresses[0]
+                                progressDialog.dismiss()
+                                setObserver()
+                            } else {
+                                val locationData = Location("")
+                                locationData.latitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_lat!!.toDouble()
+                                locationData.longitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_long!!.toDouble()
+                                mLocation = locationData
+                                val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+                                val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                                val stringBuilder = StringBuilder()
+                                for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                                    stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                                currentLocation = mLocation!!
+                                address = addresses[0]
+                                progressDialog.dismiss()
+                                setObserver()
+                            }
+                        } catch (e: Exception) {
+                            val locationData = Location("")
+                            locationData.latitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_lat!!.toDouble()
+                            locationData.longitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_long!!.toDouble()
+                            mLocation = locationData
+                            val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+                            val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                            val stringBuilder = StringBuilder()
+                            for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                                stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                            currentLocation = mLocation!!
+                            address = addresses[0]
+                            progressDialog.dismiss()
+                            setObserver()
+                        }
+                        break
                     }
-                    break
-
+                } catch (e: Exception) {
+                    val locationData = Location("")
+                    locationData.latitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_lat!!.toDouble()
+                    locationData.longitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_long!!.toDouble()
+                    mLocation = locationData
+                    val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+                    val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                    val stringBuilder = StringBuilder()
+                    for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                        stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                    currentLocation = mLocation!!
+                    address = addresses[0]
+                    progressDialog.dismiss()
+                    setObserver()
                 }
                 mFusedLocationClient.removeLocationUpdates(mLocationCallback)
             }
@@ -396,12 +429,23 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
 
                 Glide.with(requireActivity()).load(arrayList[position]).centerCrop().placeholder(R.drawable.user_placeholder).into(jobViewBinding.userImage)
-                arrayList[position].job_sub_total = arrayList[position].job_sub_total.formatChange()
-                arrayList[position].Charge_for_Jobs = arrayList[position].Charge_for_Jobs.formatChange()
-                arrayList[position].job_total_amount = arrayList[position].job_total_amount.formatChange()
+                /* arrayList[position].job_sub_total = arrayList[position].job_sub_total.formatChange()
+                 arrayList[position].Charge_for_Jobs = arrayList[position].Charge_for_Jobs.formatChange()
+                 arrayList[position].job_total_amount = arrayList[position].job_total_amount.formatChange()*/
                 jobViewBinding.data = arrayList[position]
                 jobViewBinding.jobPostedDate.text = orderDateValue(arrayList[position].job_post_date!!)
                 jobViewBinding.jobPostedTime.text = jobPostedTime(arrayList[position].job_posted_time!!)
+                jobViewBinding.jobSubTotal.text = arrayList[position].job_sub_total.formatChange()
+                jobViewBinding.jobSubTotal1.text = arrayList[position].job_sub_total.formatChange()
+                jobViewBinding.totalAmount.text = "${arrayList[position].job_total_amount.formatChange()}/-"
+                jobViewBinding.chargesJob.text = arrayList[position].Charge_for_Jobs.formatChange()
+
+                try{
+                    jobViewBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+                    jobViewBinding.orderStatus.setTextColor(Color.parseColor(arrayList[position].order_status_text_color_code))
+                }catch (e:Exception){
+
+                }
             }
             "acceptData" -> {
                 orderAcceptBehavior.state = BottomSheetBehavior.STATE_EXPANDED

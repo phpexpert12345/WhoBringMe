@@ -51,6 +51,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         }
         try {
             homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+            homeFragmentCellBinding.orderStatus.setTextColor(Color.parseColor(arrayList[position].order_status_text_color_code))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -85,10 +86,12 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
             }
             "Decline" -> {
                 homeFragmentCellBinding.declineFinishedLayout.visibility = View.GONE
+                homeFragmentCellBinding.acceptedDateTime.visibility = View.GONE
                 homeFragmentCellBinding.cs.setImageResource(R.drawable.cs)
                 homeFragmentCellBinding.acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
             }
             else -> {
+                homeFragmentCellBinding.acceptedDateTime.visibility = View.GONE
                 (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accept
                 homeFragmentCellBinding.cs.setImageResource(R.drawable.cs)
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().decline

@@ -154,8 +154,8 @@
 
                     <ImageView
                         android:id="@+id/csImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_65sdp"
+                        android:layout_height="@dimen/_65sdp"
                         android:layout_alignParentEnd="true"
                         android:src="@drawable/cs"
                         tools:ignore="ContentDescription" />
@@ -191,7 +191,6 @@
                         android:text="@{languageModel.write_a_review}"
                         android:textColor="@color/colorGreen"
                         android:textSize="@dimen/_8sdp"
-                        android:visibility='@{model.review_status.equalsIgnoreCase("Not Done") ? View.VISIBLE : View.GONE}'
                         tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
 
@@ -318,12 +317,42 @@
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
+            <View
+                android:id="@+id/reviewView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/view_color"
+                android:paddingStart="@dimen/_minus10sdp"
+                android:paddingEnd="@dimen/_minus10sdp" />
+
+            <TextView
+                android:id="@+id/declineMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/red_corner_bd"
+                android:fontFamily="@font/poppins_italic"
+                android:padding="@dimen/_5sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_9sdp" />
+
+            <View
+                android:id="@+id/declineView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/view_color"
+                android:paddingStart="@dimen/_minus10sdp"
+                android:paddingEnd="@dimen/_minus10sdp" />
+
             <RelativeLayout
                 android:id="@+id/deliveryDataLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
-                android:visibility='@{model.delivery_Employee_name.trim().equalsIgnoreCase("") ? View.GONE : View.VISIBLE}'>
+                android:layout_margin="@dimen/_10sdp">
 
                 <ImageView
                     android:id="@+id/deliveryImageView"
@@ -368,11 +397,11 @@
                     tools:ignore="RelativeOverlap">
 
                     <TextView
+                        android:id="@+id/acceptedDateTimeText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@{languageModel.accepted_time_text}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_7sdp" />
 
