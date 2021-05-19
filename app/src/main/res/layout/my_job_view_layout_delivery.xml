@@ -103,6 +103,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/orderStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -272,10 +273,10 @@
                         android:textSize="@dimen/_13sdp" />
 
                     <TextView
+                        android:id="@+id/jobSubTotal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@{data.job_sub_total}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_15sdp" />
 
@@ -503,13 +504,13 @@
                             tools:ignore="ContentDescription" />
 
                         <TextView
+                            android:id="@+id/jobSubTotal1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_1sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="@{data.job_sub_total}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp" />
                     </LinearLayout>
@@ -549,13 +550,13 @@
                             tools:ignore="ContentDescription" />
 
                         <TextView
+                            android:id="@+id/chargesJob"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_1sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="@{data.Charge_for_Jobs}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp" />
                     </LinearLayout>
@@ -597,13 +598,13 @@
                         tools:ignore="ContentDescription" />
 
                     <TextView
+                        android:id="@+id/totalAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_1sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text='@{data.job_total_amount+"/-"}'
                         android:textColor="@color/yellow"
                         android:textSize="@dimen/_17sdp" />
                 </LinearLayout>
@@ -614,7 +615,7 @@
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/proceedButton"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:background="@drawable/button_rectangle_green"

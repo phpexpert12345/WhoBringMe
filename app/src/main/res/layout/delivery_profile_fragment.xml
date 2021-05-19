@@ -26,292 +26,300 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:fontFamily="@font/poppins_semi_bold"
-            android:text="@string/profile"
+            android:text="@{languageModel.profile}"
             android:textColor="@color/white"
             android:textSize="@dimen/_19sdp" />
 
-
-        <LinearLayout
-            android:id="@+id/profileDataLayout"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_60sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:background="@drawable/bottom_shadow_background"
             android:orientation="horizontal"
-            android:padding="@dimen/_15sdp">
+            tools:ignore="ScrollViewCount">
 
-            <ImageView
-                android:id="@+id/userImage"
-                android:layout_width="@dimen/_65sdp"
-                android:layout_height="@dimen/_65sdp"
-                tools:ignore="ContentDescription" />
-
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/profileDataLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@drawable/bottom_shadow_background"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_15sdp">
+
+                    <ImageView
+                        android:id="@+id/userImage"
+                        android:layout_width="@dimen/_65sdp"
+                        android:layout_height="@dimen/_65sdp"
+                        tools:ignore="ContentDescription" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/userName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:fontFamily="@font/poppins_medium"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_13sdp"
+                                tools:ignore="RelativeOverlap" />
+
+                            <ImageView
+                                android:id="@+id/editImage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/edit"
+                                tools:ignore="ContentDescription" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/phone_icon"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:id="@+id/userMobileNo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:fontFamily="@font/poppins_regular"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_9sdp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/email"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:id="@+id/userEmailTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:fontFamily="@font/poppins_regular"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_9sdp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
 
                 <RelativeLayout
+                    android:id="@+id/jobLimitLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profileDataLayout"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:visibility="gone">
 
                     <TextView
-                        android:id="@+id/userName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:fontFamily="@font/poppins_medium"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@{languageModel.job_post_limit}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_11sdp"
                         tools:ignore="RelativeOverlap" />
 
                     <ImageView
-                        android:id="@+id/editImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginTop="@dimen/_minus15sdp"
-                        android:layout_marginEnd="@dimen/_minus15sdp"
-                        android:layout_marginBottom="@dimen/_minus18sdp"
-                        android:src="@drawable/edit"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/profile_arrow"
                         tools:ignore="ContentDescription" />
                 </RelativeLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <View
+                    android:id="@+id/jonLimitView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_below="@id/jobLimitLayout"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@color/text_color_light"
+                    android:visibility="gone" />
+
+                <RelativeLayout
+                    android:id="@+id/changeMPinLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                    android:layout_below="@+id/jonLimitView"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@{languageModel.change_mpin}"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_11sdp"
+                        tools:ignore="RelativeOverlap" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/phone_icon"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/profile_arrow"
                         tools:ignore="ContentDescription" />
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/pinChangeView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_below="@id/changeMPinLayout"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@color/text_color_light" />
+
+                <RelativeLayout
+                    android:id="@+id/documentUploadLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/pinChangeView"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp">
 
                     <TextView
-                        android:id="@+id/userMobileNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
+                        android:text="@{languageModel.document_upload}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_9sdp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                        android:textSize="@dimen/_11sdp"
+                        tools:ignore="RelativeOverlap" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/email"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/profile_arrow"
                         tools:ignore="ContentDescription" />
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/documentUploadView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_below="@id/documentUploadLayout"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@color/text_color_light" />
+
+                <RelativeLayout
+                    android:id="@+id/phoneChangeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/documentUploadView"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_10sdp">
 
                     <TextView
-                        android:id="@+id/userEmailTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_regular"
+                        android:text="@{languageModel.change_phone_number}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_9sdp" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
+                        android:textSize="@dimen/_11sdp"
+                        tools:ignore="RelativeOverlap" />
 
-        <RelativeLayout
-            android:id="@+id/jobLimitLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profileDataLayout"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:visibility="gone">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/profile_arrow"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:text="@{languageModel.job_post_limit}"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_11sdp"
-                tools:ignore="RelativeOverlap" />
+                <View
+                    android:id="@+id/phoneChangeView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_below="@id/phoneChangeLayout"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@color/text_color_light" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/profile_arrow"
-                tools:ignore="ContentDescription" />
-        </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/logoutLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/phoneChangeView"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_10sdp">
 
-        <View
-            android:id="@+id/jonLimitView"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_below="@id/jobLimitLayout"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:background="@color/text_color_light"
-            android:visibility="gone" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@{languageModel.logout}"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/_11sdp"
+                        tools:ignore="RelativeOverlap" />
 
-        <RelativeLayout
-            android:id="@+id/changeMPinLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/jonLimitView"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/profile_arrow"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:text="@{languageModel.change_mpin}"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_11sdp"
-                tools:ignore="RelativeOverlap" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/profile_arrow"
-                tools:ignore="ContentDescription" />
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/pinChangeView"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_below="@id/changeMPinLayout"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:background="@color/text_color_light" />
-
-        <RelativeLayout
-            android:id="@+id/documentUploadLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/pinChangeView"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:text="@{languageModel.document_upload}"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_11sdp"
-                tools:ignore="RelativeOverlap" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/profile_arrow"
-                tools:ignore="ContentDescription" />
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/documentUploadView"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_below="@id/documentUploadLayout"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:background="@color/text_color_light" />
-
-        <RelativeLayout
-            android:id="@+id/phoneChangeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/documentUploadView"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_10sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:text="@{languageModel.change_phone_number}"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_11sdp"
-                tools:ignore="RelativeOverlap" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/profile_arrow"
-                tools:ignore="ContentDescription" />
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/phoneChangeView"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_below="@id/phoneChangeLayout"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:background="@color/text_color_light" />
-
-        <RelativeLayout
-            android:id="@+id/logoutLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/phoneChangeView"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_10sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:text="@{languageModel.logout}"
-                android:textColor="@color/red"
-                android:textSize="@dimen/_11sdp"
-                tools:ignore="RelativeOverlap" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/profile_arrow"
-                tools:ignore="ContentDescription" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_below="@id/logoutLayout"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:background="@color/text_color_light" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_below="@id/logoutLayout"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@color/text_color_light" />
+            </RelativeLayout>
+        </ScrollView>
     </RelativeLayout>
 </layout>

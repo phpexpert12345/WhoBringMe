@@ -8,7 +8,7 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.icu.text.NumberFormat
+import android.graphics.Rect
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -17,6 +17,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -34,6 +35,8 @@ import com.phpexpert.bringme.models.JobHistoryModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.utilities.SharedPrefrenceManager
 import java.lang.Exception
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -51,6 +54,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var sharedPreference: SharedPrefrenceManager
+    var isLoadingVehicleActive: Boolean = true
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -236,7 +240,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
                     @SuppressLint("SetTextI18n")
                     override fun afterTextChanged(p0: Editable?) {
-                        writeReviewBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${250 - (p0.toString().length)}"
+                        writeReviewBinding.maxCharacters.text = "${sharedPreference.getLanguageData().maximum_characters_250} ${250 - (p0.toString().length)}"
                     }
 
                 })
@@ -318,8 +322,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
     private fun String?.formatChange() = run {
         try {
-            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
-            formatter.format(this?.toFloat())
+//            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+//            formatter.format(this?.toFloat())
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            val formartter = (DecimalFormat("##.##", symbols))
+            formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this
         }
@@ -339,6 +346,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 
         Handler().postDelayed({
+            writeReviewBinding.writeReviewET.text = Editable.Factory.getInstance().newEditable("")
             writeReviewBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
             homeFragmentBinding.blurView.visibility = View.GONE
         }, 100)

@@ -21,6 +21,8 @@ import com.phpexpert.bringme.databinding.HomeFragmentCellBinding
 import com.phpexpert.bringme.dtos.OrderListData
 import com.phpexpert.bringme.utilities.BaseActivity
 import java.lang.Exception
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,6 +65,7 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
                 try {
                     homeFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_accept_date!!} ${arrayList[position].job_accept_time}")
                     homeFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted_time_text
+                    homeFragmentCellBinding.reviewView.visibility = View.GONE
                     homeFragmentCellBinding.writeReview.visibility = View.GONE
                     homeFragmentCellBinding.deliveryDataLayout.visibility = View.VISIBLE
                 } catch (e: Exception) {
@@ -175,8 +178,11 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
 
     private fun String?.formatChange() = run {
         try {
-            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
-            formatter.format(this?.toFloat())
+//            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+//            formatter.format(this?.toFloat())
+            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            val formartter = (DecimalFormat("##.##", symbols))
+            formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this
         }

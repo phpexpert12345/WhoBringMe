@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -219,12 +220,13 @@
                         android:text="@{languageModel.order_id_text}"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/_13sdp" />
+<!--                    android:text="@{languageModel.order_id_text}"-->
 
                     <TextView
                         android:id="@+id/orderId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_35sdp"
+                        android:layout_marginStart="@dimen/_27sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_15sdp" />
@@ -285,7 +287,7 @@
                 <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                     android:id="@+id/cancelButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_30sdp"
                     android:background="@color/red"
@@ -294,6 +296,8 @@
                     android:paddingEnd="@dimen/_70sdp"
                     android:text="@{languageModel.cancel}"
                     android:textAllCaps="false"
+                    app:spinning_bar_color="@color/white"
+                    android:padding="@dimen/_5sdp"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp" />
             </LinearLayout>
@@ -453,7 +457,7 @@
                         android:id="@+id/orderId1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_35sdp"
+                        android:layout_marginStart="@dimen/_27sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_15sdp" />
@@ -538,7 +542,6 @@
 
         <include
             android:id="@+id/jobViewLayout"
-            layout="@layout/job_view_layout"
-            android:visibility="visible" />
+            layout="@layout/job_view_layout" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

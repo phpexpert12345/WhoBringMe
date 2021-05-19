@@ -16,15 +16,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_120sdp"
+            android:layout_height="@dimen/_100sdp"
             android:background="@color/colorLoginButton"
             android:paddingTop="@dimen/_20sdp" />
 
         <RelativeLayout
             android:id="@+id/headerLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/_20sdp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/back_arrow"
@@ -49,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/_60sdp">
+                android:layout_marginTop="@dimen/_65sdp">
 
                 <ImageView
                     android:id="@+id/userImage"
@@ -88,8 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    android:hint="@{languageModel.first_name}"
-                    app:hintTextColor="@color/lightColor">
+                    android:hint="@{languageModel.first_name}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/firstNameEt"
@@ -98,11 +96,12 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:paddingStart="0dp"
-                        android:maxLength="255"
+                        android:maxLength="50"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
                         android:singleLine="true"
+                        android:textColorHint="@color/lightColor"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_13sdp"
                         app:boxBackgroundColor="@android:color/transparent"
@@ -113,8 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    android:hint="@{languageModel.last_name}"
-                    app:hintTextColor="@color/lightColor">
+                    android:hint="@{languageModel.last_name}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/lastName"
@@ -123,8 +121,9 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:paddingStart="0dp"
-                        android:maxLength="255"
+                        android:maxLength="50"
                         android:paddingLeft="0dp"
+                        android:textColorHint="@color/lightColor"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
                         android:singleLine="true"
@@ -138,8 +137,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    android:hint="@{languageModel.email}"
-                    app:hintTextColor="@color/lightColor">
+                    android:hint="@{languageModel.email}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/emailEt"
@@ -149,9 +147,11 @@
                         android:fontFamily="@font/poppins_medium"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
+                        android:maxLength="50"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
                         android:singleLine="true"
+                        android:textColorHint="@color/lightColor"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_13sdp"
                         app:boxBackgroundColor="@android:color/transparent"
@@ -166,8 +166,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5sdp"
-                        android:hint="@{languageModel.address}"
-                        app:hintTextColor="@color/lightColor">
+                        android:hint="@{languageModel.address}">
 
                         <AutoCompleteTextView
                             android:id="@+id/autoComplete"
@@ -176,8 +175,10 @@
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/poppins_medium"
                             android:gravity="center_vertical"
+                            android:textColorHint="@color/lightColor"
                             android:minHeight="@dimen/_50sdp"
                             android:paddingStart="0dp"
+                            android:paddingEnd="@dimen/_20sdp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
                             android:paddingBottom="@dimen/_minus40sdp"
@@ -188,6 +189,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageView
+                        android:id="@+id/locationCurrent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -201,8 +203,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    android:hint="@{languageModel.state}"
-                    app:hintTextColor="@color/lightColor">
+                    android:hint="@{languageModel.state}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/stateEt"
@@ -214,6 +215,7 @@
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
+                        android:textColorHint="@color/lightColor"
                         android:singleLine="true"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_13sdp"
@@ -225,8 +227,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    android:hint="@{languageModel.city}"
-                    app:hintTextColor="@color/lightColor">
+                    android:hint="@{languageModel.city}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cityET"
@@ -235,6 +236,7 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:paddingStart="0dp"
+                        android:textColorHint="@color/lightColor"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
@@ -248,9 +250,11 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:hint="@{languageModel.post_code}"
-                    app:hintTextColor="@color/lightColor">
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    android:hint="@{languageModel.post_code}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/postCodeEt"
@@ -259,6 +263,7 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:inputType="number"
+                        android:textColorHint="@color/lightColor"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"

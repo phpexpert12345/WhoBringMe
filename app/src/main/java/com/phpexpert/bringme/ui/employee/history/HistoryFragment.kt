@@ -2,13 +2,14 @@
 
 package com.phpexpert.bringme.ui.employee.history
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
-import android.icu.text.NumberFormat
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,8 @@ import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.models.JobHistoryModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import java.lang.Exception
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -139,6 +142,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         return mapDataVal
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onClick(textInput: String, position: Int) {
         when (textInput) {
             "viewData" -> {
@@ -182,6 +186,20 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                 reviewBinding.closeIcon.setOnClickListener {
                     this.hideKeyboard()
                 }
+                reviewBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${250}"
+                reviewBinding.writeReviewET.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    }
+
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    }
+
+                    @SuppressLint("SetTextI18n")
+                    override fun afterTextChanged(p0: Editable?) {
+                        reviewBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${250 - (p0.toString().length)}"
+                    }
+
+                })
                 reviewBinding.submitButton.setOnClickListener {
                     when {
                         reviewBinding.ratingData.rating == 0f -> {
@@ -261,11 +279,19 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
 
     private fun String?.formatChange() = run {
         try {
-            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
-            formatter.format(this?.toFloat())
+//            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
+//            formatter.format(this?.toFloat())
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
+            val formartter = (DecimalFormat("##.##", symbols))
+            formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        hideKeyboard()
     }
 
     private fun Fragment.hideKeyboard() {
@@ -281,7 +307,8 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                 reviewBinding.writeReviewET.text = Editable.Factory.getInstance().newEditable("")
                 mBottomSheetReview.state = BottomSheetBehavior.STATE_COLLAPSED
                 historyBinding.blurView.visibility = View.GONE
-            }catch (e:Exception){}
+            } catch (e: Exception) {
+            }
         }, 100)
     }
 }

@@ -1,11 +1,10 @@
-package com.phpexpert.bringme.ui.delivery.myjob
+package com.phpexpert.bringme.ui.delivery.earning
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,8 +12,6 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.activities.delivery.TransactionActivity
 import com.phpexpert.bringme.activities.delivery.WithdrawActivity
 import com.phpexpert.bringme.databinding.FragmentEarningBinding
-import com.phpexpert.bringme.databinding.FragmentMyJobBinding
-import com.phpexpert.bringme.ui.delivery.earning.EarningAdapter
 import com.phpexpert.bringme.utilities.BaseActivity
 
 class EarningFragment : Fragment() {

@@ -22,7 +22,6 @@
                 android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/_20sdp"
                 android:background="@color/colorLoginButton"
                 android:gravity="center_vertical">
 

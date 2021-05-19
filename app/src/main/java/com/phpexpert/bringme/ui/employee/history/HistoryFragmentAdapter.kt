@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.icu.text.NumberFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,16 +11,22 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutHistroyCellBinding
 import com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoList
 import com.phpexpert.bringme.utilities.BaseActivity
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATION")
 class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<EmployeeJobHistoryDtoList>, private var onClickListener: OnClickView) : RecyclerView.Adapter<HistoryFragmentAdapter.HistoryFragmentViewHolder>() {
 
     private lateinit var historyFragmentCellBinding: LayoutHistroyCellBinding
@@ -38,6 +43,111 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
 
     override fun onBindViewHolder(holder: HistoryFragmentViewHolder, position: Int) {
         historyFragmentCellBinding = holder.viewBinding as LayoutHistroyCellBinding
+        historyFragmentCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
+//        arrayList[position].job_total_amount = arrayList[position].job_total_amount.formatChange()
+        historyFragmentCellBinding.model = arrayList[position]
+
+        historyFragmentCellBinding.jobTotalAmount.text = arrayList[position].job_total_amount.formatChange()
+        historyFragmentCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
+
+        if (arrayList[position].order_decline_reason == "") {
+            historyFragmentCellBinding.declineMessage.visibility = View.GONE
+            historyFragmentCellBinding.declineView.visibility = View.GONE
+        } else {
+            historyFragmentCellBinding.declineMessage.visibility = View.VISIBLE
+            historyFragmentCellBinding.declineView.visibility = View.VISIBLE
+            historyFragmentCellBinding.declineMessage.text = arrayList[position].order_decline_reason
+            arrayList[position].order_status_msg = "Declined"
+        }
+        when (arrayList[position].order_status_msg) {
+            "Accepted" -> {
+                try {
+                    historyFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_accept_date!!} ${arrayList[position].job_accept_time}")
+                    historyFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted_time_text
+                    historyFragmentCellBinding.writeReview.visibility = View.GONE
+                    historyFragmentCellBinding.reviewView.visibility = View.GONE
+                    historyFragmentCellBinding.deliveryDataLayout.visibility = View.VISIBLE
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+            }
+            "Completed" -> {
+                try {
+                    historyFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_completed_date!!} ${arrayList[position].job_completed_time}")
+                    historyFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().complete_time_text
+                    if (arrayList[position].review_status == "Not Done") {
+                        historyFragmentCellBinding.reviewView.visibility = View.GONE
+                        historyFragmentCellBinding.writeReview.visibility = View.VISIBLE
+                    } else {
+                        historyFragmentCellBinding.reviewView.visibility = View.VISIBLE
+                        historyFragmentCellBinding.writeReview.visibility = View.GONE
+                    }
+                    historyFragmentCellBinding.deliveryDataLayout.visibility = View.VISIBLE
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+            }
+            "Canceled", "Declined" -> {
+                try {
+                    if (arrayList[position].review_status == "Not Done") {
+                        historyFragmentCellBinding.reviewView.visibility = View.GONE
+                        historyFragmentCellBinding.writeReview.visibility = View.VISIBLE
+                    } else {
+                        historyFragmentCellBinding.reviewView.visibility = View.VISIBLE
+                        historyFragmentCellBinding.writeReview.visibility = View.GONE
+                    }
+                    historyFragmentCellBinding.deliveryDataLayout.visibility = View.GONE
+
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+            }
+            "Pending" -> {
+                try {
+                    historyFragmentCellBinding.writeReview.visibility = View.GONE
+                    historyFragmentCellBinding.deliveryDataLayout.visibility = View.GONE
+                    historyFragmentCellBinding.reviewView.visibility = View.GONE
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+        Glide.with(context).asGif().load(arrayList[position].order_status_icon).placeholder(R.drawable.cs).into(historyFragmentCellBinding.csImage)
+
+        try {
+            historyFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+            historyFragmentCellBinding.orderStatus.setTextColor(Color.parseColor(arrayList[position].order_status_text_color_code))
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        historyFragmentCellBinding.viewJobImageView.setOnClickListener {
+            onClickListener.onClick("viewData", position)
+        }
+
+        historyFragmentCellBinding.writeReview.setOnClickListener {
+            onClickListener.onClick("writeReview", position)
+        }
+        var requestOptions = RequestOptions()
+        requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(16))
+        Glide.with(context).load(arrayList[position].Client_photo)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .apply(requestOptions)
+                .placeholder(R.drawable.user_placeholder)
+                .into(historyFragmentCellBinding.userImage)
+
+        Glide.with(context)
+                .load(arrayList[position].Delivery_Employee_photo)
+                .placeholder(R.drawable.user_placeholder)
+                .apply(requestOptions)
+                .placeholder(R.drawable.user_placeholder)
+                .into(historyFragmentCellBinding.deliveryImageView)
+
+        if (arrayList[position].job_rating!! != "") {
+            historyFragmentCellBinding.reviewRatingBar.rating = arrayList[position].job_rating!!.toFloat()
+        }
+        /*historyFragmentCellBinding = holder.viewBinding as LayoutHistroyCellBinding
         historyFragmentCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
         historyFragmentCellBinding.model = arrayList[position]
 
@@ -87,7 +197,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
 
         historyFragmentCellBinding.writeReview.setOnClickListener {
             onClickListener.onClick("writeReview", position)
-        }
+        }*/
     }
 
     override fun getItemCount(): Int {
@@ -135,8 +245,11 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
 
     private fun String?.formatChange() = run {
         try {
-            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
-            formatter.format(this?.toFloat())
+//            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+//            formatter.format(this?.toFloat())
+            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            val formartter = (DecimalFormat("##.##", symbols))
+            formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this
         }

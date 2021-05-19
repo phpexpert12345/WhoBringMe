@@ -134,7 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:fontFamily="@font/poppins_regular"
+                        android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_13sdp" />
 
@@ -145,7 +145,7 @@
                         android:text="@{jobDetails.jobAmount}"
                         android:layout_marginStart="@dimen/_3sdp"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_15sdp"
+                        android:textSize="@dimen/_13sdp"
                         tools:ignore="HardcodedText" />
 
 
@@ -185,17 +185,17 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{jobDetails.jobTime}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_15sdp"
+                        android:textSize="@dimen/_13sdp"
                         tools:ignore="HardcodedText" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_3sdp"
-                        android:fontFamily="@font/poppins_regular"
+                        android:fontFamily="@font/poppins_medium"
                         android:text="@{languageModel.mint}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_7sdp" />
+                        android:textSize="@dimen/_13sdp" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -394,16 +394,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/_1sdp"
                         tools:ignore="UseCompoundDrawables">
 
                         <TextView
                             android:id="@+id/currencyCode1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:fontFamily="@font/poppins_medium"
+                            android:fontFamily="@font/poppins_regular"
                             android:textColor="@color/text_color"
-                            android:textSize="@dimen/_13sdp"
+                            android:textSize="@dimen/_11sdp"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -411,7 +411,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_1sdp"
-                            android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:text="@{jobDetails.jobAmount}"
                             android:textColor="@color/text_color"
@@ -430,10 +429,9 @@
                             android:id="@+id/currencyCode2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:fontFamily="@font/poppins_medium"
+                            android:fontFamily="@font/poppins_regular"
                             android:textColor="@color/text_color"
-                            android:textSize="@dimen/_13sdp"
+                            android:textSize="@dimen/_11sdp"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -442,7 +440,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_1sdp"
-                            android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:text="@{jobDetails.charge_for_Jobs}"
                             android:textColor="@color/text_color"
@@ -464,9 +461,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_2sdp"
-                            android:fontFamily="@font/poppins_medium"
+                            android:fontFamily="@font/poppins_regular"
                             android:textColor="@color/text_color"
-                            android:textSize="@dimen/_13sdp"
+                            android:textSize="@dimen/_11sdp"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -515,9 +512,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:fontFamily="@font/poppins_medium"
+                        android:fontFamily="@font/poppins_regular"
                         android:textColor="@color/yellow"
-                        android:textSize="@dimen/_19sdp"
+                        android:textSize="@dimen/_17sdp"
                         tools:ignore="ContentDescription" />
 
                     <TextView
@@ -539,7 +536,7 @@
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/proceedButton"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:background="@drawable/button_rectangle_green"

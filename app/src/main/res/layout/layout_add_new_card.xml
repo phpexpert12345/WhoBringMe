@@ -24,8 +24,7 @@
                 android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorLoginButton"
-                android:paddingTop="@dimen/_20sdp">
+                android:background="@color/colorLoginButton">
 
 
                 <ImageView
@@ -333,7 +332,7 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/button_rectangle_green"
             android:fontFamily="@font/poppins_medium"
-            android:text="Pay Now"
+            android:text="@{languageModel.pay_now}"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/_11sdp"

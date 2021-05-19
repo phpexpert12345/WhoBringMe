@@ -20,13 +20,11 @@ class ChangePasswordActivity : BaseActivity() {
     private var passwordNewVisible: Boolean = false
     private var passwordConfirmVisible: Boolean = false
     private lateinit var languageDtoData: LanguageDtoData
-    private lateinit var softInputAssist: SoftInputAssist
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         changePasswordActivity = DataBindingUtil.setContentView(this, R.layout.layout_change_password)
         changePasswordActivity.languageModel = sharedPrefrenceManager.getLanguageData()
-        softInputAssist = SoftInputAssist(this)
         changePasswordViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         languageDtoData = sharedPrefrenceManager.getLanguageData()
 
@@ -190,22 +188,6 @@ class ChangePasswordActivity : BaseActivity() {
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
         mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
         return mapDataValue
-    }
-
-    override fun onPause() {
-        softInputAssist.onPause()
-        super.onPause()
-    }
-
-    override fun onResume() {
-        softInputAssist.onResume()
-        super.onResume()
-    }
-
-    override fun onDestroy() {
-        softInputAssist.onDestroy()
-        super.onDestroy()
-
     }
 
 }

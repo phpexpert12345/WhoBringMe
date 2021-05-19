@@ -34,7 +34,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@{languageModel.please_wait_we_will_auto_verify_nthe_otp_sent_to}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_15sdp" />
 
@@ -175,6 +174,23 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_11sdp"
                 app:spinning_bar_color="@color/colorGreen" />
+
+            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                android:id="@+id/btn_submit"
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/button_rectangle_green"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@{languageModel.submit}"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_11sdp"
+                app:spinning_bar_color="@color/white"
+                android:visibility="gone"
+                app:spinning_bar_padding="@dimen/_5sdp"/>
 
             <LinearLayout
                 android:id="@+id/resendLayout"

@@ -172,6 +172,12 @@ class EmployeeJobHistoryDtoList {
     @SerializedName("job_rating")
     var job_rating: String? = ""
 
+    @SerializedName("job_review_date")
+    var job_review_date: String? = ""
+
+    @SerializedName("job_review_time")
+    var job_review_time: String? = ""
+
     @SerializedName("job_accept_date")
     var job_accept_date: String? = ""
 
@@ -187,6 +193,12 @@ class EmployeeJobHistoryDtoList {
     @SerializedName("review_status")
     var review_status: String? = ""
 
+    @SerializedName("order_decline_reason")
+    var order_decline_reason: String? = ""
+
+    @SerializedName("order_status_icon")
+    var order_status_icon: String? = ""
+
     @SerializedName("order_status_msg")
     var order_status_msg: String? = ""
 
@@ -196,9 +208,9 @@ class EmployeeJobHistoryDtoList {
     @SerializedName("order_status_color_code")
     var order_status_color_code: String? = ""
 
+    @SerializedName("order_status_text_color_code")
+    var order_status_text_color_code: String? = ""
+
     @SerializedName("write_review_status")
     var write_review_status: String? = ""
-
-    @SerializedName("order_decline_reason")
-    var order_decline_reason: String? = ""
 }

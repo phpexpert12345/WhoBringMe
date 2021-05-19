@@ -22,21 +22,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <RelativeLayout
                     android:id="@+id/headerImage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/header_bg"
+                    android:layout_height="@dimen/_130sdp"
+                    android:background="@drawable/header_bg"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ContentDescription" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_80sdp"
+                    android:layout_width="@dimen/_110sdp"
+                    android:layout_height="@dimen/_110sdp"
+                    android:layout_marginTop="@dimen/_72sdp"
                     android:src="@drawable/login_logo"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -73,7 +71,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_20sdp"
                     android:orientation="horizontal"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -83,9 +81,9 @@
                         android:id="@+id/mobileNumberTextHint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_regular"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:text="@{languageModel.mobile_number}"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@{languageModel.enter_mobile_number}"
                         android:textColor="#808080"
                         android:textSize="@dimen/_10sdp"
                         android:visibility="gone" />
@@ -94,8 +92,7 @@
                         android:id="@+id/mobileNumberInputText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@{languageModel.enter_mobile_number}"
-                        app:hintTextColor="@color/colorDarkGrey">
+                        android:hint="@{languageModel.enter_mobile_number}">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/mobileNumberEditText"
@@ -107,7 +104,6 @@
                             android:fontFamily="@font/poppins_medium"
                             android:imeOptions="actionDone"
                             android:inputType="number"
-                            android:maxLength="14"
                             android:paddingStart="@dimen/_65sdp"
                             android:paddingLeft="@dimen/_65sdp"
                             android:paddingTop="@dimen/_25sdp"
@@ -151,8 +147,7 @@
                         android:id="@+id/textData"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@{languageModel.enter_password}"
-                        app:hintTextColor="@color/colorDarkGrey">
+                        android:hint="@{languageModel.enter_password}">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/digitPin"
@@ -211,7 +206,7 @@
                     android:text="@{languageModel.login}"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_13sdp"
+                    android:textSize="@dimen/_11sdp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/forgotPassword"

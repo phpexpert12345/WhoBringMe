@@ -38,7 +38,6 @@ class NewCardActivity : BaseActivity() {
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var languageDtoData: LanguageDtoData
-    private lateinit var softInputAssist: SoftInputAssist
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -51,7 +50,6 @@ class NewCardActivity : BaseActivity() {
         cardActivityBinding = DataBindingUtil.setContentView(this, R.layout.layout_add_new_card)
         cardActivityBinding.languageModel = sharedPrefrenceManager.getLanguageData()
         languageDtoData = sharedPrefrenceManager.getLanguageData()
-        softInputAssist = SoftInputAssist(this)
         jobPostViewModel = ViewModelProvider(this).get(JobPostModel::class.java)
         servicePostValue = intent.getSerializableExtra("postValues") as PostJobPostDto
         setPaymentAuthKeyObserver()
@@ -414,21 +412,5 @@ class NewCardActivity : BaseActivity() {
             }
             bottomSheetDialog.show()
         }
-    }
-
-    override fun onPause() {
-        softInputAssist.onPause()
-        super.onPause()
-    }
-
-    override fun onResume() {
-        softInputAssist.onResume()
-        super.onResume()
-    }
-
-    override fun onDestroy() {
-        softInputAssist.onDestroy()
-        super.onDestroy()
-
     }
 }

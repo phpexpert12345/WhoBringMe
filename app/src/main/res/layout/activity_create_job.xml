@@ -21,42 +21,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorLoginButton"
-            android:paddingTop="@dimen/_20sdp"
-            android:paddingBottom="@dimen/_20sdp">
+            android:paddingBottom="@dimen/_17sdp">
+
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_minus15sdp"
+                android:layout_marginBottom="@dimen/_minus32sdp"
+                android:src="@drawable/back_arrow"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/_26sdp"
-                android:fontFamily="@font/poppins_semi_bold"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:fontFamily="@font/poppins_medium"
                 android:text="@{languageModel.create_a_job}"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_13sdp"
-                tools:ignore="RelativeOverlap" />
-
-            <ImageView
-                android:id="@+id/closeIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:src="@drawable/close"
-                tools:ignore="ContentDescription" />
-
+                android:textSize="@dimen/_13sdp" />
         </RelativeLayout>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:layout_above="@+id/submitButton"
-            android:layout_below="@+id/headerLayout">
+            android:layout_below="@+id/headerLayout"
+            android:background="@color/backgroundColor">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:background="@color/backgroundColor"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
@@ -65,15 +60,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:orientation="horizontal"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
-                        android:id="@+id/userImage"
-                        android:layout_width="@dimen/_50sdp"
-                        android:layout_height="@dimen/_50sdp"
-                        android:scaleType="centerCrop"
-                        tools:ignore="ContentDescription" />
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_2sdp"
+                        app:cardCornerRadius="@dimen/_40sdp"
+                        app:cardElevation="@dimen/_5sdp">
+
+                        <ImageView
+                            android:id="@+id/userImage"
+                            android:layout_width="@dimen/_50sdp"
+                            android:layout_height="@dimen/_50sdp"
+                            android:scaleType="centerCrop"
+                            tools:ignore="ContentDescription" />
+                    </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/userName"
@@ -94,22 +98,44 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
-                    android:background="@null"
+                    android:background="@color/backgroundColorDark"
                     android:fontFamily="@font/poppins_regular"
                     android:gravity="start"
                     android:hint="@{languageModel.what_do_you_want_to_post_about}"
-                    android:maxHeight="@dimen/_100sdp"
-                    android:minHeight="@dimen/_100sdp"
+                    android:maxLength="2000"
+                    android:minHeight="@dimen/_80sdp"
+                    android:padding="@dimen/_5sdp"
                     android:textColor="@color/text_color"
-                    android:textColorHint="@color/text_color_light"
+                    android:textColorHint="@color/color_text_grey"
                     android:textSize="@dimen/_11sdp"
                     tools:ignore="Autofill,TextFields" />
 
-                <androidx.core.widget.NestedScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                <TextView
+                    android:id="@+id/maxCharactersLimitData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_below="@+id/postInfo"
-                    android:background="@drawable/top_shadow_background">
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text='@{languageModel.characters_limit + " 2000"}'
+                    android:textColor="@color/colorGreen"
+                    android:textColorHint="@color/colorGreen"
+                    android:textSize="@dimen/_10sdp" />
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/maxCharactersLimitData"
+                    android:layout_marginStart="@dimen/_minus5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_minus5sdp"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -170,7 +196,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_10sdp"
+                                    android:layout_marginStart="@dimen/_5sdp"
                                     android:fontFamily="@font/poppins_regular"
                                     android:text="@{languageModel.minute}"
                                     android:textColor="@color/colorDarkGrey"
@@ -180,24 +206,39 @@
                             </LinearLayout>
                         </RelativeLayout>
 
-                        <EditText
-                            android:id="@+id/totalAmount"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/jobTotalAmount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginTop="@dimen/_15sdp"
                             android:layout_marginEnd="@dimen/_10sdp"
-                            android:digits="1234567890."
-                            android:fontFamily="@font/poppins_regular"
-                            android:hint="@{languageModel.job_total_amount}"
-                            android:inputType="numberDecimal"
-                            android:singleLine="true"
-                            android:textColor="@color/text_color"
-                            android:textColorHint="@color/colorDarkGrey"
-                            android:textSize="@dimen/_13sdp"
-                            tools:ignore="Autofill,TextFields" />
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:textColorHint="@color/colorGrey">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/totalAmount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:backgroundTint="@color/view_color_dark"
+                                android:digits="1234567890."
+                                android:fontFamily="@font/poppins_regular"
+                                android:inputType="numberDecimal"
+                                android:lineHeight="0.5dp"
+                                android:paddingStart="0dp"
+                                android:paddingTop="@dimen/_25sdp"
+                                android:paddingEnd="0dp"
+                                android:paddingBottom="@dimen/_minus40sdp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_13sdp"
+                                app:boxBackgroundColor="@android:color/transparent"
+                                tools:ignore="RtlHardcoded,RtlSymmetry,UnusedAttribute" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
-                </androidx.core.widget.NestedScrollView>
+                </androidx.cardview.widget.CardView>
             </RelativeLayout>
         </ScrollView>
 
@@ -205,7 +246,7 @@
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/submitButton"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:background="@drawable/button_rectangle_green"

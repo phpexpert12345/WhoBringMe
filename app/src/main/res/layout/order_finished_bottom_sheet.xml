@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="languageModel"
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
     </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_17sdp"/>
+                android:textSize="@dimen/_17sdp" />
         </LinearLayout>
 
         <ImageView
@@ -59,28 +61,42 @@
             android:textColor="@color/text_color"
             android:textSize="@dimen/_11sdp" />
 
-        <EditText
-            android:id="@+id/jobCode"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_50sdp"
-            android:layout_marginStart="@dimen/_50sdp"
-            android:inputType="number"
-            android:textSize="@dimen/_13sdp"
-            android:hint="@string/enter_job_code"
-            android:fontFamily="@font/poppins_regular"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/colorDarkGrey"
-            tools:ignore="Autofill" />
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:hint="@{languageModel.enter_job_code}">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/jobCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginEnd="@dimen/_30sdp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingStart="0dp"
+                android:paddingLeft="0dp"
+                android:paddingTop="@dimen/_25sdp"
+                android:paddingBottom="@dimen/_minus40sdp"
+                android:singleLine="true"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/lightColor"
+                android:textSize="@dimen/_13sdp"
+                app:boxBackgroundColor="@android:color/transparent"
+                tools:ignore="RtlHardcoded,RtlSymmetry" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginStart="@dimen/_50sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_50sdp"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <EditText
                 android:id="@+id/otp1"
@@ -88,12 +104,12 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:maxLength="1"
                 android:background="@drawable/red_box"
                 android:backgroundTint="#EFEFEF"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center"
                 android:inputType="number"
+                android:maxLength="1"
                 android:singleLine="true"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_17sdp"
@@ -106,12 +122,12 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_weight="1"
-                android:maxLength="1"
                 android:background="@drawable/red_box"
                 android:backgroundTint="#EFEFEF"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center"
                 android:inputType="number"
+                android:maxLength="1"
                 android:singleLine="true"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_17sdp"
@@ -124,12 +140,12 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_weight="1"
-                android:maxLength="1"
                 android:background="@drawable/red_box"
                 android:backgroundTint="#EFEFEF"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center"
                 android:inputType="number"
+                android:maxLength="1"
                 android:singleLine="true"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_17sdp"
@@ -142,12 +158,12 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_weight="1"
-                android:maxLength="1"
                 android:background="@drawable/red_box"
                 android:backgroundTint="#EFEFEF"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center"
                 android:inputType="number"
+                android:maxLength="1"
                 android:singleLine="true"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_17sdp"
@@ -169,7 +185,7 @@
                 android:fontFamily="@font/poppins_medium"
                 android:text="@{languageModel.no}"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_13sdp" />
+                android:textSize="@dimen/_11sdp" />
 
             <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                 android:id="@+id/yesLayout"
@@ -181,7 +197,7 @@
                 android:fontFamily="@font/poppins_medium"
                 android:text="@{languageModel.yes}"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_13sdp"
+                android:textSize="@dimen/_11sdp"
                 tools:ignore="HardcodedText" />
 
         </LinearLayout>

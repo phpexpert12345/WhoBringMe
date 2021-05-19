@@ -110,6 +110,7 @@
                 android:id="@+id/nestedScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_4sdp"
                 android:layout_below="@+id/headerLayout">
 
                 <RelativeLayout
@@ -120,6 +121,11 @@
                         android:id="@+id/historyRV"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_below="@+id/historyRV"/>
                 </RelativeLayout>
             </androidx.core.widget.NestedScrollView>
         </RelativeLayout>

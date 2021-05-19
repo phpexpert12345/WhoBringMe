@@ -73,7 +73,7 @@
                 android:fontFamily="@font/poppins_medium"
                 android:text="@{languageModel.no}"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_13sdp" />
+                android:textSize="@dimen/_11sdp" />
 
             <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                 android:id="@+id/yesLayout"
@@ -85,7 +85,7 @@
                 android:fontFamily="@font/poppins_medium"
                 android:text="@{languageModel.yes}"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_13sdp"/>
+                android:textSize="@dimen/_11sdp"/>
 
         </LinearLayout>
     </LinearLayout>

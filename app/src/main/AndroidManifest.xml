@@ -29,7 +29,7 @@
         tools:ignore="AllowBackup">
         <activity
             android:name=".activities.RegistrationActivity"
-            android:theme="@style/RegistrationActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.OTPActivity"
@@ -98,11 +98,11 @@
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.employee.ProfileEditActivity"
-            android:theme="@style/RegistrationActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.employee.NewCardActivity"
-            android:theme="@style/RegistrationActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
@@ -121,7 +121,7 @@
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.ChangePasswordActivity"
-            android:theme="@style/RegistrationActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.NotificationActivity"

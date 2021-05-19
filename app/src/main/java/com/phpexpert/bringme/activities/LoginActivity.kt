@@ -2,7 +2,7 @@ package com.phpexpert.bringme.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Typeface
+import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
@@ -20,7 +20,6 @@ import com.phpexpert.bringme.databinding.ActivityLoginBinding
 import com.phpexpert.bringme.models.LoginViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.utilities.CONSTANTS
-import com.phpexpert.bringme.utilities.SoftInputAssist
 import java.lang.Exception
 
 
@@ -38,7 +37,6 @@ class LoginActivity : BaseActivity() {
     private var passwordVisible: Boolean = false
     private var passwordNewVisible: Boolean = false
     private var passwordConfirmVisible: Boolean = false
-    private lateinit var softInputAssist: SoftInputAssist
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,9 +47,6 @@ class LoginActivity : BaseActivity() {
         loginBinding.languageModel = sharedPrefrenceManager.getLanguageData()
 
         initValues() // method to init values
-        softInputAssist = SoftInputAssist(this)
-
-        loginBinding.searchCountyCountry.setTypeFace(Typeface.DEFAULT_BOLD)
 
         setAction()  // method to set all button actions
     }
@@ -72,19 +67,21 @@ class LoginActivity : BaseActivity() {
         forgotPasswordOneDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = sharedPrefrenceManager.getLanguageData().one_time_password
         forgotPasswordOneDialog.findViewById<TextView>(R.id.onThisMobile)?.text = sharedPrefrenceManager.getLanguageData().on_this_mobile_number
 
-        forgotPasswordOneDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.text = sharedPrefrenceManager.getLanguageData().mobile_number
+        forgotPasswordOneDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.text = sharedPrefrenceManager.getLanguageData().enter_mobile_number
         forgotPasswordOneDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
 
         forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = sharedPrefrenceManager.getLanguageData().get_otp
         forgotPasswordOneDialog.findViewById<TextInputEditText>(R.id.mobileNumber)?.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
             if (b) {
                 forgotPasswordOneDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = ""
+                forgotPasswordOneDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.setTextColor(Color.parseColor("#27A5DD"))
                 forgotPasswordOneDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.visibility = View.VISIBLE
                 val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
                 lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._19sdp), 0, 0)
                 forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.layoutParams = lp
             } else {
-                if (loginBinding.mobileNumberEditText.text!!.isEmpty()) {
+                forgotPasswordOneDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.setTextColor(Color.parseColor("#27A5DD"))
+                if (forgotPasswordOneDialog.findViewById<TextInputEditText>(R.id.mobileNumber)?.text!!.isEmpty()) {
                     forgotPasswordOneDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
                     val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
                     lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._7sdp), 0, 0)
@@ -98,7 +95,6 @@ class LoginActivity : BaseActivity() {
 
 
         forgotPasswordOneDialog.setCancelable(false)
-        forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.setTypeFace(Typeface.DEFAULT_BOLD)
 
         forgotPasswordTwoDialog = BottomSheetDialog(this, R.style.SheetDialog)
         forgotPasswordTwoDialog.setContentView(R.layout.layout_forgot_password_two)
@@ -113,33 +109,32 @@ class LoginActivity : BaseActivity() {
         forgotPasswordTwoDialog.findViewById<TextView>(R.id.waitForOtp)?.text = sharedPrefrenceManager.getLanguageData().waiting_for_otp
         forgotPasswordTwoDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = sharedPrefrenceManager.getLanguageData().one_time_password
         forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)?.text = sharedPrefrenceManager.getLanguageData().submit
-
-        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+        /*forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
             if (p1) {
                 forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.otpData)?.hint = sharedPrefrenceManager.getLanguageData().otp
             } else {
                 if (forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.text!!.isEmpty())
                     forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.otpData)?.hint = sharedPrefrenceManager.getLanguageData().enter_otp
             }
-        }
+        }*/
 
-        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+        /*forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
             if (p1) {
                 forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.newPassword)?.hint = sharedPrefrenceManager.getLanguageData().new_password
             } else {
                 if (forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.text!!.isEmpty())
                     forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.newPassword)?.hint = sharedPrefrenceManager.getLanguageData().enter_new_password
             }
-        }
+        }*/
 
-        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+        /*forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
             if (p1) {
                 forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.confirmPassword)?.hint = sharedPrefrenceManager.getLanguageData().confirm_password
             } else {
                 if (forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.text!!.isEmpty())
                     forgotPasswordTwoDialog.findViewById<TextInputLayout>(R.id.confirmPassword)?.hint = sharedPrefrenceManager.getLanguageData().enter_confirm_password
             }
-        }
+        }*/
 
         forgotPasswordTwoDialog.setCancelable(false)
 //        forgotPasswordTwoBinding = loginBinding.forgotPasswordTwo
@@ -156,6 +151,7 @@ class LoginActivity : BaseActivity() {
 
 
     //method to set action of all buttons
+    @SuppressLint("CutPasteId")
     @Suppress("DEPRECATION")
     private fun setAction() {
 
@@ -208,7 +204,7 @@ class LoginActivity : BaseActivity() {
             }
         }
 
-        loginBinding.digitPin.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+        /*loginBinding.digitPin.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
             if (p1) {
                 loginBinding.textData.hint = sharedPrefrenceManager.getLanguageData().password
             } else {
@@ -216,15 +212,17 @@ class LoginActivity : BaseActivity() {
                     loginBinding.textData.hint = sharedPrefrenceManager.getLanguageData().enter_password
             }
         }
-
+*/
         loginBinding.mobileNumberEditText.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
             if (b) {
                 loginBinding.mobileNumberInputText.hint = ""
                 loginBinding.mobileNumberTextHint.visibility = View.VISIBLE
+                loginBinding.mobileNumberTextHint.setTextColor(resources.getColor(R.color.colorLoginButton))
                 val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
                 lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._19sdp), 0, 0)
                 loginBinding.searchCountyCountry.layoutParams = lp
             } else {
+                loginBinding.mobileNumberTextHint.setTextColor(Color.parseColor("#808080"))
                 if (loginBinding.mobileNumberEditText.text!!.isEmpty()) {
                     loginBinding.mobileNumberInputText.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
                     val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
@@ -275,7 +273,9 @@ class LoginActivity : BaseActivity() {
                 e.printStackTrace()
             }
             forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
+            forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.clearFocus()
             forgotPasswordOneDialog.dismiss()
+
             loginBinding.forgotPasswordView.visibility = View.GONE
         }
 
@@ -314,7 +314,14 @@ class LoginActivity : BaseActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+
             forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
+            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.text = Editable.Factory.getInstance().newEditable("")
+            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.clearFocus()
+            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
+            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.clearFocus()
+            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
+            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.clearFocus()
             forgotPasswordTwoDialog.dismiss()
             loginBinding.forgotPasswordView.visibility = View.GONE
         }
@@ -398,14 +405,14 @@ class LoginActivity : BaseActivity() {
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 if (it.status_code == "0") {
-                    bottomSheetDialog.findViewById<ImageView>(R.id.companyLogo)!!.visibility = View.VISIBLE
+//                    bottomSheetDialog.findViewById<ImageView>(R.id.companyLogo)!!.visibility = View.VISIBLE
                     bottomSheetDialog.findViewById<TextView>(R.id.textHeading)!!.text = resources.getString(R.string.app_name)
                     sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
                     sharedPrefrenceManager.saveProfile(it.data)
                     var intent: Intent?
                     if (sharedPrefrenceManager.getProfile().account_type == "1") {
                         bottomSheetDialogMessageOkButton.setOnClickListener {
-                            bottomSheetDialog.findViewById<ImageView>(R.id.companyLogo)!!.visibility = View.GONE
+//                            bottomSheetDialog.findViewById<ImageView>(R.id.companyLogo)!!.visibility = View.GONE
                             bottomSheetDialog.findViewById<TextView>(R.id.textHeading)!!.text = sharedPrefrenceManager.getLanguageData().alert_text
                             intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
                             bottomSheetDialog.dismiss()
@@ -460,6 +467,7 @@ class LoginActivity : BaseActivity() {
                         forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
                         timerRestriction()
                         forgotPasswordTwoDialog.show()
+                        forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.clearFocus()
                         forgotPasswordOneDialog.dismiss()
                     }
                 } else {
@@ -496,6 +504,12 @@ class LoginActivity : BaseActivity() {
                     bottomSheetDialogMessageOkButton.setOnClickListener {
                         bottomSheetDialog.dismiss()
                         loginBinding.forgotPasswordView.visibility = View.GONE
+                        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.text = Editable.Factory.getInstance().newEditable("")
+                        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.clearFocus()
+                        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
+                        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.clearFocus()
+                        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
+                        forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.clearFocus()
                         forgotPasswordTwoDialog.dismiss()
                     }
                 } else {
@@ -596,19 +610,8 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun onPause() {
-        softInputAssist.onPause()
         super.onPause()
         forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
     }
 
-    override fun onResume() {
-        softInputAssist.onResume()
-        super.onResume()
-    }
-
-    override fun onDestroy() {
-        softInputAssist.onDestroy()
-        super.onDestroy()
-
-    }
 }

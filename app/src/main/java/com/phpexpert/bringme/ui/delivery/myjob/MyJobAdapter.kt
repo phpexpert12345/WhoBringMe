@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.icu.text.NumberFormat
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -16,6 +17,8 @@ import com.phpexpert.bringme.databinding.LayoutJobCellBinding
 import com.phpexpert.bringme.dtos.MyJobDtoList
 import com.phpexpert.bringme.utilities.BaseActivity
 import java.lang.Exception
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -55,22 +58,43 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
         jobCellBinding.jobPostedTime.text = jobPostedTime(arrayList[position].job_posted_time!!)
 
         try {
+            jobCellBinding.orderCompleteDateLayout.visibility = View.VISIBLE
             jobCellBinding.completeCancelStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
-        jobCellBinding.completeCancelText.text = if (arrayList[position].order_status_msg == "Accepted") {
-            jobCellBinding.jobAcceptCancelTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted_time
-        } else {
-            jobCellBinding.jobAcceptCancelTime.text = changeAcceptDateTime(arrayList[position].job_completed_date + " " + arrayList[position].job_completed_time)
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().complete_time
+        when (arrayList[position].order_status_msg) {
+            "Accepted" -> {
+                try {
+                    jobCellBinding.orderCompleteDateLayout.visibility = View.VISIBLE
+                    jobCellBinding.jobAcceptCancelTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
+                    jobCellBinding.completeCancelText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted_time
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            "Completed" -> {
+                try {
+                    jobCellBinding.orderCompleteDateLayout.visibility = View.VISIBLE
+                    jobCellBinding.jobAcceptCancelTime.text = changeAcceptDateTime(arrayList[position].job_completed_date + " " + arrayList[position].job_completed_time)
+                    jobCellBinding.completeCancelText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().complete_time
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            "Decline" -> {
+                jobCellBinding.orderCompleteDateLayout.visibility = View.GONE
+                jobCellBinding.jobAcceptCancelTime.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
+            }
+            else -> {
+                jobCellBinding.orderCompleteDateLayout.visibility = View.GONE
+            }
         }
 
-        try{
+        try {
             jobCellBinding.ratingData.rating = arrayList[position].job_rating!!.toFloat()
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -144,8 +168,11 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
 
     private fun String?.formatChange() = run {
         try {
-            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
-            formatter.format(this?.toFloat())
+//            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+//            formatter.format(this?.toFloat())
+            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            val formartter = (DecimalFormat("##.##", symbols))
+            formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this
         }

@@ -7,6 +7,7 @@ import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
@@ -24,6 +25,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.activities.ChangePasswordActivity
 import com.phpexpert.bringme.activities.LoginActivity
@@ -68,7 +71,7 @@ class ProfileFragment : Fragment() {
         return profileFragmentBinding.root
     }
 
-    @SuppressLint("CutPasteId")
+    @SuppressLint("CutPasteId", "SetTextI18n")
     private fun initValues() {
         mobileNumberDialog = BottomSheetDialog(requireActivity(), R.style.SheetDialog)
         mobileNumberDialog.setContentView(R.layout.layout_change_phone_number)
@@ -76,17 +79,46 @@ class ProfileFragment : Fragment() {
         mobileNumberDialog.findViewById<TextView>(R.id.weWillSendText)?.text = languageData.we_will_send_you_an
         mobileNumberDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = languageData.one_time_password
         mobileNumberDialog.findViewById<TextView>(R.id.onThisMobile)?.text = languageData.on_this_mobile_number
-        mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.hint = languageData.enter_your_phone_number
+//        mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.hint = languageData.enter_your_phone_number
         mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = languageData.get_otp
+
+
+        mobileNumberDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.text = languageData.enter_mobile_number
+        mobileNumberDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = languageData.enter_mobile_number
+
+        mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = languageData.get_otp
+        mobileNumberDialog.findViewById<TextInputEditText>(R.id.mobileNumber)?.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            if (b) {
+                mobileNumberDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = ""
+                mobileNumberDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.setTextColor(Color.parseColor("#27A5DD"))
+                mobileNumberDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.visibility = View.VISIBLE
+                val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+                lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._19sdp), 0, 0)
+                mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.layoutParams = lp
+            } else {
+                mobileNumberDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.setTextColor(Color.parseColor("#27A5DD"))
+                if (mobileNumberDialog.findViewById<TextInputEditText>(R.id.mobileNumber)?.text!!.isEmpty()) {
+                    mobileNumberDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = languageData.enter_mobile_number
+                    val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+                    lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._7sdp), 0, 0)
+                    mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.layoutParams = lp
+                    mobileNumberDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.visibility = View.GONE
+                }
+
+            }
+        }
+
         mobileNumberDialog.setCancelable(false)
 
         otpDataDialog = BottomSheetDialog(requireActivity(), R.style.SheetDialog)
         otpDataDialog.setContentView(R.layout.otp_verify_layout)
-        otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to
+        otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to + " " + mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.textView_selectedCountry?.text.toString() + mobileNumberDialog.findViewById<TextInputEditText>(R.id.mobileNumber)?.text.toString()
         otpDataDialog.findViewById<TextView>(R.id.timeText)?.text = languageData.auto_verifying_your_otp_in_00_12
         otpDataDialog.findViewById<TextView>(R.id.didNotReceive)?.text = languageData.don_t_receive_code_resend_code
         otpDataDialog.findViewById<TextView>(R.id.resendText)?.text = languageData.resend_code
         otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)?.text = languageData.verify
+        otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)?.text = languageData.submit
+
         otpDataDialog.setCancelable(false)
 
         mobileNumberDialog.findViewById<ImageView>(R.id.closeIcon)!!.setOnClickListener {
@@ -126,7 +158,7 @@ class ProfileFragment : Fragment() {
             otpDataDialog.dismiss()
         }
 
-        otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setOnClickListener {
+        otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.setOnClickListener {
             verifyOtpObserver()
         }
 
@@ -234,6 +266,10 @@ class ProfileFragment : Fragment() {
                     if (it.status_code == "0") {
                         mobileNumberDialog.dismiss()
                         timerRestriction()
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text = Editable.Factory.getInstance().newEditable("")
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text = Editable.Factory.getInstance().newEditable("")
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text = Editable.Factory.getInstance().newEditable("")
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text = Editable.Factory.getInstance().newEditable("")
                         otpDataDialog.show()
                     }
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -386,15 +422,11 @@ class ProfileFragment : Fragment() {
     @SuppressLint("CutPasteId")
     private fun setSubButton() {
         if (otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text.toString().trim() == "" && otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text.toString().trim() == "" || otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text.toString().trim() == "" || otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text.toString().trim() == "") {
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().verify
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setBackgroundResource(R.drawable.button_shape_gray)
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusableInTouchMode = false
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusable = false
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.visibility = View.GONE
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.visibility = View.VISIBLE
         } else {
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().submit
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setBackgroundResource(R.drawable.button_rectangle_green)
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusableInTouchMode = true
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusable = true
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.visibility = View.GONE
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.visibility = View.VISIBLE
         }
     }
 }

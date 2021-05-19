@@ -23,7 +23,6 @@ import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.PostDataOtp
 import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
-import com.phpexpert.bringme.utilities.CONSTANTS
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -46,9 +45,9 @@ class OTPActivity : BaseActivity() {
         languageDtoData = sharedPrefrenceManager.getLanguageData()
         postDataOtp = intent.getSerializableExtra("postDataModel") as PostDataOtp
 
-        otpActivity.btnVerify.setOnClickListener {
+        otpActivity.btnSubmit.setOnClickListener {
             if (isOnline()) {
-                otpActivity.btnVerify.startAnimation()
+                otpActivity.btnSubmit.startAnimation()
                 gettingLocation()
             } else {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
@@ -96,19 +95,23 @@ class OTPActivity : BaseActivity() {
                 R.id.otpPass1 -> if (text.length == 1) {
                     otpActivity.otpPass2.requestFocus()
                 }
-                R.id.otpPass2 -> if (text.length == 1) otpActivity.otpPass3.requestFocus() else if (text.isEmpty()) otpActivity.otpPass1.requestFocus()
-                R.id.otpPass3 -> if (text.length == 1) otpActivity.otpPass4.requestFocus() else if (text.isEmpty()) otpActivity.otpPass2.requestFocus()
+                R.id.otpPass2 -> if (text.length == 1) {
+                    otpActivity.otpPass3.requestFocus()
+                } else if (text.isEmpty()) {
+                    otpActivity.otpPass1.requestFocus()
+                }
+                R.id.otpPass3 -> if (text.length == 1) {
+                    otpActivity.otpPass4.requestFocus()
+                } else if (text.isEmpty()) {
+                    otpActivity.otpPass2.requestFocus()
+                }
                 R.id.otpPass4 -> if (text.isEmpty()) {
                     otpActivity.otpPass3.requestFocus()
-                    otpActivity.btnVerify.text = languageDtoData.verify
-                    otpActivity.btnVerify.setBackgroundResource(R.drawable.button_shape_gray)
-                    otpActivity.btnVerify.isFocusableInTouchMode = false
-                    otpActivity.btnVerify.isFocusable = false
+                    otpActivity.btnVerify.visibility = View.VISIBLE
+                    otpActivity.btnSubmit.visibility = View.GONE
                 } else {
-                    otpActivity.btnVerify.text = languageDtoData.submit
-                    otpActivity.btnVerify.setBackgroundResource(R.drawable.button_rectangle_green)
-                    otpActivity.btnVerify.isFocusableInTouchMode = true
-                    otpActivity.btnVerify.isFocusable = true
+                    otpActivity.btnVerify.visibility = View.GONE
+                    otpActivity.btnSubmit.visibility = View.VISIBLE
                 }
             }
         }
@@ -146,7 +149,7 @@ class OTPActivity : BaseActivity() {
 
     private fun setObserver() {
         viewDataModel.registerViewModel(mapData()).observe(this, {
-            otpActivity.btnVerify.revertAnimation()
+            otpActivity.btnSubmit.revertAnimation()
             bottomSheetDialogMessageText.text = it.status_message
             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -218,7 +221,7 @@ class OTPActivity : BaseActivity() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun gettingLocation(){
+    private fun gettingLocation() {
         try {
             val mLocationRequest = LocationRequest.create()
             mLocationRequest.interval = 60000
@@ -246,7 +249,7 @@ class OTPActivity : BaseActivity() {
                                 postDataOtp.addressPostCode = addresses[0]!!.postalCode
                                 setObserver()
                             } else {
-                                otpActivity.btnVerify.revertAnimation()
+                                otpActivity.btnSubmit.revertAnimation()
                                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_not_found
                                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -258,7 +261,7 @@ class OTPActivity : BaseActivity() {
                             }
                             break
                         } catch (e: Exception) {
-                            otpActivity.btnVerify.revertAnimation()
+                            otpActivity.btnSubmit.revertAnimation()
                             bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_not_found
                             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                             bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -280,7 +283,7 @@ class OTPActivity : BaseActivity() {
 //                                LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
 
         } catch (e: Exception) {
-            otpActivity.btnVerify.revertAnimation()
+            otpActivity.btnSubmit.revertAnimation()
             bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().something_is_wrong
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE

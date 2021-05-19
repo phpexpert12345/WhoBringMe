@@ -117,7 +117,6 @@
                             android:id="@+id/runningOrders"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_2sdp"
                             android:fontFamily="@font/poppins_medium"
                             android:text="00"
                             android:textColor="@color/text_color"
@@ -129,6 +128,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
                             android:text="@{languageModel.running_orders}"
+                            android:layout_marginTop="@dimen/_minus5sdp"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_9sdp" />
                     </LinearLayout>
@@ -156,10 +156,10 @@
                                 android:id="@+id/currencyCode"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/poppins_regular"
+                                android:fontFamily="@font/poppins_medium"
                                 android:text="€"
                                 android:textColor="@color/text_color"
-                                android:textSize="@dimen/_20sdp"
+                                android:textSize="@dimen/_25sdp"
                                 tools:ignore="HardcodedText" />
 
                             <TextView
@@ -167,7 +167,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_5sdp"
-                                android:layout_marginTop="@dimen/_2sdp"
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="00"
                                 android:textColor="@color/text_color"
@@ -180,6 +179,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
                             android:text="@{languageModel.total_amount}"
+                            android:layout_marginTop="@dimen/_minus5sdp"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_9sdp" />
                     </LinearLayout>
@@ -190,7 +190,7 @@
                 android:id="@+id/swipeRefreshData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_155sdp">
+                android:layout_marginTop="@dimen/_150sdp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

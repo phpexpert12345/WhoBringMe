@@ -19,8 +19,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_minus20sdp"
-        app:cardElevation="@dimen/_10sdp"
+        app:cardElevation="@dimen/_3sdp"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_3sdp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -76,9 +78,9 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_marginTop="@dimen/_1sdp"
-                            android:fontFamily="@font/poppins_medium"
+                            android:fontFamily="@font/poppins_regular"
                             android:textColor="@color/colorGreen"
-                            android:textSize="@dimen/_16sdp"
+                            android:textSize="@dimen/_13sdp"
                             tools:ignore="HardcodedText" />
 
                         <TextView
@@ -97,7 +99,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -119,12 +121,12 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_3sdp"
                     android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/_36sdp"
                         android:layout_toLeftOf="@+id/csImage"
                         android:orientation="vertical"
@@ -149,8 +151,8 @@
 
                     <ImageView
                         android:id="@+id/csImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_65sdp"
+                        android:layout_height="@dimen/_50sdp"
                         android:layout_alignParentEnd="true"
                         android:src="@drawable/cs"
                         tools:ignore="ContentDescription" />
@@ -185,7 +187,6 @@
                         android:text="@{languageModel.write_a_review}"
                         android:textColor="@color/colorGreen"
                         android:textSize="@dimen/_8sdp"
-                        android:visibility='@{model.review_status.equalsIgnoreCase("Done") ? View.GONE : View.VISIBLE}'
                         tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
 
@@ -208,7 +209,7 @@
                             android:fontFamily="@font/poppins_medium"
                             android:text="@{languageModel.when_you_want_to_get_the_product}"
                             android:textColor="@color/colorDarkGrey"
-                            android:textSize="@dimen/_7sdp" />
+                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -226,7 +227,7 @@
                             android:fontFamily="@font/poppins_regular"
                             android:text="@{languageModel.mint}"
                             android:textColor="@color/text_color"
-                            android:textSize="@dimen/_7sdp" />
+                            android:textSize="@dimen/_8sdp" />
 
                     </LinearLayout>
 
@@ -243,7 +244,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
-                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@color/view_color"
                 android:paddingStart="@dimen/_minus10sdp"
                 android:paddingEnd="@dimen/_minus10sdp" />
@@ -252,9 +252,11 @@
                 android:id="@+id/jobReviewLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_10sdp"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility='@{model.review_status.equalsIgnoreCase("Not done") ? View.GONE : View.VISIBLE}'>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -313,18 +315,47 @@
                     android:textSize="@dimen/_9sdp" />
             </LinearLayout>
 
+            <View
+                android:id="@+id/reviewView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/view_color"
+                android:paddingStart="@dimen/_minus10sdp"
+                android:paddingEnd="@dimen/_minus10sdp" />
+
+            <TextView
+                android:id="@+id/declineMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/red_corner_bd"
+                android:fontFamily="@font/poppins_italic"
+                android:padding="@dimen/_5sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_9sdp" />
+
+            <View
+                android:id="@+id/declineView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/view_color"
+                android:paddingStart="@dimen/_minus10sdp"
+                android:paddingEnd="@dimen/_minus10sdp" />
+
             <RelativeLayout
-                android:id="@+id/jobAcceptLayout"
+                android:id="@+id/deliveryDataLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
-                android:visibility="gone">
+                android:layout_margin="@dimen/_10sdp">
 
                 <ImageView
                     android:id="@+id/deliveryImageView"
-                    android:layout_width="@dimen/_45sdp"
-                    android:layout_height="@dimen/_45sdp"
-                    android:src="@drawable/delivery_boy"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
@@ -341,7 +372,8 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{model.delivery_Employee_name}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_11sdp"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -350,7 +382,8 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{model.delivery_Employee_phone_code+model.delivery_Employee_phone}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_7sdp"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -362,23 +395,24 @@
                     tools:ignore="RelativeOverlap">
 
                     <TextView
+                        android:id="@+id/acceptedDateTimeText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/poppins_medium"
-                        android:text='@{model.order_status_msg=="Accepted" ? languageModel.accepted_time : languageModel.complete_time}'
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_7sdp" />
 
                     <TextView
-                        android:id="@+id/acceptedDateTime"
+                        android:id="@+id/timeData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_7sdp"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

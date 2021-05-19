@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/colorLoginButton</item>
         <item name="colorPrimaryVariant">@color/colorLoginButton</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/colorLoginButton</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/colorLoginButton</item>
         <item name="colorSecondaryVariant">@color/colorLoginButton</item>
@@ -27,7 +28,7 @@
     <style name="Theme.BringMe.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
     </style>
 
     <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
@@ -69,7 +70,14 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.3</item>
         <item name="android:windowFrame">@null</item>
-        <item name="android:windowIsFloating">true</item>
+        <item name="colorPrimary">@color/colorLoginButton</item>
+        <item name="colorPrimaryVariant">@color/colorLoginButton</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/colorLoginButton</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/colorLoginButton</item>
+        <item name="colorSecondaryVariant">@color/colorLoginButton</item>
+        <item name="colorOnSecondary">@color/colorLoginButton</item>
     </style>
 
     <style name="Theme.BringMe.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

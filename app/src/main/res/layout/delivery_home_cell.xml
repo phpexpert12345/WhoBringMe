@@ -19,8 +19,11 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_minus10sdp"
-        app:cardElevation="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        app:cardElevation="@dimen/_3sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -36,14 +39,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_toStartOf="@+id/clientCall"
+                    android:orientation="horizontal"
                     tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                     <ImageView
                         android:id="@+id/userImage"
-                        android:layout_width="@dimen/_50sdp"
-                        android:layout_height="@dimen/_50sdp"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
                         android:scaleType="centerCrop"
                         tools:ignore="ContentDescription" />
 
@@ -76,7 +79,10 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp">
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_3sdp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -128,7 +134,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_25sdp"
                     android:layout_toStartOf="@+id/cs"
                     android:orientation="vertical">
@@ -153,8 +158,8 @@
 
                 <ImageView
                     android:id="@+id/cs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_65sdp"
+                    android:layout_height="@dimen/_50sdp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/cs"
@@ -165,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal"
                 android:visibility='@{model.order_status_msg.equalsIgnoreCase("Pending") || model.order_status_msg.equalsIgnoreCase("Decline")? View.GONE : View.VISIBLE}'>
 
@@ -198,7 +203,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp">
 
                 <LinearLayout
@@ -252,38 +257,38 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@color/view_color_dark" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_7sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_20sdp">
+                android:layout_marginBottom="@dimen/_7sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:orientation="horizontal"
                     android:layout_toStartOf="@+id/layoutAccept"
+                    android:orientation="horizontal"
                     tools:ignore="UseCompoundDrawables">
 
                     <TextView
                         android:id="@+id/currencyCode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_4sdp"
-                        android:fontFamily="@font/poppins_regular"
+                        android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color_dark"
-                        android:textSize="@dimen/_15sdp" />
+                        android:textSize="@dimen/_14sdp" />
+
                     <TextView
                         android:id="@+id/jobTotalAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_4sdp"
+                        android:layout_marginStart="@dimen/_3sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_13sdp" />
@@ -294,32 +299,33 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
                     tools:ignore="RelativeOverlap">
 
                     <TextView
                         android:id="@+id/acceptViewLayout"
-                        android:layout_width="@dimen/_80sdp"
+                        android:layout_width="@dimen/_40sdp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/button_rectangle_green"
+                        android:background="@drawable/button_rectangle_green_cornor"
                         android:fontFamily="@font/poppins_medium"
-                        android:paddingTop="@dimen/_5sdp"
                         android:gravity="center_horizontal"
+                        android:paddingTop="@dimen/_5sdp"
                         android:paddingBottom="@dimen/_5sdp"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_13sdp" />
+                        android:textSize="@dimen/_7sdp" />
 
                     <TextView
                         android:id="@+id/declineFinishedLayout"
-                        android:layout_width="@dimen/_80sdp"
+                        android:layout_width="@dimen/_40sdp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:background="@color/red"
-                        android:gravity="center_horizontal"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:background="@drawable/button_rectangle_red"
                         android:fontFamily="@font/poppins_medium"
+                        android:gravity="center_horizontal"
                         android:paddingTop="@dimen/_5sdp"
                         android:paddingBottom="@dimen/_5sdp"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_13sdp" />
+                        android:textSize="@dimen/_7sdp" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

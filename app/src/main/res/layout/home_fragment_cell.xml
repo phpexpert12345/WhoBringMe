@@ -19,8 +19,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_minus20sdp"
-        app:cardElevation="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        app:cardElevation="@dimen/_3sdp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -31,7 +33,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -48,6 +52,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:fontFamily="@font/poppins_medium"
                             android:text="@{languageModel.order}"
                             android:textColor="@color/colorDarkGrey"
@@ -77,9 +82,9 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_marginTop="@dimen/_1sdp"
-                            android:fontFamily="@font/poppins_medium"
+                            android:fontFamily="@font/poppins_regular"
                             android:textColor="@color/colorGreen"
-                            android:textSize="@dimen/_16sdp"
+                            android:textSize="@dimen/_13sdp"
                             tools:ignore="HardcodedText" />
 
                         <TextView
@@ -99,7 +104,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -111,7 +116,7 @@
                         android:textSize="@dimen/_11sdp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
                         android:text='@{" "+model.job_OTP_code}'
@@ -122,12 +127,12 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/_36sdp"
                         android:layout_toLeftOf="@+id/csImage"
                         android:gravity="start"
@@ -155,7 +160,7 @@
                     <ImageView
                         android:id="@+id/csImage"
                         android:layout_width="@dimen/_65sdp"
-                        android:layout_height="@dimen/_65sdp"
+                        android:layout_height="@dimen/_50sdp"
                         android:layout_alignParentEnd="true"
                         android:src="@drawable/cs"
                         tools:ignore="ContentDescription" />
@@ -200,9 +205,10 @@
                     android:layout_marginTop="@dimen/_10sdp">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/viewJobImageView"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         tools:ignore="RelativeOverlap">
@@ -213,7 +219,7 @@
                             android:fontFamily="@font/poppins_medium"
                             android:text="@{languageModel.when_you_want_to_get_the_product}"
                             android:textColor="@color/colorDarkGrey"
-                            android:textSize="@dimen/_7sdp" />
+                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -232,7 +238,7 @@
                             android:fontFamily="@font/poppins_regular"
                             android:text="@{languageModel.mint}"
                             android:textColor="@color/text_color"
-                            android:textSize="@dimen/_7sdp" />
+                            android:textSize="@dimen/_8sdp" />
 
                     </LinearLayout>
 
@@ -257,7 +263,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:orientation="vertical"
                 android:visibility='@{model.review_status.equalsIgnoreCase("Not done") ? View.GONE : View.VISIBLE}'>
 
@@ -314,6 +322,7 @@
                     android:fontFamily="@font/poppins_regular"
                     android:textColor="@color/text_color_dark"
                     android:textSize="@dimen/_9sdp"
+                    android:visibility="gone"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -331,7 +340,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/red_corner_bd"
                 android:fontFamily="@font/poppins_italic"

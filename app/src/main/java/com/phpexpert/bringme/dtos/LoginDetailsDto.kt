@@ -3,8 +3,15 @@ package com.phpexpert.bringme.dtos
 import com.google.gson.annotations.SerializedName
 
 open class LoginDetailsDto {
+
     @SerializedName("LoginId")
     var LoginId: String? = ""
+
+    @SerializedName("login_first_name")
+    lateinit var login_first_name: String
+
+    @SerializedName("login_last_name")
+    lateinit var login_last_name: String
 
     @SerializedName("Mobile_OTP")
     var Mobile_OTP: String? = ""

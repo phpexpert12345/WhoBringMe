@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.icu.text.NumberFormat
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -32,6 +31,8 @@ import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.LatestJobDeliveryDataList
 import com.phpexpert.bringme.models.LatestJobDeliveryViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -348,7 +349,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 })
             } else {
                 progressDialog.dismiss()
-                (activity as BaseActivity).bottomSheetDialogMessageText.text = getString(R.string.enter_job_code_first)
+                (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.enter_job_code_first
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -552,8 +553,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
     private fun String?.formatChange() = run {
         try {
-            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
-            formatter.format(this?.toFloat())
+//            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+//            formatter.format(this?.toFloat())
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            val formartter = (DecimalFormat("##.##", symbols))
+            formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this
         }

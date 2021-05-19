@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.icu.text.NumberFormat
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +17,8 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.DeliveryHomeCellBinding
 import com.phpexpert.bringme.dtos.LatestJobDeliveryDataList
 import com.phpexpert.bringme.utilities.BaseActivity
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,7 +45,8 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         homeFragmentCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
         homeFragmentCellBinding.jobTotalAmount.text = arrayList[position].job_total_amount.formatChange()
 
-        Glide.with(context).load(arrayList[position].Client_photo).centerCrop().placeholder(R.drawable.user_placeholder).into(homeFragmentCellBinding.userImage)
+        Glide.with(context).load(arrayList[position].Client_photo).circleCrop().placeholder(R.drawable.user_placeholder).into(homeFragmentCellBinding.userImage)
+
         homeFragmentCellBinding.clientCall.setOnClickListener {
             val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + arrayList[position].Client_phone_code + arrayList[position].Client_phone))
             context.startActivity(intent)
@@ -70,8 +72,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
                 }
                 (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().finished
-                homeFragmentCellBinding.cs.setImageResource(R.drawable.cs1)
-                homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.colorLoginButton))
+                homeFragmentCellBinding.declineFinishedLayout.setBackgroundResource(R.drawable.button_blue_green)
             }
             "Completed" -> {
                 try {
@@ -80,24 +81,23 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
                     e.printStackTrace()
                 }
                 (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
-                (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.visibility=View.GONE
-                homeFragmentCellBinding.cs.setImageResource(R.drawable.cs1)
-                homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.colorLoginButton))
+                (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.visibility = View.GONE
+                homeFragmentCellBinding.declineFinishedLayout.setBackgroundResource(R.drawable.button_blue_green)
             }
             "Decline" -> {
                 homeFragmentCellBinding.declineFinishedLayout.visibility = View.GONE
                 homeFragmentCellBinding.acceptedDateTime.visibility = View.GONE
-                homeFragmentCellBinding.cs.setImageResource(R.drawable.cs)
                 homeFragmentCellBinding.acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
             }
             else -> {
                 homeFragmentCellBinding.acceptedDateTime.visibility = View.GONE
                 (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accept
-                homeFragmentCellBinding.cs.setImageResource(R.drawable.cs)
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().decline
-                homeFragmentCellBinding.declineFinishedLayout.setBackgroundColor(context.resources.getColor(R.color.red))
+                homeFragmentCellBinding.declineFinishedLayout.setBackgroundResource(R.drawable.button_rectangle_red)
             }
         }
+
+        Glide.with(context).asGif().load(arrayList[position].order_status_icon).placeholder(R.drawable.cs).into(homeFragmentCellBinding.cs)
 
         homeFragmentCellBinding.acceptViewLayout.setOnClickListener {
             if ((holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text.toString() == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view) {
@@ -184,8 +184,11 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
 
     private fun String?.formatChange() = run {
         try {
-            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
-            formatter.format(this?.toFloat())
+//            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+//            formatter.format(this?.toFloat())
+            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            val formartter = (DecimalFormat("##.##", symbols))
+            formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this
         }

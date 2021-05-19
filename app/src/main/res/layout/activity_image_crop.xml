@@ -21,15 +21,19 @@
             android:scaleType="fitCenter"
             tools:ignore="ContentDescription" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <ImageView
             android:id="@+id/set_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
             android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:background="@drawable/blue_circle"
+            android:padding="@dimen/_20sdp"
+            android:src="@drawable/right_arrow"
+            app:tint="@color/white"
             android:onClick="onCropImageClick"
-            app:srcCompat="@drawable/ic_send_icon"
-            tools:ignore="ContentDescription,VectorDrawableCompat" />
+            tools:ignore="ContentDescription" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/rotate_image"

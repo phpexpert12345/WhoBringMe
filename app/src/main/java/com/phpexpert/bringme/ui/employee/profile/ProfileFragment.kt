@@ -257,7 +257,7 @@ class ProfileFragment : Fragment() {
     private fun verifyOtpObserver() {
         if ((activity as BaseActivity).isOnline()) {
             profileViewMode.otpVerifyData(getOtpVerify()).observe(viewLifecycleOwner, {
-                otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.revertAnimation()
+                otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.revertAnimation()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -271,7 +271,7 @@ class ProfileFragment : Fragment() {
                 (activity as BaseActivity).bottomSheetDialog.show()
             })
         } else {
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.revertAnimation()
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.revertAnimation()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -380,7 +380,7 @@ class ProfileFragment : Fragment() {
                         grantResults[4] == PackageManager.PERMISSION_GRANTED) {
                     startActivity(Intent(requireActivity(), ProfileEditActivity::class.java))
                 } else {
-                    (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please allow all permission"
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_allow_all_permission
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -395,15 +395,11 @@ class ProfileFragment : Fragment() {
     @SuppressLint("CutPasteId")
     private fun setSubButton() {
         if (otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text.toString().trim() == "" && otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text.toString().trim() == "" || otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text.toString().trim() == "" || otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text.toString().trim() == "") {
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().verify
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setBackgroundResource(R.drawable.button_shape_gray)
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusableInTouchMode = false
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusable = false
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.visibility = View.GONE
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.visibility = View.VISIBLE
         } else {
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().submit
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.setBackgroundResource(R.drawable.button_rectangle_green)
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusableInTouchMode = true
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.isFocusable = true
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.visibility = View.GONE
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.visibility = View.VISIBLE
         }
     }
 }

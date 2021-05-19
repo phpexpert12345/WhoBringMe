@@ -9,8 +9,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Color
-import android.icu.text.NumberFormat
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
@@ -25,13 +23,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.snackbar.Snackbar
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.AuthModel
 import java.io.File
 import java.io.FileOutputStream
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -94,6 +93,7 @@ open class BaseActivity : AppCompatActivity() {
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     authData.isAuthHit(false)
                     bottomSheetDialog.dismiss()
+                    finish()
                 }
                 bottomSheetDialog.show()
             }
@@ -106,6 +106,7 @@ open class BaseActivity : AppCompatActivity() {
         bottomSheetDialogMessageOkButton.setOnClickListener {
             authData.isAuthHit(false)
             bottomSheetDialog.dismiss()
+            finish()
         }
         bottomSheetDialog.show()
     }
@@ -151,7 +152,7 @@ open class BaseActivity : AppCompatActivity() {
 
             100 -> { // Allowed was selected so Permission granted
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                   //nothing else
+                    //nothing else
                 } else {
                     // User selected the Never Ask Again Option Change settings in app settings manually
                     val alertDialogBuilder = AlertDialog.Builder(this)
@@ -234,8 +235,11 @@ open class BaseActivity : AppCompatActivity() {
 
     fun String?.formatChange() = run {
         try {
-            val formatter = NumberFormat.getInstance(Locale(sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
-            formatter.format(this?.toFloat())
+//            val formatter = NumberFormat.getInstance(Locale(sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
+//            formatter.format(this?.toFloat())
+            val symbols = DecimalFormatSymbols(Locale(sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
+            val formartter = (DecimalFormat("##.##", symbols))
+            formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this
         }

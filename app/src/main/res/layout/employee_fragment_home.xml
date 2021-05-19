@@ -3,10 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="languageModel"
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
     </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -47,8 +49,9 @@
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/_10sdp"
+                            android:layout_height="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_3sdp"
                             android:src="@drawable/location"
                             tools:ignore="ContentDescription" />
 
@@ -59,7 +62,7 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_9sdp" />
+                            android:textSize="@dimen/_10sdp" />
 
                     </LinearLayout>
                 </RelativeLayout>
@@ -151,7 +154,8 @@
                 <androidx.core.widget.NestedScrollView
                     android:id="@+id/scrollableBar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -161,6 +165,11 @@
                             android:id="@+id/homeRv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_60sdp"
+                            android:layout_below="@+id/homeRv" />
                     </RelativeLayout>
                 </androidx.core.widget.NestedScrollView>
             </LinearLayout>
@@ -185,10 +194,12 @@
 
         <include
             android:id="@+id/bottomHistryLayout"
-            layout="@layout/job_view_layout" />
+            layout="@layout/job_view_layout"
+            android:visibility="visible" />
 
         <include
             android:id="@+id/writeReviewLayout"
-            layout="@layout/write_review_layout" />
+            layout="@layout/write_review_layout"
+            android:visibility="visible" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

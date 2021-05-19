@@ -5,10 +5,9 @@ package com.phpexpert.bringme.activities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
 import android.text.Html
-import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.RelativeLayout
@@ -80,10 +79,12 @@ open class RegistrationActivity : BaseActivity(){
             if (b) {
                 registrationActivity.mobileNumberInputText.hint = ""
                 registrationActivity.mobileNumberTextHint.visibility = View.VISIBLE
+                registrationActivity.mobileNumberTextHint.setTextColor(resources.getColor(R.color.colorLoginButton))
                 val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
                 lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._19sdp), 0, 0)
                 registrationActivity.searchCountyCountry.layoutParams = lp
             } else {
+                registrationActivity.mobileNumberTextHint.setTextColor(Color.parseColor("#808080"))
                 if (registrationActivity.mobileNumberEditText.text!!.isEmpty()) {
                     registrationActivity.mobileNumberInputText.hint = sharedPrefrenceManager.getLanguageData().mobile_number
                     val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
@@ -95,7 +96,7 @@ open class RegistrationActivity : BaseActivity(){
             }
         }
 
-        registrationActivity.firstNameEt.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+        /*registrationActivity.firstNameEt.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
             if (p1) {
                 registrationActivity.firstNameLayout.hint = sharedPrefrenceManager.getLanguageData().first_name
             } else {
@@ -120,9 +121,9 @@ open class RegistrationActivity : BaseActivity(){
                 if (registrationActivity.emailEt.text!!.isEmpty())
                     registrationActivity.emailLayout.hint = sharedPrefrenceManager.getLanguageData().email_id
             }
-        }
+        }*/
 
-        registrationActivity.emailEt.addTextChangedListener(object : TextWatcher {
+        /*registrationActivity.emailEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
@@ -139,16 +140,16 @@ open class RegistrationActivity : BaseActivity(){
                 }
             }
 
-        })
+        })*/
 
-        registrationActivity.digitPin.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+        /*registrationActivity.digitPin.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
             if (p1) {
                 registrationActivity.textData.hint = sharedPrefrenceManager.getLanguageData().password
             } else {
                 if (registrationActivity.digitPin.text!!.isEmpty())
                     registrationActivity.textData.hint = sharedPrefrenceManager.getLanguageData()._6_digit_mpin_number
             }
-        }
+        }*/
 
 
 
