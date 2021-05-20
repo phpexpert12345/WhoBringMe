@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/top_shadow_background"
         android:orientation="vertical"
+        android:clickable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <RelativeLayout
@@ -75,22 +76,34 @@
                     android:stepSize="1"
                     android:theme="@style/largeRating" />
 
-                <EditText
-                    android:id="@+id/writeReviewET"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/firstNameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_14sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_14sdp"
-                    android:backgroundTint="@color/colorDarkGrey"
-                    android:fontFamily="@font/poppins_medium"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
                     android:hint="@{languageModel.write_your_review}"
-                    android:maxHeight="@dimen/_600sdp"
-                    android:maxLength="250"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/colorDarkGrey"
-                    android:textSize="@dimen/_13sdp"
-                    tools:ignore="Autofill,TextFields" />
+                    android:textColorHint="@color/lightColor">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/writeReviewET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:backgroundTint="@color/colorDarkGrey"
+                        android:fontFamily="@font/poppins_regular"
+                        android:maxLength="250"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
+                        android:paddingTop="@dimen/_25sdp"
+                        android:paddingBottom="@dimen/_minus25sdp"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/lightColor"
+                        android:textSize="@dimen/_12sdp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/maxCharacters"

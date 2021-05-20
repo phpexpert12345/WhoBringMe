@@ -2,12 +2,9 @@
 
 package com.phpexpert.bringme.ui.delivery.profile
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
@@ -34,26 +31,21 @@ import com.phpexpert.bringme.activities.delivery.UploadDocumentSelectActivity
 import com.phpexpert.bringme.activities.employee.ProfileEditActivity
 import com.phpexpert.bringme.databinding.DeliveryProfileFragmentBinding
 import com.phpexpert.bringme.dtos.LanguageDtoData
+import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.ui.employee.profile.ProfileViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.SharedPrefrenceManager
 
 @Suppress("DEPRECATION")
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), AuthInterface {
     private lateinit var profileFragmentBinding: DeliveryProfileFragmentBinding
     private lateinit var profileViewMode: com.phpexpert.bringme.models.ProfileViewModel
     private lateinit var mobileNumberDialog: BottomSheetDialog
     private lateinit var otpDataDialog: BottomSheetDialog
     private lateinit var progressDialog: ProgressDialog
     private lateinit var languageData: LanguageDtoData
-
-    @SuppressLint("InlinedApi")
-    private var perission = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.CAMERA,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
+    private lateinit var sharedPrefrenceManager: SharedPrefrenceManager
+    private lateinit var apiName: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -61,9 +53,11 @@ class ProfileFragment : Fragment() {
         profileFragmentBinding = DataBindingUtil.inflate(layoutInflater, R.layout.delivery_profile_fragment, container, false)
         profileFragmentBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         languageData = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
+        sharedPrefrenceManager = (activity as BaseActivity).sharedPrefrenceManager
 
         profileViewMode = ViewModelProvider(this).get(com.phpexpert.bringme.models.ProfileViewModel::class.java)
-        initValues()
+        setMobileNumberDialog()
+        setOtpDialog()
         setActions()
         profileFragmentBinding.phoneChangeLayout.setOnClickListener {
             mobileNumberDialog.show()
@@ -71,75 +65,60 @@ class ProfileFragment : Fragment() {
         return profileFragmentBinding.root
     }
 
-    @SuppressLint("CutPasteId", "SetTextI18n")
-    private fun initValues() {
+    @SuppressLint("CutPasteId")
+    private fun setMobileNumberDialog() {
         mobileNumberDialog = BottomSheetDialog(requireActivity(), R.style.SheetDialog)
         mobileNumberDialog.setContentView(R.layout.layout_change_phone_number)
-        mobileNumberDialog.findViewById<TextView>(R.id.textHeading)?.text = languageData.change_phone_number
-        mobileNumberDialog.findViewById<TextView>(R.id.weWillSendText)?.text = languageData.we_will_send_you_an
-        mobileNumberDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = languageData.one_time_password
-        mobileNumberDialog.findViewById<TextView>(R.id.onThisMobile)?.text = languageData.on_this_mobile_number
-//        mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.hint = languageData.enter_your_phone_number
-        mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = languageData.get_otp
+        mobileNumberDialog.setCancelable(false)
+        mobileNumberDialog.findViewById<TextView>(R.id.textHeading)?.text = sharedPrefrenceManager.getLanguageData().change_phone_number
+        mobileNumberDialog.findViewById<TextView>(R.id.weWillSendText)?.text = sharedPrefrenceManager.getLanguageData().we_will_send_you_an
+        mobileNumberDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = sharedPrefrenceManager.getLanguageData().one_time_password
+        mobileNumberDialog.findViewById<TextView>(R.id.onThisMobile)?.text = sharedPrefrenceManager.getLanguageData().on_this_mobile_number
+        mobileNumberDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
 
-
-        mobileNumberDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.text = languageData.enter_mobile_number
-        mobileNumberDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = languageData.enter_mobile_number
-
-        mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = languageData.get_otp
+        mobileNumberDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
+        mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = sharedPrefrenceManager.getLanguageData().get_otp
         mobileNumberDialog.findViewById<TextInputEditText>(R.id.mobileNumber)?.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
             if (b) {
-                mobileNumberDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = ""
-                mobileNumberDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.setTextColor(Color.parseColor("#27A5DD"))
-                mobileNumberDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.visibility = View.VISIBLE
                 val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
                 lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._19sdp), 0, 0)
                 mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.layoutParams = lp
             } else {
-                mobileNumberDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.setTextColor(Color.parseColor("#27A5DD"))
                 if (mobileNumberDialog.findViewById<TextInputEditText>(R.id.mobileNumber)?.text!!.isEmpty()) {
-                    mobileNumberDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = languageData.enter_mobile_number
                     val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
                     lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._7sdp), 0, 0)
                     mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.layoutParams = lp
-                    mobileNumberDialog.findViewById<TextView>(R.id.mobileNumberTextHint)?.visibility = View.GONE
                 }
-
             }
         }
 
-        mobileNumberDialog.setCancelable(false)
-
-        otpDataDialog = BottomSheetDialog(requireActivity(), R.style.SheetDialog)
-        otpDataDialog.setContentView(R.layout.otp_verify_layout)
-        otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to + " " + mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.textView_selectedCountry?.text.toString() + mobileNumberDialog.findViewById<TextInputEditText>(R.id.mobileNumber)?.text.toString()
-        otpDataDialog.findViewById<TextView>(R.id.timeText)?.text = languageData.auto_verifying_your_otp_in_00_12
-        otpDataDialog.findViewById<TextView>(R.id.didNotReceive)?.text = languageData.don_t_receive_code_resend_code
-        otpDataDialog.findViewById<TextView>(R.id.resendText)?.text = languageData.resend_code
-        otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)?.text = languageData.verify
-        otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)?.text = languageData.submit
-
-        otpDataDialog.setCancelable(false)
-
         mobileNumberDialog.findViewById<ImageView>(R.id.closeIcon)!!.setOnClickListener {
+            try {
+                mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
             mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
+            mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.clearFocus()
             mobileNumberDialog.dismiss()
         }
 
         mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.setOnClickListener {
             when {
-                mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString().trim() == "" -> {
-                    (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_enter_mobile_number_first
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.isEmpty() -> {
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_register_mobile_text
+                    (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                         (activity as BaseActivity).bottomSheetDialog.dismiss()
                     }
                     (activity as BaseActivity).bottomSheetDialog.show()
                 }
-                mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text?.length !in 10..14 -> {
-                    (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_enter_valid_phone_number
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString().length !in 10..14 -> {
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_valid_mobile_number
+                    (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                         (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -152,6 +131,19 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setOtpDialog() {
+        otpDataDialog = BottomSheetDialog(requireActivity(), R.style.SheetDialog)
+        otpDataDialog.setContentView(R.layout.otp_verify_layout)
+        otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to
+        otpDataDialog.findViewById<TextView>(R.id.timeText)?.text = languageData.auto_verifying_your_otp_in_00_12
+        otpDataDialog.findViewById<TextView>(R.id.didNotReceive)?.text = languageData.don_t_receive_code_resend_code
+        otpDataDialog.findViewById<TextView>(R.id.resendText)?.text = languageData.resend_code
+        otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)?.text = languageData.verify
+        otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)?.text = languageData.submit
+
+        otpDataDialog.setCancelable(false)
 
         otpDataDialog.findViewById<ImageView>(R.id.closeIcon)!!.setOnClickListener {
             mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
@@ -159,6 +151,7 @@ class ProfileFragment : Fragment() {
         }
 
         otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.setOnClickListener {
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.startAnimation()
             verifyOtpObserver()
         }
 
@@ -168,10 +161,10 @@ class ProfileFragment : Fragment() {
         }
 
         progressDialog = ProgressDialog(requireActivity())
-        progressDialog.setMessage(languageData.please_wait)
+        progressDialog.setMessage((activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_wait)
         progressDialog.setCancelable(false)
-        handleOtpET()
 
+        handleOtpET()
     }
 
     private fun timerRestriction() {
@@ -198,9 +191,7 @@ class ProfileFragment : Fragment() {
 
     private fun setActions() {
         profileFragmentBinding.editImage.setOnClickListener {
-            if ((activity as BaseActivity).isCheckPermissions(requireActivity(), perission)) {
-                startActivity(Intent(requireActivity(), ProfileEditActivity::class.java))
-            }
+            startActivity(Intent(requireActivity(), ProfileEditActivity::class.java))
         }
         profileFragmentBinding.documentUploadLayout.setOnClickListener {
             startActivity(Intent(requireActivity(), UploadDocumentSelectActivity::class.java))
@@ -238,6 +229,7 @@ class ProfileFragment : Fragment() {
         ProfileViewModel.changeModel.postValue(false)
     }
 
+
     @SuppressLint("SetTextI18n")
     private fun setObserver() {
         ProfileViewModel.getChangeModel().observe(viewLifecycleOwner, {
@@ -255,6 +247,7 @@ class ProfileFragment : Fragment() {
         })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun getOtpNumberObserver() {
         if ((activity as BaseActivity).isOnline()) {
             profileViewMode.changeMobileNumber(getOtpDataMap()).observe(viewLifecycleOwner, {
@@ -270,6 +263,7 @@ class ProfileFragment : Fragment() {
                         otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text = Editable.Factory.getInstance().newEditable("")
                         otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text = Editable.Factory.getInstance().newEditable("")
                         otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text = Editable.Factory.getInstance().newEditable("")
+                        otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to + " " + mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString() + mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text.toString()
                         otpDataDialog.show()
                     }
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -344,16 +338,16 @@ class ProfileFragment : Fragment() {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["account_mobile"] = mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
         mapDataVal["account_phone_code"] = mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
-        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
-        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataVal
     }
 
     private fun getOtpVerify(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["otp_number"] = mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
-        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
-        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataVal
     }
 
@@ -361,16 +355,57 @@ class ProfileFragment : Fragment() {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["account_mobile"] = mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
         mapDataVal["account_phone_code"] = mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
-        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
-        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataVal
     }
 
     private fun handleOtpET() {
+        otpDataDialog.findViewById<EditText>(R.id.otpPass1)!!.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            otpDataDialog.findViewById<EditText>(R.id.otpPass1)!!.setSelection(otpDataDialog.findViewById<EditText>(R.id.otpPass1)!!.text.length)
+            if (b) {
+                if (otpDataDialog.findViewById<EditText>(R.id.otpPass1)!!.text.isNotEmpty() && otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.text.isNotEmpty()) {
+                    otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.requestFocus()
+                }
+            }
+        }
+
+        otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.setSelection(otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.text.length)
+            if (b) {
+                if (otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.text.isNotEmpty() && otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.text.isNotEmpty()) {
+                    otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.requestFocus()
+                } else if (otpDataDialog.findViewById<EditText>(R.id.otpPass1)!!.text.isEmpty()) {
+                    otpDataDialog.findViewById<EditText>(R.id.otpPass1)!!.requestFocus()
+                }
+            }
+        }
+
+        otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.setSelection(otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.text.length)
+            if (b) {
+                if (otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.text.isNotEmpty() && otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!.text.isNotEmpty()) {
+                    otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!.requestFocus()
+                } else if (otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.text.isEmpty()) {
+                    otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.requestFocus()
+                }
+            }
+        }
+
+        otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!.setSelection(otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!.text.length)
+            if (b) {
+                if (otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.text.isEmpty()) {
+                    otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.requestFocus()
+                }
+            }
+        }
+
         otpDataDialog.findViewById<EditText>(R.id.otpPass1)!!.addTextChangedListener(GenericTextWatcher(otpDataDialog.findViewById<EditText>(R.id.otpPass1)!!))
         otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.addTextChangedListener(GenericTextWatcher(otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!))
         otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.addTextChangedListener(GenericTextWatcher(otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!))
         otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!.addTextChangedListener(GenericTextWatcher(otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!))
+
     }
 
     inner class GenericTextWatcher(var view: View) : TextWatcher {
@@ -382,12 +417,22 @@ class ProfileFragment : Fragment() {
                     otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.requestFocus()
                 }
                 R.id.otpPass2 -> if (text.length == 1) otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.requestFocus() else if (text.isEmpty()) otpDataDialog.findViewById<EditText>(R.id.otpPass1)!!.requestFocus()
-                R.id.otpPass3 -> if (text.length == 1) otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!.requestFocus() else if (text.isEmpty()) otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.requestFocus()
+                R.id.otpPass3 -> if (text.length == 1) {
+                    otpDataDialog.findViewById<EditText>(R.id.otpPass4)!!.requestFocus()
+                } else if (text.isEmpty()) {
+                    otpDataDialog.findViewById<EditText>(R.id.otpPass2)!!.requestFocus()
+                }
                 R.id.otpPass4 -> if (text.isEmpty()) {
                     otpDataDialog.findViewById<EditText>(R.id.otpPass3)!!.requestFocus()
+                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.visibility = View.GONE
+                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.visibility = View.VISIBLE
+//                    otpActivity.btnVerify.visibility = View.VISIBLE
+//                    otpActivity.btnSubmit.visibility = View.GONE
+                } else {
+                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.visibility = View.VISIBLE
+                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.visibility = View.GONE
                 }
             }
-            setSubButton()
         }
 
         override fun beforeTextChanged(arg0: CharSequence, arg1: Int, arg2: Int, arg3: Int) {
@@ -397,36 +442,26 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when (requestCode) {
-            100 -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                        grantResults[1] == PackageManager.PERMISSION_GRANTED &&
-                        grantResults[2] == PackageManager.PERMISSION_GRANTED &&
-                        grantResults[3] == PackageManager.PERMISSION_GRANTED &&
-                        grantResults[4] == PackageManager.PERMISSION_GRANTED) {
-                    startActivity(Intent(requireActivity(), ProfileEditActivity::class.java))
-                } else {
-                    (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_allow_all_permission
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
-                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
-                        (activity as BaseActivity).bottomSheetDialog.dismiss()
-                    }
-                    (activity as BaseActivity).bottomSheetDialog.show()
-                }
+    override fun isAuthHit(value: Boolean, message: String) {
+        if (value) {
+            when (apiName) {
+                "sendOtp" -> getOtpNumberObserver()
+                "verifyOtp" -> verifyOtpObserver()
+                "resendOtp" -> resendOtpObserver()
             }
-        }
-    }
-
-    @SuppressLint("CutPasteId")
-    private fun setSubButton() {
-        if (otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text.toString().trim() == "" && otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text.toString().trim() == "" || otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text.toString().trim() == "" || otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text.toString().trim() == "") {
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.visibility = View.GONE
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.visibility = View.VISIBLE
         } else {
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.visibility = View.GONE
-            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_verify)!!.visibility = View.VISIBLE
+            try {
+                progressDialog.dismiss()
+            } catch (e: Exception) {
+            }
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = message
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                (activity as BaseActivity).bottomSheetDialog.dismiss()
+            }
+            (activity as BaseActivity).bottomSheetDialog.show()
         }
     }
 }

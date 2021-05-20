@@ -2,9 +2,11 @@
 
 package com.phpexpert.bringme.activities.employee
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
@@ -22,13 +24,15 @@ import com.phpexpert.bringme.databinding.JobViewLayoutBinding
 import com.phpexpert.bringme.databinding.PaymentSuccessfullPageBinding
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.PostJobPostDto
+import com.phpexpert.bringme.interfaces.AuthInterface
+import com.phpexpert.bringme.interfaces.PermissionInterface
 import com.phpexpert.bringme.models.JobPostModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import java.util.concurrent.TimeUnit
 import kotlin.Exception
 
 @Suppress("DEPRECATION")
-class CongratulationScreen : BaseActivity() {
+class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface {
 
     private lateinit var congratulationScreenBinding: PaymentSuccessfullPageBinding
     private lateinit var mBottomSheetFilter: BottomSheetBehavior<View>
@@ -39,6 +43,13 @@ class CongratulationScreen : BaseActivity() {
     private lateinit var countDownTimer: CountDownTimer
     private lateinit var languageDtoData: LanguageDtoData
     private var counting: Int = 10
+    private lateinit var apiName: String
+    private lateinit var phoneNumber: String
+
+    @SuppressLint("InlinedApi")
+    private var perission = arrayOf(
+            Manifest.permission.CALL_PHONE
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +104,7 @@ class CongratulationScreen : BaseActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setActions() {
         congratulationScreenBinding.viewJobIcon.setOnClickListener {
             mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
@@ -116,8 +128,19 @@ class CongratulationScreen : BaseActivity() {
         }
 
         congratulationScreenBinding.homeButton.setOnClickListener {
-            startActivity(Intent(this, DashboardActivity::class.java))
-            finishAffinity()
+            try {
+                startActivity(Intent(this, DashboardActivity::class.java))
+                finishAffinity()
+            } catch (e: Exception) {
+                bottomSheetDialogMessageText.text = "Some issue from server side we are resolve it"
+                bottomSheetDialogHeadingText.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
+            }
         }
 
         congratulationScreenBinding.cancelButton.setOnClickListener {
@@ -149,9 +172,18 @@ class CongratulationScreen : BaseActivity() {
             var countSecond = intArrayOf(59)
             countDownTimer = object : CountDownTimer(TimeUnit.MINUTES.toMillis(servicePostValue.jobTime!!.toLong()), 1000) {
                 override fun onTick(p0: Long) {
-                    congratulationScreenBinding.hoursTV.text = counterHour[0].toString()
-                    congratulationScreenBinding.minute1TV.text = (countMint[0] / 10).toString()
-                    congratulationScreenBinding.minute2TV.text = (countMint[0] % 10).toString()
+                    if (counterHour[0] > 0)
+                        congratulationScreenBinding.hoursTV.text = counterHour[0].toString()
+                    else {
+                        congratulationScreenBinding.hoursTV.text = "0"
+                    }
+                    if (countMint[0] > 0) {
+                        congratulationScreenBinding.minute1TV.text = (countMint[0] / 10).toString()
+                        congratulationScreenBinding.minute2TV.text = (countMint[0] % 10).toString()
+                    } else {
+                        congratulationScreenBinding.minute1TV.text = "0"
+                        congratulationScreenBinding.minute2TV.text = "0"
+                    }
                     congratulationScreenBinding.second1TV.text = (countSecond[0] / 10).toString()
                     congratulationScreenBinding.second2TV.text = (countSecond[0] % 10).toString()
                     if (countSecond[0] == 0) {
@@ -165,7 +197,7 @@ class CongratulationScreen : BaseActivity() {
                         getJobDetailsObserver()
                     }
 
-                    if (countMint[0] == 0) {
+                    if (countMint[0] == 0 && counterHour[0] != 0) {
                         counterHour[0]--
                         countMint = intArrayOf(59)
                     }
@@ -174,6 +206,7 @@ class CongratulationScreen : BaseActivity() {
                 @SuppressLint("CutPasteId")
                 override fun onFinish() {
                     bottomSheetDialogMessageText.text = languageDtoData.we_did_not_find_any_delivery_employee_within
+                    bottomSheetDialogHeadingText.visibility = View.GONE
                     bottomSheetDialogMessageOkButton.text = languageDtoData.yes
                     bottomSheetDialogMessageCancelButton.text = languageDtoData.no
                     bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -240,79 +273,138 @@ class CongratulationScreen : BaseActivity() {
     }
 
     private fun cancelJobObserver() {
-        jobViewModel.cancelJob(getCancelMap()).observe(this, {
-            try {
-                congratulationScreenBinding.cancelButton.revertAnimation()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-            bottomSheetDialogMessageText.text = it.status_message
-            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-            if (it.status_code == "0") {
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    countDownTimer.cancel()
-                    bottomSheetDialog.dismiss()
-                    startActivity(Intent(this, DashboardActivity::class.java))
-                    finishAffinity()
-                }
+        if (isOnline()) {
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                jobViewModel.cancelJob(getCancelMap()).observe(this, {
+                    try {
+                        congratulationScreenBinding.cancelButton.revertAnimation()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageText.text = it.status_message
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    if (it.status_code == "0") {
+                        bottomSheetDialogHeadingText.visibility = View.GONE
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            countDownTimer.cancel()
+                            bottomSheetDialog.dismiss()
+                            startActivity(Intent(this, DashboardActivity::class.java))
+                            finishAffinity()
+                        }
+                    } else {
+                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            bottomSheetDialog.dismiss()
+                        }
+                    }
+                    bottomSheetDialog.show()
+                })
             } else {
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
-                }
+                apiName = "cancel"
+                hitAuthApi(this)
+            }
+        } else {
+            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+            bottomSheetDialogHeadingText.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
             }
             bottomSheetDialog.show()
-        })
+        }
     }
 
     private fun updateJobObserver() {
-        jobViewModel.updateJob(getUpdateMap()).observe(this, {
-            progressDialog.dismiss()
-            try {
-                congratulationScreenBinding.cancelButton.revertAnimation()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-            bottomSheetDialogMessageText.text = it.status_message
-            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-            if (it.status_code == "0") {
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
-                    countDownTimer.cancel()
-                    setCountDownTimer()
-                }
+        if (isOnline()) {
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                jobViewModel.updateJob(getUpdateMap()).observe(this, {
+                    progressDialog.dismiss()
+                    try {
+                        congratulationScreenBinding.cancelButton.revertAnimation()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageText.text = it.status_message
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    if (it.status_code == "0") {
+                        bottomSheetDialogHeadingText.visibility = View.GONE
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            bottomSheetDialog.dismiss()
+                            countDownTimer.cancel()
+                            setCountDownTimer()
+                        }
+                    } else {
+                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            bottomSheetDialog.dismiss()
+                        }
+                    }
+                    bottomSheetDialog.show()
+                })
             } else {
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
-                }
+                apiName = "update"
+                hitAuthApi(this)
+            }
+        } else {
+            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+            bottomSheetDialogHeadingText.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
             }
             bottomSheetDialog.show()
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun getJobDetailsObserver() {
-        jobViewModel.getJobDetails(getJobDetailsMap()).observe(this, {
-            if (it.status_code == "0") {
-                if (it.data!!.OrderDetailList!![0].order_status_msg == "Accepted") {
-                    congratulationScreenBinding.timingDataLayout.visibility = View.GONE
-                    congratulationScreenBinding.userAcceptedData.visibility = View.VISIBLE
-                    congratulationScreenBinding.homeButton.visibility = View.VISIBLE
-                    countDownTimer.cancel()
-                    Glide.with(this).load(it.data!!.OrderDetailList!![0].Delivery_Employee_photo).placeholder(R.drawable.user_placeholder).into(congratulationScreenBinding.deliveryImageView)
-                    congratulationScreenBinding.userName2.text = it.data!!.OrderDetailList!![0].Delivery_Employee_name
-                    congratulationScreenBinding.userMobileNo.text = it.data!!.OrderDetailList!![0].Delivery_Employee_phone_code + " " + it.data!!.OrderDetailList!![0].Delivery_Employee_phone
-                }
+        if (isOnline()) {
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                jobViewModel.getJobDetails(getJobDetailsMap()).observe(this, {
+                    if (it.status_code == "0") {
+                        if (it.data!!.OrderDetailList!![0].order_status_msg == "Accepted") {
+                            congratulationScreenBinding.timingDataLayout.visibility = View.GONE
+                            congratulationScreenBinding.userAcceptedData.visibility = View.VISIBLE
+                            congratulationScreenBinding.homeButton.visibility = View.VISIBLE
+                            countDownTimer.cancel()
+                            Glide.with(this).load(it.data!!.OrderDetailList!![0].Delivery_Employee_photo).placeholder(R.drawable.user_placeholder).into(congratulationScreenBinding.deliveryImageView)
+                            congratulationScreenBinding.callNumber.setOnClickListener { _ ->
+                                phoneNumber = it.data!!.OrderDetailList!![0].Delivery_Employee_phone_code + it.data!!.OrderDetailList!![0].Delivery_Employee_phone
+                                if (isCheckPermissions(this, perission)) {
+                                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNumber"))
+                                    startActivity(intent)
+                                }
+                            }
+                            congratulationScreenBinding.userName2.text = it.data!!.OrderDetailList!![0].Delivery_Employee_name
+                            congratulationScreenBinding.userMobileNo.text = it.data!!.OrderDetailList!![0].Delivery_Employee_phone_code + " " + it.data!!.OrderDetailList!![0].Delivery_Employee_phone
+                        }
+                    }
+                })
+            } else {
+                apiName = "jobDetails"
+                hitAuthApi(this)
             }
-        })
+        } else {
+            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+            bottomSheetDialogHeadingText.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        }
     }
 
     private fun getJobDetailsMap(): Map<String, String> {
         val mapData = HashMap<String, String>()
         mapData["job_order_id"] = servicePostValue.jobId!!
         mapData["LoginId"] = sharedPrefrenceManager.getLoginId()
-        mapData["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapData["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
         return mapData
     }
 
@@ -320,7 +412,7 @@ class CongratulationScreen : BaseActivity() {
         val mapData = HashMap<String, String>()
         mapData["job_order_id"] = servicePostValue.jobId!!
         mapData["LoginId"] = sharedPrefrenceManager.getLoginId()
-        mapData["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapData["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
         return mapData
     }
 
@@ -329,7 +421,33 @@ class CongratulationScreen : BaseActivity() {
         mapData["job_order_id"] = servicePostValue.jobId!!
         mapData["job_offer_time"] = servicePostValue.jobTime!! + " minutes"
         mapData["LoginId"] = sharedPrefrenceManager.getLoginId()
-        mapData["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapData["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
         return mapData
+    }
+
+    override fun isAuthHit(value: Boolean, message: String) {
+        if (value) {
+            when (apiName) {
+                "cancel" -> cancelJobObserver()
+                "update" -> updateJobObserver()
+                "jobDetails" -> getJobDetailsObserver()
+            }
+        } else {
+            bottomSheetDialogMessageText.text = message
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        }
+    }
+
+    override fun isPermission(value: Boolean) {
+        if (value) {
+            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNumber"))
+            startActivity(intent)
+        }
     }
 }

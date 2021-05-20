@@ -145,7 +145,8 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
                 .into(historyFragmentCellBinding.deliveryImageView)
 
         if (arrayList[position].job_rating!! != "") {
-            historyFragmentCellBinding.reviewRatingBar.rating = arrayList[position].job_rating!!.toFloat()
+            historyFragmentCellBinding.ratingValue.rating = arrayList[position].job_rating!!.toFloat()
+//            historyFragmentCellBinding.reviewRatingBar.rating = arrayList[position].job_rating!!.toFloat()
         }
         /*historyFragmentCellBinding = holder.viewBinding as LayoutHistroyCellBinding
         historyFragmentCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
@@ -247,7 +248,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
         try {
 //            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, "DE"))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

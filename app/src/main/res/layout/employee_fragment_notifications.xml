@@ -14,21 +14,19 @@
         android:layout_height="match_parent"
         tools:context=".ui.employee.notifications.NotificationsFragment">
 
-        <RelativeLayout
+        <TextView
             android:id="@+id/headerLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_70sdp"
-            android:background="@color/colorLoginButton" />
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@color/colorLoginButton"
             android:fontFamily="@font/poppins_semi_bold"
+            android:paddingTop="@dimen/_20sdp"
+            android:paddingBottom="@dimen/_20sdp"
+            android:paddingStart="@dimen/_10sdp"
             android:text="@{languageModel.notification}"
             android:textColor="@color/white"
-            android:textSize="@dimen/_19sdp" />
+            android:textSize="@dimen/_19sdp"
+            tools:ignore="RtlSymmetry" />
 
         <LinearLayout
             android:id="@+id/noNotificationData"

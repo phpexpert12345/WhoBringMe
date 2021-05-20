@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:src="@drawable/cs"
             tools:ignore="ContentDescription" />
 
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/poppins_medium"
             android:gravity="center_horizontal"
             android:text="@{languageModel.are_you_sure_you_want_to_accept_nthis_order}"
@@ -61,13 +61,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:orientation="horizontal">
 
             <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                 android:id="@+id/noLayout"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_weight="1"
                 android:background="@color/red"
                 android:fontFamily="@font/poppins_medium"
@@ -78,7 +78,7 @@
             <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                 android:id="@+id/yesLayout"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginStart="@dimen/_1sdp"
                 android:layout_weight="1"
                 android:background="@color/colorGreen"

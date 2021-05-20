@@ -11,7 +11,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="@dimen/_3sdp"
+        android:elevation="@dimen/_3sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_3sdp"
         android:layout_marginStart="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_7sdp"
@@ -35,14 +36,14 @@
                 android:id="@+id/message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:textColor="@color/text_color"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:textColor="@color/colorDarkGrey"
                 android:textSize="@dimen/_11sdp"
                 android:fontFamily="@font/poppins_regular"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -50,8 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@+id/jobTime"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:textColor="@color/text_color"
+                    android:textColor="@color/text_color_dark"
                     android:textSize="@dimen/_9sdp"
                     android:fontFamily="@font/poppins_regular"/>
 
@@ -60,8 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:textColor="@color/text_color"
+                    android:textColor="@color/text_color_dark"
                     android:textSize="@dimen/_9sdp"
                     android:fontFamily="@font/poppins_regular"
                     tools:ignore="RelativeOverlap" />

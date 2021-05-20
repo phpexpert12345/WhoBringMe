@@ -213,7 +213,7 @@ class OTPActivity : BaseActivity(), AuthInterface {
     }
 
     private fun setObserver() {
-        if (sharedPrefrenceManager.getAuthData().auth_key != null && sharedPrefrenceManager.getAuthData().auth_key == "")
+        if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "")
             viewDataModel.registerViewModel(mapData()).observe(this, {
                 otpActivity.btnSubmit.revertAnimation()
                 bottomSheetDialogMessageText.text = it.status_message
@@ -242,7 +242,7 @@ class OTPActivity : BaseActivity(), AuthInterface {
     }
 
     private fun resendOtpObserver() {
-        if (sharedPrefrenceManager.getAuthData().auth_key != null && sharedPrefrenceManager.getAuthData().auth_key != "")
+        if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "")
             viewDataModel.resendOtpModel(resendData()).observe(this, {
                 progressDialog.dismiss()
                 bottomSheetDialogMessageText.text = it.status_message
@@ -302,16 +302,16 @@ class OTPActivity : BaseActivity(), AuthInterface {
         mapDataVal["referral_code"] = postDataOtp.accountReferralCode
         mapDataVal["device_token_id"] = postDataOtp.deviceTokenId
         mapDataVal["device_platform"] = postDataOtp.devicePlatform
-        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
-        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataVal
     }
 
     private fun resendData(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
-        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["Token_ID"] = postDataOtp.deviceTokenId!!
-        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataVal
     }
 

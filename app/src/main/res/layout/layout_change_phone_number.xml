@@ -7,8 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:theme="@style/DialogStyle"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -19,12 +18,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
-                android:layout_marginTop="@dimen/_10sdp"/>
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/white" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/top_bottom_shadow_background"/>
+                android:background="@drawable/top_bottom_shadow_background" />
+
             <TextView
                 android:id="@+id/textHeading"
                 android:layout_width="wrap_content"
@@ -40,8 +41,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:src="@drawable/close_back"
                 tools:ignore="ContentDescription" />
 
@@ -65,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_25sdp"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_25sdp"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -122,7 +123,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/mobileNumberInputText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:textColorHint="@color/lightColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mobileNumber"
@@ -135,12 +137,11 @@
                         android:imeOptions="actionDone"
                         android:inputType="number"
                         android:maxLength="14"
-                        android:paddingStart="@dimen/_65sdp"
+                        android:paddingStart="@dimen/_70sdp"
                         android:paddingLeft="@dimen/_65sdp"
                         android:paddingTop="@dimen/_25sdp"
-                        android:paddingBottom="@dimen/_minus10sdp"
+                        android:paddingBottom="@dimen/_minus25sdp"
                         android:textColor="@color/text_color"
-                        android:textColorHint="@color/colorDarkGrey"
                         android:textSize="@dimen/_12sdp"
                         app:boxBackgroundColor="@android:color/transparent"
                         tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -169,14 +170,14 @@
                 android:id="@+id/getOtpButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_rectangle_green"
                 android:layout_gravity="center_horizontal"
-                app:spinning_bar_color="@color/white"
-                app:spinning_bar_padding="@dimen/_5sdp"
+                android:background="@drawable/button_rectangle_green"
                 android:fontFamily="@font/poppins_medium"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_11sdp"
+                app:spinning_bar_color="@color/white"
+                app:spinning_bar_padding="@dimen/_5sdp" />
         </LinearLayout>
 
     </LinearLayout>

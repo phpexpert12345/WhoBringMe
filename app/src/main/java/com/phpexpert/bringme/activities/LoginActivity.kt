@@ -357,7 +357,7 @@ class LoginActivity : BaseActivity(), AuthInterface {
     //method to observe login data
     private fun observerDataLogin() {
         if (isOnline()) {
-            if (sharedPrefrenceManager.getAuthData().auth_key != null && sharedPrefrenceManager.getAuthData().auth_key != "") {
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 loginViewModel.getLoginData(mapDataLogin()).observe(this, {
                     loginBinding.loginButton.revertAnimation()
                     bottomSheetDialogMessageText.text = it.status_message
@@ -414,7 +414,7 @@ class LoginActivity : BaseActivity(), AuthInterface {
     @SuppressLint("CutPasteId", "SetTextI18n")
     private fun observeForgotPasswordOtpSendData() {
         if (isOnline()) {
-            if (sharedPrefrenceManager.getAuthData().auth_key != null && sharedPrefrenceManager.getAuthData().auth_key != "")
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "")
                 loginViewModel.getOtpForgotPasswordSendData(mapDataOtpForgotSend()).observe(this, {
                     forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
                     bottomSheetDialogMessageText.text = it.status_message
@@ -463,7 +463,7 @@ class LoginActivity : BaseActivity(), AuthInterface {
     //observer for reset password
     private fun observeForgotPasswordResetData() {
         if (isOnline()) {
-            if (sharedPrefrenceManager.getAuthData().auth_key != null && sharedPrefrenceManager.getAuthData().auth_key != "")
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "")
                 loginViewModel.getOtpForgotPasswordReset(mapDataResetPassword()).observe(this, {
                     forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)!!.revertAnimation()
                     forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
@@ -521,8 +521,8 @@ class LoginActivity : BaseActivity(), AuthInterface {
         mapDataValue["account_password"] = loginBinding.digitPin.text.toString()
         mapDataValue["device_id"] = getIMEI(this)!!
         mapDataValue["device_platform"] = "Android"
-        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
-        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataValue
     }
 
@@ -531,8 +531,8 @@ class LoginActivity : BaseActivity(), AuthInterface {
         val mapDataValue = HashMap<String, String>()
         mapDataValue["account_mobile"] = forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
         mapDataValue["account_phone_code"] = forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
-        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
-        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataValue
     }
 
@@ -543,16 +543,16 @@ class LoginActivity : BaseActivity(), AuthInterface {
         mapDataValue["confirm_password"] = forgotPasswordTwoDialog.findViewById<EditText>(R.id.confirmPasswordET)!!.text.toString()
         mapDataValue["LoginId"] = loginId
         mapDataValue["Mobile_OTP"] = forgotPasswordTwoDialog.findViewById<EditText>(R.id.otpNumberET)!!.text.toString()
-        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
-        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataValue
     }
 
     private fun resendData(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
-        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["Token_ID"] = tokenId
-        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataVal
     }
 

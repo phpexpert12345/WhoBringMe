@@ -53,93 +53,116 @@
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_45sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
+                    android:minWidth="@dimen/_60sdp"
+                    android:minHeight="@dimen/_65sdp"
                     app:cardCornerRadius="@dimen/_10sdp"
-                    app:cardElevation="@dimen/_5sdp">
+                    app:cardElevation="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true">
 
                     <EditText
                         android:id="@+id/otpPass1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_gravity="center"
                         android:background="@null"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
+                        android:minWidth="@dimen/_40sdp"
+                        android:minHeight="@dimen/_45sdp"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="Autofill,LabelFor" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_minus6sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
+                    android:minWidth="@dimen/_60sdp"
+                    android:minHeight="@dimen/_65sdp"
                     app:cardCornerRadius="@dimen/_10sdp"
-                    app:cardElevation="@dimen/_5sdp">
+                    app:cardElevation="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true">
 
                     <EditText
                         android:id="@+id/otpPass2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_gravity="center"
                         android:background="@null"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
+                        android:minWidth="@dimen/_40sdp"
+                        android:minHeight="@dimen/_45sdp"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="Autofill,LabelFor" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_minus5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
+                    android:minWidth="@dimen/_60sdp"
+                    android:minHeight="@dimen/_65sdp"
                     app:cardCornerRadius="@dimen/_10sdp"
-                    app:cardElevation="@dimen/_5sdp">
+                    app:cardElevation="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true">
 
                     <EditText
                         android:id="@+id/otpPass3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_gravity="center"
                         android:background="@null"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
+                        android:minWidth="@dimen/_40sdp"
+                        android:minHeight="@dimen/_45sdp"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="Autofill,LabelFor" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_minus5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_5sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
+                    android:minWidth="@dimen/_60sdp"
+                    android:minHeight="@dimen/_65sdp"
                     app:cardCornerRadius="@dimen/_10sdp"
-                    app:cardElevation="@dimen/_5sdp">
+                    app:cardElevation="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true">
 
                     <EditText
                         android:id="@+id/otpPass4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_gravity="center"
                         android:background="@null"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
+                        android:minWidth="@dimen/_40sdp"
+                        android:minHeight="@dimen/_45sdp"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="Autofill,LabelFor" />
@@ -194,6 +217,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:visibility="gone"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">

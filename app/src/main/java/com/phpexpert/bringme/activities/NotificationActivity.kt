@@ -10,10 +10,11 @@ import com.phpexpert.bringme.adapters.NotificationAdapter
 import com.phpexpert.bringme.databinding.NotificationActivityBinding
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.NotificationDtoList
+import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.NotificationViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
 
-class NotificationActivity : BaseActivity() {
+class NotificationActivity : BaseActivity(), AuthInterface {
     private lateinit var notificationsViewModel: NotificationViewModel
     private lateinit var notificationBinding: NotificationActivityBinding
     private lateinit var arrayList: ArrayList<NotificationDtoList>
@@ -42,28 +43,32 @@ class NotificationActivity : BaseActivity() {
 
     private fun setObserver() {
         if (isOnline()) {
-            notificationsViewModel.getNotificationData(getNotificationMap()).observe(this, {
-                if (it.status_code == "0") {
-                    notificationBinding.nestedScrollView.visibility = View.VISIBLE
-                    notificationBinding.noNotificationData.visibility = View.GONE
-                    arrayList.clear()
-                    arrayList.addAll(it.data!!.NotificationList!!)
-                    notificationBinding.notificationRV.adapter!!.notifyDataSetChanged()
-                } else {
-                    if (it.status == "") {
-                        bottomSheetDialogMessageText.text = it.status_message
-                        bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                        bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            bottomSheetDialog.dismiss()
-                        }
-                        bottomSheetDialog.show()
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                notificationsViewModel.getNotificationData(getNotificationMap()).observe(this, {
+                    if (it.status_code == "0") {
+                        notificationBinding.nestedScrollView.visibility = View.VISIBLE
+                        notificationBinding.noNotificationData.visibility = View.GONE
+                        arrayList.clear()
+                        arrayList.addAll(it.data!!.NotificationList!!)
+                        notificationBinding.notificationRV.adapter!!.notifyDataSetChanged()
                     } else {
-                        notificationBinding.nestedScrollView.visibility = View.GONE
-                        notificationBinding.noNotificationData.visibility = View.VISIBLE
+                        if (it.status == "") {
+                            bottomSheetDialogMessageText.text = it.status_message
+                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
+                            bottomSheetDialog.show()
+                        } else {
+                            notificationBinding.nestedScrollView.visibility = View.GONE
+                            notificationBinding.noNotificationData.visibility = View.VISIBLE
+                        }
                     }
-                }
-            })
+                })
+            } else {
+                hitAuthApi(this)
+            }
         } else {
             bottomSheetDialogMessageText.text = languageDtoData.network_error
             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
@@ -78,7 +83,24 @@ class NotificationActivity : BaseActivity() {
     private fun getNotificationMap(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["LoginId"] = sharedPrefrenceManager.getLoginId()
-        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
         return mapDataVal
+    }
+
+    override fun isAuthHit(value: Boolean, message: String) {
+        if (value){
+
+        }else{
+
+            bottomSheetDialogMessageText.text = message
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+
+        }
     }
 }

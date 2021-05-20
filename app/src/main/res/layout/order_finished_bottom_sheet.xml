@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:src="@drawable/otp_ic_small"
             tools:ignore="ContentDescription" />
 
@@ -54,7 +54,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:fontFamily="@font/poppins_medium"
             android:gravity="center_horizontal"
             android:text="@{languageModel.enter_job_code_which_is_provide_by_raj_nkaushal_to_finish_your_job}"
@@ -64,17 +66,16 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textColorHint="@color/lightColor"
             android:hint="@{languageModel.enter_job_code}">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/jobCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
-                android:layout_marginEnd="@dimen/_30sdp"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/poppins_medium"
                 android:paddingStart="0dp"
@@ -84,7 +85,7 @@
                 android:singleLine="true"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/lightColor"
-                android:textSize="@dimen/_13sdp"
+                android:textSize="@dimen/_12sdp"
                 app:boxBackgroundColor="@android:color/transparent"
                 tools:ignore="RtlHardcoded,RtlSymmetry" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -179,7 +180,7 @@
             <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                 android:id="@+id/noLayout"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_weight="1"
                 android:background="@color/red"
                 android:fontFamily="@font/poppins_medium"
@@ -190,7 +191,7 @@
             <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                 android:id="@+id/yesLayout"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginStart="@dimen/_1sdp"
                 android:layout_weight="1"
                 android:background="@color/colorGreen"

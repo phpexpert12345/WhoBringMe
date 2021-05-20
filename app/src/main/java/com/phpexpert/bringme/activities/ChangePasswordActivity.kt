@@ -8,11 +8,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutChangePasswordBinding
 import com.phpexpert.bringme.dtos.LanguageDtoData
+import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.ProfileViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
-import com.phpexpert.bringme.utilities.SoftInputAssist
 
-class ChangePasswordActivity : BaseActivity() {
+class ChangePasswordActivity : BaseActivity(), AuthInterface {
 
     private lateinit var changePasswordActivity: LayoutChangePasswordBinding
     private lateinit var changePasswordViewModel: ProfileViewModel
@@ -154,22 +154,32 @@ class ChangePasswordActivity : BaseActivity() {
 
     private fun setObserver() {
         if (isOnline()) {
-            changePasswordViewModel.changePassword(mapData()).observe(this, {
+            if (sharedPrefrenceManager.getAuthData()?.auth_key !=null && sharedPrefrenceManager.getAuthData()?.auth_key !="") {
                 changePasswordActivity.continueButton.revertAnimation()
-                bottomSheetDialogMessageText.text = it.status_message
-                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
-                    if (it.status_code == "0") {
-                        finish()
+                changePasswordViewModel.changePassword(mapData()).observe(this, {
+                    changePasswordActivity.continueButton.revertAnimation()
+                    bottomSheetDialogMessageText.text = it.status_message
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    if (it.status_code == "0")
+                        bottomSheetDialogHeadingText.visibility = View.GONE
+                    else
+                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                    bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                        if (it.status_code == "0") {
+                            finish()
+                        }
+                        bottomSheetDialog.dismiss()
                     }
-                    bottomSheetDialog.dismiss()
-                }
-                bottomSheetDialog.show()
-            })
+                    bottomSheetDialog.show()
+                })
+            }else{
+                hitAuthApi(this)
+            }
         } else {
             changePasswordActivity.continueButton.revertAnimation()
             bottomSheetDialogMessageText.text = languageDtoData.network_error
+            bottomSheetDialogHeadingText.visibility = View.GONE
             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -185,9 +195,25 @@ class ChangePasswordActivity : BaseActivity() {
         mapDataValue["confirm_password"] = changePasswordActivity.confirmPasswordET.text.toString()
         mapDataValue["LoginId"] = sharedPrefrenceManager.getLoginId()
         mapDataValue["Old_Password"] = changePasswordActivity.oldPassword.text.toString()
-        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData().auth_key!!
-        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData().lang_code!!
+        mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataValue
+    }
+
+    override fun isAuthHit(value: Boolean, message: String) {
+        if (value){
+            setObserver()
+        }else{
+            changePasswordActivity.continueButton.revertAnimation()
+            bottomSheetDialogMessageText.text = message
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        }
     }
 
 }

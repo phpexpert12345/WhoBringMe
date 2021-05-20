@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorLoginButton"
-            android:paddingTop="@dimen/_20sdp"
             android:paddingBottom="@dimen/_20sdp">
 
             <ImageView
@@ -80,6 +79,11 @@
                     android:id="@+id/notificationRV"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_below="@+id/notificationRV"/>
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>

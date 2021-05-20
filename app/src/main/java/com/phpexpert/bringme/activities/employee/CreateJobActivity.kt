@@ -24,7 +24,6 @@ class CreateJobActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         createJobBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_job)
         createJobBinding.languageModel = sharedPrefrenceManager.getLanguageData()
-//        softInputAssist = SoftInputAssist(this)
 
         createJobBinding.jobTotalAmount.hint = "${sharedPrefrenceManager.getLanguageData().job_total_amount_in} (${getCurrencySymbol()})"
         Glide.with(this).load(sharedPrefrenceManager.getProfile().login_photo)
@@ -38,45 +37,18 @@ class CreateJobActivity : BaseActivity() {
 
     private fun setActions() {
 
-        /*createJobBinding.totalAmount.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                if (p0.toString().trim() == "(${getCurrencySymbol()})") {
-                    createJobBinding.totalAmount.text = Editable.Factory.getInstance().newEditable("")
-                } else {
-                    if (!createJobBinding.totalAmount.text.toString().contains(getCurrencySymbol()!!) && p0.toString().trim() != "") {
-                        createJobBinding.totalAmount.text = Editable.Factory.getInstance().newEditable("(${getCurrencySymbol()}) $p0")
-                        createJobBinding.totalAmount.setSelection(createJobBinding.totalAmount.text.toString().length)
-                    } else {
-                        try {
-                            if (p0.toString().split(" ")[1].toFloat() > 1000000) {
-                                Toast.makeText(this@CreateJobActivity, sharedPrefrenceManager.getLanguageData().enter_job_limit_amount, Toast.LENGTH_LONG).show()
-                            }
-                        } catch (e: Exception) {
-                        }
-                    }
-
-                }
-            }
-        })*/
         createJobBinding.submitButton.setOnClickListener {
             if (checkValidation()) {
-                createJobBinding.submitButton.startAnimation()
+//                createJobBinding.submitButton.startAnimation()
                 val postJobPostDto = PostJobPostDto()
                 postJobPostDto.jobAmount = createJobBinding.totalAmount.text.toString()
                 postJobPostDto.jobDescription = createJobBinding.postInfo.text.toString().trim()
                 postJobPostDto.jobTime = createJobBinding.mintsTextView.text.toString()
-                Handler().postDelayed({
-                    val intent = Intent(this, PaymentActivity::class.java)
-                    intent.putExtra("postValue", postJobPostDto)
-                    startActivity(intent)
-                }, 1000)
+//                Handler().postDelayed({
+                val intent = Intent(this, PaymentActivity::class.java)
+                intent.putExtra("postValue", postJobPostDto)
+                startActivity(intent)
+//                }, 1000)
             }
         }
 
@@ -97,7 +69,7 @@ class CreateJobActivity : BaseActivity() {
                     createJobBinding.maxCharactersLimitData.hint = ""
                     createJobBinding.maxCharactersLimitData.text = "${sharedPrefrenceManager.getLanguageData().characters_limit} ${2000 - (p0.toString().length)}"
                 } else
-                    createJobBinding.maxCharactersLimitData.hint = "${sharedPrefrenceManager.getLanguageData().characters_limit} ${2000 - (p0.toString().length)}"
+                    createJobBinding.maxCharactersLimitData.text = "${sharedPrefrenceManager.getLanguageData().characters_limit} ${2000 - (p0.toString().length)}"
             }
 
         })
@@ -120,6 +92,7 @@ class CreateJobActivity : BaseActivity() {
         return when {
             createJobBinding.postInfo.text.toString().trim().isEmpty() -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().post_description_is_mandatory
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -131,6 +104,7 @@ class CreateJobActivity : BaseActivity() {
             createJobBinding.totalAmount.text.toString().isEmpty() -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().total_amount_is_mandatory
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -142,6 +116,7 @@ class CreateJobActivity : BaseActivity() {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().total_amount_should_be_more_than_0
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
                 }
@@ -152,6 +127,7 @@ class CreateJobActivity : BaseActivity() {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_job_limit_amount
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
                 }
@@ -163,6 +139,7 @@ class CreateJobActivity : BaseActivity() {
             }
         }
     }
+
     override fun onPause() {
         super.onPause()
         createJobBinding.submitButton.revertAnimation()

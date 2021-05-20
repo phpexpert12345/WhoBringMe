@@ -60,7 +60,7 @@ class SharedPrefrenceManager @Inject constructor(var sharedPreferences: SharedPr
         )
     }
 
-    fun getAuthData(): AuthDtoData {
+    fun getAuthData(): AuthDtoData? {
         val g = Gson()
         val regStr: String = getPreference("AUTH_DATA")!!
         return g.fromJson(

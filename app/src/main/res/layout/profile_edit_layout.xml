@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="languageModel"
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
     </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,7 +18,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_100sdp"
+            android:layout_height="@dimen/_95sdp"
             android:background="@color/colorLoginButton"
             android:paddingTop="@dimen/_20sdp" />
 
@@ -35,12 +37,14 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_25sdp"
+                android:gravity="center"
+                android:layout_marginEnd="@dimen/_20sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@{languageModel.edit}"
+                android:text="@{languageModel.update_profile}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13sdp" />
 
@@ -48,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/_65sdp">
+                android:layout_marginTop="@dimen/_60sdp">
 
                 <ImageView
                     android:id="@+id/userImage"
@@ -95,14 +99,14 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:paddingStart="0dp"
                         android:maxLength="50"
+                        android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
                         android:singleLine="true"
-                        android:textColorHint="@color/lightColor"
                         android:textColor="@color/text_color"
+                        android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
                         app:boxBackgroundColor="@android:color/transparent"
                         tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -120,14 +124,14 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
-                        android:paddingStart="0dp"
                         android:maxLength="50"
+                        android:paddingStart="0dp"
                         android:paddingLeft="0dp"
-                        android:textColorHint="@color/lightColor"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
                         android:singleLine="true"
                         android:textColor="@color/text_color"
+                        android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
                         app:boxBackgroundColor="@android:color/transparent"
                         tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -145,14 +149,14 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
+                        android:maxLength="50"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
-                        android:maxLength="50"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
                         android:singleLine="true"
-                        android:textColorHint="@color/lightColor"
                         android:textColor="@color/text_color"
+                        android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
                         app:boxBackgroundColor="@android:color/transparent"
                         tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -175,14 +179,14 @@
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/poppins_medium"
                             android:gravity="center_vertical"
-                            android:textColorHint="@color/lightColor"
                             android:minHeight="@dimen/_50sdp"
                             android:paddingStart="0dp"
-                            android:paddingEnd="@dimen/_20sdp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
+                            android:paddingEnd="@dimen/_20sdp"
                             android:paddingBottom="@dimen/_minus40sdp"
                             android:textColor="@color/text_color"
+                            android:textColorHint="@color/lightColor"
                             android:textSize="@dimen/_13sdp"
                             app:boxBackgroundColor="@android:color/transparent"
                             tools:ignore="LabelFor,RtlHardcoded,RtlSymmetry" />
@@ -215,9 +219,9 @@
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
-                        android:textColorHint="@color/lightColor"
                         android:singleLine="true"
                         android:textColor="@color/text_color"
+                        android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
                         app:boxBackgroundColor="@android:color/transparent"
                         tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -236,12 +240,12 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:paddingStart="0dp"
-                        android:textColorHint="@color/lightColor"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
                         android:singleLine="true"
                         android:textColor="@color/text_color"
+                        android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
                         app:boxBackgroundColor="@android:color/transparent"
                         tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -250,8 +254,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:layout_marginBottom="@dimen/_20sdp"
                     android:hint="@{languageModel.post_code}">
@@ -263,13 +267,13 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/poppins_medium"
                         android:inputType="number"
-                        android:textColorHint="@color/lightColor"
                         android:paddingStart="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="@dimen/_25sdp"
                         android:paddingBottom="@dimen/_minus40sdp"
                         android:singleLine="true"
                         android:textColor="@color/text_color"
+                        android:textColorHint="@color/lightColor"
                         android:textSize="@dimen/_13sdp"
                         app:boxBackgroundColor="@android:color/transparent"
                         tools:ignore="RtlHardcoded,RtlSymmetry" />

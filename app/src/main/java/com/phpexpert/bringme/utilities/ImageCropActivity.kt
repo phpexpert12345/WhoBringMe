@@ -27,11 +27,11 @@ class ImageCropActivity : BaseActivity() {
 
         imageCropActivityBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_image_crop)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
+//        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         imageUri = Uri.parse(intent.getStringExtra("imageUri"))
         // Log.d("imageUri!!", String.valueOf(imageUri));
         setUriImages(imageUri)
+
         imageCropActivityBinding.rotateImage.setOnClickListener {
             imageCropActivityBinding.CropImageView.getCroppedImage(
                 300,

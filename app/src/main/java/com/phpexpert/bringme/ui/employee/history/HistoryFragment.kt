@@ -25,6 +25,7 @@ import com.phpexpert.bringme.databinding.JobViewLayoutBinding
 import com.phpexpert.bringme.databinding.WriteReviewLayoutBinding
 import com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoList
 import com.phpexpert.bringme.dtos.PostJobPostDto
+import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.JobHistoryModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import java.lang.Exception
@@ -35,7 +36,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 @Suppress("DEPRECATION")
-class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
+class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInterface {
     private var jobHistoryViewModel: JobHistoryModel? = null
     private lateinit var historyBinding: EmployeeFragmentHistoryBinding
     private lateinit var mBottomSheetFilter: BottomSheetBehavior<View>
@@ -46,6 +47,12 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
     private lateinit var arrayList: ArrayList<EmployeeJobHistoryDtoList>
     private var searOrderString: String = ""
     private lateinit var progressDialog: ProgressDialog
+    private lateinit var mainArrayList: ArrayList<EmployeeJobHistoryDtoList>
+    private lateinit var apiName: String
+    private lateinit var reviewJobId: String
+    private lateinit var reviewJobRating: String
+    private lateinit var reviewJobText: String
+    private var selectedPosition: Int = -1
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -77,13 +84,16 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
     }
 
     private fun setAction() {
+        historyBinding.searchIconEdit.setOnClickListener {
+            if (historyBinding.layoutSearchData.visibility != View.VISIBLE) {
+                historyBinding.layoutSearchData.visibility = View.VISIBLE
+                historyBinding.searchIconEdit.visibility = View.GONE
+            }
+        }
+
         historyBinding.searchIcon.setOnClickListener {
-            if (historyBinding.textHeading.visibility == View.VISIBLE) {
-                historyBinding.textHeading.visibility = View.GONE
-                historyBinding.searchET.visibility = View.VISIBLE
-                historyBinding.closeIcon.visibility = View.VISIBLE
-            } else {
-                searOrderString = historyBinding.searchET.text.toString()
+            if (historyBinding.searchET.text.isNotEmpty()) {
+                searOrderString = historyBinding.searchET.text.toString().trim()
                 setObserver()
             }
         }
@@ -91,53 +101,79 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         historyBinding.closeIcon.setOnClickListener {
             historyBinding.searchET.text = Editable.Factory.getInstance().newEditable("")
             this.searOrderString = ""
-            historyBinding.textHeading.visibility = View.VISIBLE
-            historyBinding.searchET.visibility = View.GONE
-            historyBinding.closeIcon.visibility = View.GONE
+            historyBinding.searchIconEdit.visibility = View.VISIBLE
+            historyBinding.layoutSearchData.visibility = View.GONE
             this.hideKeyboard()
-            setObserver()
+            if (mainArrayList.isNotEmpty()) {
+                arrayList.clear()
+                arrayList.addAll(mainArrayList)
+                historyBinding.historyRV.adapter?.notifyDataSetChanged()
+            } else {
+                setObserver()
+            }
         }
     }
 
     private fun setList() {
         historyBinding.historyRV.layoutManager = LinearLayoutManager(requireActivity())
         historyBinding.historyRV.isNestedScrollingEnabled = false
+        mainArrayList = ArrayList()
         arrayList = ArrayList()
         historyBinding.historyRV.adapter = HistoryFragmentAdapter(requireActivity(), arrayList, this)
     }
 
     private fun setObserver() {
-        progressDialog.show()
-        jobHistoryViewModel!!.getJobHistoryData(jobHistoryMapData()).observe(viewLifecycleOwner, {
-            progressDialog.dismiss()
-            if (it.status_code == "0") {
-                historyBinding.noJobHistroy.visibility = View.GONE
-                historyBinding.nestedScrollView.visibility = View.VISIBLE
-                arrayList.clear()
-                arrayList.addAll(it.data!!.OrderList)
-                historyBinding.historyRV.adapter!!.notifyDataSetChanged()
-            } else {
-                if (it.status != "") {
-                    historyBinding.noJobHistroy.visibility = View.VISIBLE
-                    historyBinding.nestedScrollView.visibility = View.GONE
-                } else {
-                    (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
-                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
-                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+        if ((activity as BaseActivity).isOnline()) {
+            if ((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key != "" && (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                progressDialog.show()
+                jobHistoryViewModel!!.getJobHistoryData(jobHistoryMapData()).observe(viewLifecycleOwner, {
+                    progressDialog.dismiss()
+                    if (it.status_code == "0") {
+                        historyBinding.noJobHistroy.visibility = View.GONE
+                        historyBinding.nestedScrollView.visibility = View.VISIBLE
+                        arrayList.clear()
+                        arrayList.addAll(it.data!!.OrderList)
+                        if (searOrderString == "") {
+                            mainArrayList.addAll(arrayList)
+                        }
+                        historyBinding.historyRV.adapter!!.notifyDataSetChanged()
+                    } else {
+                        if (it.status != "") {
+                            historyBinding.noJobHistroy.visibility = View.VISIBLE
+                            historyBinding.nestedScrollView.visibility = View.GONE
+                        } else {
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                                (activity as BaseActivity).bottomSheetDialog.dismiss()
+                            }
+                            (activity as BaseActivity).bottomSheetDialog.show()
+                        }
                     }
-                    (activity as BaseActivity).bottomSheetDialog.show()
-                }
+                })
+            } else {
+                apiName = "listData"
+                (activity as BaseActivity).hitAuthApi(this)
             }
-        })
+        } else {
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                (activity as BaseActivity).bottomSheetDialog.dismiss()
+            }
+            (activity as BaseActivity).bottomSheetDialog.show()
+        }
     }
 
     private fun jobHistoryMapData(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
-        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["Order_Number"] = searOrderString
         return mapDataVal
     }
@@ -146,8 +182,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
     override fun onClick(textInput: String, position: Int) {
         when (textInput) {
             "viewData" -> {
-                mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
-                historyBinding.blurView.visibility = View.VISIBLE
+
                 jobViewBinding.closeView.setOnClickListener {
                     mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
                     historyBinding.blurView.visibility = View.GONE
@@ -179,10 +214,12 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                 jobViewBinding.currencyCode2.text = (activity as BaseActivity).getCurrencySymbol()
                 jobViewBinding.currencyCode3.text = (activity as BaseActivity).getCurrencySymbol()
                 jobViewBinding.currencyCode4.text = (activity as BaseActivity).getCurrencySymbol()
+
+                mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
+                historyBinding.blurView.visibility = View.VISIBLE
             }
             else -> {
-                mBottomSheetReview.state = BottomSheetBehavior.STATE_EXPANDED
-                historyBinding.blurView.visibility = View.VISIBLE
+
                 reviewBinding.closeIcon.setOnClickListener {
                     this.hideKeyboard()
                 }
@@ -204,6 +241,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                     when {
                         reviewBinding.ratingData.rating == 0f -> {
                             (activity as BaseActivity).bottomSheetDialog.show()
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
                             (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_provide_rating
                             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -214,6 +252,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                         }
                         reviewBinding.writeReviewET.text.toString() == "" -> {
                             (activity as BaseActivity).bottomSheetDialog.show()
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
                             (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_enter_review
                             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -224,47 +263,69 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
                         }
                         else -> {
                             reviewBinding.submitButton.startAnimation()
+                            reviewJobId = arrayList[position].job_order_id!!
+                            reviewJobRating = reviewBinding.ratingData.rating.toString()
+                            reviewJobText = reviewBinding.writeReviewET.text.toString()
                             writeReviewData(arrayList[position].job_order_id!!, reviewBinding.ratingData.rating.toString(), reviewBinding.writeReviewET.text.toString(), position)
                             reviewBinding.ratingData.rating = 0f
                             reviewBinding.writeReviewET.text = Editable.Factory.getInstance().newEditable("")
                         }
                     }
                 }
+
+                mBottomSheetReview.state = BottomSheetBehavior.STATE_EXPANDED
+                historyBinding.blurView.visibility = View.VISIBLE
             }
         }
     }
 
     private fun writeReviewData(jobOrderId: String, totalRating: String, reviewContent: String, position: Int) {
-        jobHistoryViewModel!!.getWriteReviewJobData(reviewDataMap(jobOrderId, totalRating, reviewContent)).observe(viewLifecycleOwner, {
-            reviewBinding.submitButton.revertAnimation()
-            mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
-            historyBinding.blurView.visibility = View.GONE
-            if (it.status_code == "0") {
-                (activity as BaseActivity).bottomSheetDialog.show()
-                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
-                (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
-                    (activity as BaseActivity).bottomSheetDialog.dismiss()
-                    this.hideKeyboard()
+        if ((activity as BaseActivity).isOnline()) {
+            if ((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key != "" && (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                jobHistoryViewModel!!.getWriteReviewJobData(reviewDataMap(jobOrderId, totalRating, reviewContent)).observe(viewLifecycleOwner, {
+                    reviewBinding.submitButton.revertAnimation()
+                    mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
+                    historyBinding.blurView.visibility = View.GONE
+                    if (it.status_code == "0") {
+                        (activity as BaseActivity).bottomSheetDialog.show()
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                        (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                            (activity as BaseActivity).bottomSheetDialog.dismiss()
+                            this.hideKeyboard()
 
-                    arrayList[position].review_status = "Done"
-                    arrayList[position].job_review_description = reviewContent
-                    arrayList[position].job_rating = totalRating
-                    historyBinding.historyRV.adapter!!.notifyItemChanged(position)
-                }
-                (activity as BaseActivity).bottomSheetDialog.show()
+                            arrayList[position].review_status = "Done"
+                            arrayList[position].job_review_description = reviewContent
+                            arrayList[position].job_rating = totalRating
+                            historyBinding.historyRV.adapter!!.notifyItemChanged(position)
+                        }
+                        (activity as BaseActivity).bottomSheetDialog.show()
+                    } else {
+                        (activity as BaseActivity).bottomSheetDialog.show()
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                        (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                            (activity as BaseActivity).bottomSheetDialog.dismiss()
+                        }
+                        (activity as BaseActivity).bottomSheetDialog.show()
+                    }
+                })
             } else {
-                (activity as BaseActivity).bottomSheetDialog.show()
-                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
-                (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
-                    (activity as BaseActivity).bottomSheetDialog.dismiss()
-                }
-                (activity as BaseActivity).bottomSheetDialog.show()
+                apiName = "writeReview"
+                (activity as BaseActivity).hitAuthApi(this)
             }
-        })
+        } else {
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                (activity as BaseActivity).bottomSheetDialog.dismiss()
+            }
+            (activity as BaseActivity).bottomSheetDialog.show()
+        }
     }
 
     private fun reviewDataMap(jobOrderId: String, totalRating: String, reviewContent: String): Map<String, String> {
@@ -273,7 +334,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         mapDataValue["job_order_id"] = jobOrderId
         mapDataValue["total_tating"] = totalRating
         mapDataValue["review_content"] = (activity as BaseActivity).base64Encoded(reviewContent)
-        mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         return mapDataValue
     }
 
@@ -281,7 +342,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
         try {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!, "DE"))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
@@ -310,5 +371,24 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView {
             } catch (e: Exception) {
             }
         }, 100)
+    }
+
+    override fun isAuthHit(value: Boolean, message: String) {
+        if (value) {
+            when (apiName) {
+                "listData" -> setObserver()
+                "writeReview" -> writeReviewData(reviewJobId, reviewJobRating, reviewJobText, selectedPosition)
+            }
+        } else {
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = message
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                (activity as BaseActivity).bottomSheetDialog.dismiss()
+            }
+            (activity as BaseActivity).bottomSheetDialog.show()
+        }
     }
 }

@@ -19,6 +19,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -32,12 +33,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ProfileEditLayoutBinding
 import com.phpexpert.bringme.dtos.*
+import com.phpexpert.bringme.interfaces.AuthInterface
+import com.phpexpert.bringme.interfaces.PermissionInterface
 import com.phpexpert.bringme.models.EditProfileViewModel
 import com.phpexpert.bringme.retro.ProfileRetro
 import com.phpexpert.bringme.retro.ServiceGenerator
 import com.phpexpert.bringme.retro.ServiceGeneratorLocation
 import com.phpexpert.bringme.ui.employee.profile.ProfileViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import com.phpexpert.bringme.utilities.ImageCropActivity
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -53,7 +57,7 @@ import kotlin.collections.HashMap
 
 
 @Suppress("LocalVariableName", "DEPRECATION", "PrivatePropertyName", "SameParameterValue", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class ProfileEditActivity : BaseActivity() {
+class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
     private lateinit var profileEditLayoutBinding: ProfileEditLayoutBinding
     private var mResultList = ArrayList<PlaceAutocomplete>()
     private val arrayList = ArrayList<String>()
@@ -64,11 +68,15 @@ class ProfileEditActivity : BaseActivity() {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var progressDialog: ProgressDialog
+    private lateinit var permissionName: String
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    )
+
+    private var permissionCamera = arrayOf(
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -89,6 +97,8 @@ class ProfileEditActivity : BaseActivity() {
         profileEditLayoutBinding.languageModel = sharedPrefrenceManager.getLanguageData()
         editProfileViewModel = ViewModelProvider(this).get(EditProfileViewModel::class.java)
         languageDtoData = sharedPrefrenceManager.getLanguageData()
+        permissionInterface = this
+
         profileEditLayoutBinding.autoComplete.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -101,56 +111,26 @@ class ProfileEditActivity : BaseActivity() {
         profileEditLayoutBinding.backArrow.setOnClickListener {
             finish()
         }
-        isCheckPermissions(this, perission)
+//        isCheckPermissions(this, perission)
 
         profileEditLayoutBinding.locationCurrent.setOnClickListener {
-            progressDialog = ProgressDialog(this)
-            progressDialog.setCancelable(false)
-            progressDialog.setMessage(languageDtoData.fetching_location)
-            progressDialog.show()
-            val mLocationRequest = LocationRequest.create()
-            mLocationRequest.interval = 60000
-            mLocationRequest.fastestInterval = 5000
-            mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            var mLocation: Location?
-            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-            mLocationCallback = object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    progressDialog.dismiss()
-                    for (location in locationResult.locations) {
-                        if (location != null) {
-                            try {
-                                mLocation = location
-                                val geocoder = Geocoder(this@ProfileEditActivity, Locale.getDefault())
-                                val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
-                                val stringBuilder = StringBuilder()
-                                for (i in 0..addresses[0]!!.maxAddressLineIndex)
-                                    stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
-                                profileEditLayoutBinding.autoComplete.text = Editable.Factory.getInstance().newEditable(stringBuilder.toString())
-                            } catch (e: java.lang.Exception) {
-                                bottomSheetDialogMessageText.text = languageDtoData.location_not_found
-                                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                                bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                                bottomSheetDialogMessageOkButton.setOnClickListener {
-                                    bottomSheetDialog.dismiss()
-                                }
-                                bottomSheetDialog.show()
-                            }
-                            break
-                        } else {
-                            bottomSheetDialogMessageText.text = languageDtoData.location_not_found
-                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                            bottomSheetDialogMessageOkButton.setOnClickListener {
-                                bottomSheetDialog.dismiss()
-                            }
-                            bottomSheetDialog.show()
-                        }
-                    }
-                    mFusedLocationClient.removeLocationUpdates(mLocationCallback)
-                }
+            permissionName = "locationPermission"
+            if (sharedPrefrenceManager.getPreference(CONSTANTS.isLocation) == "true") {
+                val mLocation = Location("")
+                mLocation.latitude = sharedPrefrenceManager.getPreference(CONSTANTS.currentLatitue)!!.toDouble()
+                mLocation.longitude = sharedPrefrenceManager.getPreference(CONSTANTS.currentLongitude)!!.toDouble()
+
+                val geocoder = Geocoder(this@ProfileEditActivity, Locale.getDefault())
+                val addresses = geocoder.getFromLocation(mLocation.latitude, mLocation.longitude, 1)
+                val stringBuilder = StringBuilder()
+                for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                    stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                setGeoCode(mLocation)
+                profileEditLayoutBinding.autoComplete.text = Editable.Factory.getInstance().newEditable(stringBuilder.toString())
+
+            } else if (isCheckPermissions(this, perission)) {
+                setLocation()
             }
-            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
         }
         profileEditLayoutBinding.stateEt.isFocusable = false
         profileEditLayoutBinding.stateEt.isFocusableInTouchMode = false
@@ -159,62 +139,29 @@ class ProfileEditActivity : BaseActivity() {
         profileEditLayoutBinding.postCodeEt.isFocusable = false
         profileEditLayoutBinding.postCodeEt.isFocusableInTouchMode = false
         profileEditLayoutBinding.autoComplete.setOnItemClickListener { _, _, i, _ ->
-
-            val geocoder = Geocoder(this@ProfileEditActivity, Locale.getDefault())
-            val addresses = geocoder.getFromLocation(mResultList[i].geometry!!.location!!.lat!!.toDouble(), mResultList[i].geometry!!.location!!.lng!!.toDouble(), 1)
-            postDataOtp.accountLat = mResultList[i].geometry!!.location!!.lat
-            postDataOtp.accountLong = mResultList[i].geometry!!.location!!.lng
-            postDataOtp.accountCountry = addresses[0]!!.countryName
-
-            if (addresses[0].adminArea != "") {
-                profileEditLayoutBinding.stateEt.isFocusable = false
-                profileEditLayoutBinding.stateEt.isFocusableInTouchMode = false
-                profileEditLayoutBinding.stateEt.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.adminArea)
-            } else {
-                profileEditLayoutBinding.stateEt.isFocusable = true
-                profileEditLayoutBinding.stateEt.isFocusableInTouchMode = true
-            }
-
-            if (addresses[0].locality != "") {
-                profileEditLayoutBinding.cityET.isFocusable = false
-                profileEditLayoutBinding.cityET.isFocusableInTouchMode = false
-                profileEditLayoutBinding.cityET.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.locality)
-            } else {
-                profileEditLayoutBinding.cityET.isFocusable = true
-                profileEditLayoutBinding.cityET.isFocusableInTouchMode = true
-            }
-
-            if (addresses[0].postalCode != "") {
-                profileEditLayoutBinding.postCodeEt.isFocusable = false
-                profileEditLayoutBinding.postCodeEt.isFocusableInTouchMode = false
-                profileEditLayoutBinding.postCodeEt.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.postalCode)
-            } else {
-                profileEditLayoutBinding.postCodeEt.isFocusable = true
-                profileEditLayoutBinding.postCodeEt.isFocusableInTouchMode = true
-            }
-            postDataOtp.accountState = addresses[0]!!.adminArea
-            postDataOtp.accountCity = addresses[0]!!.locality
-            val stringBuilder = StringBuilder()
-            for (j in 0..addresses[0]!!.maxAddressLineIndex)
-                stringBuilder.append(addresses[0]!!.getAddressLine(j) + ",")
-            postDataOtp.accountAddress = stringBuilder.toString()
-            postDataOtp.addressPostCode = addresses[0]!!.postalCode
+            val mLocation = Location("")
+            mLocation.latitude = mResultList[i].geometry!!.location?.lat!!.toDouble()
+            mLocation.longitude = mResultList[i].geometry!!.location?.lng!!.toDouble()
+            setGeoCode(mLocation)
         }
 
         profileEditLayoutBinding.editProfile.setOnClickListener {
 //            startActivityForResult(getPickImageChooserIntent(), 4001)
+            permissionName = "Camera"
+            if (isCheckPermissions(this, permissionCamera))
             startDialog()
         }
 
         profileEditLayoutBinding.updateButton.setOnClickListener {
             if (isOnline()) {
-                if (checkValidations() && isCheckPermissions(this, perission)) {
+                if (checkValidations()) {
                     profileEditLayoutBinding.updateButton.startAnimation()
                     editImageData()
                 }
             } else {
                 bottomSheetDialogMessageText.text = languageDtoData.network_error
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -223,6 +170,102 @@ class ProfileEditActivity : BaseActivity() {
             }
         }
         setValues()
+    }
+
+    private fun setGeoCode(mLocation: Location) {
+        val geocoder = Geocoder(this@ProfileEditActivity, Locale.getDefault())
+        val addresses = geocoder.getFromLocation(mLocation.latitude, mLocation.longitude, 1)
+        postDataOtp.accountLat = mLocation.latitude.toString()
+        postDataOtp.accountLong = mLocation.longitude.toString()
+        postDataOtp.accountCountry = addresses[0]!!.countryName
+
+        if (addresses[0].adminArea != "") {
+            profileEditLayoutBinding.stateEt.isFocusable = false
+            profileEditLayoutBinding.stateEt.isFocusableInTouchMode = false
+            profileEditLayoutBinding.stateEt.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.adminArea)
+        } else {
+            profileEditLayoutBinding.stateEt.isFocusable = true
+            profileEditLayoutBinding.stateEt.isFocusableInTouchMode = true
+        }
+
+        if (addresses[0].locality != "") {
+            profileEditLayoutBinding.cityET.isFocusable = false
+            profileEditLayoutBinding.cityET.isFocusableInTouchMode = false
+            profileEditLayoutBinding.cityET.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.locality)
+        } else {
+            profileEditLayoutBinding.cityET.isFocusable = true
+            profileEditLayoutBinding.cityET.isFocusableInTouchMode = true
+        }
+
+        if (addresses[0].postalCode != "") {
+            profileEditLayoutBinding.postCodeEt.isFocusable = false
+            profileEditLayoutBinding.postCodeEt.isFocusableInTouchMode = false
+            profileEditLayoutBinding.postCodeEt.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.postalCode)
+        } else {
+            profileEditLayoutBinding.postCodeEt.isFocusable = true
+            profileEditLayoutBinding.postCodeEt.isFocusableInTouchMode = true
+        }
+        postDataOtp.accountState = addresses[0]!!.adminArea
+        postDataOtp.accountCity = addresses[0]!!.locality
+        val stringBuilder = StringBuilder()
+        for (j in 0..addresses[0]!!.maxAddressLineIndex)
+            stringBuilder.append(addresses[0]!!.getAddressLine(j) + ",")
+        postDataOtp.accountAddress = stringBuilder.toString()
+        postDataOtp.addressPostCode = addresses[0]!!.postalCode
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun setLocation() {
+        progressDialog = ProgressDialog(this)
+        progressDialog.setCancelable(false)
+        progressDialog.setMessage(languageDtoData.fetching_location)
+        progressDialog.show()
+        val mLocationRequest = LocationRequest.create()
+        mLocationRequest.interval = 60000
+        mLocationRequest.fastestInterval = 5000
+        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        var mLocation: Location?
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        mLocationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                progressDialog.dismiss()
+                for (location in locationResult.locations) {
+                    if (location != null) {
+                        try {
+                            mLocation = location
+                            val geocoder = Geocoder(this@ProfileEditActivity, Locale.getDefault())
+                            val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                            val stringBuilder = StringBuilder()
+                            for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                                stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                            setGeoCode(mLocation!!)
+                            profileEditLayoutBinding.autoComplete.text = Editable.Factory.getInstance().newEditable(stringBuilder.toString())
+                        } catch (e: java.lang.Exception) {
+                            bottomSheetDialogMessageText.text = languageDtoData.location_not_found
+                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                            bottomSheetDialogHeadingText.visibility = View.GONE
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
+                            bottomSheetDialog.show()
+                        }
+                        break
+                    } else {
+                        bottomSheetDialogMessageText.text = languageDtoData.location_not_found
+                        bottomSheetDialogHeadingText.visibility = View.GONE
+                        bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                        bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            bottomSheetDialog.dismiss()
+                        }
+                        bottomSheetDialog.show()
+                    }
+                }
+                mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+            }
+        }
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
     }
 
     private fun setValues() {
@@ -261,6 +304,7 @@ class ProfileEditActivity : BaseActivity() {
             profileEditLayoutBinding.firstNameEt.text.toString().isEmpty() -> {
                 bottomSheetDialogMessageText.text = languageDtoData.enter_first_name
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -271,6 +315,7 @@ class ProfileEditActivity : BaseActivity() {
             profileEditLayoutBinding.lastName.text.toString().isEmpty() -> {
                 bottomSheetDialogMessageText.text = languageDtoData.enter_last_name
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -282,6 +327,7 @@ class ProfileEditActivity : BaseActivity() {
                 bottomSheetDialogMessageText.text = languageDtoData.enter_email
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
                 }
@@ -292,6 +338,7 @@ class ProfileEditActivity : BaseActivity() {
                 bottomSheetDialogMessageText.text = languageDtoData.enater_valid_email
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
                 }
@@ -303,6 +350,7 @@ class ProfileEditActivity : BaseActivity() {
                 bottomSheetDialogMessageText.text = languageDtoData.entera_address
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
                 }
@@ -313,6 +361,7 @@ class ProfileEditActivity : BaseActivity() {
                 bottomSheetDialogMessageText.text = languageDtoData.enter_state
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
                 }
@@ -322,6 +371,7 @@ class ProfileEditActivity : BaseActivity() {
             profileEditLayoutBinding.cityET.text.toString().isEmpty() -> {
                 bottomSheetDialogMessageText.text = languageDtoData.enter_city
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
                     bottomSheetDialog.dismiss()
@@ -331,6 +381,7 @@ class ProfileEditActivity : BaseActivity() {
             }
             profileEditLayoutBinding.postCodeEt.text.toString().isEmpty() -> {
                 bottomSheetDialogMessageText.text = languageDtoData.enter_post_code
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -391,6 +442,9 @@ class ProfileEditActivity : BaseActivity() {
         bottomSheetDialog1.setContentView(R.layout.bottom__chooser_dialog_layout)
         bottomSheetDialog1.setCancelable(true)
         bottomSheetDialog1.findViewById<TextView>(R.id.textHeading)?.text = sharedPrefrenceManager.getLanguageData().alert_text
+        bottomSheetDialog1.findViewById<ImageView>(R.id.closeIcon)?.setOnClickListener {
+            bottomSheetDialog1.dismiss()
+        }
         val bottomSheetDialogMessageText = bottomSheetDialog1.findViewById<TextView>(R.id.message)!!
         val bottomSheetDialogMessageOkButton = bottomSheetDialog1.findViewById<TextView>(R.id.okText)!!
         val bottomSheetDialogMessageCancelButton = bottomSheetDialog1.findViewById<TextView>(R.id.cancelText)!!
@@ -437,7 +491,6 @@ class ProfileEditActivity : BaseActivity() {
         }
         return outputFileUri
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -519,7 +572,7 @@ class ProfileEditActivity : BaseActivity() {
 
     private fun getPredictions(Query: String): ArrayList<PlaceAutocomplete> {
         val results: ArrayList<PlaceAutocomplete> = ArrayList<PlaceAutocomplete>()
-        ServiceGeneratorLocation.createService(ProfileRetro::class.java).getPlaces(Query, sharedPrefrenceManager.getAuthData().GOOGLE_MAP_KEY).enqueue(object : Callback<PlaceMainClass> {
+        ServiceGeneratorLocation.createService(ProfileRetro::class.java).getPlaces(Query, sharedPrefrenceManager.getAuthData()?.GOOGLE_MAP_KEY).enqueue(object : Callback<PlaceMainClass> {
             override fun onResponse(call: Call<PlaceMainClass>, response: Response<PlaceMainClass>) {
                 mResultList.clear()
                 mResultList.addAll(response.body()!!.results)
@@ -540,77 +593,97 @@ class ProfileEditActivity : BaseActivity() {
     }
 
     private fun editImageData() {
-        val map = HashMap<String, RequestBody?>()
-        map["account_first_name"] = createRequestBody(base64Encoded(profileEditLayoutBinding.firstNameEt.text.toString()))
-        map["account_last_name"] = createRequestBody(base64Encoded(profileEditLayoutBinding.lastName.text.toString()))
-        map["LoginId"] = createRequestBody(sharedPrefrenceManager.getLoginId())
-        map["account_email"] = createRequestBody((profileEditLayoutBinding.emailEt.text.toString()))
-        map["account_country"] = createRequestBody(base64Encoded(postDataOtp.accountCountry!!))
-        map["account_state"] = createRequestBody(base64Encoded(profileEditLayoutBinding.stateEt.text.toString()))
-        map["account_city"] = createRequestBody(base64Encoded(profileEditLayoutBinding.cityET.text.toString()))
-        map["account_address"] = createRequestBody(base64Encoded(profileEditLayoutBinding.autoComplete.text.toString()))
-        map["address_postcode"] = createRequestBody(base64Encoded(profileEditLayoutBinding.postCodeEt.text.toString()))
-        map["account_lat"] = createRequestBody(postDataOtp.accountLat!!)
-        map["account_long"] = createRequestBody(postDataOtp.accountLong!!)
-        map["auth_key"] = createRequestBody(sharedPrefrenceManager.getAuthData().auth_key!!)
-        map["lang_code"] = createRequestBody(sharedPrefrenceManager.getAuthData().lang_code!!)
-        ServiceGenerator.createService(ProfileRetro::class.java)
-                .editPhotoData(map, createMultiPartBody(POD1_URI, "account_photo"))
-                .enqueue(object : Callback<EditProfileDto> {
-                    @SuppressLint("SetTextI18n")
-                    override fun onResponse(call: Call<EditProfileDto>, response: Response<EditProfileDto>) {
-                        if (response.isSuccessful) {
-                            val responseData = response.body()
-                            bottomSheetDialogMessageText.text = responseData!!.status_message
-                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                            bottomSheetDialogMessageOkButton.setOnClickListener {
-                                profileEditLayoutBinding.updateButton.revertAnimation()
-                                if (responseData.status_code == "0") {
-                                    val loginData = sharedPrefrenceManager.getProfile()
-                                    loginData.login_photo = responseData.data.login_photo
-                                    loginData.login_email = profileEditLayoutBinding.emailEt.text.toString()
-                                    loginData.login_name = profileEditLayoutBinding.firstNameEt.text.toString() + " " + profileEditLayoutBinding.lastName.text.toString()
-                                    loginData.login_first_name = profileEditLayoutBinding.firstNameEt.text.toString()
-                                    loginData.login_last_name = profileEditLayoutBinding.lastName.text.toString()
-                                    loginData.login_address = profileEditLayoutBinding.autoComplete.text.toString()
-                                    loginData.login_country = postDataOtp.accountCountry
-                                    loginData.login_city = postDataOtp.accountCity
-                                    loginData.login_state = postDataOtp.accountState
-                                    loginData.login_postcode = postDataOtp.addressPostCode
-                                    loginData.login_lat = postDataOtp.accountLat
-                                    loginData.login_long = postDataOtp.accountLong
-                                    sharedPrefrenceManager.saveProfile(loginData)
-                                    ProfileViewModel.changeModel.postValue(true)
-                                    finish()
+        if (isOnline()) {
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != "" && sharedPrefrenceManager.getAuthData()?.auth_key != null) {
+                val map = HashMap<String, RequestBody?>()
+                map["account_first_name"] = createRequestBody(base64Encoded(profileEditLayoutBinding.firstNameEt.text.toString()))
+                map["account_last_name"] = createRequestBody(base64Encoded(profileEditLayoutBinding.lastName.text.toString()))
+                map["LoginId"] = createRequestBody(sharedPrefrenceManager.getLoginId())
+                map["account_email"] = createRequestBody((profileEditLayoutBinding.emailEt.text.toString()))
+                map["account_country"] = createRequestBody(base64Encoded(postDataOtp.accountCountry!!))
+                map["account_state"] = createRequestBody(base64Encoded(profileEditLayoutBinding.stateEt.text.toString()))
+                map["account_city"] = createRequestBody(base64Encoded(profileEditLayoutBinding.cityET.text.toString()))
+                map["account_address"] = createRequestBody(base64Encoded(profileEditLayoutBinding.autoComplete.text.toString()))
+                map["address_postcode"] = createRequestBody(base64Encoded(profileEditLayoutBinding.postCodeEt.text.toString()))
+                map["account_lat"] = createRequestBody(postDataOtp.accountLat!!)
+                map["account_long"] = createRequestBody(postDataOtp.accountLong!!)
+                map["auth_key"] = createRequestBody(sharedPrefrenceManager.getAuthData()?.auth_key!!)
+                map["lang_code"] = createRequestBody(sharedPrefrenceManager.getAuthData()?.lang_code!!)
+                ServiceGenerator.createService(ProfileRetro::class.java)
+                        .editPhotoData(map, createMultiPartBody(POD1_URI, "account_photo"))
+                        .enqueue(object : Callback<EditProfileDto> {
+                            @SuppressLint("SetTextI18n")
+                            override fun onResponse(call: Call<EditProfileDto>, response: Response<EditProfileDto>) {
+                                if (response.isSuccessful) {
+                                    val responseData = response.body()
+                                    bottomSheetDialogMessageText.text = responseData!!.status_message
+                                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                                    if (responseData.status_code == "0") {
+                                        bottomSheetDialogHeadingText.visibility = View.GONE
+                                    } else {
+                                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                                    }
+                                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                                        profileEditLayoutBinding.updateButton.revertAnimation()
+                                        if (responseData.status_code == "0") {
+                                            val loginData = sharedPrefrenceManager.getProfile()
+                                            loginData.login_photo = responseData.data.login_photo
+                                            loginData.login_email = profileEditLayoutBinding.emailEt.text.toString()
+                                            loginData.login_name = profileEditLayoutBinding.firstNameEt.text.toString() + " " + profileEditLayoutBinding.lastName.text.toString()
+                                            loginData.login_first_name = profileEditLayoutBinding.firstNameEt.text.toString()
+                                            loginData.login_last_name = profileEditLayoutBinding.lastName.text.toString()
+                                            loginData.login_address = profileEditLayoutBinding.autoComplete.text.toString()
+                                            loginData.login_country = postDataOtp.accountCountry
+                                            loginData.login_city = postDataOtp.accountCity
+                                            loginData.login_state = postDataOtp.accountState
+                                            loginData.login_postcode = postDataOtp.addressPostCode
+                                            loginData.login_lat = postDataOtp.accountLat
+                                            loginData.login_long = postDataOtp.accountLong
+                                            sharedPrefrenceManager.saveProfile(loginData)
+                                            ProfileViewModel.changeModel.postValue(true)
+                                            finish()
+                                        }
+                                        bottomSheetDialog.dismiss()
+                                    }
+                                    bottomSheetDialog.show()
+                                } else {
+                                    profileEditLayoutBinding.updateButton.revertAnimation()
+                                    bottomSheetDialogMessageText.text = languageDtoData.edit_profile_api_error
+                                    bottomSheetDialogHeadingText.visibility = View.GONE
+                                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                                        bottomSheetDialog.dismiss()
+                                    }
+                                    bottomSheetDialog.show()
                                 }
-                                bottomSheetDialog.dismiss()
                             }
-                            bottomSheetDialog.show()
-                        } else {
-                            profileEditLayoutBinding.updateButton.revertAnimation()
-                            bottomSheetDialogMessageText.text = languageDtoData.edit_profile_api_error
-                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                            bottomSheetDialogMessageOkButton.setOnClickListener {
-                                bottomSheetDialog.dismiss()
+
+                            override fun onFailure(call: Call<EditProfileDto>, t: Throwable) {
+                                profileEditLayoutBinding.updateButton.revertAnimation()
+                                bottomSheetDialogMessageText.text = languageDtoData.edit_profile_api_error
+                                bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                                bottomSheetDialogMessageOkButton.setOnClickListener {
+                                    bottomSheetDialog.dismiss()
+                                }
+                                bottomSheetDialog.show()
                             }
-                            bottomSheetDialog.show()
-                        }
-                    }
 
-                    override fun onFailure(call: Call<EditProfileDto>, t: Throwable) {
-                        profileEditLayoutBinding.updateButton.revertAnimation()
-                        bottomSheetDialogMessageText.text = languageDtoData.edit_profile_api_error
-                        bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                        bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            bottomSheetDialog.dismiss()
-                        }
-                        bottomSheetDialog.show()
-                    }
-
-                })
+                        })
+            } else hitAuthApi(this)
+        } else {
+            bottomSheetDialogMessageText.text = languageDtoData.network_error
+            bottomSheetDialogHeadingText.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        }
     }
 
     private fun createRequestBody(string: String): RequestBody? {
@@ -632,6 +705,31 @@ class ProfileEditActivity : BaseActivity() {
             MultipartBody.Part.createFormData(imageName, file.name, requestFile)
         } else {
             null
+        }
+    }
+
+    override fun isAuthHit(value: Boolean, message: String) {
+        if (value) {
+            editImageData()
+        } else {
+            bottomSheetDialogMessageText.text = message
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        }
+    }
+
+    override fun isPermission(value: Boolean) {
+        if (value) {
+            if (permissionName == "locationPermission") {
+                setLocation()
+            } else {
+                startDialog()
+            }
         }
     }
 

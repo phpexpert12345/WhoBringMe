@@ -2,6 +2,7 @@
 
 package com.phpexpert.bringme.ui.delivery.home
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
@@ -30,8 +31,10 @@ import com.phpexpert.bringme.databinding.*
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.LatestJobDeliveryDataList
 import com.phpexpert.bringme.interfaces.AuthInterface
+import com.phpexpert.bringme.interfaces.PermissionInterface
 import com.phpexpert.bringme.models.LatestJobDeliveryViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import com.phpexpert.bringme.utilities.SharedPrefrenceManager
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -43,7 +46,7 @@ import kotlin.collections.HashMap
 
 
 @Suppress("DEPRECATION", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface {
+class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface, PermissionInterface {
     private var latestJobViewModel: LatestJobDeliveryViewModel? = null
     private lateinit var homeFragmentBinding: DeliveryFragmentHomeBinding
 
@@ -63,16 +66,24 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var currentLocation: Location
     private lateinit var address: Address
-
     private lateinit var arrayList: ArrayList<LatestJobDeliveryDataList>
     private var selectedPosition: Int = -1
     private lateinit var orderDelcineString: String
 
+    private lateinit var mainArrayList: ArrayList<LatestJobDeliveryDataList>
+
     private lateinit var progressDialog: ProgressDialog
     private var searOrderString: String = ""
     private lateinit var languageDtoData: LanguageDtoData
+    private lateinit var apiName: String
     private lateinit var sharedPrefrenceManager: SharedPrefrenceManager
 
+    @SuppressLint("InlinedApi")
+    private var perission = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.CALL_PHONE
+    )
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -81,6 +92,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
         languageDtoData = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         latestJobViewModel = ViewModelProvider(this).get(LatestJobDeliveryViewModel::class.java)
         sharedPrefrenceManager = (activity as BaseActivity).sharedPrefrenceManager
+        (activity as BaseActivity).permissionInterface = this
+
         jobViewBinding = homeFragmentBinding.jobViewLayout
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
         jobViewBinding.languageModel = languageDtoData
@@ -104,18 +117,48 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
         orderDeclineBinding.languageModel = languageDtoData
         orderDeclineBehavior.isDraggable = false
         orderDeclineBehavior.peekHeight = 0
+
+        progressDialog = ProgressDialog(requireActivity())
+        progressDialog.setCancelable(false)
+
         setActions()
         setList()
-        initValues()
+
+        if (sharedPrefrenceManager.getPreference(CONSTANTS.isLocation) == "true") {
+            val locationData = Location("")
+            locationData.latitude = sharedPrefrenceManager.getPreference(CONSTANTS.currentLatitue)!!.toDouble()
+            locationData.longitude = sharedPrefrenceManager.getPreference(CONSTANTS.currentLongitude)!!.toDouble()
+
+            val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+            val addresses = geocoder.getFromLocation(locationData.latitude, locationData.longitude, 1)
+            val stringBuilder = StringBuilder()
+            for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+            currentLocation = locationData
+            address = addresses[0]
+            setObserver()
+        } else {
+            if ((activity as BaseActivity).isCheckPermissions(requireActivity(), perission))
+                if ((activity as BaseActivity).isLocationEnabled()) {
+                    getLocation()
+                } else {
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.location_enable_message
+                    (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                }
+        }
+
         return homeFragmentBinding.root
     }
 
     @SuppressLint("MissingPermission")
-    private fun initValues() {
-
-        progressDialog = ProgressDialog(requireActivity())
+    private fun getLocation() {
         progressDialog.setMessage(languageDtoData.fetching_location)
-        progressDialog.setCancelable(false)
         progressDialog.show()
         val mLocationRequest = LocationRequest.create()
         mLocationRequest.interval = 60000
@@ -197,28 +240,26 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
         homeFragmentBinding.notificationIcon.setOnClickListener {
             startActivity(Intent(requireActivity(), NotificationActivity::class.java))
         }
+
         homeFragmentBinding.searchIcon.setOnClickListener {
-            if (homeFragmentBinding.textHeading.visibility == View.VISIBLE) {
-                homeFragmentBinding.textHeading.visibility = View.GONE
-                homeFragmentBinding.notificationIcon.visibility = View.GONE
-                homeFragmentBinding.searchET.visibility = View.VISIBLE
-                homeFragmentBinding.closeIcon.visibility = View.VISIBLE
-            } else {
+            homeFragmentBinding.layoutSearchData.visibility = View.VISIBLE
+            homeFragmentBinding.searchIcon.visibility = View.GONE
+        }
+
+        homeFragmentBinding.searchIconEdit.setOnClickListener {
+            if (homeFragmentBinding.searchET.text.toString().trim().isNotEmpty()) {
                 searOrderString = homeFragmentBinding.searchET.text.toString()
-                progressDialog.show()
                 setObserver()
             }
         }
-
         homeFragmentBinding.closeIcon.setOnClickListener {
             homeFragmentBinding.searchET.text = Editable.Factory.getInstance().newEditable("")
+            homeFragmentBinding.layoutSearchData.visibility = View.GONE
+            homeFragmentBinding.searchIcon.visibility = View.VISIBLE
             this.searOrderString = ""
-            homeFragmentBinding.textHeading.visibility = View.VISIBLE
-            homeFragmentBinding.searchET.visibility = View.GONE
-            homeFragmentBinding.notificationIcon.visibility = View.VISIBLE
-            homeFragmentBinding.closeIcon.visibility = View.GONE
-            progressDialog.show()
-            setObserver()
+            arrayList.clear()
+            arrayList.addAll(mainArrayList)
+            homeFragmentBinding.homeRecyclerView.adapter?.notifyDataSetChanged()
         }
     }
 
@@ -234,29 +275,34 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
         homeFragmentBinding.homeRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
         homeFragmentBinding.homeRecyclerView.isNestedScrollingEnabled = false
         arrayList = ArrayList()
+        mainArrayList = ArrayList()
         homeFragmentBinding.homeRecyclerView.adapter = HomeFragmentAdapter(requireActivity(), arrayList, this)
     }
 
     private fun setObserver() {
-        progressDialog.setMessage(languageDtoData.please_wait)
-        progressDialog.show()
         if ((activity as BaseActivity).isOnline()) {
-            latestJobViewModel!!.getLatestJobDeliveryData(mapData()).observe(viewLifecycleOwner, {
-                progressDialog.dismiss()
-                if (it.status_code == "0") {
-                    homeFragmentBinding.noDataFoundLayout.visibility = View.GONE
-                    homeFragmentBinding.nestedScrollView.visibility = View.VISIBLE
-                    arrayList.clear()
-                    arrayList.addAll(it.data!!.OrderList)
-                    homeFragmentBinding.homeRecyclerView.adapter!!.notifyDataSetChanged()
-                    homeFragmentBinding.runningOrders.text = it.Total_Running_Orders
-                    homeFragmentBinding.totalAmount.text = it.Total_Running_Order_Amount.formatChange()
-                } else {
-                    if (it.status == "") {
+            progressDialog.setMessage(languageDtoData.please_wait)
+            progressDialog.show()
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                latestJobViewModel!!.getLatestJobDeliveryData(mapData()).observe(viewLifecycleOwner, {
+                    progressDialog.dismiss()
+                    if (it.status_code == "0") {
+                        homeFragmentBinding.noDataFoundLayout.visibility = View.GONE
+                        homeFragmentBinding.nestedScrollView.visibility = View.VISIBLE
+                        arrayList.clear()
+                        arrayList.addAll(it.data!!.OrderList)
+                        if (searOrderString == "") {
+                            mainArrayList.clear()
+                            mainArrayList.addAll(arrayList)
+                        }
+                        homeFragmentBinding.homeRecyclerView.adapter!!.notifyDataSetChanged()
+                        homeFragmentBinding.runningOrders.text = it.Total_Running_Orders
+                        homeFragmentBinding.totalAmount.text = it.Total_Running_Order_Amount.formatChange()
+                    } else {
                         homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
                         homeFragmentBinding.nestedScrollView.visibility = View.GONE
-                    } else {
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -264,12 +310,15 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
                         }
                         (activity as BaseActivity).bottomSheetDialog.show()
                     }
-                }
-            })
-
+                })
+            } else {
+                apiName = "homeApi"
+                (activity as BaseActivity).hitAuthApi(this)
+            }
         } else {
             progressDialog.dismiss()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -281,21 +330,32 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
 
     private fun orderAcceptObserver() {
         if ((activity as BaseActivity).isOnline()) {
-            latestJobViewModel!!.orderAcceptData(orderMapData()).observe(viewLifecycleOwner, {
-                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                latestJobViewModel!!.orderAcceptData(orderMapData()).observe(viewLifecycleOwner, {
+//                    progressDialog.dismiss()
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {
-                        setObserver()
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                    } else {
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                     }
-                    (activity as BaseActivity).bottomSheetDialog.dismiss()
-                }
-                (activity as BaseActivity).bottomSheetDialog.show()
-            })
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                        if (it.status_code == "0") {
+                            setObserver()
+                        }
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                })
+            } else {
+                apiName = "acceptOrderApi"
+            }
         } else {
             (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -307,41 +367,17 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
     private fun orderDeclineObserver() {
         progressDialog.show()
         if ((activity as BaseActivity).isOnline()) {
-            latestJobViewModel!!.orderDeclineData(orderDeclineData()).observe(viewLifecycleOwner, {
-                progressDialog.dismiss()
-                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
-                    if (it.status_code == "0") {
-                        setObserver()
-                    }
-                    (activity as BaseActivity).bottomSheetDialog.dismiss()
-                }
-                (activity as BaseActivity).bottomSheetDialog.show()
-            })
-        } else {
-            progressDialog.dismiss()
-            (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
-            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
-                (activity as BaseActivity).bottomSheetDialog.dismiss()
-            }
-            (activity as BaseActivity).bottomSheetDialog.show()
-        }
-    }
-
-    private fun orderFinishObserver() {
-        progressDialog.show()
-        if ((activity as BaseActivity).isOnline()) {
-            if (orderFinishedBinding.jobCode.text.toString().trim() != "") {
-                latestJobViewModel!!.orderFinishData(orderFinishData()).observe(viewLifecycleOwner, {
-                    this.hideKeyboard()
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                latestJobViewModel!!.orderDeclineData(orderDeclineData()).observe(viewLifecycleOwner, {
                     progressDialog.dismiss()
                     (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    if (it.status_code == "0") {
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                    } else {
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                    }
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
                         if (it.status_code == "0") {
                             setObserver()
@@ -351,10 +387,56 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
                     (activity as BaseActivity).bottomSheetDialog.show()
                 })
             } else {
+                apiName = "orderDeclineApi"
+                (activity as BaseActivity).hitAuthApi(this)
+            }
+        } else {
+            progressDialog.dismiss()
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                (activity as BaseActivity).bottomSheetDialog.dismiss()
+            }
+            (activity as BaseActivity).bottomSheetDialog.show()
+        }
+    }
+
+    private fun orderFinishObserver() {
+//        progressDialog.show()
+        if ((activity as BaseActivity).isOnline()) {
+            if (orderFinishedBinding.jobCode.text.toString().trim() != "") {
+                if (sharedPrefrenceManager.getAuthData()?.auth_key != "" && sharedPrefrenceManager.getAuthData()?.auth_key != null) {
+                    latestJobViewModel!!.orderFinishData(orderFinishData()).observe(viewLifecycleOwner, {
+                        this.hideKeyboard()
+                        progressDialog.dismiss()
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                        (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                        if (it.status_code == "0") {
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                        } else {
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                        }
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                            if (it.status_code == "0") {
+                                setObserver()
+                            }
+                            (activity as BaseActivity).bottomSheetDialog.dismiss()
+                        }
+                        (activity as BaseActivity).bottomSheetDialog.show()
+                    })
+                } else {
+                    apiName = "finishOrderApi"
+                    (activity as BaseActivity).hitAuthApi(this)
+                }
+            } else {
                 progressDialog.dismiss()
                 (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.enter_job_code_first
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
                 (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                     (activity as BaseActivity).bottomSheetDialog.dismiss()
                 }
@@ -366,6 +448,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
             (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
             }
@@ -382,8 +465,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
         mapDataVal["current_city"] = (activity as BaseActivity).base64Encoded(address.adminArea)
         mapDataVal["current_locality"] = (activity as BaseActivity).base64Encoded(address.locality)
         mapDataVal["current_zipcode"] = address.postalCode
-        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
-        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["Order_Number"] = searOrderString
         return mapDataVal
     }
@@ -392,7 +475,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
         val mapDataVal = HashMap<String, String>()
         mapDataVal["job_order_id"] = arrayList[selectedPosition].job_order_id!!
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         return mapDataVal
     }
 
@@ -401,7 +484,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
         mapDataVal["job_order_id"] = arrayList[selectedPosition].job_order_id!!
         mapDataVal["order_decline_reason"] = (activity as BaseActivity).base64Encoded(orderDelcineString)
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         return mapDataVal
     }
 
@@ -410,7 +493,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
         mapDataVal["job_order_id"] = arrayList[selectedPosition].job_order_id!!
         mapDataVal["job_OTP_code"] = orderFinishedBinding.jobCode.text.toString()
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         return mapDataVal
     }
 
@@ -419,8 +502,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
         selectedPosition = position
         when (textInput) {
             "viewData" -> {
-                mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
-                homeFragmentBinding.blurView.visibility = View.VISIBLE
+
                 jobViewBinding.closeView.setOnClickListener {
                     mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
                     homeFragmentBinding.blurView.visibility = View.GONE
@@ -440,9 +522,20 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
                 jobViewBinding.jobPostedDate.text = orderDateValue(arrayList[position].job_post_date!!)
                 jobViewBinding.jobPostedTime.text = jobPostedTime(arrayList[position].job_posted_time!!)
                 jobViewBinding.jobSubTotal.text = arrayList[position].job_sub_total.formatChange()
+//                android:text='@{languageModel.admin_charges_for_job+" ("+data.charge_for_Jobs_Admin_percentage+"%)"}'
+//                '@{data.job_tax_amount.equalsIgnoreCase("0") || data.job_tax_amount.equalsIgnoreCase("") ? View.GONE : View.VISIBLE}'
+//                adminServiceFeesCharge
                 jobViewBinding.jobSubTotal1.text = arrayList[position].job_sub_total.formatChange()
+
                 jobViewBinding.totalAmount.text = "${arrayList[position].job_total_amount.formatChange()}/-"
-                jobViewBinding.chargesJob.text = arrayList[position].Charge_for_Jobs.formatChange()
+                jobViewBinding.serviceCharges.text = arrayList[position].Charge_for_Jobs.formatChange()
+                if (arrayList[position].job_tax_amount == "0" || arrayList[position].job_tax_amount == ("")) {
+                    jobViewBinding.adminServiceFeesLayout.visibility = View.GONE
+                } else {
+                    jobViewBinding.adminServiceFeesLayout.visibility = View.VISIBLE
+                    jobViewBinding.adminServiceFees.text = languageDtoData.admin_charges_for_job + " (" + arrayList[position].Charge_for_Jobs_Admin_percentage + "%)"
+                    jobViewBinding.adminServiceFeesCharge.text = arrayList[position].admin_service_fees.formatChange()
+                }
 
                 try {
                     jobViewBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
@@ -450,10 +543,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
                 } catch (e: Exception) {
 
                 }
+                mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
+                homeFragmentBinding.blurView.visibility = View.VISIBLE
             }
             "acceptData" -> {
-                orderAcceptBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                homeFragmentBinding.blurView.visibility = View.VISIBLE
+
                 orderAcceptBinding.orderId.text = arrayList[position].job_order_id!!
                 orderAcceptBinding.noLayout.setOnClickListener {
                     orderAcceptBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -464,10 +558,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
                     homeFragmentBinding.blurView.visibility = View.GONE
                     orderAcceptObserver()
                 }
+                orderAcceptBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                homeFragmentBinding.blurView.visibility = View.VISIBLE
             }
             "finishedJob" -> {
-                orderFinishedBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                homeFragmentBinding.blurView.visibility = View.VISIBLE
                 orderFinishedBinding.orderId.text = arrayList[position].job_order_id!!
                 orderFinishedBinding.orderFinishData.text = "${languageDtoData.enter_job_code_which_is_provide_by_raj_nkaushal_to_finish_your_job}\n${arrayList[position].Client_name} ${languageDtoData.to_finish_your_job}"
                 orderFinishedBinding.noLayout.setOnClickListener {
@@ -487,10 +581,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
 //                        (activity as BaseActivity).bottomSheetDialog.show()
 //                    }
                 }
+                orderFinishedBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                homeFragmentBinding.blurView.visibility = View.VISIBLE
             }
             "declineJob" -> {
-                orderDeclineBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                homeFragmentBinding.blurView.visibility = View.VISIBLE
+
                 orderDeclineBinding.orderId.text = arrayList[position].job_order_id!!
                 orderDeclineBinding.noLayout.setOnClickListener {
                     this.hideKeyboard()
@@ -503,6 +598,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
                     } else {
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.please_enter_order_decline_reason
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                             (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -510,6 +606,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
                         (activity as BaseActivity).bottomSheetDialog.show()
                     }
                 }
+                orderDeclineBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                homeFragmentBinding.blurView.visibility = View.VISIBLE
             }
         }
     }
@@ -558,7 +656,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
         try {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, "DE"))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
@@ -582,10 +680,26 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
         }, 100)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        try {
+            progressDialog.dismiss()
+        } catch (e: Exception) {
+        }
+    }
     override fun isAuthHit(value: Boolean, message: String) {
         if (value) {
-            setObserver()
+            when (apiName) {
+                "homeApi" -> setObserver()
+                "acceptOrderApi" -> orderAcceptObserver()
+                "orderDeclineApi" -> orderDeclineObserver()
+                "finishOrderApi" -> orderFinishObserver()
+            }
         } else {
+            try {
+                progressDialog.dismiss()
+            } catch (e: Exception) {
+            }
             (activity as BaseActivity).bottomSheetDialogMessageText.text = message
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
@@ -594,6 +708,12 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface 
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
             }
             (activity as BaseActivity).bottomSheetDialog.show()
+        }
+    }
+
+    override fun isPermission(value: Boolean) {
+        if (value) {
+            getLocation()
         }
     }
 }

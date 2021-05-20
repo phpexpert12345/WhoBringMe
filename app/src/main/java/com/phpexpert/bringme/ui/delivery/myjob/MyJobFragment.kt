@@ -23,6 +23,7 @@ import com.phpexpert.bringme.databinding.FragmentMyJobBinding
 import com.phpexpert.bringme.databinding.MyJobViewLayoutDeliveryBinding
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.MyJobDtoList
+import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.MyJobDataModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import java.text.DecimalFormat
@@ -34,7 +35,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 @Suppress("DEPRECATION", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
+class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
 
     private lateinit var myJobBinding: FragmentMyJobBinding
     private lateinit var arrayList: ArrayList<MyJobDtoList>
@@ -116,24 +117,24 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
 
     private fun setObserver() {
         if ((activity as BaseActivity).isOnline()) {
-            myJobModel.getMyJobData(getMapData()).observe(viewLifecycleOwner, {
-                progressDialog.dismiss()
-                if (it.status_code == "0") {
-                    myJobBinding.noDataFoundLayout.visibility = View.GONE
-                    myJobBinding.nestedScrollView.visibility = View.VISIBLE
-                    myJobBinding.runningOrders.text = it.Total_Orders
+            if ((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key != null && (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                myJobModel.getMyJobData(getMapData()).observe(viewLifecycleOwner, {
+                    progressDialog.dismiss()
+                    if (it.status_code == "0") {
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                        myJobBinding.noDataFoundLayout.visibility = View.GONE
+                        myJobBinding.nestedScrollView.visibility = View.VISIBLE
+                        myJobBinding.runningOrders.text = it.Total_Orders
+                        myJobBinding.totalAmount.text = it.Total_Order_Amount.formatChange()
+                        arrayList.clear()
+                        arrayList.addAll(it.data!!.OrderList!!)
+                        myJobBinding.jobRV.adapter!!.notifyDataSetChanged()
 
-                    myJobBinding.totalAmount.text = it.Total_Order_Amount.formatChange()
-                    arrayList.clear()
-                    arrayList.addAll(it.data!!.OrderList!!)
-                    myJobBinding.jobRV.adapter!!.notifyDataSetChanged()
-
-                } else {
-                    if (it.status != "") {
+                    } else {
                         myJobBinding.noDataFoundLayout.visibility = View.VISIBLE
                         myJobBinding.nestedScrollView.visibility = View.GONE
-                    } else {
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -141,12 +142,15 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
                         }
                         (activity as BaseActivity).bottomSheetDialog.show()
                     }
-                }
-            })
+                })
+            } else {
+                (activity as BaseActivity).hitAuthApi(this)
+            }
         } else {
             progressDialog.dismiss()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -158,15 +162,13 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
     private fun getMapData(): Map<String, String> {
         val mapDataValue = HashMap<String, String>()
         mapDataValue["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataValue["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!
-        mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData().auth_key!!
+        mapDataValue["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         return mapDataValue
     }
 
     @SuppressLint("SetTextI18n")
     override fun onClick(textInput: String, position: Int) {
-        mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
-        myJobBinding.blurView.visibility = View.VISIBLE
         jobViewBinding.closeView.setOnClickListener {
             mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
             myJobBinding.blurView.visibility = View.GONE
@@ -177,20 +179,38 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
         jobViewBinding.currencyCode2.text = (activity as BaseActivity).getCurrencySymbol()
         jobViewBinding.currencyCode4.text = (activity as BaseActivity).getCurrencySymbol()
 
+
         Glide.with(requireActivity()).load(arrayList[position]).centerCrop().placeholder(R.drawable.user_placeholder).into(jobViewBinding.userImage)
+        /* arrayList[position].job_sub_total = arrayList[position].job_sub_total.formatChange()
+         arrayList[position].Charge_for_Jobs = arrayList[position].Charge_for_Jobs.formatChange()
+         arrayList[position].job_total_amount = arrayList[position].job_total_amount.formatChange()*/
         jobViewBinding.data = arrayList[position]
         jobViewBinding.jobPostedDate.text = orderDateValue(arrayList[position].job_post_date!!)
         jobViewBinding.jobPostedTime.text = jobPostedTime(arrayList[position].job_posted_time!!)
         jobViewBinding.jobSubTotal.text = arrayList[position].job_sub_total.formatChange()
+//                android:text='@{languageModel.admin_charges_for_job+" ("+data.charge_for_Jobs_Admin_percentage+"%)"}'
+//                '@{data.job_tax_amount.equalsIgnoreCase("0") || data.job_tax_amount.equalsIgnoreCase("") ? View.GONE : View.VISIBLE}'
+//                adminServiceFeesCharge
         jobViewBinding.jobSubTotal1.text = arrayList[position].job_sub_total.formatChange()
+
         jobViewBinding.totalAmount.text = "${arrayList[position].job_total_amount.formatChange()}/-"
-        jobViewBinding.chargesJob.text = arrayList[position].Charge_for_Jobs.formatChange()
-        try{
+        jobViewBinding.serviceCharges.text = arrayList[position].Charge_for_Jobs.formatChange()
+        if (arrayList[position].job_tax_amount == "0" || arrayList[position].job_tax_amount == ("")) {
+            jobViewBinding.adminServiceFeesLayout.visibility = View.GONE
+        } else {
+            jobViewBinding.adminServiceFeesLayout.visibility = View.VISIBLE
+            jobViewBinding.adminServiceFees.text = languageDtoData.admin_charges_for_job + " (" + arrayList[position].Charge_for_Jobs_Admin_percentage + "%)"
+            jobViewBinding.adminServiceFeesCharge.text = arrayList[position].admin_service_fees.formatChange()
+        }
+
+        try {
             jobViewBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
             jobViewBinding.orderStatus.setTextColor(Color.parseColor(arrayList[position].order_status_text_color_code))
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
         }
+        mBottomSheetFilter.state = BottomSheetBehavior.STATE_EXPANDED
+        myJobBinding.blurView.visibility = View.VISIBLE
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -237,7 +257,7 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
         try {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, "DE"))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
@@ -281,5 +301,31 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView {
             myJobBinding.nextMonth.visibility = View.GONE
         } else myJobBinding.nextMonth.visibility = View.VISIBLE
         myJobBinding.currentMonth.text = "${month[currentMonth]}  $currentYear"
+    }
+
+    override fun isAuthHit(value: Boolean, message: String) {
+        if (value) {
+            setObserver()
+        } else {
+            progressDialog.dismiss()
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = message
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                (activity as BaseActivity).bottomSheetDialog.dismiss()
+            }
+            (activity as BaseActivity).bottomSheetDialog.show()
+
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        try {
+            progressDialog.dismiss()
+        } catch (e: Exception) {
+
+        }
     }
 }

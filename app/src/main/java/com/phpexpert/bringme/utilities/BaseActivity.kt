@@ -28,6 +28,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.interfaces.AuthInterface
+import com.phpexpert.bringme.interfaces.PermissionInterface
 import com.phpexpert.bringme.models.AuthModel
 import java.io.File
 import java.io.FileOutputStream
@@ -48,6 +49,7 @@ open class BaseActivity : AppCompatActivity() {
     lateinit var bottomSheetDialogHeadingText:TextView
     lateinit var bottomSheetDialogMessageOkButton: TextView
     lateinit var bottomSheetDialogMessageCancelButton: TextView
+    lateinit var permissionInterface:PermissionInterface
 
 
     private var currencyLocaleMap: SortedMap<Currency, Locale>? = null
@@ -195,10 +197,10 @@ open class BaseActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-
             100 -> { // Allowed was selected so Permission granted
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //nothing else
+                    permissionInterface.isPermission(true)
                 } else {
                     // User selected the Never Ask Again Option Change settings in app settings manually
                     val alertDialogBuilder = AlertDialog.Builder(this)
@@ -283,7 +285,7 @@ open class BaseActivity : AppCompatActivity() {
         try {
 //            val formatter = NumberFormat.getInstance(Locale(sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale(sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
+            val symbols = DecimalFormatSymbols(Locale(sharedPrefrenceManager.getAuthData()?.lang_code!!, "DE"))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
@@ -292,8 +294,8 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     open fun getCurrencySymbol(): String? {
-        val currency = Currency.getInstance(sharedPrefrenceManager.getAuthData().currency_code)
-        println(sharedPrefrenceManager.getAuthData().currency_code + ":-" + currency.getSymbol(currencyLocaleMap?.get(currency)))
+        val currency = Currency.getInstance(sharedPrefrenceManager.getAuthData()?.currency_code)
+        println(sharedPrefrenceManager.getAuthData()?.currency_code + ":-" + currency.getSymbol(currencyLocaleMap?.get(currency)))
         return currency.getSymbol(currencyLocaleMap?.get(currency))
     }
 

@@ -22,7 +22,8 @@
         android:layout_marginStart="@dimen/_7sdp"
         android:layout_marginTop="@dimen/_3sdp"
         android:layout_marginEnd="@dimen/_7sdp"
-        app:cardElevation="@dimen/_3sdp"
+        android:elevation="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -45,7 +46,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:orientation="horizontal"
                         tools:ignore="RelativeOverlap">
 
@@ -81,7 +82,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:textColor="@color/colorGreen"
                             android:textSize="@dimen/_13sdp"
@@ -93,7 +93,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_2sdp"
-                            android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:textColor="@color/colorGreen"
                             android:textSize="@dimen/_13sdp"
@@ -101,70 +100,70 @@
                     </LinearLayout>
                 </RelativeLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="@{languageModel.job_code}"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="@dimen/_11sdp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text='@{" "+model.job_OTP_code}'
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_11sdp"
-                        tools:ignore="HardcodedText" />
-                </LinearLayout>
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp">
+                    android:layout_marginTop="@dimen/_2sdp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_36sdp"
-                        android:layout_toLeftOf="@+id/csImage"
-                        android:gravity="start"
-                        android:orientation="vertical"
-                        tools:ignore="RelativeOverlap,RtlHardcoded">
+                        android:layout_toStartOf="@+id/csImage"
+                        android:layout_marginEnd="@dimen/_32sdp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_medium"
+                                android:text="@{languageModel.job_code}"
+                                android:textColor="@color/colorDarkGrey"
+                                android:textSize="@dimen/_11sdp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_medium"
+                                android:text='@{" "+model.job_OTP_code}'
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_11sdp"
+                                tools:ignore="HardcodedText" />
+                        </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
                             android:fontFamily="@font/poppins_medium"
                             android:text="@{languageModel.job_description}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-                            android:text="@{model.about_job}"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="@dimen/_7sdp"
-                            tools:ignore="HardcodedText" />
                     </LinearLayout>
 
                     <ImageView
                         android:id="@+id/csImage"
-                        android:layout_width="@dimen/_65sdp"
-                        android:layout_height="@dimen/_50sdp"
+                        android:layout_width="@dimen/_57sdp"
+                        android:layout_height="@dimen/_42sdp"
                         android:layout_alignParentEnd="true"
                         android:src="@drawable/cs"
                         tools:ignore="ContentDescription" />
                 </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@{model.about_job}"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textSize="@dimen/_8sdp"
+                    tools:ignore="HardcodedText" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -279,35 +278,43 @@
                         android:layout_height="@dimen/_45sdp"
                         tools:ignore="ContentDescription" />
 
-                    <TextView
-                        android:id="@+id/userName"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/_10sdp"
                         android:layout_toEndOf="@+id/userImage"
-                        android:fontFamily="@font/poppins_semi_bold"
-                        android:text="@{model.client_name}"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_13sdp"
-                        tools:ignore="HardcodedText,RelativeOverlap" />
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+                        <TextView
+                            android:id="@+id/userName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:text="@{model.client_name}"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_13sdp"
+                            tools:ignore="HardcodedText,RelativeOverlap" />
 
-                    <RatingBar
-                        android:id="@+id/ratingValue"
-                        style="@style/Widget.AppCompat.RatingBar.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:numStars="5"
-                        android:progressTint="@color/yellow" />
+                        <RatingBar
+                            android:id="@+id/ratingValue"
+                            android:layout_marginTop="@dimen/_4sdp"
+                            style="@style/Widget.AppCompat.RatingBar.Small"
+                            android:layout_width="wrap_content"
+
+                            android:layout_height="wrap_content"
+                            android:numStars="5"
+                            android:progressTint="@color/yellow" />
+                    </LinearLayout>
                 </RelativeLayout>
 
                 <TextView
                     android:id="@+id/ratingReview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:text="@{model.job_review_description}"
                     android:textColor="@color/text_color"
@@ -370,10 +377,11 @@
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_toStartOf="@+id/completeAcceptTime"
                     android:layout_toEndOf="@+id/deliveryImageView"
                     android:orientation="vertical">
 
@@ -389,15 +397,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{model.delivery_Employee_phone_code+model.delivery_Employee_phone}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_7sdp"
+                        android:textSize="@dimen/_9sdp"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/completeAcceptTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -412,17 +421,17 @@
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_7sdp" />
+                        android:textSize="@dimen/_8sdp" />
 
                     <TextView
                         android:id="@+id/timeData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_7sdp"
+                        android:textSize="@dimen/_8sdp"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
             </RelativeLayout>

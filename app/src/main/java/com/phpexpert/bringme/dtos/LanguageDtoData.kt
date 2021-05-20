@@ -255,4 +255,5 @@ class LanguageDtoData {
     val job_total_amount_in = "Job Total Amount in"
     val pay_now = "Pay Now"
     val location_enable_message = "Please enable GPS location"
+    val call = "Call"
 }

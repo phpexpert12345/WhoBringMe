@@ -97,7 +97,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
             }
         }
 
-        Glide.with(context).asGif().load(arrayList[position].order_status_icon).placeholder(R.drawable.cs).into(homeFragmentCellBinding.cs)
+        Glide.with(context).asGif().load(arrayList[position].order_status_icon).placeholder(R.drawable.cs).into(homeFragmentCellBinding.csImage)
 
         homeFragmentCellBinding.acceptViewLayout.setOnClickListener {
             if ((holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text.toString() == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view) {
@@ -186,7 +186,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         try {
 //            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, "DE"))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

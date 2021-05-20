@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorLoginButton"
-            android:paddingBottom="@dimen/_17sdp">
+            android:paddingBottom="@dimen/_20sdp">
 
             <ImageView
                 android:id="@+id/back_arrow"
@@ -135,6 +135,7 @@
                     android:layout_marginBottom="@dimen/_20sdp"
                     app:cardCornerRadius="@dimen/_10sdp"
                     app:cardElevation="@dimen/_3sdp"
+                    android:elevation="@dimen/_3sdp"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
