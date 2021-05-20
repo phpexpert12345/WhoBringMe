@@ -21,13 +21,15 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityOTPBinding
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.PostDataOtp
+import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import java.util.*
 import kotlin.collections.HashMap
 
-@Suppress("DEPRECATION")
-class OTPActivity : BaseActivity() {
+@Suppress("DEPRECATION", "SpellCheckingInspection")
+class OTPActivity : BaseActivity(), AuthInterface {
 
     private lateinit var otpActivity: ActivityOTPBinding
     private lateinit var postDataOtp: PostDataOtp
@@ -36,6 +38,7 @@ class OTPActivity : BaseActivity() {
     private lateinit var languageDtoData: LanguageDtoData
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private var apiName = ""
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,18 +49,7 @@ class OTPActivity : BaseActivity() {
         postDataOtp = intent.getSerializableExtra("postDataModel") as PostDataOtp
 
         otpActivity.btnSubmit.setOnClickListener {
-            if (isOnline()) {
-                otpActivity.btnSubmit.startAnimation()
-                gettingLocation()
-            } else {
-                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
-                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-                bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
-                }
-                bottomSheetDialog.show()
-            }
+            validation()
         }
 
         viewDataModel = ViewModelProvider(this).get(RegistrationModel::class.java)
@@ -80,8 +72,81 @@ class OTPActivity : BaseActivity() {
         handleOtpET()
     }
 
+    private fun validation() {
+        if (isOnline()) {
+            otpActivity.btnSubmit.startAnimation()
+            if (sharedPrefrenceManager.getPreference(CONSTANTS.isLocation) == "true") {
+                val location = Location("")
+                location.latitude = sharedPrefrenceManager.getPreference(CONSTANTS.currentLatitue)!!.toDouble()
+                location.longitude = sharedPrefrenceManager.getPreference(CONSTANTS.currentLongitude)!!.toDouble()
+                startActivity(location)
+            } else {
+                if (isLocationEnabled())
+                    gettingLocationData()
+                else {
+                    bottomSheetDialogHeadingText.visibility = View.GONE
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_enable_message
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
+                }
+            }
+        } else {
+            bottomSheetDialogHeadingText.visibility = View.GONE
+            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        }
+    }
 
     private fun handleOtpET() {
+        otpActivity.otpPass1.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            otpActivity.otpPass1.setSelection(otpActivity.otpPass1.text.length)
+            if (b) {
+                if (otpActivity.otpPass1.text.isNotEmpty() && otpActivity.otpPass2.text.isNotEmpty()) {
+                    otpActivity.otpPass2.requestFocus()
+                }
+            }
+        }
+
+        otpActivity.otpPass2.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            otpActivity.otpPass2.setSelection(otpActivity.otpPass2.text.length)
+            if (b) {
+                if (otpActivity.otpPass2.text.isNotEmpty() && otpActivity.otpPass3.text.isNotEmpty()) {
+                    otpActivity.otpPass3.requestFocus()
+                } else if (otpActivity.otpPass1.text.isEmpty()) {
+                    otpActivity.otpPass1.requestFocus()
+                }
+            }
+        }
+
+        otpActivity.otpPass3.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            otpActivity.otpPass3.setSelection(otpActivity.otpPass3.text.length)
+            if (b) {
+                if (otpActivity.otpPass3.text.isNotEmpty() && otpActivity.otpPass4.text.isNotEmpty()) {
+                    otpActivity.otpPass4.requestFocus()
+                } else if (otpActivity.otpPass2.text.isEmpty()) {
+                    otpActivity.otpPass2.requestFocus()
+                }
+            }
+        }
+
+        otpActivity.otpPass4.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
+            otpActivity.otpPass4.setSelection(otpActivity.otpPass4.text.length)
+            if (b) {
+                if (otpActivity.otpPass3.text.isEmpty()) {
+                    otpActivity.otpPass3.requestFocus()
+                }
+            }
+        }
+
         otpActivity.otpPass1.addTextChangedListener(GenericTextWatcher(otpActivity.otpPass1))
         otpActivity.otpPass2.addTextChangedListener(GenericTextWatcher(otpActivity.otpPass2))
         otpActivity.otpPass3.addTextChangedListener(GenericTextWatcher(otpActivity.otpPass3))
@@ -148,43 +213,73 @@ class OTPActivity : BaseActivity() {
     }
 
     private fun setObserver() {
-        viewDataModel.registerViewModel(mapData()).observe(this, {
-            otpActivity.btnSubmit.revertAnimation()
-            bottomSheetDialogMessageText.text = it.status_message
-            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-            if (it.status_code == "0") {
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                    finishAffinity()
+        if (sharedPrefrenceManager.getAuthData().auth_key != null && sharedPrefrenceManager.getAuthData().auth_key == "")
+            viewDataModel.registerViewModel(mapData()).observe(this, {
+                otpActivity.btnSubmit.revertAnimation()
+                bottomSheetDialogMessageText.text = it.status_message
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                if (it.status_code == "0") {
+                    bottomSheetDialogHeadingText.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        finishAffinity()
+                    }
+                } else {
+                    bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
                 }
-            } else {
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    bottomSheetDialog.dismiss()
-                }
-            }
-            bottomSheetDialog.show()
-        })
+                bottomSheetDialog.show()
+            })
+        else {
+            apiName = "registerData"
+            hitAuthApi(this)
+        }
     }
 
     private fun resendOtpObserver() {
-        viewDataModel.resendOtpModel(resendData()).observe(this, {
-            progressDialog.dismiss()
-            bottomSheetDialogMessageText.text = it.status_message
-            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-            bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
-                if (it.status_code == "0") {
-                    otpActivity.timeText.visibility = View.VISIBLE
-                    otpActivity.resendLayout.visibility = View.GONE
-                    timerRestriction()
+        if (sharedPrefrenceManager.getAuthData().auth_key != null && sharedPrefrenceManager.getAuthData().auth_key != "")
+            viewDataModel.resendOtpModel(resendData()).observe(this, {
+                progressDialog.dismiss()
+                bottomSheetDialogMessageText.text = it.status_message
+                if (it.status_code == "0")
+                    bottomSheetDialogHeadingText.visibility = View.GONE
+                else
+                    bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                    if (it.status_code == "0") {
+                        otpActivity.timeText.visibility = View.VISIBLE
+                        otpActivity.resendLayout.visibility = View.GONE
+                        otpActivity.otpPass4.text = Editable.Factory.getInstance().newEditable("")
+                        otpActivity.otpPass3.text = Editable.Factory.getInstance().newEditable("")
+                        otpActivity.otpPass2.text = Editable.Factory.getInstance().newEditable("")
+                        otpActivity.otpPass1.text = Editable.Factory.getInstance().newEditable("")
+                        timerRestriction()
+                    }
+                    bottomSheetDialog.dismiss()
                 }
-                bottomSheetDialog.dismiss()
+                bottomSheetDialog.show()
+            })
+        else {
+            if (isOnline()) {
+                hitAuthApi(this)
+            } else {
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                bottomSheetDialogHeadingText.visibility = View.GONE
+                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                bottomSheetDialogMessageOkButton.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                }
+                bottomSheetDialog.show()
             }
-            bottomSheetDialog.show()
-        })
+        }
     }
 
     private fun mapData(): Map<String, String?> {
@@ -221,7 +316,7 @@ class OTPActivity : BaseActivity() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun gettingLocation() {
+    private fun gettingLocationData() {
         try {
             val mLocationRequest = LocationRequest.create()
             mLocationRequest.interval = 60000
@@ -235,22 +330,11 @@ class OTPActivity : BaseActivity() {
                         try {
                             if (location != null) {
                                 mLocation = location
-                                val geocoder = Geocoder(this@OTPActivity, Locale.getDefault())
-                                val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
-                                postDataOtp.accountLat = mLocation!!.latitude.toString()
-                                postDataOtp.accountLong = mLocation!!.longitude.toString()
-                                postDataOtp.accountCountry = addresses[0]!!.countryName
-                                postDataOtp.accountState = addresses[0]!!.adminArea
-                                postDataOtp.accountCity = addresses[0]!!.locality
-                                val stringBuilder = StringBuilder()
-                                for (i in 0..addresses[0]!!.maxAddressLineIndex)
-                                    stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
-                                postDataOtp.accountAddress = stringBuilder.toString()
-                                postDataOtp.addressPostCode = addresses[0]!!.postalCode
-                                setObserver()
+                                startActivity(mLocation!!)
                             } else {
                                 otpActivity.btnSubmit.revertAnimation()
                                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_not_found
+                                bottomSheetDialogHeadingText.visibility = View.GONE
                                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -264,6 +348,7 @@ class OTPActivity : BaseActivity() {
                             otpActivity.btnSubmit.revertAnimation()
                             bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_not_found
                             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                            bottomSheetDialogHeadingText.visibility = View.GONE
                             bottomSheetDialogMessageCancelButton.visibility = View.GONE
                             bottomSheetDialogMessageOkButton.setOnClickListener {
                                 bottomSheetDialog.dismiss()
@@ -286,6 +371,39 @@ class OTPActivity : BaseActivity() {
             otpActivity.btnSubmit.revertAnimation()
             bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().something_is_wrong
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        }
+    }
+
+    private fun startActivity(mLocation: Location) {
+        val geocoder = Geocoder(this@OTPActivity, Locale.getDefault())
+        val addresses = geocoder.getFromLocation(mLocation.latitude, mLocation.longitude, 1)
+        postDataOtp.accountLat = mLocation.latitude.toString()
+        postDataOtp.accountLong = mLocation.longitude.toString()
+        postDataOtp.accountCountry = addresses[0]!!.countryName
+        postDataOtp.accountState = addresses[0]!!.adminArea
+        postDataOtp.accountCity = addresses[0]!!.locality
+        val stringBuilder = StringBuilder()
+        for (i in 0..addresses[0]!!.maxAddressLineIndex)
+            stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+        postDataOtp.accountAddress = stringBuilder.toString()
+        postDataOtp.addressPostCode = addresses[0]!!.postalCode
+        setObserver()
+    }
+
+    override fun isAuthHit(value: Boolean, message: String) {
+        if (value) {
+            when (message) {
+                "registerData" -> validation()
+            }
+        } else {
+            bottomSheetDialogMessageText.text = message
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogHeadingText.visibility = View.VISIBLE
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()

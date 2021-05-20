@@ -337,7 +337,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_11sdp"
             app:spinning_bar_color="@color/white"
-            app:spinning_bar_width="@dimen/_5sdp"
+            app:spinning_bar_padding="@dimen/_5sdp"
             tools:ignore="HardcodedText" />
 
     </RelativeLayout>

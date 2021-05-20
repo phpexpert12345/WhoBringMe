@@ -53,14 +53,12 @@ class RegistrationSelectionActivity : BaseActivity() {
         }
 
         registrationSelectionBinding.nextButton.setOnClickListener {
-            if (selectionString != ""){
-                registrationSelectionBinding.nextButton.startAnimation()
-                Handler().postDelayed({
-                    val intent = Intent(this, RegistrationActivity::class.java)
-                    intent.putExtra("selectionString", selectionString)
-                    startActivity(intent)
-                }, 1000)
-            }else{
+            if (selectionString != "") {
+//                registrationSelectionBinding.nextButton.startAnimation()
+                val intent = Intent(this, RegistrationActivity::class.java)
+                intent.putExtra("selectionString", selectionString)
+                startActivity(intent)
+            } else {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().please_select_one
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -75,7 +73,5 @@ class RegistrationSelectionActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         registrationSelectionBinding.nextButton.revertAnimation()
-        val window: Window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 }

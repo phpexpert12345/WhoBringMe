@@ -110,7 +110,7 @@
     <item>
         <layer-list>
             <item
-                android:bottom="-5dp"
+                android:bottom="-7dp"
                 android:left="-3dp"
                 android:right="-3dp"
                 android:top="-1dp">

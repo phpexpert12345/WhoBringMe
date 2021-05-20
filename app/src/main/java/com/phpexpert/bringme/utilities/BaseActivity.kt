@@ -9,6 +9,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.dtos.LanguageDtoData
@@ -43,12 +45,23 @@ open class BaseActivity : AppCompatActivity() {
     private lateinit var authViewModel: AuthModel
     lateinit var bottomSheetDialog: BottomSheetDialog
     lateinit var bottomSheetDialogMessageText: TextView
+    lateinit var bottomSheetDialogHeadingText:TextView
     lateinit var bottomSheetDialogMessageOkButton: TextView
     lateinit var bottomSheetDialogMessageCancelButton: TextView
+
+
     private var currencyLocaleMap: SortedMap<Currency, Locale>? = null
+    private lateinit var mLocationCallback: LocationCallback
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
     @Inject
     lateinit var sharedPrefrenceManager: SharedPrefrenceManager
+
+    @SuppressLint("InlinedApi")
+    private var perission = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    )
 
     @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,9 +77,11 @@ open class BaseActivity : AppCompatActivity() {
         bottomSheetDialog.findViewById<TextView>(R.id.textHeading)?.text = sharedPrefrenceManager.getLanguageData().alert_text
         bottomSheetDialog.findViewById<TextView>(R.id.cancelText)?.text = sharedPrefrenceManager.getLanguageData().cancel
         bottomSheetDialog.findViewById<TextView>(R.id.okText)?.text = sharedPrefrenceManager.getLanguageData().ok_text
+        bottomSheetDialogHeadingText = bottomSheetDialog.findViewById(R.id.textHeading)!!
         bottomSheetDialogMessageText = bottomSheetDialog.findViewById(R.id.message)!!
         bottomSheetDialogMessageOkButton = bottomSheetDialog.findViewById(R.id.okText)!!
         bottomSheetDialogMessageCancelButton = bottomSheetDialog.findViewById(R.id.cancelText)!!
+        authViewModel = ViewModelProvider(this).get(AuthModel::class.java)
 
         currencyLocaleMap = TreeMap { c1, c2 -> c1.currencyCode.compareTo(c2.currencyCode) }
         for (locale in Locale.getAvailableLocales()) {
@@ -78,37 +93,68 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun hitAuthApi(authData: AuthInterface) = if (isOnline()) {
+    @SuppressLint("MissingPermission")
+    fun gettingLocation() {
+        try {
+            val mLocationRequest = LocationRequest.create()
+            mLocationRequest.interval = 60000
+            mLocationRequest.fastestInterval = 5000
+            mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            mLocationCallback = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    for (location in locationResult.locations) {
+                        try {
+                            if (location != null) {
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.currentLatitue, location.latitude.toString())
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.currentLongitude, location.longitude.toString())
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "true")
+                            } else {
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "false")
 
-        authViewModel = ViewModelProvider(this).get(AuthModel::class.java)
+                            }
+                            break
+                        } catch (e: Exception) {
+                            sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "false")
+
+                        }
+                    }
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+//                    v.putExtra("postDataModel", postDataOtp)
+//                    startActivity(v)
+                }
+            }
+            @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
+
+//                        val mLocation =
+//                                LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
+
+        } catch (e: Exception) {
+            sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "false")
+            /* bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().something_is_wrong
+             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+             bottomSheetDialogMessageCancelButton.visibility = View.GONE
+             bottomSheetDialogMessageOkButton.setOnClickListener {
+                 bottomSheetDialog.dismiss()
+             }
+             bottomSheetDialog.show()*/
+        }
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun hitAuthApi(authData: AuthInterface) {
         authViewModel.getAuthDataModel().observe(this, {
             bottomSheetDialogMessageText.text = it.status_message
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             if (it.status_code == "0") {
-//                AuthSingleton.authObject = it.data!![0]
                 sharedPrefrenceManager.saveAuthData(it.data!![0])
-                authData.isAuthHit(true)
+                authData.isAuthHit(true, it.status_message!!)
             } else {
-                bottomSheetDialogMessageOkButton.setOnClickListener {
-                    authData.isAuthHit(false)
-                    bottomSheetDialog.dismiss()
-                    finish()
-                }
-                bottomSheetDialog.show()
+                authData.isAuthHit(false, it!!.status_message!!)
             }
         })
-
-    } else {
-        bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
-        bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-        bottomSheetDialogMessageCancelButton.visibility = View.GONE
-        bottomSheetDialogMessageOkButton.setOnClickListener {
-            authData.isAuthHit(false)
-            bottomSheetDialog.dismiss()
-            finish()
-        }
-        bottomSheetDialog.show()
     }
 
     open fun isOnline(): Boolean {
@@ -250,4 +296,6 @@ open class BaseActivity : AppCompatActivity() {
         println(sharedPrefrenceManager.getAuthData().currency_code + ":-" + currency.getSymbol(currencyLocaleMap?.get(currency)))
         return currency.getSymbol(currencyLocaleMap?.get(currency))
     }
+
+    fun isLocationEnabled():Boolean = (getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
 }

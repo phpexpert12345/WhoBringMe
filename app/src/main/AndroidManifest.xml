@@ -29,7 +29,7 @@
         tools:ignore="AllowBackup">
         <activity
             android:name=".activities.RegistrationActivity"
-            android:theme="@style/Theme.BringMe.NoActionBar"
+            android:theme="@style/RegistrationActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.OTPActivity"
@@ -38,7 +38,7 @@
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.BringMe.NoActionBar"
+            android:theme="@style/RegistrationActivity"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
@@ -89,7 +89,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.RegistrationSelectionActivity"
-            android:theme="@style/Theme.BringMe.NoActionBarn" />
+            android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.employee.PaymentActivity"
             android:theme="@style/Theme.BringMe.NoActionBar" />

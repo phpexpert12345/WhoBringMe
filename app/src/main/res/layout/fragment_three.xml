@@ -1,60 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="languageModel"
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
     </data>
-    <LinearLayout
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         tools:context=".fragment.SwipeFragmentThree">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/onboarding_3"
-            tools:ignore="ContentDescription" />
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="@{languageModel.title_3}"
-            android:textAlignment="center"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/_14sdp" />
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:fontFamily="@font/poppins_regular"
-            android:text="@{languageModel.label_three}"
-            android:textAlignment="center"
-            android:textColor="@color/color_text_grey"
-            android:textSize="@dimen/_12sdp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/onboarding_3"
+                tools:ignore="ContentDescription" />
 
-        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-            android:id="@+id/button_get_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:background="@drawable/button_rectangle_green"
-            android:text="@{languageModel.get_start}"
-            app:spinning_bar_color="@color/white"
-            android:textColor="@color/white"
-            android:fontFamily="@font/poppins_medium"
-            android:paddingRight="@dimen/_40sdp"
-            android:paddingLeft="@dimen/_40sdp"
-            android:textAllCaps="false"
-            android:textSize="@dimen/_11sdp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@{languageModel.title_3}"
+                android:textAlignment="center"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/_14sdp" />
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="@{languageModel.label_three}"
+                android:textAlignment="center"
+                android:textColor="@color/color_text_grey"
+                android:textSize="@dimen/_12sdp" />
+
+            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                android:id="@+id/button_get_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:background="@drawable/button_rectangle_green"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingLeft="@dimen/_40sdp"
+                android:paddingRight="@dimen/_40sdp"
+                android:text="@{languageModel.get_start}"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_11sdp"
+                app:spinning_bar_color="@color/white" />
+
+        </LinearLayout>
+
+    </ScrollView>
 </layout>

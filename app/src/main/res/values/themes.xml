@@ -16,13 +16,13 @@
     </style>
 
     <style name="RegistrationActivity" parent="Theme.BringMe.NoActionBar">
-        <item name="colorPrimary">@color/colorDarkGrey</item>
-        <item name="colorPrimaryVariant">@color/colorDarkGrey</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/colorDarkGrey</item>
-        <item name="colorSecondaryVariant">@color/colorDarkGrey</item>
-        <item name="colorOnSecondary">@color/colorDarkGrey</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textColorHint">@color/view_color_dark</item>
+        <item name="colorAccent">@color/view_color_dark</item>
+        <item name="colorControlNormal">@color/view_color_dark</item>
+        <item name="colorControlActivated">@color/colorLoginButton</item>
+        <item name="colorControlHighlight">@color/colorLoginButton</item>
+        <item name="android:textColorHighlight">@color/colorLoginButton</item>
     </style>
 
     <style name="Theme.BringMe.NoActionBar">

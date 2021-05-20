@@ -84,8 +84,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
                         android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <TextView
@@ -133,7 +133,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5sdp"
-                        android:hint="@{languageModel.first_name}">
+                        android:hint="@{languageModel.first_name}"
+                        android:textColorHint="@color/lightColor">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/firstNameEt"
@@ -142,13 +143,13 @@
                             android:background="@android:color/transparent"
                             android:backgroundTint="@color/colorDarkGrey"
                             android:fontFamily="@font/poppins_regular"
+                            android:maxLength="50"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
-                            android:maxLength="255"
                             android:paddingTop="@dimen/_25sdp"
-                            android:paddingBottom="@dimen/_minus40sdp"
+                            android:paddingBottom="@dimen/_minus25sdp"
                             android:textColor="@color/text_color"
-                            android:textColorHint="@color/colorDarkGrey"
+                            android:textColorHint="@color/lightColor"
                             android:textSize="@dimen/_12sdp"
                             app:boxBackgroundColor="@android:color/transparent"
                             tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -160,7 +161,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5sdp"
-                        android:hint="@{languageModel.last_name}">
+                        android:hint="@{languageModel.last_name}"
+                        android:textColorHint="@color/lightColor">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/lastNameEt"
@@ -168,11 +170,11 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/poppins_regular"
+                            android:maxLength="50"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
-                            android:maxLength="255"
-                            android:paddingBottom="@dimen/_minus40sdp"
+                            android:paddingBottom="@dimen/_minus25sdp"
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/colorDarkGrey"
                             android:textSize="@dimen/_12sdp"
@@ -202,7 +204,8 @@
                             android:id="@+id/mobileNumberInputText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@{languageModel.mobile_number}">
+                            android:hint="@{languageModel.mobile_number}"
+                            android:textColorHint="@color/lightColor">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/mobileNumberEditText"
@@ -218,7 +221,7 @@
                                 android:paddingStart="@dimen/_65sdp"
                                 android:paddingLeft="@dimen/_65sdp"
                                 android:paddingTop="@dimen/_25sdp"
-                                android:paddingBottom="@dimen/_minus10sdp"
+                                android:paddingBottom="@dimen/_minus25sdp"
                                 android:textColor="@color/text_color"
                                 android:textColorHint="@color/colorDarkGrey"
                                 android:textSize="@dimen/_12sdp"
@@ -250,7 +253,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5sdp"
-                        android:hint="@{languageModel.email_id}">
+                        android:hint="@{languageModel.email_id}"
+                        android:textColorHint="@color/lightColor">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/emailEt"
@@ -262,7 +266,7 @@
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
-                            android:paddingBottom="@dimen/_minus40sdp"
+                            android:paddingBottom="@dimen/_minus25sdp"
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/colorDarkGrey"
                             android:textSize="@dimen/_12sdp"
@@ -279,7 +283,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/_5sdp"
-                            android:hint="@{languageModel._6_digit_mpin_number}">
+                            android:hint="@{languageModel._6_digit_mpin_number}"
+                            android:textColorHint="@color/lightColor">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/digitPin"
@@ -289,11 +294,11 @@
                                 android:digits="0123456789"
                                 android:fontFamily="@font/poppins_regular"
                                 android:inputType="numberPassword"
-                                android:paddingStart="0dp"
                                 android:maxLength="6"
+                                android:paddingStart="0dp"
                                 android:paddingLeft="0dp"
                                 android:paddingTop="@dimen/_25sdp"
-                                android:paddingBottom="@dimen/_minus40sdp"
+                                android:paddingBottom="@dimen/_minus25sdp"
                                 android:textColor="@color/text_color"
                                 android:textColorHint="@color/colorDarkGrey"
                                 android:textSize="@dimen/_12sdp"
@@ -309,8 +314,12 @@
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="@dimen/_5sdp"
+                            android:paddingStart="@dimen/_10sdp"
+                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingTop="@dimen/_10sdp"
+                            android:paddingBottom="@dimen/_10sdp"
                             android:src="@drawable/eyes_off"
-                            tools:ignore="ContentDescription" />
+                            tools:ignore="ContentDescription,RtlHardcoded,RtlSymmetry" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -341,6 +350,5 @@
                     android:textSize="@dimen/_10sdp" />
             </LinearLayout>
         </ScrollView>
-
     </RelativeLayout>
 </layout>

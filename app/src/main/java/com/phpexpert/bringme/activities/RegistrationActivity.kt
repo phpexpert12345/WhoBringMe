@@ -5,7 +5,6 @@ package com.phpexpert.bringme.activities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
 import android.text.method.PasswordTransformationMethod
@@ -17,20 +16,18 @@ import com.google.android.gms.location.*
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityRegistrationBinding
 import com.phpexpert.bringme.dtos.PostDataOtp
+import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
-import com.phpexpert.bringme.utilities.SoftInputAssist
 import java.util.*
 import kotlin.collections.HashMap
 
 
 @Suppress("DEPRECATION", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-open class RegistrationActivity : BaseActivity(){
+open class RegistrationActivity : BaseActivity(), AuthInterface {
     private lateinit var registrationActivity: ActivityRegistrationBinding
     private lateinit var selectionString: String
-
     private var passwordVisible: Boolean = false
-    private lateinit var softInputAssist: SoftInputAssist
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -43,7 +40,6 @@ open class RegistrationActivity : BaseActivity(){
         registrationActivity = DataBindingUtil.setContentView(this, R.layout.activity_registration)
         registrationActivity.languageModel = sharedPrefrenceManager.getLanguageData()
         registrationActivity.continueMessage.text = Html.fromHtml(sharedPrefrenceManager.getLanguageData().by_continuing_you_agree_that_you_have_read_and_accept_our_t_amp_cs_and_privacy_policy)
-        softInputAssist = SoftInputAssist(this)
         setActions()
         setValues()
     }
@@ -59,6 +55,7 @@ open class RegistrationActivity : BaseActivity(){
                     setObserver()
                 else {
                     bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().please_enable_permissions_irst
+                    bottomSheetDialogHeadingText.visibility = View.GONE
                     bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -71,26 +68,19 @@ open class RegistrationActivity : BaseActivity(){
         }
 
         registrationActivity.backArrow.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finishAffinity()
+            finish()
         }
 
         registrationActivity.mobileNumberEditText.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
             if (b) {
-                registrationActivity.mobileNumberInputText.hint = ""
-                registrationActivity.mobileNumberTextHint.visibility = View.VISIBLE
-                registrationActivity.mobileNumberTextHint.setTextColor(resources.getColor(R.color.colorLoginButton))
                 val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
                 lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._19sdp), 0, 0)
                 registrationActivity.searchCountyCountry.layoutParams = lp
             } else {
-                registrationActivity.mobileNumberTextHint.setTextColor(Color.parseColor("#808080"))
                 if (registrationActivity.mobileNumberEditText.text!!.isEmpty()) {
-                    registrationActivity.mobileNumberInputText.hint = sharedPrefrenceManager.getLanguageData().mobile_number
                     val lp = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
                     lp.setMargins(resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._minus6sdp), resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._7sdp), 0, 0)
                     registrationActivity.searchCountyCountry.layoutParams = lp
-                    registrationActivity.mobileNumberTextHint.visibility = View.GONE
                 }
 
             }
@@ -154,6 +144,7 @@ open class RegistrationActivity : BaseActivity(){
 
 
         registrationActivity.passwordEye.setOnClickListener {
+            registrationActivity.digitPin.setSelection(registrationActivity.digitPin.text.toString().trim().length)
             if (passwordVisible) {
                 registrationActivity.passwordEye.setImageResource(R.drawable.eye_close)
                 passwordVisible = false
@@ -174,41 +165,47 @@ open class RegistrationActivity : BaseActivity(){
     @SuppressLint("MissingPermission")
     private fun setObserver() {
         if (isOnline()) {
-            registrationActivity.btnSubmit.startAnimation()
-            val otpSendViewModel = ViewModelProvider(this).get(RegistrationModel::class.java)
-            otpSendViewModel.sendOtpModel(getMapData()).observe(this, {
-                registrationActivity.btnSubmit.revertAnimation()
-                bottomSheetDialogMessageText.text = it.status_message
-                bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-                bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                if (it.status_code == "0") {
-                    bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
-                        bottomSheetDialog.dismiss()
-                        val v = Intent(this@RegistrationActivity, OTPActivity::class.java)
-                        val postDataOtp = PostDataOtp()
-                        postDataOtp.accountFirstName = registrationActivity.firstNameEt.text.toString()
-                        postDataOtp.accountLasttName = registrationActivity.lastNameEt.text.toString()
-                        postDataOtp.accountMobile = registrationActivity.mobileNumberEditText.text.toString()
-                        postDataOtp.accountPhoneCode = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
-                        postDataOtp.accountEmail = registrationActivity.emailEt.text.toString()
-                        postDataOtp.accountType = selectionString
-                        postDataOtp.mobilePinCode = registrationActivity.digitPin.text.toString()
-                        postDataOtp.deviceTokenId = it.data!!.Token_ID
-                        postDataOtp.devicePlatform = "Android"
-                        v.putExtra("postDataModel", postDataOtp)
-                        startActivity(v)
+            if (sharedPrefrenceManager.getAuthData().auth_key != null && sharedPrefrenceManager.getAuthData().auth_key != "") {
+                registrationActivity.btnSubmit.startAnimation()
+                val otpSendViewModel = ViewModelProvider(this).get(RegistrationModel::class.java)
+                otpSendViewModel.sendOtpModel(getMapData()).observe(this, {
+                    registrationActivity.btnSubmit.revertAnimation()
+                    bottomSheetDialogMessageText.text = it.status_message
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    if (it.status_code == "0") {
+                        bottomSheetDialogHeadingText.visibility = View.GONE
+                        bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                            bottomSheetDialog.dismiss()
+                            val v = Intent(this@RegistrationActivity, OTPActivity::class.java)
+                            val postDataOtp = PostDataOtp()
+                            postDataOtp.accountFirstName = registrationActivity.firstNameEt.text.toString()
+                            postDataOtp.accountLasttName = registrationActivity.lastNameEt.text.toString()
+                            postDataOtp.accountMobile = registrationActivity.mobileNumberEditText.text.toString()
+                            postDataOtp.accountPhoneCode = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
+                            postDataOtp.accountEmail = registrationActivity.emailEt.text.toString()
+                            postDataOtp.accountType = selectionString
+                            postDataOtp.mobilePinCode = registrationActivity.digitPin.text.toString()
+                            postDataOtp.deviceTokenId = it.data!!.Token_ID
+                            postDataOtp.devicePlatform = "Android"
+                            v.putExtra("postDataModel", postDataOtp)
+                            startActivity(v)
+                        }
+
+                    } else {
+                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            bottomSheetDialog.dismiss()
+                        }
+
                     }
-
-                } else {
-                    bottomSheetDialogMessageOkButton.setOnClickListener {
-                        bottomSheetDialog.dismiss()
-                    }
-
-                }
-                bottomSheetDialog.show()
-            })
-
+                    bottomSheetDialog.show()
+                })
+            } else {
+                hitAuthApi(this)
+            }
         } else {
+            bottomSheetDialogHeadingText.visibility = View.GONE
             bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -234,6 +231,7 @@ open class RegistrationActivity : BaseActivity(){
         return when {
             registrationActivity.firstNameEt.text.toString().isEmpty() -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().first_name_is_required_field
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -244,6 +242,7 @@ open class RegistrationActivity : BaseActivity(){
             }
             registrationActivity.lastNameEt.text.toString().isEmpty() -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().last_name_is_required_field
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -254,6 +253,7 @@ open class RegistrationActivity : BaseActivity(){
             }
             registrationActivity.mobileNumberEditText.text.toString().isEmpty() -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().mobile_number_is_required_field
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -264,6 +264,7 @@ open class RegistrationActivity : BaseActivity(){
             }
             registrationActivity.mobileNumberEditText.text.toString().length !in 10..14 -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_valid_mobile_number
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -274,6 +275,7 @@ open class RegistrationActivity : BaseActivity(){
             }
             registrationActivity.emailEt.text.toString().isEmpty() -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().email_id_is_required_field
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -284,6 +286,7 @@ open class RegistrationActivity : BaseActivity(){
             }
             !registrationActivity.emailEt.text.toString().isValidEmail() -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enater_valid_email
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -294,6 +297,7 @@ open class RegistrationActivity : BaseActivity(){
             }
             registrationActivity.digitPin.text.toString().isEmpty() -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().create_6_digit_password
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -304,6 +308,7 @@ open class RegistrationActivity : BaseActivity(){
             }
             registrationActivity.digitPin.text.toString().length != 6 -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().must_contain_6_digit_password
+                bottomSheetDialogHeadingText.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -319,20 +324,23 @@ open class RegistrationActivity : BaseActivity(){
     }
 
     override fun onPause() {
-        softInputAssist.onPause()
         super.onPause()
         registrationActivity.btnSubmit.revertAnimation()
     }
 
-    override fun onResume() {
-        softInputAssist.onResume()
-        super.onResume()
-    }
-
-    override fun onDestroy() {
-        softInputAssist.onDestroy()
-        super.onDestroy()
-
+    override fun isAuthHit(value: Boolean, message: String) {
+        if (value) {
+            setObserver()
+        } else {
+            bottomSheetDialogMessageText.text = message
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogHeadingText.visibility = View.GONE
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            bottomSheetDialogMessageOkButton.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        }
     }
 
 }

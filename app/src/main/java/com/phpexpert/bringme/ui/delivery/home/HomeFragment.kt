@@ -29,8 +29,10 @@ import com.phpexpert.bringme.activities.NotificationActivity
 import com.phpexpert.bringme.databinding.*
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.LatestJobDeliveryDataList
+import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.LatestJobDeliveryViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.SharedPrefrenceManager
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.ParseException
@@ -41,7 +43,7 @@ import kotlin.collections.HashMap
 
 
 @Suppress("DEPRECATION", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
+class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface {
     private var latestJobViewModel: LatestJobDeliveryViewModel? = null
     private lateinit var homeFragmentBinding: DeliveryFragmentHomeBinding
 
@@ -69,6 +71,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     private lateinit var progressDialog: ProgressDialog
     private var searOrderString: String = ""
     private lateinit var languageDtoData: LanguageDtoData
+    private lateinit var sharedPrefrenceManager: SharedPrefrenceManager
 
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -77,7 +80,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         homeFragmentBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         languageDtoData = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
         latestJobViewModel = ViewModelProvider(this).get(LatestJobDeliveryViewModel::class.java)
-
+        sharedPrefrenceManager = (activity as BaseActivity).sharedPrefrenceManager
         jobViewBinding = homeFragmentBinding.jobViewLayout
         mBottomSheetFilter = BottomSheetBehavior.from(jobViewBinding.root)
         jobViewBinding.languageModel = languageDtoData
@@ -441,10 +444,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
                 jobViewBinding.totalAmount.text = "${arrayList[position].job_total_amount.formatChange()}/-"
                 jobViewBinding.chargesJob.text = arrayList[position].Charge_for_Jobs.formatChange()
 
-                try{
+                try {
                     jobViewBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
                     jobViewBinding.orderStatus.setTextColor(Color.parseColor(arrayList[position].order_status_text_color_code))
-                }catch (e:Exception){
+                } catch (e: Exception) {
 
                 }
             }
@@ -577,5 +580,20 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
             orderFinishedBinding.jobCode.text = Editable.Factory.getInstance().newEditable("")
             homeFragmentBinding.blurView.visibility = View.GONE
         }, 100)
+    }
+
+    override fun isAuthHit(value: Boolean, message: String) {
+        if (value) {
+            setObserver()
+        } else {
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = message
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                (activity as BaseActivity).bottomSheetDialog.dismiss()
+            }
+            (activity as BaseActivity).bottomSheetDialog.show()
+        }
     }
 }

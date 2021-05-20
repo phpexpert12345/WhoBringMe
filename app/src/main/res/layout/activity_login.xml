@@ -57,14 +57,13 @@
                     android:id="@+id/whoBringMeText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_17sdp"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="@string/who_bring_me"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_21sdp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/logo" />
+                    app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
 
                 <RelativeLayout
                     android:id="@+id/mobileNumberLayout"
@@ -92,7 +91,8 @@
                         android:id="@+id/mobileNumberInputText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@{languageModel.enter_mobile_number}">
+                        android:hint="@{languageModel.enter_mobile_number}"
+                        android:textColorHint="@color/lightColor">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/mobileNumberEditText"
@@ -101,15 +101,16 @@
                             android:layout_weight="4"
                             android:background="@android:color/transparent"
                             android:digits="0123456789"
-                            android:fontFamily="@font/poppins_medium"
+                            android:maxLength="14"
+                            android:fontFamily="@font/poppins_regular"
                             android:imeOptions="actionDone"
                             android:inputType="number"
-                            android:paddingStart="@dimen/_65sdp"
-                            android:paddingLeft="@dimen/_65sdp"
+                            android:paddingStart="@dimen/_70sdp"
+                            android:paddingLeft="@dimen/_70sdp"
                             android:paddingTop="@dimen/_25sdp"
-                            android:paddingBottom="@dimen/_minus10sdp"
+                            android:paddingBottom="@dimen/_minus25sdp"
                             android:textColor="@color/text_color"
-                            android:textColorHint="@color/colorDarkGrey"
+                            android:textColorHint="@color/view_color_dark"
                             android:textSize="@dimen/_12sdp"
                             app:boxBackgroundColor="@android:color/transparent"
                             tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -119,10 +120,10 @@
                         android:id="@+id/search_county_country"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/_minus6sdp"
                         android:layout_marginTop="@dimen/_7sdp"
                         android:textSize="@dimen/_12sdp"
-                        android:textStyle="bold"
                         app:ccpDialog_allowSearch="true"
                         app:ccpDialog_showCloseIcon="true"
                         app:ccp_autoDetectCountry="true"
@@ -147,7 +148,8 @@
                         android:id="@+id/textData"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@{languageModel.enter_password}">
+                        android:hint="@{languageModel.enter_password}"
+                        android:textColorHint="@color/lightColor">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/digitPin"
@@ -155,12 +157,13 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:digits="0123456789"
-                            android:fontFamily="@font/poppins_medium"
+                            android:fontFamily="@font/poppins_regular"
                             android:inputType="numberPassword"
                             android:paddingStart="0dp"
+                            android:maxLength="6"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
-                            android:paddingBottom="@dimen/_minus40sdp"
+                            android:paddingBottom="@dimen/_minus25sdp"
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/colorDarkGrey"
                             android:textSize="@dimen/_12sdp"
@@ -175,7 +178,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_minus5sdp"
+                        android:padding="@dimen/_10sdp"
                         android:src="@drawable/eyes_off"
                         tools:ignore="ContentDescription" />
                 </RelativeLayout>
@@ -184,12 +188,12 @@
                     android:id="@+id/forgotPassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_7sdp"
                     android:layout_marginEnd="@dimen/_20sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:text="@{languageModel.forgot_password}"
                     android:textColor="@color/color_text_grey"
-                    android:textSize="@dimen/_11sdp"
+                    android:textSize="@dimen/_10sdp"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
 
@@ -210,7 +214,8 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/forgotPassword"
-                    app:spinning_bar_color="@color/colorGreen" />
+                    app:spinning_bar_color="@color/white"
+                    app:spinning_bar_padding="@dimen/_5sdp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -235,9 +240,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_2sdp"
+                        android:fontFamily="@font/poppins_regular"
                         android:text="@{languageModel.create_account}"
                         android:textColor="#00A8EC"
-                        android:textSize="@dimen/_13sdp" />
+                        android:textSize="@dimen/_11sdp" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

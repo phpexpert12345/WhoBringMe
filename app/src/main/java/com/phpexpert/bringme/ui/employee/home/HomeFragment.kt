@@ -8,7 +8,6 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Rect
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -17,7 +16,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,8 +29,10 @@ import com.phpexpert.bringme.databinding.JobViewLayoutBinding
 import com.phpexpert.bringme.databinding.WriteReviewLayoutBinding
 import com.phpexpert.bringme.dtos.OrderListData
 import com.phpexpert.bringme.dtos.PostJobPostDto
+import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.JobHistoryModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import com.phpexpert.bringme.utilities.SharedPrefrenceManager
 import java.lang.Exception
 import java.text.DecimalFormat
@@ -42,7 +42,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 @Suppress("DEPRECATION", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
+class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface {
     private lateinit var jobHistoryModel: JobHistoryModel
     private lateinit var homeFragmentBinding: EmployeeFragmentHomeBinding
     private lateinit var mBottomSheetFilter: BottomSheetBehavior<View>
@@ -54,7 +54,6 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var sharedPreference: SharedPrefrenceManager
-    var isLoadingVehicleActive: Boolean = true
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -78,38 +77,30 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
 
     @SuppressLint("MissingPermission")
     private fun initValues() {
-        homeFragmentBinding.clientCurrentLocation.text = sharedPreference.getLanguageData().fetching_location
-        val mLocationRequest = LocationRequest.create()
-        mLocationRequest.interval = 60000
-        mLocationRequest.fastestInterval = 5000
-        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        var mLocation: Location?
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        mLocationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                for (location in locationResult.locations) {
-                    if (location != null) {
-                        try {
-                            mLocation = location
-                            val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-                            val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
-                            val stringBuilder = StringBuilder()
-                            for (i in 0..addresses[0]!!.maxAddressLineIndex)
-                                stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
-                            homeFragmentBinding.clientCurrentLocation.text = stringBuilder.toString()
-                        } catch (e: Exception) {
-                            homeFragmentBinding.clientCurrentLocation.text = sharedPreference.getProfile().login_address
-                        }
-                        break
-                    } else {
-                        homeFragmentBinding.clientCurrentLocation.text = sharedPreference.getProfile().login_address
-                    }
-                }
-                mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+        if ((activity as BaseActivity).isLocationEnabled()) {
+            if (sharedPreference.getPreference(CONSTANTS.isLocation) == "true") {
+                val mLocation = Location("")
+                mLocation.latitude = sharedPreference.getPreference(CONSTANTS.currentLatitue)!!.toDouble()
+                mLocation.longitude = sharedPreference.getPreference(CONSTANTS.currentLongitude)!!.toDouble()
+                val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+                val addresses = geocoder.getFromLocation(mLocation.latitude, mLocation.longitude, 1)
+                val stringBuilder = StringBuilder()
+                for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                    stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                homeFragmentBinding.clientCurrentLocation.text = stringBuilder.toString()
+            } else {
+                setLocation()
             }
+        } else {
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPreference.getLanguageData().location_enable_message
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = sharedPreference.getLanguageData().ok_text
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                (activity as BaseActivity).bottomSheetDialog.dismiss()
+            }
+            (activity as BaseActivity).bottomSheetDialog.show()
         }
-        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
-
 
         jobViewBinding = homeFragmentBinding.bottomHistryLayout
         jobViewBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
@@ -127,6 +118,45 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
         progressDialog.setCancelable(false)
         progressDialog.setMessage((activity as BaseActivity).sharedPrefrenceManager.getLanguageData().please_wait)
         jobHistoryModel = ViewModelProvider(this).get(JobHistoryModel::class.java)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun setLocation() {
+        val mLocationRequest = LocationRequest.create()
+        mLocationRequest.interval = 60000
+        mLocationRequest.fastestInterval = 5000
+        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        var mLocation: Location?
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        mLocationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                for (location in locationResult.locations) {
+                    if (location != null) {
+                        try {
+                            mLocation = location
+                            sharedPreference.savePrefrence(CONSTANTS.currentLatitue, location.latitude.toString())
+                            sharedPreference.savePrefrence(CONSTANTS.currentLongitude, location.longitude.toString())
+                            sharedPreference.savePrefrence(CONSTANTS.isLocation, "true")
+                            val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+                            val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
+                            val stringBuilder = StringBuilder()
+                            for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                                stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                            homeFragmentBinding.clientCurrentLocation.text = stringBuilder.toString()
+                        } catch (e: Exception) {
+                            sharedPreference.savePrefrence(CONSTANTS.isLocation, "false")
+                            homeFragmentBinding.clientCurrentLocation.text = sharedPreference.getProfile().login_address
+                        }
+                        break
+                    } else {
+                        sharedPreference.savePrefrence(CONSTANTS.isLocation, "false")
+                        homeFragmentBinding.clientCurrentLocation.text = sharedPreference.getProfile().login_address
+                    }
+                }
+                mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+            }
+        }
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
     }
 
     private fun setActions() {
@@ -151,32 +181,48 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
     }
 
     private fun setObserver() {
-        progressDialog.show()
-        jobHistoryModel.getLatestJobData(getMapData()).observe(viewLifecycleOwner, {
-            progressDialog.dismiss()
-            if (it.status_code == "0") {
-                homeFragmentBinding.noDataFoundLayout.visibility = View.GONE
-                homeFragmentBinding.messageNoData.visibility = View.GONE
-                homeFragmentBinding.scrollableBar.visibility = View.VISIBLE
-                orderListData.clear()
-                orderListData.addAll(it.data!!.OrderList!!)
-                homeFragmentBinding.homeRv.adapter!!.notifyDataSetChanged()
-            } else {
-                if (it.status == "") {
-                    (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
-                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
-                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+        if ((activity as BaseActivity).isOnline()) {
+            if (sharedPreference.getAuthData().auth_key != null && sharedPreference.getAuthData().auth_key != "") {
+                progressDialog.show()
+                jobHistoryModel.getLatestJobData(getMapData()).observe(viewLifecycleOwner, {
+                    progressDialog.dismiss()
+                    if (it.status_code == "0") {
+                        homeFragmentBinding.noDataFoundLayout.visibility = View.GONE
+                        homeFragmentBinding.messageNoData.visibility = View.GONE
+                        homeFragmentBinding.scrollableBar.visibility = View.VISIBLE
+                        orderListData.clear()
+                        orderListData.addAll(it.data!!.OrderList!!)
+                        homeFragmentBinding.homeRv.adapter!!.notifyDataSetChanged()
+                    } else {
+                        if (it.status == "") {
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
+                            (activity as BaseActivity).bottomSheetDialogMessageText.visibility = View.VISIBLE
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                                (activity as BaseActivity).bottomSheetDialog.dismiss()
+                            }
+                            (activity as BaseActivity).bottomSheetDialog.show()
+                        } else {
+                            homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
+                            homeFragmentBinding.messageNoData.visibility = View.VISIBLE
+                            homeFragmentBinding.scrollableBar.visibility = View.GONE
+                        }
                     }
-                    (activity as BaseActivity).bottomSheetDialog.show()
-                } else {
-                    homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
-                    homeFragmentBinding.messageNoData.visibility = View.VISIBLE
-                    homeFragmentBinding.scrollableBar.visibility = View.GONE
-                }
+                })
+            } else {
+                (activity as BaseActivity).hitAuthApi(this)
             }
-        })
+        } else {
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPreference.getLanguageData().network_error
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                (activity as BaseActivity).bottomSheetDialog.dismiss()
+            }
+            (activity as BaseActivity).bottomSheetDialog.show()
+        }
     }
 
     private fun getMapData(): Map<String, String> {
@@ -350,6 +396,21 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView {
             writeReviewBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
             homeFragmentBinding.blurView.visibility = View.GONE
         }, 100)
+    }
+
+    override fun isAuthHit(value: Boolean, message: String) {
+        if (value) {
+            setObserver()
+        } else {
+            (activity as BaseActivity).bottomSheetDialogMessageText.text = message
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = sharedPreference.getLanguageData().ok_text
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                (activity as BaseActivity).bottomSheetDialog.dismiss()
+            }
+            (activity as BaseActivity).bottomSheetDialog.show()
+        }
     }
 
 }
