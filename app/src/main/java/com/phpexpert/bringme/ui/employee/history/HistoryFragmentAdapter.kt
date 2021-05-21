@@ -50,15 +50,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
         historyFragmentCellBinding.jobTotalAmount.text = arrayList[position].job_total_amount.formatChange()
         historyFragmentCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
 
-        if (arrayList[position].order_decline_reason == "") {
-            historyFragmentCellBinding.declineMessage.visibility = View.GONE
-            historyFragmentCellBinding.declineView.visibility = View.GONE
-        } else {
-            historyFragmentCellBinding.declineMessage.visibility = View.VISIBLE
-            historyFragmentCellBinding.declineView.visibility = View.VISIBLE
-            historyFragmentCellBinding.declineMessage.text = arrayList[position].order_decline_reason
-            arrayList[position].order_status_msg = "Declined"
-        }
+
         when (arrayList[position].order_status_msg) {
             "Accepted" -> {
                 try {
@@ -87,7 +79,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
                     e.printStackTrace()
                 }
             }
-            "Canceled", "Declined" -> {
+            "Cancelled" -> {
                 try {
                     if (arrayList[position].review_status == "Not Done") {
                         historyFragmentCellBinding.reviewView.visibility = View.GONE
@@ -97,6 +89,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
                         historyFragmentCellBinding.writeReview.visibility = View.GONE
                     }
                     historyFragmentCellBinding.deliveryDataLayout.visibility = View.GONE
+                    historyFragmentCellBinding.declineMessage.text = arrayList[position].order_decline_reason
 
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()

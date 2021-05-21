@@ -2,6 +2,8 @@ package com.phpexpert.bringme.activities.employee
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
 import android.location.Location
@@ -10,6 +12,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
@@ -208,6 +211,7 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
                 }
                 else -> {
                     cardActivityBinding.payNowButton.startAnimation()
+                    this.hideKeyboard()
                     try {
                         val cardData = Card.create(cardActivityBinding.cardNumber.text.toString().replace("\\s".toRegex(), ""),
                                 cardActivityBinding.expiryDate.text.toString().split("/")[0].toInt(),
@@ -430,10 +434,14 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
                     for (location in locationResult.locations) {
                         if (location != null) {
                             mLocation = location
+                            sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "true")
+                            sharedPrefrenceManager.savePrefrence(CONSTANTS.currentLongitude, mLocation?.longitude.toString())
+                            sharedPrefrenceManager.savePrefrence(CONSTANTS.currentLatitue, mLocation?.latitude.toString())
                             getPostJobDataObserver(mLocation!!)
                             break
                         } else {
                             cardActivityBinding.payNowButton.revertAnimation()
+                            sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "false")
                             bottomSheetDialogMessageText.text = languageDtoData.location_not_found
                             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                             bottomSheetDialogHeadingText.visibility = View.GONE
@@ -446,6 +454,7 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
                     }
                 } catch (e: Exception) {
                     cardActivityBinding.payNowButton.revertAnimation()
+                    sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "false")
                     bottomSheetDialogMessageText.text = languageDtoData.location_not_found
                     bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     bottomSheetDialogHeadingText.visibility = View.GONE
@@ -518,5 +527,14 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
     override fun isPermission(value: Boolean) {
         if (value)
             setJobPostDataObserver()
+    }
+
+    private fun Activity.hideKeyboard() {
+        hideKeyboard(currentFocus ?: View(this))
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

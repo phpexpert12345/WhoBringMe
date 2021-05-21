@@ -22,8 +22,8 @@
         android:layout_marginStart="@dimen/_7sdp"
         android:layout_marginTop="@dimen/_2sdp"
         android:layout_marginEnd="@dimen/_7sdp"
-        app:cardCornerRadius="@dimen/_5sdp"
         android:elevation="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -48,17 +48,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/_10sdp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:layout_toEndOf="@+id/userImage">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:fontFamily="@font/poppins_medium"
                         android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:layout_toStartOf="@+id/completeCancelStatus"
+                        android:fontFamily="@font/poppins_medium"
                         android:text="@{model.client_name}"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_11sdp" />
@@ -89,14 +89,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp">
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toStartOf="@+id/csImage"
                     android:layout_marginEnd="@dimen/_32sdp"
+                    android:layout_toStartOf="@+id/csImage"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -108,7 +108,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="@{languageModel.job_code}"
+                            android:text="@{languageModel.order}"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="@dimen/_11sdp" />
 
@@ -116,7 +116,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text='@{" "+model.job_OTP_code}'
+                            android:text='@{" "+model.job_order_id}'
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -145,11 +145,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_3sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@{model.about_job}"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
                 android:textColor="@color/colorDarkGrey"
                 android:textSize="@dimen/_8sdp"
                 tools:ignore="HardcodedText" />
@@ -288,8 +288,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
                     android:layout_marginTop="@dimen/_2sdp"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@{model.job_review_description}"
                     android:textSize="@dimen/_9sdp"
                     tools:ignore="HardcodedText" />
@@ -417,14 +417,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_10sdp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginTop="@dimen/_1sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
                     android:fontFamily="@font/poppins_medium"
                     android:text="@{languageModel.job_total}"
                     android:textColor="@color/text_color"
@@ -468,7 +467,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_20sdp">
 
@@ -513,9 +512,9 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_rectangle_green_cornor"
                         android:fontFamily="@font/poppins_medium"
+                        android:gravity="center"
                         android:paddingTop="@dimen/_5sdp"
                         android:paddingBottom="@dimen/_5sdp"
-                        android:gravity="center"
                         android:text="@{languageModel.view}"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_7sdp" />

@@ -87,6 +87,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:hint="@{languageModel.enter_order_number}"
                         android:singleLine="true"
+                        android:inputType="number"
                         android:textColor="@color/white"
                         android:textColorHint="#CFCFCF"
                         android:textSize="@dimen/_12sdp"
@@ -116,7 +117,6 @@
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_20sdp"
                             android:layout_marginTop="@dimen/_4sdp"
                             android:src="@drawable/close"
                             android:visibility="visible"
@@ -243,6 +243,11 @@
                             android:id="@+id/homeRecyclerView"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_below="@id/homeRecyclerView"/>
                     </RelativeLayout>
                 </androidx.core.widget.NestedScrollView>
 

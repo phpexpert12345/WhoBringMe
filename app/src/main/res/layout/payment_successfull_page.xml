@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="languageModel"
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
@@ -69,7 +70,7 @@
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center_horizontal"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_13sdp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -315,9 +316,9 @@
             <ScrollView
                 android:id="@+id/userAcceptedData"
                 android:layout_width="match_parent"
-                android:visibility="gone"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_60sdp">
+                android:layout_marginTop="@dimen/_60sdp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -346,9 +347,11 @@
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center_horizontal"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_13sdp" />
+                        android:textSize="@dimen/_14sdp"
+                        android:visibility="gone" />
 
                     <TextView
+                        android:id="@+id/titleString"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -356,19 +359,18 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:fontFamily="@font/poppins_semi_bold"
-                        android:text="@{languageModel.congratulation}"
                         android:textColor="@color/colorGreen"
                         android:textSize="@dimen/_15sdp" />
 
                     <TextView
+                        android:id="@+id/messageString"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_45sdp"
+                        android:layout_marginStart="@dimen/_15sdp"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_45sdp"
+                        android:layout_marginEnd="@dimen/_15sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:gravity="center_horizontal"
-                        android:text="@{languageModel.now_your_job_live_and_finding_delivery_employees_to_accept_the_job}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_11sdp" />
 
@@ -396,7 +398,7 @@
                             tools:ignore="ContentDescription" />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="@dimen/_10sdp"
@@ -409,48 +411,54 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_medium"
                                 android:textColor="@color/text_color"
-                                android:textSize="@dimen/_11sdp" />
+                                android:textSize="@dimen/_12sdp" />
 
-                            <TextView
-                                android:id="@+id/userMobileNo"
-                                android:layout_width="wrap_content"
+                            <RelativeLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_8sdp"
-                                android:fontFamily="@font/poppins_medium"
-                                android:textColor="@color/text_color"
-                                android:textSize="@dimen/_7sdp" />
-                        </LinearLayout>
+                                android:layout_marginTop="@dimen/_3sdp">
 
-                        <LinearLayout
-                            android:id="@+id/callNumber"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/blue_border_call"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginEnd="@dimen/_10sdp"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_3sdp">
+                                <TextView
+                                    android:id="@+id/userMobileNo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_medium"
+                                    android:layout_centerVertical="true"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="@dimen/_9sdp" />
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="@dimen/_5sdp"
-                                android:src="@drawable/phone_call"
-                                tools:ignore="ContentDescription" />
+                                <LinearLayout
+                                    android:id="@+id/callNumber"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginEnd="@dimen/_10sdp"
+                                    android:background="@drawable/blue_border_call"
+                                    android:orientation="horizontal"
+                                    android:padding="@dimen/_2sdp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_15sdp"
-                                android:layout_marginEnd="@dimen/_5sdp"
-                                android:fontFamily="@font/poppins_regular"
-                                android:paddingTop="@dimen/_2sdp"
-                                android:text="@{languageModel.call}"
-                                android:textColor="@color/colorLoginButton"
-                                android:textSize="@dimen/_11sdp" />
+                                    <ImageView
+                                        android:layout_width="@dimen/_12sdp"
+                                        android:layout_height="@dimen/_12sdp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="@dimen/_5sdp"
+                                        android:src="@drawable/phone_call"
+                                        tools:ignore="ContentDescription,TooDeepLayout" />
 
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_15sdp"
+                                        android:layout_marginEnd="@dimen/_5sdp"
+                                        android:fontFamily="@font/poppins_regular"
+                                        android:paddingTop="@dimen/_2sdp"
+                                        android:text="@{languageModel.call}"
+                                        android:textColor="@color/colorLoginButton"
+                                        android:textSize="@dimen/_9sdp" />
+
+                                </LinearLayout>
+                            </RelativeLayout>
                         </LinearLayout>
                     </RelativeLayout>
 
@@ -550,8 +558,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:background="@color/colorGreen"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:background="@drawable/button_rectangle_green"
                 android:fontFamily="@font/poppins_medium"
                 android:paddingStart="@dimen/_70sdp"
                 android:paddingEnd="@dimen/_70sdp"

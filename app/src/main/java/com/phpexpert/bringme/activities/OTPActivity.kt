@@ -330,9 +330,13 @@ class OTPActivity : BaseActivity(), AuthInterface {
                         try {
                             if (location != null) {
                                 mLocation = location
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "true")
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.currentLongitude, mLocation?.longitude.toString())
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.currentLatitue, mLocation?.latitude.toString())
                                 startActivity(mLocation!!)
                             } else {
                                 otpActivity.btnSubmit.revertAnimation()
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "false")
                                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_not_found
                                 bottomSheetDialogHeadingText.visibility = View.GONE
                                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
@@ -346,6 +350,7 @@ class OTPActivity : BaseActivity(), AuthInterface {
                             break
                         } catch (e: Exception) {
                             otpActivity.btnSubmit.revertAnimation()
+                            sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "false")
                             bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_not_found
                             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                             bottomSheetDialogHeadingText.visibility = View.GONE

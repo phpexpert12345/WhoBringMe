@@ -80,6 +80,7 @@
                 android:fontFamily="@font/poppins_medium"
                 android:paddingStart="0dp"
                 android:paddingLeft="0dp"
+                android:inputType="number"
                 android:paddingTop="@dimen/_25sdp"
                 android:paddingBottom="@dimen/_minus40sdp"
                 android:singleLine="true"

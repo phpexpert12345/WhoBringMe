@@ -94,6 +94,12 @@ class NotificationsFragment : Fragment(), AuthInterface {
 
     override fun isAuthHit(value: Boolean, message: String) {
         if (value) {
+            setObserver()
+        } else {
+            try {
+                progressDialog.dismiss()
+            } catch (e: Exception) {
+            }
             (activity as BaseActivity).bottomSheetDialogMessageText.text = message
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE

@@ -71,7 +71,6 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
         homeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.employee_fragment_home, container, false)
         homeFragmentBinding.languageModel = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
-//        (activity as BaseActivity).isCheckPermissions(requireActivity(), perission)
         sharedPreference = (activity as BaseActivity).sharedPrefrenceManager
         (activity as BaseActivity).permissionInterface = this
         initValues()
@@ -88,9 +87,9 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 for (i in 0..addresses[0]!!.maxAddressLineIndex)
                     stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
                 homeFragmentBinding.clientCurrentLocation.text = stringBuilder.toString()
+                progressDialog.show()
                 setObserver()
             } else {
-
                 if ((activity as BaseActivity).isCheckPermissions(requireActivity(), perission)) {
                     progressDialog.show()
                     setLocation()
@@ -284,9 +283,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 homeFragmentBinding.blurView.visibility = View.VISIBLE
             }
             "writeReview" -> {
-
                 writeReviewBinding.closeIcon.setOnClickListener {
-//                    writeReviewBinding.writeReviewET.clearFocus()
                     this.hideKeyboard()
                 }
                 writeReviewBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${250}"
@@ -304,8 +301,6 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
 
                 })
                 writeReviewBinding.submitButton.setOnClickListener {
-
-                    writeReviewBinding.submitButton.startAnimation()
                     when {
                         writeReviewBinding.ratingData.rating == 0f -> {
                             (activity as BaseActivity).bottomSheetDialog.show()
@@ -330,6 +325,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                             (activity as BaseActivity).bottomSheetDialog.show()
                         }
                         else -> {
+                            writeReviewBinding.submitButton.startAnimation()
+                            writeReviewBinding.closeIcon.isClickable = false
                             reviewJobId = orderListData[position].job_order_id!!
                             reviewJobRating = writeReviewBinding.ratingData.rating.toString()
                             reviewJobText = writeReviewBinding.writeReviewET.text.toString()
@@ -346,7 +343,6 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
 
     private fun writeReviewData(jobOrderId: String, totalRating: String, reviewContent: String, position: Int) {
         if ((activity as BaseActivity).isOnline()) {
-            writeReviewBinding.closeIcon.isClickable = false
             if (sharedPreference.getAuthData()?.auth_key != null && sharedPreference.getAuthData()?.auth_key != "") {
                 jobHistoryModel.getWriteReviewJobData(reviewDataMap(jobOrderId, totalRating, reviewContent)).observe(viewLifecycleOwner, {
                     writeReviewBinding.closeIcon.isClickable = true
@@ -371,6 +367,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                         }
                         (activity as BaseActivity).bottomSheetDialog.show()
                     } else {
+                        writeReviewBinding.closeIcon.isClickable = true
+                        writeReviewBinding.submitButton.revertAnimation()
                         (activity as BaseActivity).bottomSheetDialog.show()
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
@@ -384,8 +382,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 })
             } else {
                 apiName = "writeReview"
+                (activity as BaseActivity).hitAuthApi(this)
             }
         } else {
+            writeReviewBinding.closeIcon.isClickable = true
+            writeReviewBinding.submitButton.revertAnimation()
             (activity as BaseActivity).bottomSheetDialog.show()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPreference.getLanguageData().network_error
             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
@@ -426,7 +427,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
 
     override fun onDestroyView() {
         super.onDestroyView()
-        hideKeyboard()
+        try {
+            progressDialog.dismiss()
+        } catch (e: Exception) {
+        }
+        this.hideKeyboard()
     }
 
     private fun Context.hideKeyboard(view: View) {
@@ -447,7 +452,12 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 "writeReview" -> writeReviewData(reviewJobId, reviewJobRating, reviewJobText, selectedPosition)
             }
         } else {
-            writeReviewBinding.closeIcon.isClickable = false
+            try {
+                progressDialog.dismiss()
+                writeReviewBinding.submitButton.revertAnimation()
+                writeReviewBinding.closeIcon.isClickable = true
+            } catch (e: Exception) {
+            }
             (activity as BaseActivity).bottomSheetDialogMessageText.text = message
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = sharedPreference.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE

@@ -607,6 +607,7 @@ class LoginActivity : BaseActivity(), AuthInterface {
 
     override fun onPause() {
         super.onPause()
+        this.hideKeyboard()
         forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
     }
 

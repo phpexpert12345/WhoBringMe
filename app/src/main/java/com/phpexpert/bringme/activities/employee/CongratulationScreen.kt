@@ -57,6 +57,7 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         @Suppress("DEPRECATION")
         window.statusBarColor = resources.getColor(R.color.colorLoginButton)
+        permissionInterface = this
         congratulationScreenBinding = DataBindingUtil.setContentView(this, R.layout.payment_successfull_page)
         congratulationScreenBinding.languageModel = sharedPrefrenceManager.getLanguageData()
         languageDtoData = sharedPrefrenceManager.getLanguageData()
@@ -305,6 +306,7 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
                 hitAuthApi(this)
             }
         } else {
+            congratulationScreenBinding.cancelButton.revertAnimation()
             bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
             bottomSheetDialogHeadingText.visibility = View.GONE
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
@@ -380,6 +382,8 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
                                 }
                             }
                             congratulationScreenBinding.userName2.text = it.data!!.OrderDetailList!![0].Delivery_Employee_name
+                            congratulationScreenBinding.titleString.text = it.data!!.OrderDetailList!![0].thank_you_title
+                            congratulationScreenBinding.messageString.text = it.data!!.OrderDetailList!![0].thank_you_content
                             congratulationScreenBinding.userMobileNo.text = it.data!!.OrderDetailList!![0].Delivery_Employee_phone_code + " " + it.data!!.OrderDetailList!![0].Delivery_Employee_phone
                         }
                     }
@@ -433,6 +437,10 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
                 "jobDetails" -> getJobDetailsObserver()
             }
         } else {
+            try {
+                congratulationScreenBinding.cancelButton.revertAnimation()
+            }catch (e:Exception){
+            }
             bottomSheetDialogMessageText.text = message
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogHeadingText.visibility = View.VISIBLE

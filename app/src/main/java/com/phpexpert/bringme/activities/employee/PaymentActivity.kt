@@ -120,8 +120,8 @@ class PaymentActivity : BaseActivity(), AuthInterface {
     @SuppressLint("SetTextI18n")
     private fun setObserver() {
         if (isOnline()) {
+            progressDialog.show()
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
-                progressDialog.show()
                 jobPostViewModel.getServiceCharges(servicePostValue.jobAmount!!, sharedPrefrenceManager.getAuthData()?.auth_key!!)
                         .observe(this, {
                             progressDialog.dismiss()
@@ -154,7 +154,7 @@ class PaymentActivity : BaseActivity(), AuthInterface {
                                     "0"
                                 }
                                 servicePostValue.Charge_for_Jobs_Admin_percentage = if (it.data!!.Charge_for_Jobs_Admin_percentage == "0") "0" else it.data!!.Charge_for_Jobs_Admin_percentage
-                                servicePostValue.jobPaymentMode = "Card"
+                                servicePostValue.jobPaymentMode = "Credit_Debit"
                                 servicePostValue.job_tax_amount = if (it.data!!.job_tax_amount == "0") "0" else it.data!!.job_tax_amount
                                 servicePostValue.Charge_for_Jobs_percentage = if (it.data!!.Charge_for_Jobs_percentage == "0") "0" else it.data!!.Charge_for_Jobs_percentage
                                 servicePostValue.Charge_for_Jobs_Delivery_percentage = if (it.data!!.Charge_for_Jobs_Delivery_percentage == "0") "0" else it.data!!.Charge_for_Jobs_Delivery_percentage
@@ -193,6 +193,10 @@ class PaymentActivity : BaseActivity(), AuthInterface {
         if (value) {
             setObserver()
         } else {
+            try {
+                progressDialog.dismiss()
+            } catch (e: Exception) {
+            }
             bottomSheetDialogMessageText.text = message
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogHeadingText.visibility = View.VISIBLE

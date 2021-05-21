@@ -83,7 +83,7 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
                     e.printStackTrace()
                 }
             }
-            "Decline" -> {
+            "Cancelled" -> {
                 jobCellBinding.orderCompleteDateLayout.visibility = View.GONE
                 jobCellBinding.jobAcceptCancelTime.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
             }

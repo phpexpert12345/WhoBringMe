@@ -180,6 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/_minus10sdp"
                 android:src="@drawable/add_job_ic"
                 tools:ignore="ContentDescription" />
 
@@ -189,8 +190,8 @@
             android:id="@+id/blurView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clickable="true"
             android:background="#B3000000"
+            android:clickable="true"
             android:visibility="gone" />
 
         <include

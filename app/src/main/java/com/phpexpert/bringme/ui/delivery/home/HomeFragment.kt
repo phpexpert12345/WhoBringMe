@@ -173,6 +173,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                         try {
                             if (location != null) {
                                 mLocation = location
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "true")
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.currentLongitude, mLocation?.longitude.toString())
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.currentLatitue, mLocation?.latitude.toString())
+
                                 val geocoder = Geocoder(requireActivity(), Locale.getDefault())
                                 val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
                                 val stringBuilder = StringBuilder()
@@ -184,6 +188,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                                 setObserver()
                             } else {
                                 val locationData = Location("")
+                                sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "false")
                                 locationData.latitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_lat!!.toDouble()
                                 locationData.longitude = (activity as BaseActivity).sharedPrefrenceManager.getProfile().login_long!!.toDouble()
                                 mLocation = locationData
@@ -339,6 +344,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                     if (it.status_code == "0") {
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
                     } else {
+                            progressDialog.dismiss()
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                     }
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
@@ -353,6 +359,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 apiName = "acceptOrderApi"
             }
         } else {
+            progressDialog.dismiss()
             (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
@@ -369,13 +376,13 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         if ((activity as BaseActivity).isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 latestJobViewModel!!.orderDeclineData(orderDeclineData()).observe(viewLifecycleOwner, {
-                    progressDialog.dismiss()
                     (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
                     } else {
+                            progressDialog.dismiss()
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                     }
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
@@ -409,14 +416,14 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
             if (orderFinishedBinding.jobCode.text.toString().trim() != "") {
                 if (sharedPrefrenceManager.getAuthData()?.auth_key != "" && sharedPrefrenceManager.getAuthData()?.auth_key != null) {
                     latestJobViewModel!!.orderFinishData(orderFinishData()).observe(viewLifecycleOwner, {
-                        this.hideKeyboard()
-                        progressDialog.dismiss()
+//                        progressDialog.dismiss()
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         if (it.status_code == "0") {
                             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
                         } else {
+                                progressDialog.dismiss()
                             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         }
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
@@ -556,6 +563,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 orderAcceptBinding.yesLayout.setOnClickListener {
                     orderAcceptBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     homeFragmentBinding.blurView.visibility = View.GONE
+                    progressDialog.show()
                     orderAcceptObserver()
                 }
                 orderAcceptBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -569,7 +577,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 }
                 orderFinishedBinding.yesLayout.setOnClickListener {
 //                    if (orderFinishedBinding.otp1.text.toString().trim() != "" && orderFinishedBinding.otp2.text.toString().trim() != "" && orderFinishedBinding.otp3.text.toString().trim() != "" && orderFinishedBinding.otp4.text.toString().trim() != "") {
-
+                    this.hideKeyboard()
+                    progressDialog.show()
                     orderFinishObserver()
 //                    } else {
 //                        (activity as BaseActivity).bottomSheetDialogMessageText.text = "Please enter order otp first"
@@ -588,12 +597,14 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
 
                 orderDeclineBinding.orderId.text = arrayList[position].job_order_id!!
                 orderDeclineBinding.noLayout.setOnClickListener {
+                    orderDeclineBinding.orderReason.text = Editable.Factory.getInstance().newEditable("")
                     this.hideKeyboard()
                 }
                 orderDeclineBinding.yesLayout.setOnClickListener {
                     if (orderDeclineBinding.orderReason.text.toString().trim() != "") {
                         this.hideKeyboard()
                         orderDelcineString = orderDeclineBinding.orderReason.text.toString()
+                        progressDialog.show()
                         orderDeclineObserver()
                     } else {
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = languageDtoData.please_enter_order_decline_reason
@@ -676,6 +687,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
             orderDeclineBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             orderFinishedBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             orderFinishedBinding.jobCode.text = Editable.Factory.getInstance().newEditable("")
+            orderDeclineBinding.orderReason.text = Editable.Factory.getInstance().newEditable("")
             homeFragmentBinding.blurView.visibility = View.GONE
         }, 100)
     }
@@ -687,6 +699,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         } catch (e: Exception) {
         }
     }
+
     override fun isAuthHit(value: Boolean, message: String) {
         if (value) {
             when (apiName) {

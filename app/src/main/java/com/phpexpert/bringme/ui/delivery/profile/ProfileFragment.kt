@@ -345,6 +345,7 @@ class ProfileFragment : Fragment(), AuthInterface {
 
     private fun getOtpVerify(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
+        mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
         mapDataVal["otp_number"] = mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!

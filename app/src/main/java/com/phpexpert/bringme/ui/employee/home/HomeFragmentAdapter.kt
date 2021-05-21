@@ -49,7 +49,7 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
 
         homeFragmentCellBinding.jobTotalAmount.text = arrayList[position].job_total_amount.formatChange()
         homeFragmentCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
-
+/*
         if (arrayList[position].order_decline_reason == "") {
             homeFragmentCellBinding.declineMessage.visibility = View.GONE
             homeFragmentCellBinding.declineView.visibility = View.GONE
@@ -58,7 +58,7 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
             homeFragmentCellBinding.declineView.visibility = View.VISIBLE
             homeFragmentCellBinding.declineMessage.text = arrayList[position].order_decline_reason
             arrayList[position].order_status_msg = "Declined"
-        }
+        }*/
         when (arrayList[position].order_status_msg) {
             "Accepted" -> {
                 try {
@@ -67,6 +67,8 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
                     homeFragmentCellBinding.reviewView.visibility = View.GONE
                     homeFragmentCellBinding.writeReview.visibility = View.GONE
                     homeFragmentCellBinding.deliveryDataLayout.visibility = View.VISIBLE
+                    homeFragmentCellBinding.declineMessage.visibility = View.GONE
+                    homeFragmentCellBinding.declineView.visibility = View.GONE
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -83,11 +85,13 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
                         homeFragmentCellBinding.writeReview.visibility = View.GONE
                     }
                     homeFragmentCellBinding.deliveryDataLayout.visibility = View.VISIBLE
+                    homeFragmentCellBinding.declineMessage.visibility = View.GONE
+                    homeFragmentCellBinding.declineView.visibility = View.GONE
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
-            "Canceled", "Declined" -> {
+            "Cancelled" -> {
                 try {
                     if (arrayList[position].review_status == "Not Done") {
                         homeFragmentCellBinding.reviewView.visibility = View.GONE
@@ -97,6 +101,9 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
                         homeFragmentCellBinding.writeReview.visibility = View.GONE
                     }
                     homeFragmentCellBinding.deliveryDataLayout.visibility = View.GONE
+                    homeFragmentCellBinding.declineMessage.visibility = View.VISIBLE
+                    homeFragmentCellBinding.declineView.visibility = View.VISIBLE
+                    homeFragmentCellBinding.declineMessage.text = arrayList[position].order_decline_reason
 
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -107,6 +114,8 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
                     homeFragmentCellBinding.writeReview.visibility = View.GONE
                     homeFragmentCellBinding.deliveryDataLayout.visibility = View.GONE
                     homeFragmentCellBinding.reviewView.visibility = View.GONE
+                    homeFragmentCellBinding.declineMessage.visibility = View.GONE
+                    homeFragmentCellBinding.declineView.visibility = View.GONE
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

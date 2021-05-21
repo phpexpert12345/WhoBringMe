@@ -1,12 +1,14 @@
 package com.phpexpert.bringme.activities.employee
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.phpexpert.bringme.R
@@ -41,6 +43,7 @@ class CreateJobActivity : BaseActivity() {
             if (checkValidation()) {
 //                createJobBinding.submitButton.startAnimation()
                 val postJobPostDto = PostJobPostDto()
+                this@CreateJobActivity.hideKeyboard()
                 postJobPostDto.jobAmount = createJobBinding.totalAmount.text.toString()
                 postJobPostDto.jobDescription = createJobBinding.postInfo.text.toString().trim()
                 postJobPostDto.jobTime = createJobBinding.mintsTextView.text.toString()
@@ -112,7 +115,7 @@ class CreateJobActivity : BaseActivity() {
                 bottomSheetDialog.show()
                 false
             }
-            createJobBinding.totalAmount.text.toString().toFloat() == 0.0f -> {
+            createJobBinding.totalAmount.text.toString().toFloat() < 1f -> {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().total_amount_should_be_more_than_0
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -144,17 +147,14 @@ class CreateJobActivity : BaseActivity() {
         super.onPause()
         createJobBinding.submitButton.revertAnimation()
     }
-/*
 
 
-    override fun onResume() {
-        softInputAssist.onResume()
-        super.onResume()
+    private fun Activity.hideKeyboard() {
+        hideKeyboard(currentFocus ?: View(this))
     }
 
-    override fun onDestroy() {
-        softInputAssist.onDestroy()
-        super.onDestroy()
-
-    }*/
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 }

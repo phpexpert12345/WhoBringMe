@@ -263,6 +263,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
                         }
                         else -> {
                             reviewBinding.submitButton.startAnimation()
+                            reviewBinding.closeIcon.isClickable = false
                             reviewJobId = arrayList[position].job_order_id!!
                             reviewJobRating = reviewBinding.ratingData.rating.toString()
                             reviewJobText = reviewBinding.writeReviewET.text.toString()
@@ -284,6 +285,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
             if ((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key != "" && (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 jobHistoryViewModel!!.getWriteReviewJobData(reviewDataMap(jobOrderId, totalRating, reviewContent)).observe(viewLifecycleOwner, {
                     reviewBinding.submitButton.revertAnimation()
+                    reviewBinding.closeIcon.isClickable = true
                     mBottomSheetFilter.state = BottomSheetBehavior.STATE_COLLAPSED
                     historyBinding.blurView.visibility = View.GONE
                     if (it.status_code == "0") {
@@ -317,6 +319,8 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
                 (activity as BaseActivity).hitAuthApi(this)
             }
         } else {
+            reviewBinding.submitButton.startAnimation()
+            reviewBinding.closeIcon.isClickable = true
             (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -380,6 +384,12 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
                 "writeReview" -> writeReviewData(reviewJobId, reviewJobRating, reviewJobText, selectedPosition)
             }
         } else {
+            try {
+                progressDialog.dismiss()
+                reviewBinding.submitButton.startAnimation()
+                reviewBinding.closeIcon.isClickable = true
+            } catch (e: Exception) {
+            }
             (activity as BaseActivity).bottomSheetDialogMessageText.text = message
             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text

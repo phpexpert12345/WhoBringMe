@@ -233,6 +233,9 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
                     if (location != null) {
                         try {
                             mLocation = location
+                            sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "true")
+                            sharedPrefrenceManager.savePrefrence(CONSTANTS.currentLongitude, mLocation?.longitude.toString())
+                            sharedPrefrenceManager.savePrefrence(CONSTANTS.currentLatitue, mLocation?.latitude.toString())
                             val geocoder = Geocoder(this@ProfileEditActivity, Locale.getDefault())
                             val addresses = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
                             val stringBuilder = StringBuilder()
@@ -241,6 +244,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
                             setGeoCode(mLocation!!)
                             profileEditLayoutBinding.autoComplete.text = Editable.Factory.getInstance().newEditable(stringBuilder.toString())
                         } catch (e: java.lang.Exception) {
+                            sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "false")
                             bottomSheetDialogMessageText.text = languageDtoData.location_not_found
                             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                             bottomSheetDialogHeadingText.visibility = View.GONE
@@ -252,6 +256,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
                         }
                         break
                     } else {
+                        sharedPrefrenceManager.savePrefrence(CONSTANTS.isLocation, "false")
                         bottomSheetDialogMessageText.text = languageDtoData.location_not_found
                         bottomSheetDialogHeadingText.visibility = View.GONE
                         bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text

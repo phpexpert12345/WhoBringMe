@@ -72,7 +72,7 @@
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/call"
+                        android:src="@drawable/call_circle"
                         tools:ignore="ContentDescription" />
 
                     <TextView
@@ -121,7 +121,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="@{languageModel.job_code}"
+                            android:text="@{languageModel.order}"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="@dimen/_11sdp" />
 
@@ -129,7 +129,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text='@{" "+model.job_OTP_code}'
+                            android:text='@{" "+model.job_order_id}'
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -168,6 +168,7 @@
                 tools:ignore="HardcodedText" />
 
             <LinearLayout
+                android:id="@+id/acceptedDateTimeLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"

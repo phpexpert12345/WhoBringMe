@@ -70,6 +70,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
+                homeFragmentCellBinding.acceptedDateTimeLayout.visibility = View.VISIBLE
                 (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().finished
                 homeFragmentCellBinding.declineFinishedLayout.setBackgroundResource(R.drawable.button_blue_green)
@@ -80,17 +81,18 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
+                homeFragmentCellBinding.acceptedDateTimeLayout.visibility = View.VISIBLE
                 (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.visibility = View.GONE
                 homeFragmentCellBinding.declineFinishedLayout.setBackgroundResource(R.drawable.button_blue_green)
             }
-            "Decline" -> {
+            "Cancelled" -> {
                 homeFragmentCellBinding.declineFinishedLayout.visibility = View.GONE
-                homeFragmentCellBinding.acceptedDateTime.visibility = View.GONE
+                homeFragmentCellBinding.acceptedDateTimeLayout.visibility = View.GONE
                 homeFragmentCellBinding.acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
             }
             else -> {
-                homeFragmentCellBinding.acceptedDateTime.visibility = View.GONE
+                homeFragmentCellBinding.acceptedDateTimeLayout.visibility = View.GONE
                 (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accept
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().decline
                 homeFragmentCellBinding.declineFinishedLayout.setBackgroundResource(R.drawable.button_rectangle_red)
