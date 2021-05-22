@@ -142,7 +142,10 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
                             historyBinding.noJobHistroy.visibility = View.VISIBLE
                             historyBinding.nestedScrollView.visibility = View.GONE
                         } else {
-                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                            if (it.status_code == "1")
+                                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                            else
+                                (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -304,8 +307,11 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
                         }
                         (activity as BaseActivity).bottomSheetDialog.show()
                     } else {
-                        (activity as BaseActivity).bottomSheetDialog.show()
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                        if (it.status_code == "2") {
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        } else
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -346,7 +352,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
         try {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!, "DE"))
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!, (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

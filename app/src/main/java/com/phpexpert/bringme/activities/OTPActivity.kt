@@ -216,7 +216,10 @@ class OTPActivity : BaseActivity(), AuthInterface {
         if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "")
             viewDataModel.registerViewModel(mapData()).observe(this, {
                 otpActivity.btnSubmit.revertAnimation()
-                bottomSheetDialogMessageText.text = it.status_message
+                if (it.status_code == "1")
+                    bottomSheetDialogMessageText.text = it.status_message
+                else
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                 bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 if (it.status_code == "0") {
@@ -245,7 +248,10 @@ class OTPActivity : BaseActivity(), AuthInterface {
         if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "")
             viewDataModel.resendOtpModel(resendData()).observe(this, {
                 progressDialog.dismiss()
-                bottomSheetDialogMessageText.text = it.status_message
+                if (it.status_code == "1")
+                    bottomSheetDialogMessageText.text = it.status_message
+                else
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                 if (it.status_code == "0")
                     bottomSheetDialogHeadingText.visibility = View.GONE
                 else
@@ -300,7 +306,7 @@ class OTPActivity : BaseActivity(), AuthInterface {
         mapDataVal["account_long"] = postDataOtp.accountLong
         mapDataVal["account_phone_code"] = postDataOtp.accountPhoneCode
         mapDataVal["referral_code"] = postDataOtp.accountReferralCode
-        mapDataVal["device_token_id"] = postDataOtp.deviceTokenId
+        mapDataVal["device_token_id"] = sharedPrefrenceManager.getPreference(CONSTANTS.fireBaseId)!!
         mapDataVal["device_platform"] = postDataOtp.devicePlatform
         mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!

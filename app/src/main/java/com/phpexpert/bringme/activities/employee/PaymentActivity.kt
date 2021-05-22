@@ -162,6 +162,11 @@ class PaymentActivity : BaseActivity(), AuthInterface {
                                 servicePostValue.delivery_employee_fee = if (it.data!!.delivery_employee_fee == "0") "0" else it.data!!.delivery_employee_fee
 
                             } else {
+                                if (it.status_code == "2") {
+                                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                } else {
+                                    bottomSheetDialogMessageText.text = it.status_message
+                                }
                                 bottomSheetDialogHeadingText.visibility = View.VISIBLE
                                 bottomSheetDialogMessageOkButton.setOnClickListener {
                                     bottomSheetDialog.dismiss()

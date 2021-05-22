@@ -375,8 +375,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_toEndOf="@+id/deliveryImageView"
                     android:layout_toStartOf="@+id/completeAcceptTime"
+                    android:layout_toEndOf="@+id/deliveryImageView"
                     android:orientation="vertical">
 
                     <TextView
@@ -391,7 +391,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{model.delivery_Employee_phone_code+model.delivery_Employee_phone}"
                         android:textColor="@color/text_color"
@@ -404,7 +404,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:orientation="vertical"
                     tools:ignore="RelativeOverlap">
 

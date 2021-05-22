@@ -23,6 +23,6 @@ interface LoginRetro {
     fun getForgotPasswordReset(@FieldMap mapData: Map<String, String>): Call<ForgotPasswordChangeDtoMain>
 
     @FormUrlEncoded
-    @POST("phpexpert_account_resned_otp.php")
-    fun getLoginDetails(@FieldMap mapData: Map<String, String>): Call<ResendOtpMain>
+    @POST("phpexpert_account_forgot_password_resend.php")
+    fun getForgotPasswordResetData(@FieldMap mapData: Map<String, String>): Call<ResendOtpMain>
 }

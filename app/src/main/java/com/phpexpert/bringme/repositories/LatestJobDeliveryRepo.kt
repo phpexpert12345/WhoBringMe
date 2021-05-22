@@ -26,7 +26,7 @@ class LatestJobDeliveryRepo {
                 } else {
                     val deliveryLatestJobDtoMain = DeliveryLatestJobDtoMain()
                     deliveryLatestJobDtoMain.status_message = "Latest Job Api Error"
-                    deliveryLatestJobDtoMain.status_code = "1"
+                    deliveryLatestJobDtoMain.status_code = "2"
                     latestJobData.postValue(deliveryLatestJobDtoMain)
                 }
             }
@@ -34,7 +34,7 @@ class LatestJobDeliveryRepo {
             override fun onFailure(call: Call<DeliveryLatestJobDtoMain>, t: Throwable) {
                 val deliveryLatestJobDtoMain = DeliveryLatestJobDtoMain()
                 deliveryLatestJobDtoMain.status_message = "Latest Job Api Error"
-                deliveryLatestJobDtoMain.status_code = "1"
+                deliveryLatestJobDtoMain.status_code = "2"
                 latestJobData.postValue(deliveryLatestJobDtoMain)
             }
 
@@ -50,7 +50,7 @@ class LatestJobDeliveryRepo {
                 }else{
                     val deliveryLatestJobDtoMain = OrderAcceptMainDto()
                     deliveryLatestJobDtoMain.status_message = "Latest Job Api Error"
-                    deliveryLatestJobDtoMain.status_code = "1"
+                    deliveryLatestJobDtoMain.status_code = "2"
                     orderAcceptData.postValue(deliveryLatestJobDtoMain)
                 }
             }
@@ -58,7 +58,7 @@ class LatestJobDeliveryRepo {
             override fun onFailure(call: Call<OrderAcceptMainDto>, t: Throwable) {
                 val deliveryLatestJobDtoMain = OrderAcceptMainDto()
                 deliveryLatestJobDtoMain.status_message = "Latest Job Api Error"
-                deliveryLatestJobDtoMain.status_code = "1"
+                deliveryLatestJobDtoMain.status_code = "2"
                 orderAcceptData.postValue(deliveryLatestJobDtoMain)
             }
 
@@ -74,7 +74,7 @@ class LatestJobDeliveryRepo {
                 }else{
                     val deliveryLatestJobDtoMain = OrderDeclineMainDto()
                     deliveryLatestJobDtoMain.status_message = "Latest Job Api Error"
-                    deliveryLatestJobDtoMain.status_code = "1"
+                    deliveryLatestJobDtoMain.status_code = "2"
                     orderDeclineData.postValue(deliveryLatestJobDtoMain)
                 }
             }
@@ -82,7 +82,7 @@ class LatestJobDeliveryRepo {
             override fun onFailure(call: Call<OrderDeclineMainDto>, t: Throwable) {
                 val deliveryLatestJobDtoMain = OrderDeclineMainDto()
                 deliveryLatestJobDtoMain.status_message = "Latest Job Api Error"
-                deliveryLatestJobDtoMain.status_code = "1"
+                deliveryLatestJobDtoMain.status_code = "2"
                 orderDeclineData.postValue(deliveryLatestJobDtoMain)
             }
 
@@ -98,7 +98,7 @@ class LatestJobDeliveryRepo {
                 }else{
                     val deliveryLatestJobDtoMain = OrderFinishMainDto()
                     deliveryLatestJobDtoMain.status_message = "Latest Job Api Error"
-                    deliveryLatestJobDtoMain.status_code = "1"
+                    deliveryLatestJobDtoMain.status_code = "2"
                     orderFinishData.postValue(deliveryLatestJobDtoMain)
                 }
             }
@@ -106,7 +106,7 @@ class LatestJobDeliveryRepo {
             override fun onFailure(call: Call<OrderFinishMainDto>, t: Throwable) {
                 val deliveryLatestJobDtoMain = OrderFinishMainDto()
                 deliveryLatestJobDtoMain.status_message = "Latest Job Api Error"
-                deliveryLatestJobDtoMain.status_code = "1"
+                deliveryLatestJobDtoMain.status_code = "2"
                 orderFinishData.postValue(deliveryLatestJobDtoMain)
             }
 

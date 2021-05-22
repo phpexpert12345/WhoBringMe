@@ -5,7 +5,6 @@ package com.phpexpert.bringme.ui.employee.profile
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
@@ -145,6 +144,10 @@ class ProfileFragment : Fragment(), AuthInterface {
 
         otpDataDialog.findViewById<ImageView>(R.id.closeIcon)!!.setOnClickListener {
             mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
+            otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text = Editable.Factory.getInstance().newEditable("")
+            otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text = Editable.Factory.getInstance().newEditable("")
+            otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text = Editable.Factory.getInstance().newEditable("")
+            otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text = Editable.Factory.getInstance().newEditable("")
             otpDataDialog.dismiss()
         }
 
@@ -198,7 +201,7 @@ class ProfileFragment : Fragment(), AuthInterface {
 
         profileFragmentBinding.logoutLayout.setOnClickListener {
             (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().are_you_sure_you_want_to_logout
-            (activity as BaseActivity).bottomSheetDialogMessageText.visibility = View.GONE
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().yes
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().no
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.VISIBLE
@@ -246,28 +249,42 @@ class ProfileFragment : Fragment(), AuthInterface {
     @SuppressLint("SetTextI18n")
     private fun getOtpNumberObserver() {
         if ((activity as BaseActivity).isOnline()) {
-            profileViewMode.changeMobileNumber(getOtpDataMap()).observe(viewLifecycleOwner, {
-                mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
-                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
-                (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                profileViewMode.changeMobileNumber(getOtpDataMap()).observe(viewLifecycleOwner, {
+                    mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
+                    if (it.status_code=="1")
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                    else
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {
-                        mobileNumberDialog.dismiss()
-                        timerRestriction()
-                        otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text = Editable.Factory.getInstance().newEditable("")
-                        otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text = Editable.Factory.getInstance().newEditable("")
-                        otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text = Editable.Factory.getInstance().newEditable("")
-                        otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text = Editable.Factory.getInstance().newEditable("")
-                        otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to + " " + mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString() + mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text.toString()
-                        otpDataDialog.show()
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                    } else {
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                     }
-                    (activity as BaseActivity).bottomSheetDialog.dismiss()
-                }
-                (activity as BaseActivity).bottomSheetDialog.show()
-            })
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                        if (it.status_code == "0") {
+                            mobileNumberDialog.dismiss()
+                            timerRestriction()
+                            otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text = Editable.Factory.getInstance().newEditable("")
+                            otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text = Editable.Factory.getInstance().newEditable("")
+                            otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text = Editable.Factory.getInstance().newEditable("")
+                            otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text = Editable.Factory.getInstance().newEditable("")
+                            otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to + " " + mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString() + mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text.toString()
+                            otpDataDialog.show()
+                        }
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                })
+            } else {
+                apiName = "sendOtp"
+                (activity as BaseActivity).hitAuthApi(this)
+            }
         } else {
             mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -278,22 +295,48 @@ class ProfileFragment : Fragment(), AuthInterface {
         }
     }
 
+    @SuppressLint("CutPasteId", "SetTextI18n")
     private fun verifyOtpObserver() {
         if ((activity as BaseActivity).isOnline()) {
-            profileViewMode.otpVerifyData(getOtpVerify()).observe(viewLifecycleOwner, {
-                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
-                (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                profileViewMode.otpVerifyData(getOtpVerify()).observe(viewLifecycleOwner, {
+                    otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.revertAnimation()
+                    if (it.status_code=="1")
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                    else
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {
-                        mobileNumberDialog.dismiss()
-                        otpDataDialog.show()
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                    } else {
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                     }
-                    (activity as BaseActivity).bottomSheetDialog.dismiss()
-                }
-                (activity as BaseActivity).bottomSheetDialog.show()
-            })
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                        if (it.status_code == "0") {
+                            mobileNumberDialog.dismiss()
+                            sharedPrefrenceManager.getProfile().login_phone = mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text.toString()
+                            sharedPrefrenceManager.getProfile().login_phone_code = mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.textView_selectedCountry?.text.toString()
+                            sharedPrefrenceManager.saveProfile(sharedPrefrenceManager.getProfile())
+                            profileFragmentBinding.userMobileNo.text = mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.textView_selectedCountry?.text.toString() + mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text.toString()
+                            otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text = Editable.Factory.getInstance().newEditable("")
+                            otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text = Editable.Factory.getInstance().newEditable("")
+                            otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text = Editable.Factory.getInstance().newEditable("")
+                            otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text = Editable.Factory.getInstance().newEditable("")
+                            mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text = Editable.Factory.getInstance().newEditable("")
+                            otpDataDialog.dismiss()
+                        }
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                })
+            } else {
+                apiName = "verifyOtp"
+                (activity as BaseActivity).hitAuthApi(this)
+            }
         } else {
+            otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.revertAnimation()
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -306,20 +349,38 @@ class ProfileFragment : Fragment(), AuthInterface {
 
     private fun resendOtpObserver() {
         if ((activity as BaseActivity).isOnline()) {
-            profileViewMode.otpResendData(getResendOtp()).observe(viewLifecycleOwner, {
-                progressDialog.dismiss()
-                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
-                (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
-                    otpDataDialog.findViewById<LinearLayout>(R.id.resendLayout)!!.visibility = View.GONE
-                    timerRestriction()
-                    (activity as BaseActivity).bottomSheetDialog.dismiss()
-                }
-                (activity as BaseActivity).bottomSheetDialog.show()
-            })
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
+                profileViewMode.otpResendData(getResendOtp()).observe(viewLifecycleOwner, {
+                    progressDialog.dismiss()
+                    if (it.status_code == "1")
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                    else
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    if (it.status_code == "0") {
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                    } else {
+                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                    }
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                        otpDataDialog.findViewById<LinearLayout>(R.id.resendLayout)!!.visibility = View.GONE
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text = Editable.Factory.getInstance().newEditable("")
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text = Editable.Factory.getInstance().newEditable("")
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text = Editable.Factory.getInstance().newEditable("")
+                        otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text = Editable.Factory.getInstance().newEditable("")
+                        timerRestriction()
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                })
+            } else {
+                apiName = "resendOtp"
+                (activity as BaseActivity).hitAuthApi(this)
+            }
         } else {
             progressDialog.dismiss()
+            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
             (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().network_error
             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -337,13 +398,14 @@ class ProfileFragment : Fragment(), AuthInterface {
         mapDataVal["account_phone_code"] = mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["LoginId"] = sharedPrefrenceManager.getLoginId()
         return mapDataVal
     }
 
     private fun getOtpVerify(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataVal["otp_number"] = mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
+        mapDataVal["otp_number"] = otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text.toString() + otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text.toString() + otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text.toString() + otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text.toString()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataVal
@@ -355,6 +417,7 @@ class ProfileFragment : Fragment(), AuthInterface {
         mapDataVal["account_phone_code"] = mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["LoginId"] = sharedPrefrenceManager.getLoginId()
         return mapDataVal
     }
 

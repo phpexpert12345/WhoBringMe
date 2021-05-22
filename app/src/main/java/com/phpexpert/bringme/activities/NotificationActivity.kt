@@ -52,18 +52,18 @@ class NotificationActivity : BaseActivity(), AuthInterface {
                         arrayList.addAll(it.data!!.NotificationList!!)
                         notificationBinding.notificationRV.adapter!!.notifyDataSetChanged()
                     } else {
-                        if (it.status == "") {
+                        if (it.status_message == "1")
                             bottomSheetDialogMessageText.text = it.status_message
-                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                            bottomSheetDialogMessageOkButton.setOnClickListener {
-                                bottomSheetDialog.dismiss()
-                            }
-                            bottomSheetDialog.show()
-                        } else {
-                            notificationBinding.nestedScrollView.visibility = View.GONE
-                            notificationBinding.noNotificationData.visibility = View.VISIBLE
+                        else
+                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                        bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            bottomSheetDialog.dismiss()
                         }
+                        bottomSheetDialog.show()
+                        notificationBinding.nestedScrollView.visibility = View.GONE
+                        notificationBinding.noNotificationData.visibility = View.VISIBLE
                     }
                 })
             } else {
@@ -88,9 +88,9 @@ class NotificationActivity : BaseActivity(), AuthInterface {
     }
 
     override fun isAuthHit(value: Boolean, message: String) {
-        if (value){
+        if (value) {
 
-        }else{
+        } else {
 
             bottomSheetDialogMessageText.text = message
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text

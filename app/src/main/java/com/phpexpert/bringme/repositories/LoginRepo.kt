@@ -28,7 +28,7 @@ class LoginRepo {
                 } else {
                     val loginDtoMain = LoginDtoMain()
                     loginDtoMain.status_message = "Login error in api"
-                    loginDtoMain.status_code = "1"
+                    loginDtoMain.status_code = "2"
                     loginData.postValue(loginDtoMain)
                 }
             }
@@ -36,7 +36,7 @@ class LoginRepo {
             override fun onFailure(call: Call<LoginDtoMain>, t: Throwable) {
                 val loginDtoMain = LoginDtoMain()
                 loginDtoMain.status_message = "Login error in api"
-                loginDtoMain.status_code = "1"
+                loginDtoMain.status_code = "2"
                 loginData.postValue(loginDtoMain)
             }
 
@@ -93,14 +93,14 @@ class LoginRepo {
     }
 
     fun getLoginDetailsData(mapData: Map<String, String>): MutableLiveData<ResendOtpMain> {
-        ServiceGenerator.createService(LoginRetro::class.java).getLoginDetails(mapData).enqueue(object : Callback<ResendOtpMain> {
+        ServiceGenerator.createService(LoginRetro::class.java).getForgotPasswordResetData(mapData).enqueue(object : Callback<ResendOtpMain> {
             override fun onResponse(call: Call<ResendOtpMain>, response: Response<ResendOtpMain>) {
                 if (response.isSuccessful) {
                     loginDetailsData.postValue(response.body())
                 } else {
                     val loginDtoMain = ResendOtpMain()
                     loginDtoMain.status_message = "Login error in api"
-                    loginDtoMain.status_code = "1"
+                    loginDtoMain.status_code = "2"
                     loginDetailsData.postValue(loginDtoMain)
                 }
             }
@@ -108,7 +108,7 @@ class LoginRepo {
             override fun onFailure(call: Call<ResendOtpMain>, t: Throwable) {
                 val loginDtoMain = ResendOtpMain()
                 loginDtoMain.status_message = "Login error in api"
-                loginDtoMain.status_code = "1"
+                loginDtoMain.status_code = "2"
                 loginDetailsData.postValue(loginDtoMain)
             }
 

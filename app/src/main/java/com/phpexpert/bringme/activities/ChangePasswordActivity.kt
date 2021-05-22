@@ -154,11 +154,14 @@ class ChangePasswordActivity : BaseActivity(), AuthInterface {
 
     private fun setObserver() {
         if (isOnline()) {
-            if (sharedPrefrenceManager.getAuthData()?.auth_key !=null && sharedPrefrenceManager.getAuthData()?.auth_key !="") {
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 changePasswordActivity.continueButton.revertAnimation()
                 changePasswordViewModel.changePassword(mapData()).observe(this, {
                     changePasswordActivity.continueButton.revertAnimation()
-                    bottomSheetDialogMessageText.text = it.status_message
+                    if (it.status_message == "1")
+                        bottomSheetDialogMessageText.text = it.status_message
+                    else
+                        bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                     bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0")
@@ -173,7 +176,7 @@ class ChangePasswordActivity : BaseActivity(), AuthInterface {
                     }
                     bottomSheetDialog.show()
                 })
-            }else{
+            } else {
                 hitAuthApi(this)
             }
         } else {
@@ -201,9 +204,9 @@ class ChangePasswordActivity : BaseActivity(), AuthInterface {
     }
 
     override fun isAuthHit(value: Boolean, message: String) {
-        if (value){
+        if (value) {
             setObserver()
-        }else{
+        } else {
             changePasswordActivity.continueButton.revertAnimation()
             bottomSheetDialogMessageText.text = message
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text

@@ -1,9 +1,6 @@
 package com.phpexpert.bringme.repositories
 
-import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import com.facebook.internal.Mutable
 import com.phpexpert.bringme.dtos.ForgotPasswordChangeDtoMain
 import com.phpexpert.bringme.dtos.ProfileChangeNumberDtoMain
 import com.phpexpert.bringme.dtos.ProfileResendDataMain
@@ -28,7 +25,7 @@ class ProfileRepo {
                     changePassword.postValue(response.body())
                 } else {
                     val forgotPasswordChangeDtoMain = ForgotPasswordChangeDtoMain()
-                    forgotPasswordChangeDtoMain.status_code = "1"
+                    forgotPasswordChangeDtoMain.status_code = "2"
                     forgotPasswordChangeDtoMain.status_message = "Login error in api"
                     changePassword.postValue(forgotPasswordChangeDtoMain)
                 }
@@ -36,7 +33,7 @@ class ProfileRepo {
 
             override fun onFailure(call: Call<ForgotPasswordChangeDtoMain>, t: Throwable) {
                 val forgotPasswordChangeDtoMain = ForgotPasswordChangeDtoMain()
-                forgotPasswordChangeDtoMain.status_code = "1"
+                forgotPasswordChangeDtoMain.status_code = "2"
                 forgotPasswordChangeDtoMain.status_message = "Login error in api"
                 changePassword.postValue(forgotPasswordChangeDtoMain)
             }
@@ -52,7 +49,7 @@ class ProfileRepo {
                     changeMobileNumber.postValue(response.body())
                 }else{
                     val forgotPasswordChangeDtoMain = ProfileChangeNumberDtoMain()
-                    forgotPasswordChangeDtoMain.status_code = "1"
+                    forgotPasswordChangeDtoMain.status_code = "2"
                     forgotPasswordChangeDtoMain.status_message = "Number Change error in api"
                     changeMobileNumber.postValue(forgotPasswordChangeDtoMain)
                 }
@@ -60,7 +57,7 @@ class ProfileRepo {
 
             override fun onFailure(call: Call<ProfileChangeNumberDtoMain>, t: Throwable) {
                 val forgotPasswordChangeDtoMain = ProfileChangeNumberDtoMain()
-                forgotPasswordChangeDtoMain.status_code = "1"
+                forgotPasswordChangeDtoMain.status_code = "2"
                 forgotPasswordChangeDtoMain.status_message = "Number Change error in api"
                 changeMobileNumber.postValue(forgotPasswordChangeDtoMain)
             }
@@ -76,7 +73,7 @@ class ProfileRepo {
                     otpVerifyData.postValue(response.body())
                 }else{
                     val forgotPasswordChangeDtoMain = ProfileVerifyOtpDtoMain()
-                    forgotPasswordChangeDtoMain.status_code = "1"
+                    forgotPasswordChangeDtoMain.status_code = "2"
                     forgotPasswordChangeDtoMain.status_message = "Number Change error in api"
                     otpVerifyData.postValue(forgotPasswordChangeDtoMain)
                 }
@@ -84,7 +81,7 @@ class ProfileRepo {
 
             override fun onFailure(call: Call<ProfileVerifyOtpDtoMain>, t: Throwable) {
                 val forgotPasswordChangeDtoMain = ProfileVerifyOtpDtoMain()
-                forgotPasswordChangeDtoMain.status_code = "1"
+                forgotPasswordChangeDtoMain.status_code = "2"
                 forgotPasswordChangeDtoMain.status_message = "Number Change error in api"
                 otpVerifyData.postValue(forgotPasswordChangeDtoMain)
             }
@@ -100,7 +97,7 @@ class ProfileRepo {
                     resendOtpData.postValue(response.body())
                 }else{
                     val forgotPasswordChangeDtoMain = ProfileResendDataMain()
-                    forgotPasswordChangeDtoMain.status_code = "1"
+                    forgotPasswordChangeDtoMain.status_code = "2"
                     forgotPasswordChangeDtoMain.status_message = "Number Change error in api"
                     resendOtpData.postValue(forgotPasswordChangeDtoMain)
                 }
@@ -108,7 +105,7 @@ class ProfileRepo {
 
             override fun onFailure(call: Call<ProfileResendDataMain>, t: Throwable) {
                 val forgotPasswordChangeDtoMain = ProfileResendDataMain()
-                forgotPasswordChangeDtoMain.status_code = "1"
+                forgotPasswordChangeDtoMain.status_code = "2"
                 forgotPasswordChangeDtoMain.status_message = "Number Change error in api"
                 resendOtpData.postValue(forgotPasswordChangeDtoMain)
             }

@@ -306,7 +306,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                     } else {
                         homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
                         homeFragmentBinding.nestedScrollView.visibility = View.GONE
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        if (it.status_code == "1")
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        else
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -338,13 +341,16 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 latestJobViewModel!!.orderAcceptData(orderMapData()).observe(viewLifecycleOwner, {
 //                    progressDialog.dismiss()
-                    (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                    if (it.status_code == "1")
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                    else
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
                     } else {
-                            progressDialog.dismiss()
+                        progressDialog.dismiss()
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                     }
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
@@ -376,13 +382,16 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         if ((activity as BaseActivity).isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 latestJobViewModel!!.orderDeclineData(orderDeclineData()).observe(viewLifecycleOwner, {
-                    (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                    if (it.status_code == "1")
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                    else
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
                     } else {
-                            progressDialog.dismiss()
+                        progressDialog.dismiss()
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                     }
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
@@ -417,13 +426,16 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 if (sharedPrefrenceManager.getAuthData()?.auth_key != "" && sharedPrefrenceManager.getAuthData()?.auth_key != null) {
                     latestJobViewModel!!.orderFinishData(orderFinishData()).observe(viewLifecycleOwner, {
 //                        progressDialog.dismiss()
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        if (it.status_code == "1")
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        else
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         if (it.status_code == "0") {
                             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
                         } else {
-                                progressDialog.dismiss()
+                            progressDialog.dismiss()
                             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         }
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
@@ -466,7 +478,6 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
     private fun mapData(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-
         mapDataVal["current_lat"] = currentLocation.latitude.toString()
         mapDataVal["current_long"] = currentLocation.longitude.toString()
         mapDataVal["current_city"] = (activity as BaseActivity).base64Encoded(address.adminArea)
@@ -667,7 +678,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         try {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, "DE"))
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

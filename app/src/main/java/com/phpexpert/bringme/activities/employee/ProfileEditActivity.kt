@@ -149,7 +149,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
 //            startActivityForResult(getPickImageChooserIntent(), 4001)
             permissionName = "Camera"
             if (isCheckPermissions(this, permissionCamera))
-            startDialog()
+                startDialog()
         }
 
         profileEditLayoutBinding.updateButton.setOnClickListener {
@@ -621,9 +621,12 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
                             override fun onResponse(call: Call<EditProfileDto>, response: Response<EditProfileDto>) {
                                 if (response.isSuccessful) {
                                     val responseData = response.body()
-                                    bottomSheetDialogMessageText.text = responseData!!.status_message
+                                    if (responseData?.status_code == "1")
+                                        bottomSheetDialogMessageText.text = responseData.status_message
+                                    else
+                                        bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                                     bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-                                    if (responseData.status_code == "0") {
+                                    if (responseData?.status_code == "0") {
                                         bottomSheetDialogHeadingText.visibility = View.GONE
                                     } else {
                                         bottomSheetDialogHeadingText.visibility = View.VISIBLE
@@ -631,7 +634,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
                                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
                                     bottomSheetDialogMessageOkButton.setOnClickListener {
                                         profileEditLayoutBinding.updateButton.revertAnimation()
-                                        if (responseData.status_code == "0") {
+                                        if (responseData?.status_code == "0") {
                                             val loginData = sharedPrefrenceManager.getProfile()
                                             loginData.login_photo = responseData.data.login_photo
                                             loginData.login_email = profileEditLayoutBinding.emailEt.text.toString()

@@ -268,7 +268,10 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
 
     override fun onPause() {
         super.onPause()
-
+        try {
+            countDownTimer.cancel()
+        } catch (e: Exception) {
+        }
         val window: Window = window
         window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     }
@@ -294,6 +297,10 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
                             finishAffinity()
                         }
                     } else {
+                        if (it.status_code == "1")
+                            bottomSheetDialogMessageText.text = it.status_message
+                        else bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+
                         bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         bottomSheetDialogMessageOkButton.setOnClickListener {
                             bottomSheetDialog.dismiss()
@@ -329,7 +336,6 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
                         e.printStackTrace()
                     }
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    bottomSheetDialogMessageText.text = it.status_message
                     bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     if (it.status_code == "0") {
                         bottomSheetDialogHeadingText.visibility = View.GONE
@@ -339,6 +345,10 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
                             setCountDownTimer()
                         }
                     } else {
+                        if (it.status_code == "1")
+                            bottomSheetDialogMessageText.text = it.status_message
+                        else bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+
                         bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         bottomSheetDialogMessageOkButton.setOnClickListener {
                             bottomSheetDialog.dismiss()
@@ -439,7 +449,7 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
         } else {
             try {
                 congratulationScreenBinding.cancelButton.revertAnimation()
-            }catch (e:Exception){
+            } catch (e: Exception) {
             }
             bottomSheetDialogMessageText.text = message
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text

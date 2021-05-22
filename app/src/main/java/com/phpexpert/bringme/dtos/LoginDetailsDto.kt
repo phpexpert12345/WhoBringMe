@@ -64,7 +64,6 @@ open class LoginDetailsDto {
     @SerializedName("login_name")
     var login_name: String? = ""
 
-
     @SerializedName("login_country")
     var login_country: String? = ""
 
@@ -76,4 +75,5 @@ open class LoginDetailsDto {
 
     @SerializedName("login_address")
     var login_address: String? = ""
+
 }

@@ -26,4 +26,7 @@ class AuthDtoData {
 
     @SerializedName("lang_code")
     var lang_code: String? = ""
+
+    @SerializedName("country_code")
+    var country_code: String? = ""
 }

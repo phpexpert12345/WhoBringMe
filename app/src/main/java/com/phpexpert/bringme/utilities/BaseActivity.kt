@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.messaging.FirebaseMessaging
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.interfaces.AuthInterface
@@ -46,10 +47,10 @@ open class BaseActivity : AppCompatActivity() {
     private lateinit var authViewModel: AuthModel
     lateinit var bottomSheetDialog: BottomSheetDialog
     lateinit var bottomSheetDialogMessageText: TextView
-    lateinit var bottomSheetDialogHeadingText:TextView
+    lateinit var bottomSheetDialogHeadingText: TextView
     lateinit var bottomSheetDialogMessageOkButton: TextView
     lateinit var bottomSheetDialogMessageCancelButton: TextView
-    lateinit var permissionInterface:PermissionInterface
+    lateinit var permissionInterface: PermissionInterface
 
 
     private var currencyLocaleMap: SortedMap<Currency, Locale>? = null
@@ -85,6 +86,14 @@ open class BaseActivity : AppCompatActivity() {
         bottomSheetDialogMessageCancelButton = bottomSheetDialog.findViewById(R.id.cancelText)!!
         authViewModel = ViewModelProvider(this).get(AuthModel::class.java)
 
+        if (sharedPrefrenceManager.getPreference(CONSTANTS.fireBaseId) == "") {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener {
+                if (!it.isSuccessful) {
+                    return@addOnCompleteListener
+                }
+                sharedPrefrenceManager.savePrefrence(CONSTANTS.fireBaseId, it.result)
+            }
+        }
         currencyLocaleMap = TreeMap { c1, c2 -> c1.currencyCode.compareTo(c2.currencyCode) }
         for (locale in Locale.getAvailableLocales()) {
             try {
@@ -154,7 +163,11 @@ open class BaseActivity : AppCompatActivity() {
                 sharedPrefrenceManager.saveAuthData(it.data!![0])
                 authData.isAuthHit(true, it.status_message!!)
             } else {
-                authData.isAuthHit(false, it!!.status_message!!)
+                if (it.status_code=="2"){
+                    authData.isAuthHit(false, sharedPrefrenceManager.getLanguageData().could_not_connect_server_message)
+                }else {
+                    authData.isAuthHit(false, it!!.status_message!!)
+                }
             }
         })
     }
@@ -285,7 +298,7 @@ open class BaseActivity : AppCompatActivity() {
         try {
 //            val formatter = NumberFormat.getInstance(Locale(sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale(sharedPrefrenceManager.getAuthData()?.lang_code!!, "DE"))
+            val symbols = DecimalFormatSymbols(Locale(sharedPrefrenceManager.getAuthData()?.lang_code!!, sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
@@ -299,5 +312,5 @@ open class BaseActivity : AppCompatActivity() {
         return currency.getSymbol(currencyLocaleMap?.get(currency))
     }
 
-    fun isLocationEnabled():Boolean = (getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
+    fun isLocationEnabled(): Boolean = (getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
 }

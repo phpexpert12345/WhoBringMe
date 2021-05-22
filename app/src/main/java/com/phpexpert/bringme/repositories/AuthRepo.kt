@@ -1,7 +1,5 @@
 package com.phpexpert.bringme.repositories
 
-import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.phpexpert.bringme.dtos.AuthDtoMain
 import com.phpexpert.bringme.retro.AuthRetro
@@ -21,7 +19,7 @@ class AuthRepo {
                 } else {
                     val authDtoMain = AuthDtoMain()
                     authDtoMain.status_message = "Auth Api Failure"
-                    authDtoMain.status_code = "1"
+                    authDtoMain.status_code = "2"
                     authData.postValue(authDtoMain)
                 }
             }
@@ -29,7 +27,7 @@ class AuthRepo {
             override fun onFailure(call: Call<AuthDtoMain>, t: Throwable) {
                 val authDtoMain = AuthDtoMain()
                 authDtoMain.status_message = "Auth Api Failure"
-                authDtoMain.status_code = "1"
+                authDtoMain.status_code = "2"
                 authData.postValue(authDtoMain)
             }
 

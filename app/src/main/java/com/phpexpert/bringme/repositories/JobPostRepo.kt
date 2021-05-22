@@ -31,7 +31,7 @@ class JobPostRepo {
                         } else {
                             val servicesChargesDtoMain = ServicesChargesDtoMain()
                             servicesChargesDtoMain.status_message = "Service Api Error"
-                            servicesChargesDtoMain.status_code = "1"
+                            servicesChargesDtoMain.status_code = "2"
                             serviceChargesData.postValue(servicesChargesDtoMain)
                         }
                     }
@@ -39,7 +39,7 @@ class JobPostRepo {
                     override fun onFailure(call: Call<ServicesChargesDtoMain>, t: Throwable) {
                         val servicesChargesDtoMain = ServicesChargesDtoMain()
                         servicesChargesDtoMain.status_message = "Service Api Error"
-                        servicesChargesDtoMain.status_code = "1"
+                        servicesChargesDtoMain.status_code = "2"
                         serviceChargesData.postValue(servicesChargesDtoMain)
                     }
 
@@ -55,7 +55,7 @@ class JobPostRepo {
                             paymentAuthKey.postValue(response.body())
                         } else {
                             val paymentConfigurationMain = PaymentConfigurationMain()
-                            paymentConfigurationMain.status_code = "1"
+                            paymentConfigurationMain.status_code = "2"
                             paymentConfigurationMain.status_message = "Payment Auth Api Error"
                             paymentAuthKey.postValue(paymentConfigurationMain)
                         }
@@ -63,7 +63,7 @@ class JobPostRepo {
 
                     override fun onFailure(call: Call<PaymentConfigurationMain>, t: Throwable) {
                         val paymentConfigurationMain = PaymentConfigurationMain()
-                        paymentConfigurationMain.status_code = "1"
+                        paymentConfigurationMain.status_code = "2"
                         paymentConfigurationMain.status_message = "Payment Auth Api Error"
                         paymentAuthKey.postValue(paymentConfigurationMain)
                     }
@@ -81,14 +81,14 @@ class JobPostRepo {
                         } else {
                             val paymentTokenMain = PaymentTokenMain()
                             paymentTokenMain.status_message = "Payment Token Api Error"
-                            paymentTokenMain.status_code = "1"
+                            paymentTokenMain.status_code = "2"
                             paymentGenerateToken.postValue(paymentTokenMain)
                         }
                     }
                     override fun onFailure(call: Call<PaymentTokenMain>, t: Throwable) {
                         val paymentTokenMain = PaymentTokenMain()
                         paymentTokenMain.status_message = "Payment Token Api Error"
-                        paymentTokenMain.status_code = "1"
+                        paymentTokenMain.status_code = "2"
                         paymentGenerateToken.postValue(paymentTokenMain)
                     }
 
@@ -105,7 +105,7 @@ class JobPostRepo {
                         } else {
                             val postJobDataMain = PostJobDataMain()
                             postJobDataMain.status_message = "Payment Token Api Error"
-                            postJobDataMain.status_code = "1"
+                            postJobDataMain.status_code = "2"
                             postJobData.postValue(postJobDataMain)
                         }
                     }
@@ -113,7 +113,7 @@ class JobPostRepo {
                     override fun onFailure(call: Call<PostJobDataMain>, t: Throwable) {
                         val postJobDataMain = PostJobDataMain()
                         postJobDataMain.status_message = "Payment Token Api Error"
-                        postJobDataMain.status_code = "1"
+                        postJobDataMain.status_code = "2"
                         postJobData.postValue(postJobDataMain)
                     }
 
@@ -130,7 +130,7 @@ class JobPostRepo {
                         } else {
                             val postJobDataMain = JobDetailsDtoMain()
                             postJobDataMain.status_message = "Job Details Api Error"
-                            postJobDataMain.status_code = "1"
+                            postJobDataMain.status_code = "2"
                             jobDetailsData.postValue(postJobDataMain)
                         }
                     }
@@ -138,7 +138,7 @@ class JobPostRepo {
                     override fun onFailure(call: Call<JobDetailsDtoMain>, t: Throwable) {
                         val postJobDataMain = JobDetailsDtoMain()
                         postJobDataMain.status_message = "Job Details Api Error"
-                        postJobDataMain.status_code = "1"
+                        postJobDataMain.status_code = "2"
                         jobDetailsData.postValue(postJobDataMain)
                     }
 
@@ -154,7 +154,7 @@ class JobPostRepo {
                             cancelJobData.postValue(response.body())
                         } else {
                             val cancelJobDtoMain = CancelJobDtoMain()
-                            cancelJobDtoMain.status_code="1"
+                            cancelJobDtoMain.status_code="2"
                             cancelJobDtoMain.status_message = "Cancel Job Api Error"
                             cancelJobData.postValue(cancelJobDtoMain)
                         }
@@ -162,7 +162,7 @@ class JobPostRepo {
 
                     override fun onFailure(call: Call<CancelJobDtoMain>, t: Throwable) {
                         val cancelJobDtoMain = CancelJobDtoMain()
-                        cancelJobDtoMain.status_code="1"
+                        cancelJobDtoMain.status_code="2"
                         cancelJobDtoMain.status_message = "Cancel Job Api Error"
                         cancelJobData.postValue(cancelJobDtoMain)
                     }
@@ -179,7 +179,7 @@ class JobPostRepo {
                             updateJobData.postValue(response.body())
                         } else {
                             val cancelJobDtoMain = UpdateJobDtoMain()
-                            cancelJobDtoMain.status_code="1"
+                            cancelJobDtoMain.status_code="2"
                             cancelJobDtoMain.status_message = "Cancel Job Api Error"
                             updateJobData.postValue(cancelJobDtoMain)
                         }
@@ -187,7 +187,7 @@ class JobPostRepo {
 
                     override fun onFailure(call: Call<UpdateJobDtoMain>, t: Throwable) {
                         val cancelJobDtoMain = UpdateJobDtoMain()
-                        cancelJobDtoMain.status_code="1"
+                        cancelJobDtoMain.status_code="2"
                         cancelJobDtoMain.status_message = "Cancel Job Api Error"
                         updateJobData.postValue(cancelJobDtoMain)
                     }

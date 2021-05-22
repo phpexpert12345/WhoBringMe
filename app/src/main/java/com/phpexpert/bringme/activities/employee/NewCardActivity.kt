@@ -267,7 +267,10 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
                         setJobPostDataObserver()
                     } else {
                         cardActivityBinding.payNowButton.revertAnimation()
-                        bottomSheetDialogMessageText.text = it.status_message
+                        if (it.status_code == "1")
+                            bottomSheetDialogMessageText.text = it.status_message
+                        else
+                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                         bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -374,7 +377,7 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
         mapDataValue["job_posted_country"] = base64Encoded(addresses[0]!!.countryName)
         mapDataValue["job_posted_state"] = base64Encoded(addresses[0]!!.adminArea)
         mapDataValue["job_posted_city"] = base64Encoded(addresses[0]!!.locality)
-        mapDataValue["job_posted_lat"] = base64Encoded(mLocation.latitude.toString())
+        mapDataValue["job_posted_lat"] = mLocation.latitude.toString()
         mapDataValue["job_posted_lang"] = mLocation.longitude.toString()
         mapDataValue["job_posted_zipcode"] = addresses[0]!!.postalCode
         val stringBuilder = StringBuilder()
@@ -383,6 +386,7 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
         mapDataValue["job_posted_address"] = base64Encoded(stringBuilder.toString())
         mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+
         return mapDataValue
     }
 
@@ -391,7 +395,10 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 jobPostViewModel.getPaymentAuthKey(sharedPrefrenceManager.getAuthData()?.auth_key!!)
                         .observe(this, {
-                            bottomSheetDialogMessageText.text = it.status_message
+                            if (it.status_code == "1")
+                                bottomSheetDialogMessageText.text = it.status_message
+                            else
+                                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                             bottomSheetDialogMessageCancelButton.visibility = View.GONE
                             if (it.status_code == "0") {
@@ -473,7 +480,10 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
     private fun getPostJobDataObserver(mLocation: Location) {
         jobPostViewModel.getPostJobData(getPostJobMap(transactionId, mLocation)).observe(this@NewCardActivity, {
             cardActivityBinding.payNowButton.revertAnimation()
-            bottomSheetDialogMessageText.text = it.status_message
+            if (it.status_code == "1")
+                bottomSheetDialogMessageText.text = it.status_message
+            else
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             if (it.status_code == "0") {

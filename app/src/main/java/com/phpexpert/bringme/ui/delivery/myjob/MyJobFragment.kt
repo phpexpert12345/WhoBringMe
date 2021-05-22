@@ -133,7 +133,10 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
                     } else {
                         myJobBinding.noDataFoundLayout.visibility = View.VISIBLE
                         myJobBinding.nestedScrollView.visibility = View.GONE
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        if (it.status_code == "1")
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        else
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -257,7 +260,7 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
         try {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, "DE"))
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

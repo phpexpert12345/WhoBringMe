@@ -206,7 +206,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                         homeFragmentBinding.homeRv.adapter!!.notifyDataSetChanged()
                     } else {
 //                        if (it.status == "") {
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
+                        if (it.status_code == "2") {
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPreference.getLanguageData().could_not_connect_server_message
+                        } else {
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
+                        }
                         (activity as BaseActivity).bottomSheetDialogMessageText.visibility = View.VISIBLE
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
@@ -369,8 +373,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                     } else {
                         writeReviewBinding.closeIcon.isClickable = true
                         writeReviewBinding.submitButton.revertAnimation()
-                        (activity as BaseActivity).bottomSheetDialog.show()
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message!!
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = if (it.status_code == "1") {
+                            it.status_message!!
+                        } else {
+                            sharedPreference.getLanguageData().could_not_connect_server_message
+                        }
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -413,7 +420,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         try {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, "DE"))
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

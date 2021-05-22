@@ -257,10 +257,11 @@ class LoginActivity : BaseActivity(), AuthInterface {
         forgotPasswordTwoDialog.findViewById<ImageView>(R.id.closeIcon)!!.setOnClickListener {
             try {
                 forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)!!.revertAnimation()
+                this.hideKeyboard()
+
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
             forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
             forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.clearFocus()
             forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.text = Editable.Factory.getInstance().newEditable("")
@@ -427,7 +428,6 @@ class LoginActivity : BaseActivity(), AuthInterface {
                             loginId = it.data!!.LoginId!!
                             tokenId = it.data!!.Token_ID!!
                             forgotPasswordTwoDialog.findViewById<TextView>(R.id.mobileNUmberTV)!!.text = forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString() + forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
-                            forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
                             timerRestriction()
                             forgotPasswordTwoDialog.show()
                             forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.clearFocus()
@@ -475,6 +475,8 @@ class LoginActivity : BaseActivity(), AuthInterface {
                         bottomSheetDialogMessageOkButton.setOnClickListener {
                             bottomSheetDialog.dismiss()
                             loginBinding.forgotPasswordView.visibility = View.GONE
+                            forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
+                            forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.clearFocus()
                             forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.text = Editable.Factory.getInstance().newEditable("")
                             forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.clearFocus()
                             forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
@@ -519,12 +521,13 @@ class LoginActivity : BaseActivity(), AuthInterface {
         mapDataValue["account_phone_code"] = loginBinding.searchCountyCountry.textView_selectedCountry.text.toString()
         mapDataValue["account_mobile"] = loginBinding.mobileNumberEditText.text.toString()
         mapDataValue["account_password"] = loginBinding.digitPin.text.toString()
-        mapDataValue["device_id"] = getIMEI(this)!!
+        mapDataValue["device_id"] = sharedPrefrenceManager.getPreference(CONSTANTS.fireBaseId)!!
         mapDataValue["device_platform"] = "Android"
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
         return mapDataValue
     }
+
 
     //map data for for forgot password send otp api
     private fun mapDataOtpForgotSend(): Map<String, String> {
@@ -551,14 +554,19 @@ class LoginActivity : BaseActivity(), AuthInterface {
     private fun resendData(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
-        mapDataVal["Token_ID"] = tokenId
         mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["account_mobile"] = forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
+        mapDataVal["account_phone_code"] = forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
+
         return mapDataVal
     }
 
     private fun resendOtpObserver() {
         loginViewModel.getLoginDetailsData(resendData()).observe(this, {
-            bottomSheetDialogMessageText.text = it.status_message
+            if (it.status_code == "1")
+                bottomSheetDialogMessageText.text = it.status_message
+            else
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             if (it.status_code == "0") {

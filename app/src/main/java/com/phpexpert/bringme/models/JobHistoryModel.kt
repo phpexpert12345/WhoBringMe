@@ -7,11 +7,6 @@ import com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoMain
 import com.phpexpert.bringme.dtos.LatestJobDtoMain
 import com.phpexpert.bringme.dtos.WriteReviewJobDtoMain
 import com.phpexpert.bringme.repositories.JobHistoryRepo
-import com.phpexpert.bringme.retro.JobHistoryRetro
-import com.phpexpert.bringme.retro.ServiceGenerator
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class JobHistoryModel : ViewModel() {
 

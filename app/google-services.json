@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "347065005031",
+    "project_id": "who-brings-me",
+    "storage_bucket": "who-brings-me.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:347065005031:android:9d6b418f06fef1660b0342",
+        "android_client_info": {
+          "package_name": "com.phpexpert.bringme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "347065005031-8drp3l4q86kka69eaaem970675d0himc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-BH5k2CZvn8APbCROxWv_OGMvaA-NDYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "347065005031-8drp3l4q86kka69eaaem970675d0himc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
