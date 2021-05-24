@@ -46,9 +46,9 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/_2sdp"
                         tools:ignore="RelativeOverlap">
 
                         <TextView
@@ -106,8 +106,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toStartOf="@+id/csImage"
                         android:layout_marginEnd="@dimen/_32sdp"
+                        android:layout_toStartOf="@+id/csImage"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -146,9 +146,10 @@
 
                     <ImageView
                         android:id="@+id/csImage"
-                        android:layout_width="@dimen/_57sdp"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/_42sdp"
                         android:layout_alignParentEnd="true"
+                        android:scaleType="fitEnd"
                         android:src="@drawable/cs"
                         tools:ignore="ContentDescription" />
                 </RelativeLayout>
@@ -158,9 +159,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:fontFamily="@font/poppins_medium"
+                    android:justificationMode="inter_word"
                     android:text="@{model.about_job}"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/_8sdp"
+                    android:textSize="@dimen/_9sdp"
                     tools:ignore="HardcodedText" />
 
                 <RelativeLayout
@@ -250,8 +252,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
-                android:background="@color/view_color"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/view_color"
                 android:paddingStart="@dimen/_minus10sdp"
                 android:paddingEnd="@dimen/_minus10sdp" />
 
@@ -289,9 +291,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_weight="1"
                             android:fontFamily="@font/poppins_semi_bold"
                             android:text="@{model.client_name}"
-                            android:layout_weight="1"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_13sdp"
                             tools:ignore="HardcodedText,RelativeOverlap" />
@@ -322,9 +324,9 @@
                     android:layout_gravity="end"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:visibility="gone"
                     android:textColor="@color/text_color_dark"
-                    android:textSize="@dimen/_9sdp" />
+                    android:textSize="@dimen/_9sdp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <View

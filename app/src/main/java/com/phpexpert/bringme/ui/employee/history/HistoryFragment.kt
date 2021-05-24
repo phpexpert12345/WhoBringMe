@@ -142,10 +142,10 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
                             historyBinding.noJobHistroy.visibility = View.VISIBLE
                             historyBinding.nestedScrollView.visibility = View.GONE
                         } else {
-                            if (it.status_code == "1")
-                                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                            else
+                            if (it.status_code == "2")
                                 (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                            else
+                                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                             (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                             (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                             (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -226,7 +226,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
                 reviewBinding.closeIcon.setOnClickListener {
                     this.hideKeyboard()
                 }
-                reviewBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${250}"
+                reviewBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${1000}"
                 reviewBinding.writeReviewET.addTextChangedListener(object : TextWatcher {
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     }
@@ -236,7 +236,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
 
                     @SuppressLint("SetTextI18n")
                     override fun afterTextChanged(p0: Editable?) {
-                        reviewBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${250 - (p0.toString().length)}"
+                        reviewBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${1000 - (p0.toString().length)}"
                     }
 
                 })

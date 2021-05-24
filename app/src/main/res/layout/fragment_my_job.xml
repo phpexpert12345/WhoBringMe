@@ -18,169 +18,173 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/backgroundColor"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/colorLoginButton"
                 android:orientation="vertical">
 
                 <RelativeLayout
+                    android:id="@+id/headingLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorLoginButton">
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp">
 
-                    <RelativeLayout
-                        android:id="@+id/headerLayout"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/textHeading"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp">
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="@{languageModel.my_job}"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_19sdp"
+                        tools:ignore="RelativeOverlap" />
+
+                    <LinearLayout
+                        android:id="@+id/calenderTextLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/calendar_icon"
+                            tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:fontFamily="@font/poppins_semi_bold"
-                            android:text="@{languageModel.my_job}"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="19 Mar'2021"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_19sdp"
-                            tools:ignore="RelativeOverlap" />
+                            android:textSize="@dimen/_11sdp"
+                            tools:ignore="HardcodedText" />
 
-                        <LinearLayout
-                            android:id="@+id/calenderTextLayout"
+                        <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginEnd="@dimen/_10sdp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                            tools:ignore="ContentDescription" />
+                    </LinearLayout>
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/calendar_icon"
-                                tools:ignore="ContentDescription" />
+                </RelativeLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_5sdp"
-                                android:layout_marginTop="@dimen/_2sdp"
-                                android:fontFamily="@font/poppins_regular"
-                                android:text="19 Mar'2021"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/_11sdp"
-                                tools:ignore="HardcodedText" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-                                tools:ignore="ContentDescription" />
-                        </LinearLayout>
-                    </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    tools:ignore="DisableBaselineAlignment">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/deliver_home_running_orders_bg"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/_7sdp"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_7sdp"
+                        tools:ignore="RtlSymmetry">
+
+                        <TextView
+                            android:id="@+id/runningOrders"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="0"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_20sdp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_minus5sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="@{languageModel.total_orders}"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_9sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/headerLayout"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:orientation="horizontal"
-                        android:paddingBottom="@dimen/_80sdp"
-                        tools:ignore="DisableBaselineAlignment">
+                        android:layout_weight="1"
+                        android:background="@drawable/deliver_home_amount_bg"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/_7sdp"
+                        android:paddingEnd="@dimen/_7sdp"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_7sdp"
+                        tools:ignore="RtlSymmetry">
 
                         <LinearLayout
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/deliver_home_running_orders_bg"
-                            android:orientation="vertical"
-                            android:paddingStart="@dimen/_7sdp"
-                            android:paddingTop="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_7sdp"
-                            tools:ignore="RtlSymmetry">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            tools:ignore="UseCompoundDrawables">
 
                             <TextView
-                                android:id="@+id/runningOrders"
+                                android:id="@+id/currencyCode"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="0"
+                                android:text="€"
                                 android:textColor="@color/text_color"
-                                android:textSize="@dimen/_25sdp"
+                                android:textSize="@dimen/_20sdp"
                                 tools:ignore="HardcodedText" />
 
                             <TextView
+                                android:id="@+id/totalAmount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_minus5sdp"
-                                android:fontFamily="@font/poppins_regular"
-                                android:text="@{languageModel.total_orders}"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:text="0"
                                 android:textColor="@color/text_color"
-                                android:textSize="@dimen/_9sdp" />
+                                android:textSize="@dimen/_20sdp"
+                                tools:ignore="HardcodedText" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:layout_weight="1"
-                            android:background="@drawable/deliver_home_amount_bg"
-                            android:orientation="vertical"
-                            android:paddingStart="@dimen/_7sdp"
-                            android:paddingTop="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_7sdp"
-                            tools:ignore="RtlSymmetry">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                tools:ignore="UseCompoundDrawables">
-
-                                <TextView
-                                    android:id="@+id/currencyCode"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_medium"
-                                    android:text="€"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="@dimen/_25sdp"
-                                    tools:ignore="HardcodedText" />
-
-                                <TextView
-                                    android:id="@+id/totalAmount"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_5sdp"
-                                    android:fontFamily="@font/poppins_medium"
-                                    android:text="0"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="@dimen/_25sdp"
-                                    tools:ignore="HardcodedText" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_minus5sdp"
-                                android:fontFamily="@font/poppins_regular"
-                                android:text="@{languageModel.total_amount}"
-                                android:textColor="@color/text_color"
-                                android:textSize="@dimen/_9sdp" />
-                        </LinearLayout>
+                            android:layout_marginTop="@dimen/_minus5sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="@{languageModel.total_amount}"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_9sdp" />
                     </LinearLayout>
-                </RelativeLayout>
+                </LinearLayout>
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_70sdp"
+                android:layout_below="@+id/headerLayout"
+                android:background="@color/colorLoginButton" />
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/nestedScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_130sdp"
+                android:layout_below="@+id/headerLayout"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:visibility="visible">
 
                 <RelativeLayout
@@ -194,8 +198,8 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_below="@id/jobRV"/>
+                        android:layout_height="@dimen/_10sdp"
+                        android:layout_below="@id/jobRV" />
                 </RelativeLayout>
             </androidx.core.widget.NestedScrollView>
 
@@ -203,7 +207,8 @@
                 android:id="@+id/noDataFoundLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_240sdp"
+                android:layout_below="@+id/headerLayout"
+                android:layout_marginTop="@dimen/_70sdp"
                 android:orientation="vertical"
                 android:visibility="visible"
                 tools:ignore="UseCompoundDrawables">

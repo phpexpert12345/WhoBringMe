@@ -107,10 +107,7 @@ open class RegistrationActivity : BaseActivity(), AuthInterface, PermissionInter
                 val otpSendViewModel = ViewModelProvider(this).get(RegistrationModel::class.java)
                 otpSendViewModel.sendOtpModel(getMapData()).observe(this, {
                     registrationActivity.btnSubmit.revertAnimation()
-                    if (it.status_code == "1")
-                        bottomSheetDialogMessageText.text = it.status_message
-                    else
-                        bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                    bottomSheetDialogMessageText.text = it.status_message
                     bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {
@@ -133,6 +130,11 @@ open class RegistrationActivity : BaseActivity(), AuthInterface, PermissionInter
                         }
 
                     } else {
+                        if (it.status_code=="2")
+                        bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else{
+                            bottomSheetDialogMessageText.text = it.status_message
+                        }
                         bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         bottomSheetDialogMessageOkButton.setOnClickListener {
                             bottomSheetDialog.dismiss()

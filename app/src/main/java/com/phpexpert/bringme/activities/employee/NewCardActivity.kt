@@ -267,10 +267,10 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
                         setJobPostDataObserver()
                     } else {
                         cardActivityBinding.payNowButton.revertAnimation()
-                        if (it.status_code == "1")
-                            bottomSheetDialogMessageText.text = it.status_message
-                        else
+                        if (it.status_code == "2")
                             bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else
+                            bottomSheetDialogMessageText.text = it.status_message
                         bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -395,10 +395,10 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 jobPostViewModel.getPaymentAuthKey(sharedPrefrenceManager.getAuthData()?.auth_key!!)
                         .observe(this, {
-                            if (it.status_code == "1")
-                                bottomSheetDialogMessageText.text = it.status_message
-                            else
+                            if (it.status_code == "2")
                                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                            else
+                                bottomSheetDialogMessageText.text = it.status_message
                             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                             bottomSheetDialogMessageCancelButton.visibility = View.GONE
                             if (it.status_code == "0") {
@@ -480,10 +480,10 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
     private fun getPostJobDataObserver(mLocation: Location) {
         jobPostViewModel.getPostJobData(getPostJobMap(transactionId, mLocation)).observe(this@NewCardActivity, {
             cardActivityBinding.payNowButton.revertAnimation()
-            if (it.status_code == "1")
-                bottomSheetDialogMessageText.text = it.status_message
+            if (it.status_code == "2")
+                bottomSheetDialogMessageText.text =  sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
             else
-                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                bottomSheetDialogMessageText.text =it.status_message
             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             if (it.status_code == "0") {

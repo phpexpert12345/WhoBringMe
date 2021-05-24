@@ -201,6 +201,7 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_medium"
+                    android:justificationMode="inter_word"
                     android:text="@{postJobData.jobDescription}"
                     android:textColor="@color/colorDarkGrey"
                     android:textSize="@dimen/_9sdp" />

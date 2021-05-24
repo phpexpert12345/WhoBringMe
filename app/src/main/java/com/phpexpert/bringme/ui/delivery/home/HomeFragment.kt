@@ -16,6 +16,7 @@ import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
@@ -306,10 +307,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                     } else {
                         homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
                         homeFragmentBinding.nestedScrollView.visibility = View.GONE
-                        if (it.status_code == "1")
-                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                        else
+                        if (it.status_code == "2")
                             (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -341,10 +342,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 latestJobViewModel!!.orderAcceptData(orderMapData()).observe(viewLifecycleOwner, {
 //                    progressDialog.dismiss()
-                    if (it.status_code == "1")
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                    else
+                    if (it.status_code == "2")
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                    else
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {
@@ -382,10 +383,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         if ((activity as BaseActivity).isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 latestJobViewModel!!.orderDeclineData(orderDeclineData()).observe(viewLifecycleOwner, {
-                    if (it.status_code == "1")
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                    else
+                    if (it.status_code == "2")
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                    else
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {
@@ -426,10 +427,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 if (sharedPrefrenceManager.getAuthData()?.auth_key != "" && sharedPrefrenceManager.getAuthData()?.auth_key != null) {
                     latestJobViewModel!!.orderFinishData(orderFinishData()).observe(viewLifecycleOwner, {
 //                        progressDialog.dismiss()
-                        if (it.status_code == "1")
-                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                        else
+                        if (it.status_code == "2")
                             (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         if (it.status_code == "0") {
@@ -628,6 +629,21 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                         (activity as BaseActivity).bottomSheetDialog.show()
                     }
                 }
+                orderDeclineBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${1000}"
+                orderDeclineBinding.orderReason.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    }
+
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    }
+
+                    @SuppressLint("SetTextI18n")
+                    override fun afterTextChanged(p0: Editable?) {
+                        orderDeclineBinding.maxCharacters.text = "${sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${1000 - (p0.toString().length)}"
+                    }
+
+                })
+
                 orderDeclineBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 homeFragmentBinding.blurView.visibility = View.VISIBLE
             }

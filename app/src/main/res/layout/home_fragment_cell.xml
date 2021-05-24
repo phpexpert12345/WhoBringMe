@@ -148,9 +148,10 @@
 
                     <ImageView
                         android:id="@+id/csImage"
-                        android:layout_width="@dimen/_57sdp"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/_42sdp"
                         android:layout_alignParentEnd="true"
+                        android:scaleType="fitEnd"
                         android:src="@drawable/cs"
                         tools:ignore="ContentDescription" />
                 </RelativeLayout>
@@ -162,7 +163,8 @@
                     android:fontFamily="@font/poppins_medium"
                     android:text="@{model.about_job}"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/_8sdp"
+                    android:justificationMode="inter_word"
+                    android:textSize="@dimen/_9sdp"
                     tools:ignore="HardcodedText" />
 
                 <RelativeLayout

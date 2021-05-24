@@ -563,10 +563,10 @@ class LoginActivity : BaseActivity(), AuthInterface {
 
     private fun resendOtpObserver() {
         loginViewModel.getLoginDetailsData(resendData()).observe(this, {
-            if (it.status_code == "1")
-                bottomSheetDialogMessageText.text = it.status_message
-            else
+            if (it.status_code == "2")
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+            else
+                bottomSheetDialogMessageText.text = it.status_message
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             if (it.status_code == "0") {

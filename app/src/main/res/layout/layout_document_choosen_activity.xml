@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="languageModel"
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
     </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -23,46 +25,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorLoginButton"
-                android:gravity="center_vertical">
+                android:paddingBottom="@dimen/_20sdp">
 
                 <ImageView
                     android:id="@+id/back_arrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="@dimen/_minus19sdp"
+                    android:layout_marginStart="@dimen/_minus15sdp"
+                    android:layout_marginBottom="@dimen/_minus32sdp"
                     android:src="@drawable/back_arrow"
                     tools:ignore="ContentDescription" />
 
-                <ImageView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/_23sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:src="@drawable/filter"
-                    android:visibility="gone"
-                    tools:ignore="ContentDescription" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/back_arrow"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="-20dp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    android:background="@color/colorLoginButton"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semi_bold"
-                        android:text="@{languageModel.document_upload}"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_19sdp"
-                        android:textStyle="bold" />
-                </RelativeLayout>
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_26sdp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@{languageModel.document_upload}"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_13sdp" />
             </RelativeLayout>
 
             <TextView
@@ -81,11 +63,11 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
+                app:ccpDialog_showCloseIcon="true"
                 app:ccpDialog_textColor="@color/text_color"
                 app:ccp_autoDetectCountry="true"
                 app:ccp_contentColor="@color/text_color"
                 app:ccp_showFullName="true"
-                app:ccpDialog_showCloseIcon="true"
                 app:ccp_showNameCode="false"
                 app:ccp_showPhoneCode="false"
                 app:ccp_textGravity="LEFT"
@@ -109,12 +91,13 @@
                 android:textSize="@dimen/_13sdp" />
 
             <RelativeLayout
+                android:id="@+id/idCardLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@drawable/id_unselct_bg">
+                android:background="@drawable/id_select_bg">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -125,35 +108,39 @@
                     tools:ignore="UseCompoundDrawables">
 
                     <ImageView
+                        android:id="@+id/id_card_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:src="@drawable/id_card_unselect"
+                        android:src="@drawable/id_card_select"
                         tools:ignore="ContentDescription" />
 
                     <TextView
+                        android:id="@+id/id_card_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_11sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="@{languageModel.id_card}"
-                        android:textColor="@color/colorDarkGrey"
+                        android:textColor="@color/colorGreen"
                         android:textSize="@dimen/_13sdp" />
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/id_checked_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:src="@drawable/checked"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     tools:ignore="ContentDescription" />
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/passportLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -170,15 +157,17 @@
                     tools:ignore="UseCompoundDrawables">
 
                     <ImageView
+                        android:id="@+id/passport_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/passport_unselect"
                         tools:ignore="ContentDescription" />
 
                     <TextView
+                        android:id="@+id/passport_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_16sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="@{languageModel.passport}"
                         android:textColor="@color/colorDarkGrey"
@@ -186,6 +175,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/passport_checked_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -198,6 +188,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/driverLicenseLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -214,12 +205,14 @@
                     tools:ignore="UseCompoundDrawables">
 
                     <ImageView
+                        android:id="@+id/driver_license_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/passport_unselect"
+                        android:src="@drawable/driver_license"
                         tools:ignore="ContentDescription" />
 
                     <TextView
+                        android:id="@+id/driver_license_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
@@ -230,6 +223,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/driver_license_check_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -247,13 +241,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:background="@drawable/button_rectangle_green"
             android:fontFamily="@font/poppins_medium"
             android:text="@{languageModel.continue_data}"
-            android:layout_centerVertical="true"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/_11sdp"
-            app:spinning_bar_color="@color/colorGreen" />
+            app:spinning_bar_color="@color/white"
+            app:spinning_bar_padding="@dimen/_5sdp" />
     </RelativeLayout>
 </layout>

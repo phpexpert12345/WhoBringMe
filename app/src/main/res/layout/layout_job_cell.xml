@@ -65,17 +65,15 @@
 
                     <TextView
                         android:id="@+id/completeCancelStatus"
-                        android:layout_width="@dimen/_60sdp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:background="@drawable/grey_rounded_rectangle"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center_horizontal"
-                        android:paddingTop="@dimen/_5sdp"
-                        android:paddingBottom="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:text="@{model.order_status_msg}"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_8sdp"
+                        android:textSize="@dimen/_9sdp"
                         tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
             </RelativeLayout>
@@ -135,9 +133,10 @@
 
                 <ImageView
                     android:id="@+id/csImage"
-                    android:layout_width="@dimen/_57sdp"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_alignParentEnd="true"
+                    android:scaleType="fitEnd"
                     android:src="@drawable/cs"
                     tools:ignore="ContentDescription" />
             </RelativeLayout>
@@ -148,10 +147,11 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
+                android:justificationMode="inter_word"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@{model.about_job}"
                 android:textColor="@color/colorDarkGrey"
-                android:textSize="@dimen/_8sdp"
+                android:textSize="@dimen/_9sdp"
                 tools:ignore="HardcodedText" />
 
             <LinearLayout
@@ -159,6 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal">
 
@@ -168,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_8sdp" />
+                    android:textSize="@dimen/_11sdp" />
 
                 <TextView
                     android:id="@+id/jobAcceptCancelTime"
@@ -177,7 +178,7 @@
                     android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:textColor="@color/text_color_dark"
-                    android:textSize="@dimen/_8sdp" />
+                    android:textSize="@dimen/_11sdp" />
 
             </LinearLayout>
 
@@ -418,7 +419,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_10sdp">
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -467,7 +469,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_20sdp">
 
@@ -476,6 +478,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:orientation="horizontal"
+                    android:visibility="visible"
                     tools:ignore="UseCompoundDrawables">
 
                     <TextView
@@ -493,7 +496,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_4sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@{model.job_sub_total}"
+                        android:text="@{model.job_total_amount}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_13sdp"
                         tools:ignore="HardcodedText" />

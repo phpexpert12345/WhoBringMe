@@ -368,6 +368,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
+                    android:justificationMode="inter_word"
                     android:fontFamily="@font/poppins_medium"
                     android:text="@{data.about_job}"
                     android:textColor="@color/colorDarkGrey"

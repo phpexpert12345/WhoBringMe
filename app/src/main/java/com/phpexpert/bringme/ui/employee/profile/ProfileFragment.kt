@@ -252,10 +252,10 @@ class ProfileFragment : Fragment(), AuthInterface {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 profileViewMode.changeMobileNumber(getOtpDataMap()).observe(viewLifecycleOwner, {
                     mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
-                    if (it.status_code=="1")
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                    else
+                    if (it.status_code=="2")
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                    else
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {
@@ -301,10 +301,10 @@ class ProfileFragment : Fragment(), AuthInterface {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 profileViewMode.otpVerifyData(getOtpVerify()).observe(viewLifecycleOwner, {
                     otpDataDialog.findViewById<CircularProgressButton>(R.id.btn_submit)!!.revertAnimation()
-                    if (it.status_code=="1")
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                    else
+                    if (it.status_code=="2")
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                    else
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {
@@ -352,10 +352,10 @@ class ProfileFragment : Fragment(), AuthInterface {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 profileViewMode.otpResendData(getResendOtp()).observe(viewLifecycleOwner, {
                     progressDialog.dismiss()
-                    if (it.status_code == "1")
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                    else
+                    if (it.status_code == "2")
                         (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                    else
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                     (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                     (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                     if (it.status_code == "0") {

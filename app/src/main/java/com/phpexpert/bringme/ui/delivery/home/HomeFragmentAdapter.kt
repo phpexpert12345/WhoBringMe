@@ -52,8 +52,8 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
             context.startActivity(intent)
         }
         try {
-            homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
-            homeFragmentCellBinding.orderStatus.setTextColor(Color.parseColor(arrayList[position].order_status_text_color_code))
+//            homeFragmentCellBinding.orderStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+            homeFragmentCellBinding.orderStatus.setTextColor(Color.parseColor(arrayList[position].order_status_color_code))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -127,7 +127,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
     @SuppressLint("SimpleDateFormat")
     private fun changeAcceptDateTime(dateTime: String): String? {
         val inputPattern = "yyyy-MM-dd HH:mm:ss"
-        val outputPattern = "dd MMM yyyy EEEE h:mm aa"
+        val outputPattern = "dd MMM yyyy h:mm aa"
         val inputFormat = SimpleDateFormat(inputPattern)
         val outputFormat = SimpleDateFormat(outputPattern)
 

@@ -621,10 +621,10 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
                             override fun onResponse(call: Call<EditProfileDto>, response: Response<EditProfileDto>) {
                                 if (response.isSuccessful) {
                                     val responseData = response.body()
-                                    if (responseData?.status_code == "1")
-                                        bottomSheetDialogMessageText.text = responseData.status_message
-                                    else
+                                    if (responseData?.status_code == "2")
                                         bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                    else
+                                        bottomSheetDialogMessageText.text = responseData?.status_message
                                     bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                                     if (responseData?.status_code == "0") {
                                         bottomSheetDialogHeadingText.visibility = View.GONE

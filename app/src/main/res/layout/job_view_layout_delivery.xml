@@ -208,7 +208,7 @@
                         android:textSize="@dimen/_11sdp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
                         android:text="@{data.job_order_id}"
@@ -370,6 +370,7 @@
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_medium"
                     android:text="@{data.about_job}"
+                    android:justificationMode="inter_word"
                     android:textColor="@color/colorDarkGrey"
                     android:textSize="@dimen/_9sdp" />
 

@@ -28,10 +28,10 @@
                     android:id="@+id/layoutHeading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp">
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_20sdp">
 
                     <TextView
                         android:id="@+id/textHeading"
@@ -58,14 +58,14 @@
 
                 <RelativeLayout
                     android:id="@+id/layoutSearchData"
-                    android:layout_marginStart="@dimen/_7sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/_minus15sdp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@+id/layoutHeading"
-                    android:visibility="gone"
+                    android:layout_marginStart="@dimen/_7sdp"
+                    android:layout_marginTop="@dimen/_minus15sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_20sdp"
-                    android:layout_height="wrap_content">
+                    android:visibility="gone">
 
                     <EditText
                         android:id="@+id/searchET"
@@ -93,20 +93,19 @@
                             android:id="@+id/searchIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/loupe"
                             android:layout_gravity="center_vertical"
+                            android:src="@drawable/loupe"
                             android:visibility="visible"
                             tools:ignore="ContentDescription" />
 
                         <ImageView
                             android:id="@+id/closeIcon"
-                            android:layout_width="wrap_content"
-                            android:paddingStart="@dimen/_10sdp"
+                            android:layout_width="@dimen/_36sdp"
+                            android:layout_height="@dimen/_36sdp"
+                            android:layout_marginTop="@dimen/_4sdp"
+                            android:layout_marginStart="@dimen/_5sdp"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_20sdp"
-                            android:layout_marginTop="@dimen/_4sdp"
                             android:src="@drawable/close"
                             android:visibility="visible"
                             tools:ignore="ContentDescription,RtlSymmetry" />
@@ -129,7 +128,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/notification_no"
+                    android:src="@drawable/no_job"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -137,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@{languageModel.no_history_yet}"
+                    android:text="@{languageModel.there_are_no_job}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14sdp" />
             </LinearLayout>
@@ -170,8 +169,8 @@
             android:id="@+id/blurView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clickable="true"
             android:background="#B3000000"
+            android:clickable="true"
             android:visibility="gone" />
 
         <include

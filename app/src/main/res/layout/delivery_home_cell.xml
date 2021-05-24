@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_3sdp"
         android:layout_marginEnd="@dimen/_7sdp"
         app:cardCornerRadius="@dimen/_5sdp"
         android:elevation="@dimen/_5sdp"
@@ -71,7 +71,7 @@
                         android:id="@+id/clientCall"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_gravity="end"
                         android:src="@drawable/call_circle"
                         tools:ignore="ContentDescription" />
 
@@ -79,17 +79,14 @@
                         android:id="@+id/orderStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:background="@drawable/grey_rounded_rectangle"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:paddingStart="@dimen/_15sdp"
-                        android:paddingTop="@dimen/_5sdp"
-                        android:paddingEnd="@dimen/_15sdp"
-                        android:paddingBottom="@dimen/_5sdp"
                         android:text="@{model.order_status_msg}"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_8sdp"
+                        android:textSize="@dimen/_9sdp"
                         tools:ignore="RelativeOverlap" />
+<!--                    android:background="@drawable/grey_rounded_rectangle"-->
+
                 </LinearLayout>
             </RelativeLayout>
 
@@ -148,9 +145,10 @@
 
                 <ImageView
                     android:id="@+id/csImage"
-                    android:layout_width="@dimen/_57sdp"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_alignParentEnd="true"
+                    android:scaleType="fitEnd"
                     android:src="@drawable/cs"
                     tools:ignore="ContentDescription" />
             </RelativeLayout>
@@ -161,6 +159,7 @@
                 android:layout_marginTop="@dimen/_3sdp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@{model.about_job}"
+                android:justificationMode="inter_word"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:textColor="@color/colorDarkGrey"
@@ -174,7 +173,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal"
-                android:visibility='@{model.order_status_msg.equalsIgnoreCase("Pending") || model.order_status_msg.equalsIgnoreCase("Decline")? View.GONE : View.VISIBLE}'>
+                android:visibility='@{model.order_status_msg.equalsIgnoreCase("Pending") || model.order_status_msg.equalsIgnoreCase("Cancelled")? View.GONE : View.VISIBLE}'>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -182,7 +181,7 @@
                     android:fontFamily="@font/poppins_medium"
                     android:text='@{model.order_status_msg.equalsIgnoreCase("Accepted") ? languageModel.accepted_time : languageModel.complete_time}'
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_8sdp" />
+                    android:textSize="@dimen/_11sdp" />
 
                 <TextView
                     android:id="@+id/acceptedDateTime"
@@ -191,7 +190,7 @@
                     android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:textColor="@color/text_color_dark"
-                    android:textSize="@dimen/_8sdp" />
+                    android:textSize="@dimen/_11sdp" />
 
             </LinearLayout>
 

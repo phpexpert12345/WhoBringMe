@@ -53,10 +53,6 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
         permissionInterface = this
         congratulationScreenBinding = DataBindingUtil.setContentView(this, R.layout.payment_successfull_page)
         congratulationScreenBinding.languageModel = sharedPrefrenceManager.getLanguageData()
@@ -258,22 +254,12 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        @Suppress("DEPRECATION")
-        window.statusBarColor = resources.getColor(R.color.colorLoginButton)
-    }
-
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         try {
             countDownTimer.cancel()
         } catch (e: Exception) {
         }
-        val window: Window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     }
 
     private fun cancelJobObserver() {
@@ -297,9 +283,9 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
                             finishAffinity()
                         }
                     } else {
-                        if (it.status_code == "1")
-                            bottomSheetDialogMessageText.text = it.status_message
-                        else bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        if (it.status_code == "2")
+                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else bottomSheetDialogMessageText.text = it.status_message
 
                         bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         bottomSheetDialogMessageOkButton.setOnClickListener {
@@ -345,9 +331,9 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
                             setCountDownTimer()
                         }
                     } else {
-                        if (it.status_code == "1")
-                            bottomSheetDialogMessageText.text = it.status_message
-                        else bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        if (it.status_code == "2")
+                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else bottomSheetDialogMessageText.text = it.status_message
 
                         bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         bottomSheetDialogMessageOkButton.setOnClickListener {

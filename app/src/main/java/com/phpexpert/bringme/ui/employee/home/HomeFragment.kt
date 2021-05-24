@@ -290,7 +290,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 writeReviewBinding.closeIcon.setOnClickListener {
                     this.hideKeyboard()
                 }
-                writeReviewBinding.maxCharacters.text = "${(context as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${250}"
+                writeReviewBinding.maxCharacters.text = "${(activity as BaseActivity).sharedPrefrenceManager.getLanguageData().maximum_characters_250} ${1000}"
                 writeReviewBinding.writeReviewET.addTextChangedListener(object : TextWatcher {
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     }
@@ -300,7 +300,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
 
                     @SuppressLint("SetTextI18n")
                     override fun afterTextChanged(p0: Editable?) {
-                        writeReviewBinding.maxCharacters.text = "${sharedPreference.getLanguageData().maximum_characters_250} ${250 - (p0.toString().length)}"
+                        writeReviewBinding.maxCharacters.text = "${sharedPreference.getLanguageData().maximum_characters_250} ${1000 - (p0.toString().length)}"
                     }
 
                 })
@@ -373,10 +373,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                     } else {
                         writeReviewBinding.closeIcon.isClickable = true
                         writeReviewBinding.submitButton.revertAnimation()
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = if (it.status_code == "1") {
-                            it.status_message!!
-                        } else {
+                        (activity as BaseActivity).bottomSheetDialogMessageText.text = if (it.status_code == "2") {
                             sharedPreference.getLanguageData().could_not_connect_server_message
+                        } else {
+                            it.status_message!!
                         }
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text

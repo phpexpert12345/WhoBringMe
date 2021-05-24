@@ -133,10 +133,10 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
                     } else {
                         myJobBinding.noDataFoundLayout.visibility = View.VISIBLE
                         myJobBinding.nestedScrollView.visibility = View.GONE
-                        if (it.status_code == "1")
-                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                        else
+                        if (it.status_code == "2")
                             (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE

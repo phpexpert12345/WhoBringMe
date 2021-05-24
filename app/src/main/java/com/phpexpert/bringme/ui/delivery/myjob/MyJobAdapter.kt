@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.icu.text.NumberFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,9 +56,12 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
         jobCellBinding.jobPostedDate.text = orderDateValue(arrayList[position].job_post_date!!)
         jobCellBinding.jobPostedTime.text = jobPostedTime(arrayList[position].job_posted_time!!)
 
+        Glide.with(context).asGif().load(arrayList[position].order_status_icon).placeholder(R.drawable.cs).into(jobCellBinding.csImage)
+
         try {
             jobCellBinding.orderCompleteDateLayout.visibility = View.VISIBLE
-            jobCellBinding.completeCancelStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+//            jobCellBinding.completeCancelStatus.backgroundTintList = ColorStateList.valueOf(Color.parseColor(arrayList[position].order_status_color_code))
+            jobCellBinding.completeCancelStatus.setTextColor(Color.parseColor(arrayList[position].order_status_color_code))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -110,7 +112,7 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
     @SuppressLint("SimpleDateFormat")
     private fun changeAcceptDateTime(dateTime: String): String {
         val inputPattern = "yyyy-MM-dd HH:mm:ss"
-        val outputPattern = "dd MMM yyyy, EEEE, h:mm a"
+        val outputPattern = "dd MMM yyyy h:mm a"
         val inputFormat = SimpleDateFormat(inputPattern)
         val outputFormat = SimpleDateFormat(outputPattern)
         val date: Date?

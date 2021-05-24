@@ -91,6 +91,7 @@ class CreateJobActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun checkValidation(): Boolean {
         return when {
             createJobBinding.postInfo.text.toString().trim().isEmpty() -> {
@@ -116,7 +117,7 @@ class CreateJobActivity : BaseActivity() {
                 false
             }
             createJobBinding.totalAmount.text.toString().toFloat() < 1f -> {
-                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().total_amount_should_be_more_than_0
+                bottomSheetDialogMessageText.text = "${sharedPrefrenceManager.getLanguageData().total_amount_should_be_more_than_0} ${getCurrencySymbol()}1."
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogHeadingText.visibility = View.GONE
@@ -127,7 +128,7 @@ class CreateJobActivity : BaseActivity() {
                 false
             }
             createJobBinding.totalAmount.text.toString().toFloat() > 1000000 -> {
-                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_job_limit_amount
+                bottomSheetDialogMessageText.text = "${sharedPrefrenceManager.getLanguageData().enter_job_limit_amount} ${getCurrencySymbol()}1000000."
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
                 bottomSheetDialogHeadingText.visibility = View.GONE
