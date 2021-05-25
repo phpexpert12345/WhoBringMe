@@ -291,33 +291,41 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
             progressDialog.show()
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 latestJobViewModel!!.getLatestJobDeliveryData(mapData()).observe(viewLifecycleOwner, {
-                    progressDialog.dismiss()
-                    if (it.status_code == "0") {
-                        homeFragmentBinding.noDataFoundLayout.visibility = View.GONE
-                        homeFragmentBinding.nestedScrollView.visibility = View.VISIBLE
-                        arrayList.clear()
-                        arrayList.addAll(it.data!!.OrderList)
-                        if (searOrderString == "") {
-                            mainArrayList.clear()
-                            mainArrayList.addAll(arrayList)
+                    when (it.status_code) {
+                        "0" -> {
+                            progressDialog.dismiss()
+                            homeFragmentBinding.noDataFoundLayout.visibility = View.GONE
+                            homeFragmentBinding.nestedScrollView.visibility = View.VISIBLE
+                            arrayList.clear()
+                            arrayList.addAll(it.data!!.OrderList)
+                            if (searOrderString == "") {
+                                mainArrayList.clear()
+                                mainArrayList.addAll(arrayList)
+                            }
+                            homeFragmentBinding.homeRecyclerView.adapter!!.notifyDataSetChanged()
+                            homeFragmentBinding.runningOrders.text = it.Total_Running_Orders
+                            homeFragmentBinding.totalAmount.text = it.Total_Running_Order_Amount.formatChange()
                         }
-                        homeFragmentBinding.homeRecyclerView.adapter!!.notifyDataSetChanged()
-                        homeFragmentBinding.runningOrders.text = it.Total_Running_Orders
-                        homeFragmentBinding.totalAmount.text = it.Total_Running_Order_Amount.formatChange()
-                    } else {
-                        homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
-                        homeFragmentBinding.nestedScrollView.visibility = View.GONE
-                        if (it.status_code == "2")
-                            (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                        else
-                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                        (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
-                            (activity as BaseActivity).bottomSheetDialog.dismiss()
+                        "2" -> {
+                            apiName = "homeApi"
+                            (activity as BaseActivity).hitAuthApi(this)
                         }
-                        (activity as BaseActivity).bottomSheetDialog.show()
+                        else -> {
+                            progressDialog.dismiss()
+                            homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
+                            homeFragmentBinding.nestedScrollView.visibility = View.GONE
+                            if (it.status_code == "11")
+                                (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                            else
+                                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                                (activity as BaseActivity).bottomSheetDialog.dismiss()
+                            }
+                            (activity as BaseActivity).bottomSheetDialog.show()
+                        }
                     }
                 })
             } else {
@@ -342,28 +350,34 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 latestJobViewModel!!.orderAcceptData(orderMapData()).observe(viewLifecycleOwner, {
 //                    progressDialog.dismiss()
-                    if (it.status_code == "2")
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                    else
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    if (it.status_code == "0") {
-                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
-                    } else {
-                        progressDialog.dismiss()
-                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                    }
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                    if (it.status_code=="2"){
+                        apiName = "acceptOrderApi"
+                        (activity as BaseActivity).hitAuthApi(this)
+                    }else {
+                        if (it.status_code == "11")
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                        (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         if (it.status_code == "0") {
-                            setObserver()
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                        } else {
+                            progressDialog.dismiss()
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         }
-                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                            if (it.status_code == "0") {
+                                setObserver()
+                            }
+                            (activity as BaseActivity).bottomSheetDialog.dismiss()
+                        }
+                        (activity as BaseActivity).bottomSheetDialog.show()
                     }
-                    (activity as BaseActivity).bottomSheetDialog.show()
                 })
             } else {
                 apiName = "acceptOrderApi"
+                (activity as BaseActivity).hitAuthApi(this)
             }
         } else {
             progressDialog.dismiss()
@@ -383,25 +397,30 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         if ((activity as BaseActivity).isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 latestJobViewModel!!.orderDeclineData(orderDeclineData()).observe(viewLifecycleOwner, {
-                    if (it.status_code == "2")
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                    else
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    if (it.status_code == "0") {
-                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
-                    } else {
-                        progressDialog.dismiss()
-                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                    }
-                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                    if (it.status_code == "2"){
+                        apiName = "orderDeclineApi"
+                        (activity as BaseActivity).hitAuthApi(this)
+                    }else {
+                        if (it.status_code == "11")
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                        (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         if (it.status_code == "0") {
-                            setObserver()
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                        } else {
+                            progressDialog.dismiss()
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         }
-                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                            if (it.status_code == "0") {
+                                setObserver()
+                            }
+                            (activity as BaseActivity).bottomSheetDialog.dismiss()
+                        }
+                        (activity as BaseActivity).bottomSheetDialog.show()
                     }
-                    (activity as BaseActivity).bottomSheetDialog.show()
                 })
             } else {
                 apiName = "orderDeclineApi"
@@ -427,25 +446,30 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 if (sharedPrefrenceManager.getAuthData()?.auth_key != "" && sharedPrefrenceManager.getAuthData()?.auth_key != null) {
                     latestJobViewModel!!.orderFinishData(orderFinishData()).observe(viewLifecycleOwner, {
 //                        progressDialog.dismiss()
-                        if (it.status_code == "2")
-                            (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                        else
-                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                        (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                        if (it.status_code == "0") {
-                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
-                        } else {
-                            progressDialog.dismiss()
-                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                        }
-                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                        if (it.status_code == "2"){
+                            apiName = "finishOrderApi"
+                            (activity as BaseActivity).hitAuthApi(this)
+                        }else {
+                            if (it.status_code == "11")
+                                (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                            else
+                                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                             if (it.status_code == "0") {
-                                setObserver()
+                                (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                            } else {
+                                progressDialog.dismiss()
+                                (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                             }
-                            (activity as BaseActivity).bottomSheetDialog.dismiss()
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                                if (it.status_code == "0") {
+                                    setObserver()
+                                }
+                                (activity as BaseActivity).bottomSheetDialog.dismiss()
+                            }
+                            (activity as BaseActivity).bottomSheetDialog.show()
                         }
-                        (activity as BaseActivity).bottomSheetDialog.show()
                     })
                 } else {
                     apiName = "finishOrderApi"

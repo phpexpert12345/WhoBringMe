@@ -26,7 +26,7 @@ class RegistrationRepo {
                 } else {
                     val getOtpSendDataMain = GetOtpSendDataMain()
                     getOtpSendDataMain.status_message = "Registration api failure"
-                    getOtpSendDataMain.status_code = "2"
+                    getOtpSendDataMain.status_code = "11"
                     otpSendDataMain.postValue(getOtpSendDataMain)
                 }
             }
@@ -34,7 +34,7 @@ class RegistrationRepo {
             override fun onFailure(call: Call<GetOtpSendDataMain>, t: Throwable) {
                 val getOtpSendDataMain = GetOtpSendDataMain()
                 getOtpSendDataMain.status_message = "Registration api failure"
-                getOtpSendDataMain.status_code = "2"
+                getOtpSendDataMain.status_code = "11"
                 otpSendDataMain.postValue(getOtpSendDataMain)
             }
 
@@ -51,14 +51,14 @@ class RegistrationRepo {
                 } else {
                     val registrationMainDto  =RegistrationMainDto()
                     registrationMainDto.status_message = "Registration api failure"
-                    registrationMainDto.status_code = "2"
+                    registrationMainDto.status_code = "11"
                 }
             }
 
             override fun onFailure(call: Call<RegistrationMainDto>, t: Throwable) {
                 val registrationMainDto  =RegistrationMainDto()
                 registrationMainDto.status_message = "Registration api failure"
-                registrationMainDto.status_code = "2"
+                registrationMainDto.status_code = "11"
             }
 
         })
@@ -73,7 +73,7 @@ class RegistrationRepo {
                     resendMainDto.postValue(response.body())
                 } else {
                     val resendOtpMain = ResendOtpMain()
-                    resendOtpMain.status_code = "2"
+                    resendOtpMain.status_code = "11"
                     resendOtpMain.status_message = "Resend Otp api error"
                     resendMainDto.postValue(resendOtpMain)
                 }
@@ -81,7 +81,7 @@ class RegistrationRepo {
 
             override fun onFailure(call: Call<ResendOtpMain>, t: Throwable) {
                 val resendOtpMain = ResendOtpMain()
-                resendOtpMain.status_code = "2"
+                resendOtpMain.status_code = "11"
                 resendOtpMain.status_message = "Resend Otp api error"
                 resendMainDto.postValue(resendOtpMain)
             }

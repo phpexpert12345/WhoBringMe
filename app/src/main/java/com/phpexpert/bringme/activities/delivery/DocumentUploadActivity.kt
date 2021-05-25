@@ -95,11 +95,9 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
         }
 
         uploadDocumentActivity.submitData.setOnClickListener {
-            if (POD1_URI!=null || POD2_URI!=null){
+            if (POD1_URI != null || POD2_URI != null) {
                 uploadDocumentActivity.submitData.startAnimation()
                 editImageData()
-            }else{
-
             }
         }
     }
@@ -263,21 +261,24 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
                             override fun onResponse(call: Call<EditProfileDto>, response: Response<EditProfileDto>) {
                                 if (response.isSuccessful) {
                                     val responseData = response.body()
-                                    if (responseData?.status_code == "2")
-                                        bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                                    else
-                                        bottomSheetDialogMessageText.text = responseData?.status_message
-                                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-                                    if (responseData?.status_code == "0") {
-                                        bottomSheetDialogHeadingText.visibility = View.GONE
+                                    if (responseData?.status_code == "2") {
+                                        hitAuthApi(this@DocumentUploadActivity)
                                     } else {
                                         bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                                        when (responseData?.status_code) {
+                                            "0" -> bottomSheetDialogHeadingText.visibility = View.GONE
+                                            else -> bottomSheetDialogMessageText.text = responseData?.status_message
+                                        }
+
+                                        bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                                        bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                                        bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                                            bottomSheetDialog.dismiss()
+                                            /*if (responseData?.status_code == "0")
+                                            finish()*/
+                                        }
+                                        bottomSheetDialog.show()
                                     }
-                                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                                    bottomSheetDialogMessageOkButton.setOnClickListener {
-                                        finish()
-                                    }
-                                    bottomSheetDialog.show()
                                 } else {
                                     uploadDocumentActivity.submitData.revertAnimation()
                                     bottomSheetDialogMessageText.text = languageDtoData.could_not_connect_server_message
@@ -289,6 +290,7 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
                                     }
                                     bottomSheetDialog.show()
                                 }
+
                             }
 
                             override fun onFailure(call: Call<EditProfileDto>, t: Throwable) {
@@ -355,7 +357,7 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
     }
 
     override fun isPermission(value: Boolean) {
-        if (value){
+        if (value) {
             startDialog()
         }
     }

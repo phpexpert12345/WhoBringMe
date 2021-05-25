@@ -21,7 +21,6 @@ class JobPostRepo {
     private var updateJobData = MutableLiveData<UpdateJobDtoMain>()
 
 
-
     fun jobPostRepo(subAmount: String, authKey: String): MutableLiveData<ServicesChargesDtoMain> {
         ServiceGenerator.createService(JobPostRetro::class.java).getServiceChanges(subAmount, authKey)
                 .enqueue(object : Callback<ServicesChargesDtoMain> {
@@ -31,7 +30,7 @@ class JobPostRepo {
                         } else {
                             val servicesChargesDtoMain = ServicesChargesDtoMain()
                             servicesChargesDtoMain.status_message = "Service Api Error"
-                            servicesChargesDtoMain.status_code = "2"
+                            servicesChargesDtoMain.status_code = "11"
                             serviceChargesData.postValue(servicesChargesDtoMain)
                         }
                     }
@@ -39,7 +38,7 @@ class JobPostRepo {
                     override fun onFailure(call: Call<ServicesChargesDtoMain>, t: Throwable) {
                         val servicesChargesDtoMain = ServicesChargesDtoMain()
                         servicesChargesDtoMain.status_message = "Service Api Error"
-                        servicesChargesDtoMain.status_code = "2"
+                        servicesChargesDtoMain.status_code = "11"
                         serviceChargesData.postValue(servicesChargesDtoMain)
                     }
 
@@ -55,7 +54,7 @@ class JobPostRepo {
                             paymentAuthKey.postValue(response.body())
                         } else {
                             val paymentConfigurationMain = PaymentConfigurationMain()
-                            paymentConfigurationMain.status_code = "2"
+                            paymentConfigurationMain.status_code = "11"
                             paymentConfigurationMain.status_message = "Payment Auth Api Error"
                             paymentAuthKey.postValue(paymentConfigurationMain)
                         }
@@ -63,7 +62,7 @@ class JobPostRepo {
 
                     override fun onFailure(call: Call<PaymentConfigurationMain>, t: Throwable) {
                         val paymentConfigurationMain = PaymentConfigurationMain()
-                        paymentConfigurationMain.status_code = "2"
+                        paymentConfigurationMain.status_code = "11"
                         paymentConfigurationMain.status_message = "Payment Auth Api Error"
                         paymentAuthKey.postValue(paymentConfigurationMain)
                     }
@@ -72,7 +71,7 @@ class JobPostRepo {
         return paymentAuthKey
     }
 
-    fun getPaymentGenerateToken(mapData:Map<String, String>): MutableLiveData<PaymentTokenMain> {
+    fun getPaymentGenerateToken(mapData: Map<String, String>): MutableLiveData<PaymentTokenMain> {
         ServiceGenerator.createService(JobPostRetro::class.java).getPaymentToken(mapData)
                 .enqueue(object : Callback<PaymentTokenMain> {
                     override fun onResponse(call: Call<PaymentTokenMain>, response: Response<PaymentTokenMain>) {
@@ -81,14 +80,15 @@ class JobPostRepo {
                         } else {
                             val paymentTokenMain = PaymentTokenMain()
                             paymentTokenMain.status_message = "Payment Token Api Error"
-                            paymentTokenMain.status_code = "2"
+                            paymentTokenMain.status_code = "11"
                             paymentGenerateToken.postValue(paymentTokenMain)
                         }
                     }
+
                     override fun onFailure(call: Call<PaymentTokenMain>, t: Throwable) {
                         val paymentTokenMain = PaymentTokenMain()
                         paymentTokenMain.status_message = "Payment Token Api Error"
-                        paymentTokenMain.status_code = "2"
+                        paymentTokenMain.status_code = "11"
                         paymentGenerateToken.postValue(paymentTokenMain)
                     }
 
@@ -96,7 +96,7 @@ class JobPostRepo {
         return paymentGenerateToken
     }
 
-    fun getPostJobData(mapData:Map<String, String>): MutableLiveData<PostJobDataMain> {
+    fun getPostJobData(mapData: Map<String, String>): MutableLiveData<PostJobDataMain> {
         ServiceGenerator.createService(JobPostRetro::class.java).postJobData(mapData)
                 .enqueue(object : Callback<PostJobDataMain> {
                     override fun onResponse(call: Call<PostJobDataMain>, response: Response<PostJobDataMain>) {
@@ -105,7 +105,7 @@ class JobPostRepo {
                         } else {
                             val postJobDataMain = PostJobDataMain()
                             postJobDataMain.status_message = "Payment Token Api Error"
-                            postJobDataMain.status_code = "2"
+                            postJobDataMain.status_code = "11"
                             postJobData.postValue(postJobDataMain)
                         }
                     }
@@ -113,7 +113,7 @@ class JobPostRepo {
                     override fun onFailure(call: Call<PostJobDataMain>, t: Throwable) {
                         val postJobDataMain = PostJobDataMain()
                         postJobDataMain.status_message = "Payment Token Api Error"
-                        postJobDataMain.status_code = "2"
+                        postJobDataMain.status_code = "11"
                         postJobData.postValue(postJobDataMain)
                     }
 
@@ -121,7 +121,7 @@ class JobPostRepo {
         return postJobData
     }
 
-    fun getJobDetailsData(mapData:Map<String, String>): MutableLiveData<JobDetailsDtoMain> {
+    fun getJobDetailsData(mapData: Map<String, String>): MutableLiveData<JobDetailsDtoMain> {
         ServiceGenerator.createService(JobPostRetro::class.java).getJobDetails(mapData)
                 .enqueue(object : Callback<JobDetailsDtoMain> {
                     override fun onResponse(call: Call<JobDetailsDtoMain>, response: Response<JobDetailsDtoMain>) {
@@ -130,7 +130,7 @@ class JobPostRepo {
                         } else {
                             val postJobDataMain = JobDetailsDtoMain()
                             postJobDataMain.status_message = "Job Details Api Error"
-                            postJobDataMain.status_code = "2"
+                            postJobDataMain.status_code = "11"
                             jobDetailsData.postValue(postJobDataMain)
                         }
                     }
@@ -138,7 +138,7 @@ class JobPostRepo {
                     override fun onFailure(call: Call<JobDetailsDtoMain>, t: Throwable) {
                         val postJobDataMain = JobDetailsDtoMain()
                         postJobDataMain.status_message = "Job Details Api Error"
-                        postJobDataMain.status_code = "2"
+                        postJobDataMain.status_code = "11"
                         jobDetailsData.postValue(postJobDataMain)
                     }
 
@@ -146,7 +146,7 @@ class JobPostRepo {
         return jobDetailsData
     }
 
-    fun cancelJobData(mapData: Map<String, String>):MutableLiveData<CancelJobDtoMain>{
+    fun cancelJobData(mapData: Map<String, String>): MutableLiveData<CancelJobDtoMain> {
         ServiceGenerator.createService(JobPostRetro::class.java).cancelJobData(mapData)
                 .enqueue(object : Callback<CancelJobDtoMain> {
                     override fun onResponse(call: Call<CancelJobDtoMain>, response: Response<CancelJobDtoMain>) {
@@ -154,7 +154,7 @@ class JobPostRepo {
                             cancelJobData.postValue(response.body())
                         } else {
                             val cancelJobDtoMain = CancelJobDtoMain()
-                            cancelJobDtoMain.status_code="2"
+                            cancelJobDtoMain.status_code = "11"
                             cancelJobDtoMain.status_message = "Cancel Job Api Error"
                             cancelJobData.postValue(cancelJobDtoMain)
                         }
@@ -162,7 +162,7 @@ class JobPostRepo {
 
                     override fun onFailure(call: Call<CancelJobDtoMain>, t: Throwable) {
                         val cancelJobDtoMain = CancelJobDtoMain()
-                        cancelJobDtoMain.status_code="2"
+                        cancelJobDtoMain.status_code = "11"
                         cancelJobDtoMain.status_message = "Cancel Job Api Error"
                         cancelJobData.postValue(cancelJobDtoMain)
                     }
@@ -171,7 +171,7 @@ class JobPostRepo {
         return cancelJobData
     }
 
-    fun updateJobData(mapData: Map<String, String>):MutableLiveData<UpdateJobDtoMain>{
+    fun updateJobData(mapData: Map<String, String>): MutableLiveData<UpdateJobDtoMain> {
         ServiceGenerator.createService(JobPostRetro::class.java).updateJobData(mapData)
                 .enqueue(object : Callback<UpdateJobDtoMain> {
                     override fun onResponse(call: Call<UpdateJobDtoMain>, response: Response<UpdateJobDtoMain>) {
@@ -179,7 +179,7 @@ class JobPostRepo {
                             updateJobData.postValue(response.body())
                         } else {
                             val cancelJobDtoMain = UpdateJobDtoMain()
-                            cancelJobDtoMain.status_code="2"
+                            cancelJobDtoMain.status_code = "11"
                             cancelJobDtoMain.status_message = "Cancel Job Api Error"
                             updateJobData.postValue(cancelJobDtoMain)
                         }
@@ -187,7 +187,7 @@ class JobPostRepo {
 
                     override fun onFailure(call: Call<UpdateJobDtoMain>, t: Throwable) {
                         val cancelJobDtoMain = UpdateJobDtoMain()
-                        cancelJobDtoMain.status_code="2"
+                        cancelJobDtoMain.status_code = "11"
                         cancelJobDtoMain.status_message = "Cancel Job Api Error"
                         updateJobData.postValue(cancelJobDtoMain)
                     }

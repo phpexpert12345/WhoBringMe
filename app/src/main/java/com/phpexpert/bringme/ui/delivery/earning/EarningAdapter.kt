@@ -2,18 +2,19 @@ package com.phpexpert.bringme.ui.delivery.earning
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutEarningCellBinding
-import com.phpexpert.bringme.databinding.LayoutJobCellBinding
+import com.phpexpert.bringme.dtos.EarningDtoList
 import com.phpexpert.bringme.utilities.BaseActivity
 
-class EarningAdapter(var context: Context, var arrayList: ArrayList<String>) : RecyclerView.Adapter<EarningAdapter.MyJobViewModel>() {
+class EarningAdapter(var context: Context, var arrayList: ArrayList<EarningDtoList>, private var onClickListener: OnClickView) : RecyclerView.Adapter<EarningAdapter.MyJobViewModel>() {
 
     private lateinit var earningCellBinding: LayoutEarningCellBinding
 
@@ -23,20 +24,21 @@ class EarningAdapter(var context: Context, var arrayList: ArrayList<String>) : R
         return MyJobViewModel(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.layout_earning_cell, parent, false))
     }
 
+    interface OnClickView {
+        fun onClick(textInput: String, position: Int)
+    }
+
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyJobViewModel, position: Int) {
         earningCellBinding = holder.viewBinding as LayoutEarningCellBinding
         earningCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
+        earningCellBinding.model = arrayList[position]
         earningCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
-        if (position == 1) {
-            earningCellBinding.deliveryImageView.visibility = View.VISIBLE
-            earningCellBinding.deliveryImageViewLayout.visibility = View.VISIBLE
-        } else {
-            earningCellBinding.deliveryImageView.visibility = View.GONE
-            earningCellBinding.deliveryImageViewLayout.visibility = View.GONE
+        Glide.with(context).asGif().load(arrayList[position].order_status_icon).placeholder(R.drawable.cs).into(earningCellBinding.csImage)
+        earningCellBinding.statusText.setTextColor(Color.parseColor(arrayList[position].order_status_color_code))
+        earningCellBinding.viewJobImageView.setOnClickListener {
+            onClickListener.onClick("viewJob", position)
         }
-
-
     }
 
     override fun getItemCount(): Int {

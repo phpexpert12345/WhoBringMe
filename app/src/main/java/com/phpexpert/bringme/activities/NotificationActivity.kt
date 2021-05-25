@@ -51,11 +51,13 @@ class NotificationActivity : BaseActivity(), AuthInterface {
                         arrayList.clear()
                         arrayList.addAll(it.data!!.NotificationList!!)
                         notificationBinding.notificationRV.adapter!!.notifyDataSetChanged()
-                    } else {
-                        if (it.status_message == "1")
-                            bottomSheetDialogMessageText.text = it.status_message
-                        else
+                    } else if (it.status_code == "2") {
+                        hitAuthApi(this)
+                    }else{
+                        if (it.status_message == "11")
                             bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else
+                            bottomSheetDialogMessageText.text = it.status_message
                         bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                         bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         bottomSheetDialogMessageOkButton.setOnClickListener {

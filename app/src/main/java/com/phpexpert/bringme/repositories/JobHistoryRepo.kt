@@ -22,7 +22,7 @@ class JobHistoryRepo {
                     latestJobData.postValue(response.body())
                 } else {
                     val latestJobDtoMain = LatestJobDtoMain()
-                    latestJobDtoMain.status_code = "2"
+                    latestJobDtoMain.status_code = "11"
                     latestJobDtoMain.status_message = "Latest job history api error"
                     latestJobData.postValue(latestJobDtoMain)
                 }
@@ -30,7 +30,7 @@ class JobHistoryRepo {
 
             override fun onFailure(call: Call<LatestJobDtoMain>, t: Throwable) {
                 val latestJobDtoMain = LatestJobDtoMain()
-                latestJobDtoMain.status_code = "2"
+                latestJobDtoMain.status_code = "11"
                 latestJobDtoMain.status_message = "Latest job history api error"
                 latestJobData.postValue(latestJobDtoMain)
             }
@@ -46,7 +46,7 @@ class JobHistoryRepo {
                     writeReviewData.postValue(response.body())
                 } else {
                     val latestJobDtoMain = WriteReviewJobDtoMain()
-                    latestJobDtoMain.status_code = "2"
+                    latestJobDtoMain.status_code = "11"
                     latestJobDtoMain.status_message = "Latest job history api error"
                     writeReviewData.postValue(latestJobDtoMain)
                 }
@@ -54,7 +54,7 @@ class JobHistoryRepo {
 
             override fun onFailure(call: Call<WriteReviewJobDtoMain>, t: Throwable) {
                 val latestJobDtoMain = WriteReviewJobDtoMain()
-                latestJobDtoMain.status_code = "2"
+                latestJobDtoMain.status_code = "11"
                 latestJobDtoMain.status_message = "Latest job history api error"
                 writeReviewData.postValue(latestJobDtoMain)
             }
@@ -70,7 +70,7 @@ class JobHistoryRepo {
                     getJobHistory.postValue(response.body())
                 } else {
                     val latestJobDtoMain = EmployeeJobHistoryDtoMain()
-                    latestJobDtoMain.status_code = "2"
+                    latestJobDtoMain.status_code = "11"
                     latestJobDtoMain.status_message = "Job history api error"
                     getJobHistory.postValue(latestJobDtoMain)
                 }
@@ -78,7 +78,7 @@ class JobHistoryRepo {
 
             override fun onFailure(call: Call<EmployeeJobHistoryDtoMain>, t: Throwable) {
                 val latestJobDtoMain = EmployeeJobHistoryDtoMain()
-                latestJobDtoMain.status_code = "2"
+                latestJobDtoMain.status_code = "11"
                 latestJobDtoMain.status_message = "Job history api error"
                 getJobHistory.postValue(latestJobDtoMain)
             }

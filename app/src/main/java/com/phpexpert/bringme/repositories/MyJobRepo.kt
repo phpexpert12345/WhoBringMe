@@ -20,7 +20,7 @@ class MyJobRepo {
                 }else{
                     val postJobDataMain = MyJobDtoMain()
                     postJobDataMain.status_message = "My Job Api Error"
-                    postJobDataMain.status_code = "2"
+                    postJobDataMain.status_code = "11"
                     myJobData.postValue(postJobDataMain)
                 }
             }
@@ -28,7 +28,7 @@ class MyJobRepo {
             override fun onFailure(call: Call<MyJobDtoMain>, t: Throwable) {
                 val postJobDataMain = MyJobDtoMain()
                 postJobDataMain.status_message = "My Job Api Error"
-                postJobDataMain.status_code = "2"
+                postJobDataMain.status_code = "11"
                 myJobData.postValue(postJobDataMain)
             }
 

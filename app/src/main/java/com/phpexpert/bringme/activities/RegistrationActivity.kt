@@ -106,42 +106,53 @@ open class RegistrationActivity : BaseActivity(), AuthInterface, PermissionInter
                 registrationActivity.btnSubmit.startAnimation()
                 val otpSendViewModel = ViewModelProvider(this).get(RegistrationModel::class.java)
                 otpSendViewModel.sendOtpModel(getMapData()).observe(this, {
-                    registrationActivity.btnSubmit.revertAnimation()
-                    bottomSheetDialogMessageText.text = it.status_message
-                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    if (it.status_code == "0") {
-                        bottomSheetDialogHeadingText.visibility = View.GONE
-                        bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
-                            bottomSheetDialog.dismiss()
-                            val v = Intent(this@RegistrationActivity, OTPActivity::class.java)
-                            val postDataOtp = PostDataOtp()
-                            postDataOtp.accountFirstName = registrationActivity.firstNameEt.text.toString()
-                            postDataOtp.accountLasttName = registrationActivity.lastNameEt.text.toString()
-                            postDataOtp.accountMobile = registrationActivity.mobileNumberEditText.text.toString()
-                            postDataOtp.accountPhoneCode = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
-                            postDataOtp.accountEmail = registrationActivity.emailEt.text.toString()
-                            postDataOtp.accountType = selectionString
-                            postDataOtp.mobilePinCode = registrationActivity.digitPin.text.toString()
-                            postDataOtp.deviceTokenId = it.data!!.Token_ID
-                            postDataOtp.devicePlatform = "Android"
-                            v.putExtra("postDataModel", postDataOtp)
-                            startActivity(v)
-                        }
 
-                    } else {
-                        if (it.status_code=="2")
-                        bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                        else{
+                    when (it.status_code) {
+                        "0" -> {
+                            registrationActivity.btnSubmit.revertAnimation()
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
                             bottomSheetDialogMessageText.text = it.status_message
+                            bottomSheetDialogHeadingText.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                                bottomSheetDialog.dismiss()
+                                val v = Intent(this@RegistrationActivity, OTPActivity::class.java)
+                                val postDataOtp = PostDataOtp()
+                                postDataOtp.accountFirstName = registrationActivity.firstNameEt.text.toString()
+                                postDataOtp.accountLasttName = registrationActivity.lastNameEt.text.toString()
+                                postDataOtp.accountMobile = registrationActivity.mobileNumberEditText.text.toString()
+                                postDataOtp.accountPhoneCode = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
+                                postDataOtp.accountEmail = registrationActivity.emailEt.text.toString()
+                                postDataOtp.accountType = selectionString
+                                postDataOtp.mobilePinCode = registrationActivity.digitPin.text.toString()
+                                postDataOtp.deviceTokenId = it.data!!.Token_ID
+                                postDataOtp.devicePlatform = "Android"
+                                v.putExtra("postDataModel", postDataOtp)
+                                startActivity(v)
+                            }
+                            bottomSheetDialog.show()
                         }
-                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            bottomSheetDialog.dismiss()
+                        "2" -> {
+                            hitAuthApi(this)
                         }
+                        else -> {
+                            registrationActivity.btnSubmit.revertAnimation()
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            when (it.status_code) {
+                                "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                else -> {
+                                    bottomSheetDialogMessageText.text = it.status_message
+                                }
+                            }
+                            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
+                            bottomSheetDialog.show()
 
+                        }
                     }
-                    bottomSheetDialog.show()
                 })
             } else {
                 hitAuthApi(this)

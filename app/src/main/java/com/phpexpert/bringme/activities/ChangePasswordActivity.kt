@@ -157,24 +157,28 @@ class ChangePasswordActivity : BaseActivity(), AuthInterface {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 changePasswordActivity.continueButton.revertAnimation()
                 changePasswordViewModel.changePassword(mapData()).observe(this, {
-                    changePasswordActivity.continueButton.revertAnimation()
-                    if (it.status_message == "1")
-                        bottomSheetDialogMessageText.text = it.status_message
-                    else
-                        bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    if (it.status_code == "0")
-                        bottomSheetDialogHeadingText.visibility = View.GONE
-                    else
-                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                    bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
-                        if (it.status_code == "0") {
-                            finish()
+                    if (it.status_code=="2"){
+                        hitAuthApi(this)
+                    }else {
+                        changePasswordActivity.continueButton.revertAnimation()
+                        if (it.status_message == "11")
+                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else
+                            bottomSheetDialogMessageText.text = it.status_message
+                        bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                        bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                        if (it.status_code == "0")
+                            bottomSheetDialogHeadingText.visibility = View.GONE
+                        else
+                            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                        bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                            if (it.status_code == "0") {
+                                finish()
+                            }
+                            bottomSheetDialog.dismiss()
                         }
-                        bottomSheetDialog.dismiss()
+                        bottomSheetDialog.show()
                     }
-                    bottomSheetDialog.show()
                 })
             } else {
                 hitAuthApi(this)

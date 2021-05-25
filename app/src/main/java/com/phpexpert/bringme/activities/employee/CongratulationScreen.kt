@@ -254,42 +254,58 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         try {
             countDownTimer.cancel()
         } catch (e: Exception) {
         }
+
     }
+
 
     private fun cancelJobObserver() {
         if (isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 jobViewModel.cancelJob(getCancelMap()).observe(this, {
-                    try {
-                        congratulationScreenBinding.cancelButton.revertAnimation()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    bottomSheetDialogMessageText.text = it.status_message
-                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                    if (it.status_code == "0") {
-                        bottomSheetDialogHeadingText.visibility = View.GONE
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            countDownTimer.cancel()
-                            bottomSheetDialog.dismiss()
-                            startActivity(Intent(this, DashboardActivity::class.java))
-                            finishAffinity()
+                    when (it.status_code) {
+                        "0" -> {
+                            try {
+                                congratulationScreenBinding.cancelButton.revertAnimation()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageText.text = it.status_message
+                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                            bottomSheetDialogHeadingText.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                countDownTimer.cancel()
+                                bottomSheetDialog.dismiss()
+                                startActivity(Intent(this, DashboardActivity::class.java))
+                                finishAffinity()
+                            }
                         }
-                    } else {
-                        if (it.status_code == "2")
-                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                        else bottomSheetDialogMessageText.text = it.status_message
+                        "2" -> {
+                            apiName = "cancel"
+                            hitAuthApi(this)
+                        }
+                        else -> {
+                            try {
+                                congratulationScreenBinding.cancelButton.revertAnimation()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                            if (it.status_code == "11")
+                                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                            else bottomSheetDialogMessageText.text = it.status_message
 
-                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            bottomSheetDialog.dismiss()
+                            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
                         }
                     }
                     bottomSheetDialog.show()
@@ -315,29 +331,45 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
         if (isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 jobViewModel.updateJob(getUpdateMap()).observe(this, {
-                    progressDialog.dismiss()
-                    try {
-                        congratulationScreenBinding.cancelButton.revertAnimation()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                    if (it.status_code == "0") {
-                        bottomSheetDialogHeadingText.visibility = View.GONE
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            bottomSheetDialog.dismiss()
-                            countDownTimer.cancel()
-                            setCountDownTimer()
-                        }
-                    } else {
-                        if (it.status_code == "2")
-                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                        else bottomSheetDialogMessageText.text = it.status_message
 
-                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            bottomSheetDialog.dismiss()
+                    when (it.status_code) {
+                        "0" -> {
+                            progressDialog.dismiss()
+                            try {
+                                congratulationScreenBinding.cancelButton.revertAnimation()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                            bottomSheetDialogHeadingText.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                                countDownTimer.cancel()
+                                setCountDownTimer()
+                            }
+                        }
+                        "2" -> {
+                            apiName = "update"
+                            hitAuthApi(this)
+                        }
+                        else -> {
+                            progressDialog.dismiss()
+                            try {
+                                congratulationScreenBinding.cancelButton.revertAnimation()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                            if (it.status_code == "11")
+                                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                            else bottomSheetDialogMessageText.text = it.status_message
+
+                            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
                         }
                     }
                     bottomSheetDialog.show()

@@ -28,7 +28,7 @@ class LoginRepo {
                 } else {
                     val loginDtoMain = LoginDtoMain()
                     loginDtoMain.status_message = "Login error in api"
-                    loginDtoMain.status_code = "2"
+                    loginDtoMain.status_code = "11"
                     loginData.postValue(loginDtoMain)
                 }
             }
@@ -36,7 +36,7 @@ class LoginRepo {
             override fun onFailure(call: Call<LoginDtoMain>, t: Throwable) {
                 val loginDtoMain = LoginDtoMain()
                 loginDtoMain.status_message = "Login error in api"
-                loginDtoMain.status_code = "2"
+                loginDtoMain.status_code = "11"
                 loginData.postValue(loginDtoMain)
             }
 
@@ -51,16 +51,16 @@ class LoginRepo {
                     forgotOtpSendData.postValue(response.body())
                 } else {
                     val forgotPasswordDtoMain = ForgotPasswordDtoMain()
-                    forgotPasswordDtoMain.status_message="Login error in api"
-                    forgotPasswordDtoMain.status_code="1"
+                    forgotPasswordDtoMain.status_message = "Login error in api"
+                    forgotPasswordDtoMain.status_code = "11"
                     forgotOtpSendData.postValue(forgotPasswordDtoMain)
                 }
             }
 
             override fun onFailure(call: Call<ForgotPasswordDtoMain>, t: Throwable) {
                 val forgotPasswordDtoMain = ForgotPasswordDtoMain()
-                forgotPasswordDtoMain.status_message="Login error in api"
-                forgotPasswordDtoMain.status_code="1"
+                forgotPasswordDtoMain.status_message = "Login error in api"
+                forgotPasswordDtoMain.status_code = "11"
                 forgotOtpSendData.postValue(forgotPasswordDtoMain)
             }
 
@@ -75,7 +75,7 @@ class LoginRepo {
                     forgotOtpReset.postValue(response.body())
                 } else {
                     val forgotPasswordChangeDtoMain = ForgotPasswordChangeDtoMain()
-                    forgotPasswordChangeDtoMain.status_code="1"
+                    forgotPasswordChangeDtoMain.status_code = "11"
                     forgotPasswordChangeDtoMain.status_message = "Login error in api"
                     forgotOtpReset.postValue(forgotPasswordChangeDtoMain)
                 }
@@ -83,7 +83,7 @@ class LoginRepo {
 
             override fun onFailure(call: Call<ForgotPasswordChangeDtoMain>, t: Throwable) {
                 val forgotPasswordChangeDtoMain = ForgotPasswordChangeDtoMain()
-                forgotPasswordChangeDtoMain.status_code="1"
+                forgotPasswordChangeDtoMain.status_code = "11"
                 forgotPasswordChangeDtoMain.status_message = "Login error in api"
                 forgotOtpReset.postValue(forgotPasswordChangeDtoMain)
             }
@@ -100,7 +100,7 @@ class LoginRepo {
                 } else {
                     val loginDtoMain = ResendOtpMain()
                     loginDtoMain.status_message = "Login error in api"
-                    loginDtoMain.status_code = "2"
+                    loginDtoMain.status_code = "11"
                     loginDetailsData.postValue(loginDtoMain)
                 }
             }
@@ -108,7 +108,7 @@ class LoginRepo {
             override fun onFailure(call: Call<ResendOtpMain>, t: Throwable) {
                 val loginDtoMain = ResendOtpMain()
                 loginDtoMain.status_message = "Login error in api"
-                loginDtoMain.status_code = "2"
+                loginDtoMain.status_code = "11"
                 loginDetailsData.postValue(loginDtoMain)
             }
 

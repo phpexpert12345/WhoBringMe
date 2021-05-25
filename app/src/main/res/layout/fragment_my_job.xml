@@ -210,7 +210,7 @@
                 android:layout_below="@+id/headerLayout"
                 android:layout_marginTop="@dimen/_70sdp"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView

@@ -64,6 +64,7 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
 
         mBottomSheetFilter.isDraggable = false
         mBottomSheetFilter.peekHeight = 0
+
         myJobBinding.jobRV.layoutManager = LinearLayoutManager(requireActivity())
         myJobBinding.jobRV.isNestedScrollingEnabled = false
         arrayList = ArrayList()
@@ -119,31 +120,41 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
         if ((activity as BaseActivity).isOnline()) {
             if ((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key != null && (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 myJobModel.getMyJobData(getMapData()).observe(viewLifecycleOwner, {
-                    progressDialog.dismiss()
-                    if (it.status_code == "0") {
-                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
-                        myJobBinding.noDataFoundLayout.visibility = View.GONE
-                        myJobBinding.nestedScrollView.visibility = View.VISIBLE
-                        myJobBinding.runningOrders.text = it.Total_Orders
-                        myJobBinding.totalAmount.text = it.Total_Order_Amount.formatChange()
-                        arrayList.clear()
-                        arrayList.addAll(it.data!!.OrderList!!)
-                        myJobBinding.jobRV.adapter!!.notifyDataSetChanged()
+                    when (it.status_code) {
+                        "0" -> {
+                            progressDialog.dismiss()
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.GONE
+                            myJobBinding.noDataFoundLayout.visibility = View.GONE
+                            myJobBinding.nestedScrollView.visibility = View.VISIBLE
+                            myJobBinding.runningOrders.text = it.Total_Orders
+                            myJobBinding.totalAmount.text = it.Total_Order_Amount.formatChange()
+                            arrayList.clear()
+                            arrayList.addAll(it.data!!.OrderList!!)
+                            myJobBinding.jobRV.adapter!!.notifyDataSetChanged()
 
-                    } else {
-                        myJobBinding.noDataFoundLayout.visibility = View.VISIBLE
-                        myJobBinding.nestedScrollView.visibility = View.GONE
-                        if (it.status_code == "2")
-                            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                        else
-                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
-                        (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                        (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                        (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
-                            (activity as BaseActivity).bottomSheetDialog.dismiss()
                         }
-                        (activity as BaseActivity).bottomSheetDialog.show()
+                        "2" -> {
+                            (activity as BaseActivity).hitAuthApi(this@MyJobFragment)
+                        }
+                        "3" -> {
+                            progressDialog.dismiss()
+                            myJobBinding.noDataFoundLayout.visibility = View.VISIBLE
+                            myJobBinding.nestedScrollView.visibility = View.GONE
+                        }
+                        else -> {
+
+                            if (it.status_code == "11")
+                                (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                            else
+                                (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                            (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                            (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                                (activity as BaseActivity).bottomSheetDialog.dismiss()
+                            }
+                            (activity as BaseActivity).bottomSheetDialog.show()
+                        }
                     }
                 })
             } else {

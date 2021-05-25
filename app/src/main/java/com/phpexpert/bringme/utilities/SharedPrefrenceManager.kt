@@ -1,9 +1,10 @@
+@file:Suppress("SpellCheckingInspection", "unused")
+
 package com.phpexpert.bringme.utilities
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.phpexpert.bringme.dtos.AuthDtoData
-import com.phpexpert.bringme.dtos.AuthDtoMain
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.LoginDetailsDto
 import javax.inject.Inject
@@ -87,29 +88,7 @@ class SharedPrefrenceManager @Inject constructor(var sharedPreferences: SharedPr
         ).LoginId!!
     }
 
-    /* public static void saveRegistration(Context ctx, Registration reg) {
-        Gson gson = new Gson();
-        String regString = gson.toJson(reg);
-        savePrefrence(ctx, REGISTRATION_VALUES, regString);
-    }
 
-    public static Registration getRegistration(Context ctx) {
-        Gson g = new Gson();
-        String regStr = getPrefrence(ctx, REGISTRATION_VALUES);
-        return g.fromJson(regStr, Registration.class);
-    }
-
-    public static void saveProfile(Context ctx, LoginVerifyResponse profile) {
-        Gson gson = new Gson();
-        String regString = gson.toJson(profile);
-        savePrefrence(ctx, USER_PROFILE, regString);
-    }
-
-    public static LoginVerifyResponse getProfile(Context ctx) {
-        Gson g = new Gson();
-        String regStr = getPrefrence(ctx, USER_PROFILE);
-        return g.fromJson(regStr, LoginVerifyResponse.class);
-    }*/
     fun clearData() {
         val et: SharedPreferences.Editor = sharedPreferences.edit()
         et.clear()

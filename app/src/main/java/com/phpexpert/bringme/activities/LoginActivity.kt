@@ -293,7 +293,7 @@ class LoginActivity : BaseActivity(), AuthInterface {
                     bottomSheetDialog.show()
                 }
                 forgotPasswordTwoDialog.findViewById<EditText>(R.id.newPasswordET)!!.text.isEmpty() -> {
-                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_new_password
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_new_password_error
                     bottomSheetDialogHeadingText.visibility = View.GONE
                     bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -313,7 +313,7 @@ class LoginActivity : BaseActivity(), AuthInterface {
                     bottomSheetDialog.show()
                 }
                 forgotPasswordTwoDialog.findViewById<EditText>(R.id.confirmPasswordET)!!.text.isEmpty() -> {
-                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_confirm_password
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_confirm_password_error
                     bottomSheetDialogHeadingText.visibility = View.GONE
                     bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -360,42 +360,60 @@ class LoginActivity : BaseActivity(), AuthInterface {
         if (isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 loginViewModel.getLoginData(mapDataLogin()).observe(this, {
-                    loginBinding.loginButton.revertAnimation()
-                    bottomSheetDialogMessageText.text = it.status_message
-                    bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    if (it.status_code == "0") {
-//                    bottomSheetDialog.findViewById<ImageView>(R.id.companyLogo)!!.visibility = View.VISIBLE
-                        bottomSheetDialogHeadingText.text = resources.getString(R.string.app_name)
-                        sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
-                        sharedPrefrenceManager.saveProfile(it.data)
-                        val intent: Intent?
-                        if (sharedPrefrenceManager.getProfile().account_type == "1") {
+
+                    when(it.status_code){
+                        "0"->{
+                            loginBinding.loginButton.revertAnimation()
+                            when (it.status_code) {
+                                "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                else -> bottomSheetDialogMessageText.text = it.status_message
+                            }
+                            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogHeadingText.text = resources.getString(R.string.app_name)
+                            sharedPrefrenceManager.savePrefrence(CONSTANTS.isLogin, "true")
+                            sharedPrefrenceManager.saveProfile(it.data)
+                            val intent: Intent?
+                            if (sharedPrefrenceManager.getProfile().account_type == "1") {
 //                            bottomSheetDialogMessageOkButton.setOnClickListener {
-                            intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
-                            bottomSheetDialog.dismiss()
-                            startActivity(intent)
-                            finishAffinity()
+                                intent = Intent(this, com.phpexpert.bringme.activities.employee.DashboardActivity::class.java)
+                                bottomSheetDialog.dismiss()
+                                startActivity(intent)
+                                finishAffinity()
 //                            }
 
-                        } else {
+                            } else {
 //                            bottomSheetDialogMessageOkButton.setOnClickListener {
-                            intent = Intent(this, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java)
-                            bottomSheetDialog.dismiss()
-                            startActivity(intent)
-                            finishAffinity()
+                                intent = Intent(this, com.phpexpert.bringme.activities.delivery.DashboardActivity::class.java)
+                                bottomSheetDialog.dismiss()
+                                startActivity(intent)
+                                finishAffinity()
 //                            }
+                            }
                         }
-
-                    } else {
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            bottomSheetDialog.dismiss()
+                        "2" ->{
+                            apiName = "login"
+                            hitAuthApi(this)
                         }
-                        bottomSheetDialog.show()
+                        else ->{
+                            loginBinding.loginButton.revertAnimation()
+                            when (it.status_code) {
+                                "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                else -> bottomSheetDialogMessageText.text = it.status_message
+                            }
+                            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
+                            bottomSheetDialog.show()
+                        }
                     }
                 })
             } else {
+                apiName = "login"
                 hitAuthApi(this)
             }
         } else {
@@ -417,27 +435,45 @@ class LoginActivity : BaseActivity(), AuthInterface {
         if (isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "")
                 loginViewModel.getOtpForgotPasswordSendData(mapDataOtpForgotSend()).observe(this, {
-                    forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
-                    bottomSheetDialogMessageText.text = it.status_message
-                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    if (it.status_code == "0") {
-                        bottomSheetDialogHeadingText.visibility = View.GONE
-                        bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
-                            bottomSheetDialog.dismiss()
-                            loginId = it.data!!.LoginId!!
-                            tokenId = it.data!!.Token_ID!!
-                            forgotPasswordTwoDialog.findViewById<TextView>(R.id.mobileNUmberTV)!!.text = forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString() + forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
-                            timerRestriction()
-                            forgotPasswordTwoDialog.show()
-                            forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.clearFocus()
-                            forgotPasswordOneDialog.dismiss()
+
+                    when (it.status_code) {
+                        "0" -> {
+                            forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
+                            when (it.status_code) {
+                                "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                else -> bottomSheetDialogMessageText.text = it.status_message
+                            }
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogHeadingText.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                                bottomSheetDialog.dismiss()
+                                loginId = it.data!!.LoginId!!
+                                tokenId = it.data!!.Token_ID!!
+                                forgotPasswordTwoDialog.findViewById<TextView>(R.id.mobileNUmberTV)!!.text = forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString() + forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
+                                timerRestriction()
+                                forgotPasswordTwoDialog.show()
+                                forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.clearFocus()
+                                forgotPasswordOneDialog.dismiss()
+                            }
                         }
-                    } else {
-                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
-                            bottomSheetDialog.dismiss()
+                        "2" -> {
+                            apiName = "forgotPasswordOne"
+                            hitAuthApi(this)
+                        }
+                        else -> {
+                            forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
+                            when (it.status_code) {
+                                "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                else -> bottomSheetDialogMessageText.text = it.status_message
+                            }
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
+                                bottomSheetDialog.dismiss()
+                            }
                         }
                     }
                     bottomSheetDialog.show()
@@ -465,35 +501,54 @@ class LoginActivity : BaseActivity(), AuthInterface {
         if (isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "")
                 loginViewModel.getOtpForgotPasswordReset(mapDataResetPassword()).observe(this, {
-                    forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)!!.revertAnimation()
-                    forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
-                    bottomSheetDialogMessageText.text = it.status_message
-                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
-                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                    if (it.status_code == "0") {
-                        bottomSheetDialogHeadingText.visibility = View.GONE
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            bottomSheetDialog.dismiss()
-                            loginBinding.forgotPasswordView.visibility = View.GONE
-                            forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
-                            forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.clearFocus()
-                            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.text = Editable.Factory.getInstance().newEditable("")
-                            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.clearFocus()
-                            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
-                            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.clearFocus()
-                            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
-                            forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.clearFocus()
-                            this.hideKeyboard()
-                            try {
-                                countDownTimer.cancel()
-                            } catch (e: Exception) {
+
+                    when (it.status_code) {
+                        "0" -> {
+                            forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)!!.revertAnimation()
+                            forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
+                            when (it.status_code) {
+                                "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                else -> bottomSheetDialogMessageText.text = it.status_message
                             }
-                            forgotPasswordTwoDialog.dismiss()
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogHeadingText.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                                loginBinding.forgotPasswordView.visibility = View.GONE
+                                forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text = Editable.Factory.getInstance().newEditable("")
+                                forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)?.clearFocus()
+                                forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.text = Editable.Factory.getInstance().newEditable("")
+                                forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.clearFocus()
+                                forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
+                                forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.clearFocus()
+                                forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
+                                forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.clearFocus()
+                                this.hideKeyboard()
+                                try {
+                                    countDownTimer.cancel()
+                                } catch (e: Exception) {
+                                }
+                                forgotPasswordTwoDialog.dismiss()
+                            }
                         }
-                    } else {
-                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            bottomSheetDialog.dismiss()
+                        "2" -> {
+                            apiName = "forgotPasswordTwo"
+                            hitAuthApi(this)
+                        }
+                        else -> {
+                            forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)!!.revertAnimation()
+                            forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)!!.revertAnimation()
+                            when (it.status_code) {
+                                "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                else -> bottomSheetDialogMessageText.text = it.status_message
+                            }
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
                         }
                     }
                     bottomSheetDialog.show()
@@ -562,35 +617,60 @@ class LoginActivity : BaseActivity(), AuthInterface {
     }
 
     private fun resendOtpObserver() {
-        loginViewModel.getLoginDetailsData(resendData()).observe(this, {
-            if (it.status_code == "2")
-                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-            else
-                bottomSheetDialogMessageText.text = it.status_message
+        if (isOnline()) {
+            if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key == "") {
+                loginViewModel.getLoginDetailsData(resendData()).observe(this, {
+                    when (it.status_message) {
+                        "2" -> {
+                            apiName = "forgotPasswordResend"
+                            hitAuthApi(this)
+                        }
+                        else -> {
+                            when (it.status_code) {
+                                "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                else -> bottomSheetDialogMessageText.text = it.status_message
+                            }
+                            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            if (it.status_code == "0") {
+                                bottomSheetDialogHeadingText.visibility = View.GONE
+                            } else {
+                                bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            }
+                            bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                                if (it.status_code == "0") {
+                                    forgotPasswordTwoDialog.findViewById<TextView>(R.id.waitForOtp)?.visibility = View.VISIBLE
+                                    forgotPasswordTwoDialog.findViewById<LinearLayout>(R.id.waitLayout)?.visibility = View.GONE
+                                    forgotPasswordTwoDialog.findViewById<LinearLayout>(R.id.resendOtpLayout)?.visibility = View.GONE
+                                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.text = Editable.Factory.getInstance().newEditable("")
+                                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.clearFocus()
+                                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
+                                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.clearFocus()
+                                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
+                                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.clearFocus()
+                                    timerRestriction()
+                                }
+                                bottomSheetDialog.dismiss()
+                            }
+                            bottomSheetDialog.show()
+                        }
+                    }
+                })
+            } else {
+                apiName = "forgotPasswordResend"
+                hitAuthApi(this)
+            }
+        } else {
+            forgotPasswordTwoDialog.findViewById<CircularProgressButton>(R.id.continueButton)!!.revertAnimation()
+            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
+            bottomSheetDialogHeadingText.visibility = View.GONE
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
-            if (it.status_code == "0") {
-                bottomSheetDialogHeadingText.visibility = View.GONE
-            } else {
-                bottomSheetDialogHeadingText.visibility = View.VISIBLE
-            }
-            bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
-                if (it.status_code == "0") {
-                    forgotPasswordTwoDialog.findViewById<TextView>(R.id.waitForOtp)?.visibility = View.VISIBLE
-                    forgotPasswordTwoDialog.findViewById<LinearLayout>(R.id.waitLayout)?.visibility = View.GONE
-                    forgotPasswordTwoDialog.findViewById<LinearLayout>(R.id.resendOtpLayout)?.visibility = View.GONE
-                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.text = Editable.Factory.getInstance().newEditable("")
-                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.otpNumberET)?.clearFocus()
-                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
-                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.newPasswordET)?.clearFocus()
-                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.text = Editable.Factory.getInstance().newEditable("")
-                    forgotPasswordTwoDialog.findViewById<TextInputEditText>(R.id.confirmPasswordET)?.clearFocus()
-                    timerRestriction()
-                }
+            bottomSheetDialogMessageOkButton.setOnClickListener {
                 bottomSheetDialog.dismiss()
             }
             bottomSheetDialog.show()
-        })
+        }
     }
 
     private fun timerRestriction() {
@@ -636,6 +716,7 @@ class LoginActivity : BaseActivity(), AuthInterface {
                 }
                 "forgotPasswordOne" -> observeForgotPasswordOtpSendData()
                 "forgotPasswordTwo" -> observeForgotPasswordResetData()
+                "forgotPasswordResend" -> resendOtpObserver()
             }
         } else {
             bottomSheetDialogMessageText.text = message

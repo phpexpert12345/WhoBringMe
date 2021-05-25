@@ -163,9 +163,9 @@ open class BaseActivity : AppCompatActivity() {
                 sharedPrefrenceManager.saveAuthData(it.data!![0])
                 authData.isAuthHit(true, it.status_message!!)
             } else {
-                if (it.status_code=="2"){
+                if (it.status_code == "11") {
                     authData.isAuthHit(false, sharedPrefrenceManager.getLanguageData().could_not_connect_server_message)
-                }else {
+                } else {
                     authData.isAuthHit(false, it!!.status_message!!)
                 }
             }

@@ -20,7 +20,7 @@ class NotificationRepo {
                 } else {
                     val notificationDataMain = NotificationDtoMain()
                     notificationDataMain.status_message = "Notification Api Error"
-                    notificationDataMain.status_code = "2"
+                    notificationDataMain.status_code = "11"
                     notificationData.postValue(notificationDataMain)
                 }
             }
@@ -28,7 +28,7 @@ class NotificationRepo {
             override fun onFailure(call: Call<NotificationDtoMain>, t: Throwable) {
                 val notificationDataMain = NotificationDtoMain()
                 notificationDataMain.status_message = "Notification Api Error"
-                notificationDataMain.status_code = "2"
+                notificationDataMain.status_code = "11"
                 notificationData.postValue(notificationDataMain)
             }
 

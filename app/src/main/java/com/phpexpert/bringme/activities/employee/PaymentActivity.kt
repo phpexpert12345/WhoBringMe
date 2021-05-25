@@ -124,54 +124,66 @@ class PaymentActivity : BaseActivity(), AuthInterface {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 jobPostViewModel.getServiceCharges(servicePostValue.jobAmount!!, sharedPrefrenceManager.getAuthData()?.auth_key!!)
                         .observe(this, {
-                            progressDialog.dismiss()
-                            bottomSheetDialogMessageText.text = it.status_message
-                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                            if (it.status_code == "0") {
-                                grandTotal = servicePostValue.jobAmount!!.toFloat()
-                                paymentActivityBinding.serviceChargePercentage.text = "${languageDtoData.charges_for_job} (${it.data!!.Charge_for_Jobs_percentage} %)"
-                                paymentActivityBinding.serviceCharges.text = it.data!!.Charge_for_Jobs.formatChange()
-                                try {
-                                    grandTotal = grandTotal!! + it.data!!.Charge_for_Jobs!!.toFloat()
-                                } catch (e: Exception) {
-                                }
-                                if (it.data!!.job_tax_amount == "" || it.data!!.job_tax_amount == "0") {
-                                    paymentActivityBinding.adminServiceFees.visibility = View.GONE
-                                    paymentActivityBinding.adminServiceFeesLayout.visibility = View.GONE
-                                } else {
-                                    paymentActivityBinding.adminServiceFees.visibility = View.VISIBLE
-                                    paymentActivityBinding.adminServiceFeesLayout.visibility = View.VISIBLE
-                                    paymentActivityBinding.adminServiceFees.text = "${languageDtoData.admin_charges} (${it.data!!.Charge_for_Jobs_Admin_percentage} %)"
-                                    paymentActivityBinding.adminServiceFeesCharge.text = it.data!!.admin_service_fees.formatChange()
-                                    grandTotal = grandTotal!! + it.data!!.admin_service_fees!!.toFloat()
-                                }
-                                paymentActivityBinding.grandTotalAmount.text = "${grandTotal.toString().formatChange()}/-"
-                                servicePostValue.grandTotal = grandTotal.toString()
-                                servicePostValue.Charge_for_Jobs = try {
-                                    it.data!!.Charge_for_Jobs!!.toString()
-                                } catch (e: Exception) {
-                                    "0"
-                                }
-                                servicePostValue.Charge_for_Jobs_Admin_percentage = if (it.data!!.Charge_for_Jobs_Admin_percentage == "0") "0" else it.data!!.Charge_for_Jobs_Admin_percentage
-                                servicePostValue.jobPaymentMode = "Credit_Debit"
-                                servicePostValue.job_tax_amount = if (it.data!!.job_tax_amount == "0") "0" else it.data!!.job_tax_amount
-                                servicePostValue.Charge_for_Jobs_percentage = if (it.data!!.Charge_for_Jobs_percentage == "0") "0" else it.data!!.Charge_for_Jobs_percentage
-                                servicePostValue.Charge_for_Jobs_Delivery_percentage = if (it.data!!.Charge_for_Jobs_Delivery_percentage == "0") "0" else it.data!!.Charge_for_Jobs_Delivery_percentage
-                                servicePostValue.admin_service_fees = if (it.data!!.admin_service_fees == "0") "0" else it.data!!.admin_service_fees
-                                servicePostValue.delivery_employee_fee = if (it.data!!.delivery_employee_fee == "0") "0" else it.data!!.delivery_employee_fee
-
-                            } else {
-                                if (it.status_code == "2") {
-                                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                                } else {
+                            when (it.status_code) {
+                                "0" -> {
+                                    progressDialog.dismiss()
                                     bottomSheetDialogMessageText.text = it.status_message
+                                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                                    grandTotal = servicePostValue.jobAmount!!.toFloat()
+                                    paymentActivityBinding.serviceChargePercentage.text = "${languageDtoData.charges_for_job} (${it.data!!.Charge_for_Jobs_percentage} %)"
+                                    paymentActivityBinding.serviceCharges.text = it.data!!.Charge_for_Jobs.formatChange()
+                                    try {
+                                        grandTotal = grandTotal!! + it.data!!.Charge_for_Jobs!!.toFloat()
+                                    } catch (e: Exception) {
+                                    }
+                                    if (it.data!!.job_tax_amount == "" || it.data!!.job_tax_amount == "0") {
+                                        paymentActivityBinding.adminServiceFees.visibility = View.GONE
+                                        paymentActivityBinding.adminServiceFeesLayout.visibility = View.GONE
+                                    } else {
+                                        paymentActivityBinding.adminServiceFees.visibility = View.VISIBLE
+                                        paymentActivityBinding.adminServiceFeesLayout.visibility = View.VISIBLE
+                                        paymentActivityBinding.adminServiceFees.text = "${languageDtoData.admin_charges} (${it.data!!.Charge_for_Jobs_Admin_percentage} %)"
+                                        paymentActivityBinding.adminServiceFeesCharge.text = it.data!!.admin_service_fees.formatChange()
+                                        grandTotal = grandTotal!! + it.data!!.admin_service_fees!!.toFloat()
+                                    }
+                                    paymentActivityBinding.grandTotalAmount.text = "${grandTotal.toString().formatChange()}/-"
+                                    servicePostValue.grandTotal = grandTotal.toString()
+                                    servicePostValue.Charge_for_Jobs = try {
+                                        it.data!!.Charge_for_Jobs!!.toString()
+                                    } catch (e: Exception) {
+                                        "0"
+                                    }
+                                    servicePostValue.Charge_for_Jobs_Admin_percentage = if (it.data!!.Charge_for_Jobs_Admin_percentage == "0") "0" else it.data!!.Charge_for_Jobs_Admin_percentage
+                                    servicePostValue.jobPaymentMode = "Credit_Debit"
+                                    servicePostValue.job_tax_amount = if (it.data!!.job_tax_amount == "0") "0" else it.data!!.job_tax_amount
+                                    servicePostValue.Charge_for_Jobs_percentage = if (it.data!!.Charge_for_Jobs_percentage == "0") "0" else it.data!!.Charge_for_Jobs_percentage
+                                    servicePostValue.Charge_for_Jobs_Delivery_percentage = if (it.data!!.Charge_for_Jobs_Delivery_percentage == "0") "0" else it.data!!.Charge_for_Jobs_Delivery_percentage
+                                    servicePostValue.admin_service_fees = if (it.data!!.admin_service_fees == "0") "0" else it.data!!.admin_service_fees
+                                    servicePostValue.delivery_employee_fee = if (it.data!!.delivery_employee_fee == "0") "0" else it.data!!.delivery_employee_fee
+
                                 }
-                                bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                                bottomSheetDialogMessageOkButton.setOnClickListener {
-                                    bottomSheetDialog.dismiss()
+                                "2" -> {
+                                    hitAuthApi(this)
                                 }
-                                bottomSheetDialog.show()
+                                else -> {
+                                    progressDialog.dismiss()
+                                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                                    when (it.status_code) {
+                                        "11" -> {
+                                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                        }
+                                        else -> {
+                                            bottomSheetDialogMessageText.text = it.status_message
+                                        }
+                                    }
+                                    bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                                        bottomSheetDialog.dismiss()
+                                    }
+                                    bottomSheetDialog.show()
+                                }
                             }
                         })
             } else {

@@ -215,28 +215,33 @@ class OTPActivity : BaseActivity(), AuthInterface {
     private fun setObserver() {
         if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "")
             viewDataModel.registerViewModel(mapData()).observe(this, {
-                otpActivity.btnSubmit.revertAnimation()
-                if (it.status_code == "2")
-                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                else
-                    bottomSheetDialogMessageText.text = it.status_message
-                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                if (it.status_code == "0") {
-                    bottomSheetDialogHeadingText.visibility = View.GONE
-                    bottomSheetDialogMessageOkButton.setOnClickListener {
-                        bottomSheetDialog.dismiss()
-                        val intent = Intent(this, LoginActivity::class.java)
-                        startActivity(intent)
-                        finishAffinity()
+                if (it.status_code=="2"){
+                    apiName = "registerData"
+                    hitAuthApi(this)
+                }else {
+                    otpActivity.btnSubmit.revertAnimation()
+                    when (it.status_code) {
+                        "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else -> bottomSheetDialogMessageText.text = it.status_message
                     }
-                } else {
-                    bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                    bottomSheetDialogMessageOkButton.setOnClickListener {
-                        bottomSheetDialog.dismiss()
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    if (it.status_code == "0") {
+                        bottomSheetDialogHeadingText.visibility = View.GONE
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            bottomSheetDialog.dismiss()
+                            val intent = Intent(this, LoginActivity::class.java)
+                            startActivity(intent)
+                            finishAffinity()
+                        }
+                    } else {
+                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                        bottomSheetDialogMessageOkButton.setOnClickListener {
+                            bottomSheetDialog.dismiss()
+                        }
                     }
+                    bottomSheetDialog.show()
                 }
-                bottomSheetDialog.show()
             })
         else {
             apiName = "registerData"
@@ -247,33 +252,39 @@ class OTPActivity : BaseActivity(), AuthInterface {
     private fun resendOtpObserver() {
         if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "")
             viewDataModel.resendOtpModel(resendData()).observe(this, {
-                progressDialog.dismiss()
-                if (it.status_code == "2")
-                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                else
-                    bottomSheetDialogMessageText.text = it.status_message
-                if (it.status_code == "0")
-                    bottomSheetDialogHeadingText.visibility = View.GONE
-                else
-                    bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
-                    if (it.status_code == "0") {
-                        otpActivity.timeText.visibility = View.VISIBLE
-                        otpActivity.resendLayout.visibility = View.GONE
-                        otpActivity.otpPass4.text = Editable.Factory.getInstance().newEditable("")
-                        otpActivity.otpPass3.text = Editable.Factory.getInstance().newEditable("")
-                        otpActivity.otpPass2.text = Editable.Factory.getInstance().newEditable("")
-                        otpActivity.otpPass1.text = Editable.Factory.getInstance().newEditable("")
-                        timerRestriction()
+                if (it.status_code=="2"){
+                    apiName = "resendOtp"
+                    hitAuthApi(this)
+                }else {
+                    progressDialog.dismiss()
+                    when (it.status_code) {
+                        "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else -> bottomSheetDialogMessageText.text = it.status_message
                     }
-                    bottomSheetDialog.dismiss()
+                    if (it.status_code == "0")
+                        bottomSheetDialogHeadingText.visibility = View.GONE
+                    else
+                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                        if (it.status_code == "0") {
+                            otpActivity.timeText.visibility = View.VISIBLE
+                            otpActivity.resendLayout.visibility = View.GONE
+                            otpActivity.otpPass4.text = Editable.Factory.getInstance().newEditable("")
+                            otpActivity.otpPass3.text = Editable.Factory.getInstance().newEditable("")
+                            otpActivity.otpPass2.text = Editable.Factory.getInstance().newEditable("")
+                            otpActivity.otpPass1.text = Editable.Factory.getInstance().newEditable("")
+                            timerRestriction()
+                        }
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
                 }
-                bottomSheetDialog.show()
             })
         else {
             if (isOnline()) {
+                apiName = "resendOtp"
                 hitAuthApi(this)
             } else {
                 bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().network_error
@@ -410,6 +421,7 @@ class OTPActivity : BaseActivity(), AuthInterface {
         if (value) {
             when (message) {
                 "registerData" -> validation()
+                "resendOtp" -> resendOtpObserver()
             }
         } else {
             bottomSheetDialogMessageText.text = message

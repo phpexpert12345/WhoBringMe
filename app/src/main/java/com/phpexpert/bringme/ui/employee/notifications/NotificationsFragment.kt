@@ -57,9 +57,14 @@ class NotificationsFragment : Fragment(), AuthInterface {
                         arrayList.clear()
                         arrayList.addAll(it.data!!.NotificationList!!)
                         notificationBinding.notificationRV.adapter!!.notifyDataSetChanged()
-                    } else {
+                    } else if (it.status_code == "2") {
+                        (activity as BaseActivity).hitAuthApi(this)
+                    }else{
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                        (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
+                        if (it.status_message == "11")
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text =  (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                        else
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
                         (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {

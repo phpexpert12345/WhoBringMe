@@ -262,22 +262,29 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
         if (isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 jobPostViewModel.getPaymentGenerateToken(getMapDataToken(stripToken)).observe(this, {
-                    if (it.status_code == "0") {
-                        transactionId = (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())).toString()
-                        setJobPostDataObserver()
-                    } else {
-                        cardActivityBinding.payNowButton.revertAnimation()
-                        if (it.status_code == "2")
-                            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                        else
-                            bottomSheetDialogMessageText.text = it.status_message
-                        bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                        bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                        bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                        bottomSheetDialogMessageOkButton.setOnClickListener {
-                            bottomSheetDialog.dismiss()
+                    when (it.status_code) {
+                        "0" -> {
+                            transactionId = (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())).toString()
+                            setJobPostDataObserver()
                         }
-                        bottomSheetDialog.show()
+                        "2" -> {
+                            apiName = "paymentToken"
+                            hitAuthApi(this)
+                        }
+                        else -> {
+                            cardActivityBinding.payNowButton.revertAnimation()
+                            if (it.status_code == "11")
+                                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                            else
+                                bottomSheetDialogMessageText.text = it.status_message
+                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                            bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageOkButton.setOnClickListener {
+                                bottomSheetDialog.dismiss()
+                            }
+                            bottomSheetDialog.show()
+                        }
                     }
                 })
             } else {
@@ -395,20 +402,25 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 jobPostViewModel.getPaymentAuthKey(sharedPrefrenceManager.getAuthData()?.auth_key!!)
                         .observe(this, {
-                            if (it.status_code == "2")
-                                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
-                            else
-                                bottomSheetDialogMessageText.text = it.status_message
-                            bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
-                            bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                            if (it.status_code == "0") {
-                                PaymentConfigurationSingleton.paymentConfiguration = it.data!!
+                            if (it.status_code == "2") {
+                                apiName = "authApiPayment"
+                                hitAuthApi(this)
                             } else {
-                                bottomSheetDialogHeadingText.visibility = View.VISIBLE
-                                bottomSheetDialogMessageOkButton.setOnClickListener {
-                                    bottomSheetDialog.dismiss()
+                                if (it.status_code == "11")
+                                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                                else
+                                    bottomSheetDialogMessageText.text = it.status_message
+                                bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                                bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                                if (it.status_code == "0") {
+                                    PaymentConfigurationSingleton.paymentConfiguration = it.data!!
+                                } else {
+                                    bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                                        bottomSheetDialog.dismiss()
+                                    }
+                                    bottomSheetDialog.show()
                                 }
-                                bottomSheetDialog.show()
                             }
                         })
             } else {
@@ -480,10 +492,10 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
     private fun getPostJobDataObserver(mLocation: Location) {
         jobPostViewModel.getPostJobData(getPostJobMap(transactionId, mLocation)).observe(this@NewCardActivity, {
             cardActivityBinding.payNowButton.revertAnimation()
-            if (it.status_code == "2")
-                bottomSheetDialogMessageText.text =  sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+            if (it.status_code == "11")
+                bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
             else
-                bottomSheetDialogMessageText.text =it.status_message
+                bottomSheetDialogMessageText.text = it.status_message
             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             if (it.status_code == "0") {

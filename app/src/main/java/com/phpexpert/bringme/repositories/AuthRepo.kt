@@ -19,7 +19,7 @@ class AuthRepo {
                 } else {
                     val authDtoMain = AuthDtoMain()
                     authDtoMain.status_message = "Auth Api Failure"
-                    authDtoMain.status_code = "2"
+                    authDtoMain.status_code = "11"
                     authData.postValue(authDtoMain)
                 }
             }
@@ -27,7 +27,7 @@ class AuthRepo {
             override fun onFailure(call: Call<AuthDtoMain>, t: Throwable) {
                 val authDtoMain = AuthDtoMain()
                 authDtoMain.status_message = "Auth Api Failure"
-                authDtoMain.status_code = "2"
+                authDtoMain.status_code = "11"
                 authData.postValue(authDtoMain)
             }
 
