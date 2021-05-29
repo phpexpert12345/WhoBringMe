@@ -40,42 +40,21 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:text="@{languageModel.my_job}"
+                        android:layout_centerVertical="true"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_19sdp"
                         tools:ignore="RelativeOverlap" />
+<!--                    android:text="@{languageModel.my_job}"-->
 
-                    <LinearLayout
-                        android:id="@+id/calenderTextLayout"
+                    <ImageView
+                        android:id="@+id/filterIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/calendar_icon"
-                            tools:ignore="ContentDescription" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="19 Mar'2021"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_11sdp"
-                            tools:ignore="HardcodedText" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-                            tools:ignore="ContentDescription" />
-                    </LinearLayout>
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:src="@drawable/filter"
+                        tools:ignore="ContentDescription" />
 
                 </RelativeLayout>
 
@@ -232,167 +211,6 @@
                     android:textColor="@color/color_text_grey"
                     android:textSize="@dimen/_13sdp" />
             </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/calenderLayout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_300sdp"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/calendar_bg"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:layout_marginEnd="@dimen/_20sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_margin="@dimen/_5sdp">
-
-
-                        <ImageView
-                            android:id="@+id/previousMonth"
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_baseline_chevron_left_24"
-                            tools:ignore="ContentDescription" />
-
-                        <TextView
-                            android:id="@+id/currentMonth"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="March 2021"
-                            android:textColor="@color/text_color"
-                            tools:ignore="HardcodedText,RelativeOverlap" />
-
-                        <ImageView
-                            android:id="@+id/nextMonth"
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:src="@drawable/ic_baseline_chevron_right_24"
-                            tools:ignore="ContentDescription" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_3sdp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text="@{languageModel.sunday}"
-                            android:textColor="@color/black"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text="@{languageModel.monday}"
-                            android:textColor="@color/black"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text="@{languageModel.tuesday}"
-                            android:textColor="@color/black"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text="@{languageModel.wednesday}"
-                            android:textColor="@color/black"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text="@{languageModel.thursday}"
-                            android:textColor="@color/black"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text="@{languageModel.friday}"
-                            android:textColor="@color/black"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text="@{languageModel.saturday}"
-                            android:textColor="@color/black"
-                            tools:ignore="HardcodedText" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:background="#BCBCBC" />
-
-                    <androidx.core.widget.NestedScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_3sdp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/calenderRV"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="@dimen/_10sdp" />
-                        </RelativeLayout>
-
-                    </androidx.core.widget.NestedScrollView>
-                </LinearLayout>
-            </RelativeLayout>
         </RelativeLayout>
 
         <View
@@ -406,6 +224,11 @@
         <include
             android:id="@+id/jobViewLayout"
             layout="@layout/my_job_view_layout_delivery"
+            android:visibility="visible" />
+
+        <include
+            android:id="@+id/filterLayout"
+            layout="@layout/transaction_filter_layout"
             android:visibility="visible" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

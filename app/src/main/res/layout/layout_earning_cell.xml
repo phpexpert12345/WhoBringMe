@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.text.Html"/>
         <variable
             name="model"
             type="com.phpexpert.bringme.dtos.EarningDtoList" />
@@ -80,13 +80,13 @@
                             tools:ignore="HardcodedText" />
 
                         <TextView
+                            android:id="@+id/jobTotalAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_marginTop="@dimen/_1sdp"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="@{model.job_total_amount}"
                             android:textColor="@color/colorGreen"
                             android:textSize="@dimen/_11sdp"
                             tools:ignore="HardcodedText" />
@@ -120,7 +120,7 @@
                             android:fontFamily="@font/poppins_medium"
                             android:text="@{model.about_job}"
                             android:textColor="@color/colorDarkGrey"
-                            android:textSize="@dimen/_9sdp"
+                            android:textSize="@dimen/_10sdp"
                             tools:ignore="HardcodedText" />
                     </LinearLayout>
 
@@ -271,7 +271,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@{languageModel.it_is_a_long_established_fact_that_a_reader_will_be_n_distracted_by_the_readable_content_of_a_page_n_when_looking_at_its_layout}"
+                    android:text='@{Html.fromHtml(languageModel.it_is_a_long_established_fact_that_a_reader_will_be_n_distracted_by_the_readable_content_of_a_page_n_when_looking_at_its_layout.replace("\\n", "&lt;br /&gt;"))}'
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_11sdp" />
 

@@ -204,7 +204,7 @@
                     android:justificationMode="inter_word"
                     android:text="@{postJobData.jobDescription}"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/_9sdp" />
+                    android:textSize="@dimen/_10sdp" />
 
                 <View
                     android:layout_width="match_parent"
@@ -279,7 +279,7 @@
                         android:layout_marginStart="@dimen/_11sdp"
                         android:layout_toEndOf="@+id/creditCardImage"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@{languageModel.credit_card}"
+                        android:text="@{languageModel.card_type}"
                         android:textColor="@color/text_color_dark"
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="RelativeOverlap" />

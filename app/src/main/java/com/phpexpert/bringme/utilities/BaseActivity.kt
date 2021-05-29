@@ -29,6 +29,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.interfaces.AuthInterface
+import com.phpexpert.bringme.interfaces.LanguageInterface
 import com.phpexpert.bringme.interfaces.PermissionInterface
 import com.phpexpert.bringme.models.AuthModel
 import java.io.File
@@ -39,6 +40,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 @Suppress("DEPRECATION", "DEPRECATED_IDENTITY_EQUALS")
@@ -51,8 +53,7 @@ open class BaseActivity : AppCompatActivity() {
     lateinit var bottomSheetDialogMessageOkButton: TextView
     lateinit var bottomSheetDialogMessageCancelButton: TextView
     lateinit var permissionInterface: PermissionInterface
-
-
+    var selectLanguage: String = ""
     private var currencyLocaleMap: SortedMap<Currency, Locale>? = null
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
@@ -73,7 +74,11 @@ open class BaseActivity : AppCompatActivity() {
                 .build()
                 .inject(this)
         super.onCreate(savedInstanceState)
-        sharedPrefrenceManager.saveLanguageData(LanguageDtoData())
+        try{
+            sharedPrefrenceManager.getLanguageData()
+        }catch (e:Exception){
+            sharedPrefrenceManager.saveLanguageData(LanguageDtoData())
+        }
         bottomSheetDialog = BottomSheetDialog(this, R.style.SheetDialog)
         bottomSheetDialog.setContentView(R.layout.bottom_dialog_layout)
         bottomSheetDialog.setCancelable(false)
@@ -161,6 +166,8 @@ open class BaseActivity : AppCompatActivity() {
             bottomSheetDialogMessageCancelButton.visibility = View.GONE
             if (it.status_code == "0") {
                 sharedPrefrenceManager.saveAuthData(it.data!![0])
+                if (sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage) == null || sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage) == "")
+                    sharedPrefrenceManager.savePrefrence(CONSTANTS.changeLanguage, it.data!![0].lang_code!!)
                 authData.isAuthHit(true, it.status_message!!)
             } else {
                 if (it.status_code == "11") {
@@ -170,6 +177,28 @@ open class BaseActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun hitLanguageApi(authData: LanguageInterface) {
+        authViewModel.getLanguageData(mapData()).observe(this, {
+            bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+            bottomSheetDialogMessageCancelButton.visibility = View.GONE
+            if (it.success == "0") {
+                sharedPrefrenceManager.deletePrefrence("LANGUAGE_DATA")
+                sharedPrefrenceManager.saveLanguageData(it)
+                authData.getLanguageData(true, "")
+            } else {
+                authData.getLanguageData(false, sharedPrefrenceManager.getLanguageData().could_not_connect_server_message)
+            }
+        })
+    }
+
+    private fun mapData(): Map<String, String> {
+        val mapDataVal = HashMap<String, String>()
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
+        mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+        return mapDataVal
     }
 
     open fun isOnline(): Boolean {
@@ -298,7 +327,7 @@ open class BaseActivity : AppCompatActivity() {
         try {
 //            val formatter = NumberFormat.getInstance(Locale(sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale(sharedPrefrenceManager.getAuthData()?.lang_code!!, sharedPrefrenceManager.getAuthData()?.country_code!!))
+            val symbols = DecimalFormatSymbols(Locale(sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!, sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

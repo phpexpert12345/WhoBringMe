@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.text.Html"/>
         <variable
             name="languageModel"
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
@@ -54,7 +55,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/poppins_medium"
             android:gravity="center_horizontal"
-            android:text="@{languageModel.are_you_sure_you_want_to_accept_nthis_order}"
+            android:text='@{Html.fromHtml(languageModel.are_you_sure_you_want_to_accept_nthis_order.replace("\\n", "&lt;br /&gt;"))}'
             android:textColor="@color/text_color"
             android:textSize="@dimen/_11sdp" />
 
@@ -86,7 +87,6 @@
                 android:text="@{languageModel.yes}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_11sdp"/>
-
         </LinearLayout>
     </LinearLayout>
 </layout>

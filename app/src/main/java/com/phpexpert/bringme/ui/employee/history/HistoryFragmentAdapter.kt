@@ -19,6 +19,7 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutHistroyCellBinding
 import com.phpexpert.bringme.dtos.EmployeeJobHistoryDtoList
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.ParseException
@@ -52,7 +53,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
 
 
         when (arrayList[position].order_status_msg) {
-            "Accepted" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted -> {
                 try {
                     historyFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_accept_date!!} ${arrayList[position].job_accept_time}")
                     historyFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted_time_text
@@ -65,11 +66,11 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
                     e.printStackTrace()
                 }
             }
-            "Completed" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().completed -> {
                 try {
                     historyFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_completed_date!!} ${arrayList[position].job_completed_time}")
                     historyFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().complete_time_text
-                    if (arrayList[position].review_status == "Not Done") {
+                    if (arrayList[position].review_status == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().not_done) {
                         historyFragmentCellBinding.reviewView.visibility = View.GONE
                         historyFragmentCellBinding.writeReview.visibility = View.VISIBLE
                     } else {
@@ -83,9 +84,9 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
                     e.printStackTrace()
                 }
             }
-            "Cancelled" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().cancelled -> {
                 try {
-                    if (arrayList[position].review_status == "Not Done") {
+                    if (arrayList[position].review_status == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().not_done) {
                         historyFragmentCellBinding.reviewView.visibility = View.GONE
                         historyFragmentCellBinding.writeReview.visibility = View.VISIBLE
                     } else {
@@ -100,7 +101,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
                     e.printStackTrace()
                 }
             }
-            "Pending" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().pending -> {
                 try {
                     historyFragmentCellBinding.writeReview.visibility = View.GONE
                     historyFragmentCellBinding.deliveryDataLayout.visibility = View.GONE
@@ -248,7 +249,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
         try {
 //            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, (context as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
+            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (context as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

@@ -206,10 +206,14 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                             orderListData.addAll(it.data!!.OrderList!!)
                             homeFragmentBinding.homeRv.adapter!!.notifyDataSetChanged()
                         }
+                        "1" -> {
+                            homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
+                            homeFragmentBinding.messageNoData.visibility = View.VISIBLE
+                            homeFragmentBinding.scrollableBar.visibility = View.GONE
+                        }
                         "2" -> {
                             apiName = "homeApi"
                             (activity as BaseActivity).hitAuthApi(this)
-            //                        if (it.status == "") {
                         }
                         else -> {
                             if (it.status_code == "11") {
@@ -225,11 +229,6 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                                 (activity as BaseActivity).bottomSheetDialog.dismiss()
                             }
                             (activity as BaseActivity).bottomSheetDialog.show()
-            //                        } else {
-                            homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
-                            homeFragmentBinding.messageNoData.visibility = View.VISIBLE
-                            homeFragmentBinding.scrollableBar.visibility = View.GONE
-            //                        }
                         }
                     }
                 })
@@ -253,7 +252,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
     private fun getMapData(): Map<String, String> {
         val mapData = HashMap<String, String>()
         mapData["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapData["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapData["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         mapData["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         return mapData
     }
@@ -428,6 +427,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         mapDataValue["total_tating"] = totalRating
         mapDataValue["review_content"] = (activity as BaseActivity).base64Encoded(reviewContent)
         mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataValue["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataValue
     }
 
@@ -435,7 +435,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         try {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

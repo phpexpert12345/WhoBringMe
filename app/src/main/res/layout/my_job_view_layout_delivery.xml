@@ -372,7 +372,7 @@
                     android:fontFamily="@font/poppins_medium"
                     android:text="@{data.about_job}"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/_9sdp" />
+                    android:textSize="@dimen/_10sdp" />
 
 
                 <RelativeLayout

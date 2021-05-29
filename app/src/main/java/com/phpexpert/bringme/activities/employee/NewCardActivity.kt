@@ -219,6 +219,7 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
                                 cardActivityBinding.cvv.text.toString()
                         )
                         cardData.toBuilder().currency(sharedPrefrenceManager.getAuthData()?.currency_code)
+
                         createPaymentCall(cardData)
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -359,6 +360,7 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
         mapDataValue["currency"] = sharedPrefrenceManager.getAuthData()?.currency_code!!
         mapDataValue["description"] = servicePostValue.jobDescription!!
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataValue
     }
 
@@ -391,7 +393,7 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
         for (i in 0..addresses[0]!!.maxAddressLineIndex)
             stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
         mapDataValue["job_posted_address"] = base64Encoded(stringBuilder.toString())
-        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
 
         return mapDataValue

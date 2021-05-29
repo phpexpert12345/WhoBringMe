@@ -22,8 +22,8 @@
         android:layout_marginStart="@dimen/_7sdp"
         android:layout_marginTop="@dimen/_3sdp"
         android:layout_marginEnd="@dimen/_7sdp"
-        app:cardCornerRadius="@dimen/_5sdp"
         android:elevation="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -85,7 +85,7 @@
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_9sdp"
                         tools:ignore="RelativeOverlap" />
-<!--                    android:background="@drawable/grey_rounded_rectangle"-->
+                    <!--                    android:background="@drawable/grey_rounded_rectangle"-->
 
                 </LinearLayout>
             </RelativeLayout>
@@ -99,14 +99,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp">
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toStartOf="@+id/csImage"
                     android:layout_marginEnd="@dimen/_32sdp"
+                    android:layout_toStartOf="@+id/csImage"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -156,14 +156,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:fontFamily="@font/poppins_medium"
-                android:text="@{model.about_job}"
-                android:justificationMode="inter_word"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_3sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:justificationMode="inter_word"
+                android:text="@{model.about_job}"
                 android:textColor="@color/colorDarkGrey"
-                android:textSize="@dimen/_8sdp"
+                android:textSize="@dimen/_10sdp"
                 tools:ignore="HardcodedText" />
 
             <LinearLayout
@@ -173,13 +173,13 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal"
-                android:visibility='@{model.order_status_msg.equalsIgnoreCase("Pending") || model.order_status_msg.equalsIgnoreCase("Cancelled")? View.GONE : View.VISIBLE}'>
+                android:visibility='@{model.order_status_msg.equalsIgnoreCase(languageModel.pending) || model.order_status_msg.equalsIgnoreCase(languageModel.cancelled)? View.GONE : View.VISIBLE}'>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text='@{model.order_status_msg.equalsIgnoreCase("Accepted") ? languageModel.accepted_time : languageModel.complete_time}'
+                    android:text='@{model.order_status_msg.equalsIgnoreCase(languageModel.accepted) ? languageModel.accepted_time : languageModel.complete_time}'
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_11sdp" />
 
@@ -305,25 +305,29 @@
 
                     <TextView
                         android:id="@+id/acceptViewLayout"
-                        android:layout_width="@dimen/_40sdp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_rectangle_green_cornor"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center_horizontal"
+                        android:paddingStart="@dimen/_3sdp"
                         android:paddingTop="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_3sdp"
                         android:paddingBottom="@dimen/_5sdp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_7sdp" />
 
                     <TextView
                         android:id="@+id/declineFinishedLayout"
-                        android:layout_width="@dimen/_40sdp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:background="@drawable/button_rectangle_red"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center_horizontal"
+                        android:paddingStart="@dimen/_3sdp"
                         android:paddingTop="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_3sdp"
                         android:paddingBottom="@dimen/_5sdp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_7sdp" />

@@ -228,7 +228,7 @@
                     android:justificationMode="inter_word"
                     android:text="@{jobDetails.jobDescription}"
                     android:textColor="@color/color_text_grey"
-                    android:textSize="@dimen/_9sdp"
+                    android:textSize="@dimen/_10sdp"
                     tools:ignore="HardcodedText" />
 
                 <View

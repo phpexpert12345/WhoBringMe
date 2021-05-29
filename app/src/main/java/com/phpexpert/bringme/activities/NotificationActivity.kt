@@ -13,6 +13,7 @@ import com.phpexpert.bringme.dtos.NotificationDtoList
 import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.NotificationViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 
 class NotificationActivity : BaseActivity(), AuthInterface {
     private lateinit var notificationsViewModel: NotificationViewModel
@@ -86,6 +87,7 @@ class NotificationActivity : BaseActivity(), AuthInterface {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["LoginId"] = sharedPrefrenceManager.getLoginId()
         mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataVal["lang_code"] =sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataVal
     }
 

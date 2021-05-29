@@ -164,7 +164,7 @@
                     android:text="@{model.about_job}"
                     android:textColor="@color/colorDarkGrey"
                     android:justificationMode="inter_word"
-                    android:textSize="@dimen/_9sdp"
+                    android:textSize="@dimen/_10sdp"
                     tools:ignore="HardcodedText" />
 
                 <RelativeLayout
@@ -220,7 +220,7 @@
                             android:fontFamily="@font/poppins_medium"
                             android:text="@{languageModel.when_you_want_to_get_the_product}"
                             android:textColor="@color/colorDarkGrey"
-                            android:textSize="@dimen/_8sdp" />
+                            android:textSize="@dimen/_9sdp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -239,7 +239,7 @@
                             android:fontFamily="@font/poppins_regular"
                             android:text="@{languageModel.mint}"
                             android:textColor="@color/text_color"
-                            android:textSize="@dimen/_8sdp" />
+                            android:textSize="@dimen/_9sdp" />
 
                     </LinearLayout>
 
@@ -268,7 +268,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:orientation="vertical"
-                android:visibility='@{model.review_status.equalsIgnoreCase("Not done") ? View.GONE : View.VISIBLE}'>
+                android:visibility='@{model.review_status.equalsIgnoreCase(languageModel.not_done) ? View.GONE : View.VISIBLE}'>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -423,7 +423,7 @@
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
                     <TextView
                         android:id="@+id/timeData"
@@ -433,7 +433,7 @@
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_8sdp"
+                        android:textSize="@dimen/_9sdp"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
             </RelativeLayout>

@@ -19,6 +19,7 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.HomeFragmentCellBinding
 import com.phpexpert.bringme.dtos.OrderListData
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import java.lang.Exception
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -60,7 +61,7 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
             arrayList[position].order_status_msg = "Declined"
         }*/
         when (arrayList[position].order_status_msg) {
-            "Accepted" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted -> {
                 try {
                     homeFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_accept_date!!} ${arrayList[position].job_accept_time}")
                     homeFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted_time_text
@@ -73,11 +74,11 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
                     e.printStackTrace()
                 }
             }
-            "Completed" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().completed -> {
                 try {
                     homeFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_completed_date!!} ${arrayList[position].job_completed_time}")
                     homeFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().complete_time_text
-                    if (arrayList[position].review_status == "Not Done") {
+                    if (arrayList[position].review_status == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().not_done) {
                         homeFragmentCellBinding.reviewView.visibility = View.GONE
                         homeFragmentCellBinding.writeReview.visibility = View.VISIBLE
                     } else {
@@ -91,9 +92,9 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
                     e.printStackTrace()
                 }
             }
-            "Cancelled" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().cancelled -> {
                 try {
-                    if (arrayList[position].review_status == "Not Done") {
+                    if (arrayList[position].review_status == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().not_done) {
                         homeFragmentCellBinding.reviewView.visibility = View.GONE
                         homeFragmentCellBinding.writeReview.visibility = View.VISIBLE
                     } else {
@@ -109,7 +110,7 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
                     e.printStackTrace()
                 }
             }
-            "Pending" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().pending -> {
                 try {
                     homeFragmentCellBinding.writeReview.visibility = View.GONE
                     homeFragmentCellBinding.deliveryDataLayout.visibility = View.GONE
@@ -188,7 +189,7 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
         try {
 //            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, (context as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
+            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (context as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

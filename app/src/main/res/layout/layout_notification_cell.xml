@@ -53,7 +53,7 @@
                     android:layout_toStartOf="@+id/jobTime"
                     android:textColor="@color/text_color_dark"
                     android:textSize="@dimen/_9sdp"
-                    android:fontFamily="@font/poppins_regular"/>
+                    android:fontFamily="@font/poppins_medium"/>
 
                 <TextView
                     android:id="@+id/jobTime"

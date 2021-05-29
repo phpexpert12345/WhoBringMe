@@ -28,6 +28,7 @@ import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.interfaces.PermissionInterface
 import com.phpexpert.bringme.models.JobPostModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import java.util.concurrent.TimeUnit
 import kotlin.Exception
 
@@ -396,7 +397,7 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 jobViewModel.getJobDetails(getJobDetailsMap()).observe(this, {
                     if (it.status_code == "0") {
-                        if (it.data!!.OrderDetailList!![0].order_status_msg == "Accepted") {
+                        if (it.data!!.OrderDetailList!![0].order_status_msg == languageDtoData.accepted) {
                             congratulationScreenBinding.timingDataLayout.visibility = View.GONE
                             congratulationScreenBinding.userAcceptedData.visibility = View.VISIBLE
                             congratulationScreenBinding.homeButton.visibility = View.VISIBLE
@@ -437,6 +438,7 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
         mapData["job_order_id"] = servicePostValue.jobId!!
         mapData["LoginId"] = sharedPrefrenceManager.getLoginId()
         mapData["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapData["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapData
     }
 
@@ -445,6 +447,7 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
         mapData["job_order_id"] = servicePostValue.jobId!!
         mapData["LoginId"] = sharedPrefrenceManager.getLoginId()
         mapData["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapData["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapData
     }
 
@@ -454,6 +457,7 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
         mapData["job_offer_time"] = servicePostValue.jobTime!! + " minutes"
         mapData["LoginId"] = sharedPrefrenceManager.getLoginId()
         mapData["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapData["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapData
     }
 

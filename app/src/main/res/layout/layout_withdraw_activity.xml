@@ -15,16 +15,15 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/headerLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_190sdp"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:background="@color/colorLoginButton"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/_20sdp">
+            android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical">
@@ -52,6 +51,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_minus15sdp"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -62,6 +62,7 @@
                     android:fontFamily="@font/poppins_regular"
                     android:text="@{languageModel.request_withdraw}"
                     android:textColor="@color/white"
+                    android:layout_centerVertical="true"
                     android:textSize="@dimen/_11sdp"
                     tools:ignore="RelativeOverlap" />
 
@@ -82,11 +83,11 @@
                         android:textSize="@dimen/_15sdp" />
 
                     <TextView
+                        android:id="@+id/availableAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_3sdp"
                         android:fontFamily="@font/poppins_semi_bold"
-                        android:text="2100"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_15sdp"
                         tools:ignore="HardcodedText" />
@@ -104,12 +105,19 @@
                 android:textSize="@dimen/_19sdp" />
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_below="@id/headerLayout"
+            android:background="@color/colorLoginButton" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/amountTransaction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/headerLayout"
             android:layout_marginStart="@dimen/_minus3sdp"
-            android:layout_marginTop="@dimen/_150sdp"
+            android:layout_marginTop="@dimen/_minus10sdp"
             android:layout_marginEnd="@dimen/_minus3sdp"
             android:background="@color/white"
             app:cardBackgroundColor="@color/white"
@@ -121,8 +129,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp">
 
-
                 <EditText
+                    android:id="@+id/withdrawData"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -132,7 +140,6 @@
                     android:fontFamily="@font/poppins_regular"
                     android:inputType="numberDecimal"
                     android:paddingTop="@dimen/_5sdp"
-                    android:text="200"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_13sdp"
                     tools:ignore="Autofill,HardcodedText,LabelFor" />
@@ -184,6 +191,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_toEndOf="@+id/bankIcon"
+                android:layout_centerVertical="true"
                 android:text="@{languageModel.bank}"
                 android:textColor="@color/text_color_dark"
                 android:textSize="@dimen/_13sdp"
@@ -193,11 +201,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/dot_unselected"
+                android:src="@drawable/dot_selected"
                 tools:ignore="ContentDescription" />
         </RelativeLayout>
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/submitButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -206,9 +215,9 @@
             android:text="@{languageModel.submit_request}"
             android:textAllCaps="false"
             android:textColor="@color/white"
-
+            android:layout_centerHorizontal="true"
             android:textSize="@dimen/_11sdp"
             app:spinning_bar_color="@color/white"
-            app:spinning_bar_padding="@dimen/_5sdp"/>
+            app:spinning_bar_padding="@dimen/_5sdp" />
     </RelativeLayout>
 </layout>

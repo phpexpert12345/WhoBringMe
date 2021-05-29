@@ -24,9 +24,9 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="@dimen/_110sdp"
-            android:layout_height="@dimen/_110sdp"
-            android:layout_marginTop="@dimen/_72sdp"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_marginTop="@dimen/_52sdp"
             android:src="@drawable/login_logo"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -97,6 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:fontFamily="@font/poppins_medium"
+                    android:gravity="center"
                     android:text="@{languageModel.client_receiver}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_13sdp" />
@@ -122,6 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:gravity="center"
                     android:fontFamily="@font/poppins_medium"
                     android:text="@{languageModel.delivery_employee}"
                     android:textColor="@color/text_color"

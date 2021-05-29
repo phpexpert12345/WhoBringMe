@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
+import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -91,6 +92,40 @@ class LoginActivity : BaseActivity(), AuthInterface {
             }
             forgotPasswordTwoDialog.findViewById<EditText>(R.id.newPasswordET)?.setSelection(forgotPasswordTwoDialog.findViewById<EditText>(R.id.newPasswordET)?.text.toString().trim().length)
         }
+
+        forgotPasswordTwoDialog.findViewById<EditText>(R.id.newPasswordET)?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0!!.isEmpty()) {
+                    forgotPasswordTwoDialog.findViewById<ImageView>(R.id.newPasswordEye)!!.visibility = View.GONE
+                } else {
+                    forgotPasswordTwoDialog.findViewById<ImageView>(R.id.newPasswordEye)!!.visibility = View.VISIBLE
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
+
+        forgotPasswordTwoDialog.findViewById<EditText>(R.id.confirmPasswordET)?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0!!.isEmpty()) {
+                    forgotPasswordTwoDialog.findViewById<ImageView>(R.id.confirmPasswordEye)!!.visibility = View.GONE
+                } else {
+                    forgotPasswordTwoDialog.findViewById<ImageView>(R.id.confirmPasswordEye)!!.visibility = View.VISIBLE
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
 
         forgotPasswordTwoDialog.findViewById<ImageView>(R.id.confirmPasswordEye)!!.setOnClickListener {
             if (passwordConfirmVisible) {
@@ -248,6 +283,22 @@ class LoginActivity : BaseActivity(), AuthInterface {
             }
         }
 
+        loginBinding.digitPin.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0!!.isEmpty()) {
+                    loginBinding.passwordEye.visibility = View.GONE
+                } else {
+                    loginBinding.passwordEye.visibility = View.VISIBLE
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
 
         loginBinding.createAccount.setOnClickListener {
             startActivity(Intent(this, RegistrationSelectionActivity::class.java))
@@ -361,8 +412,8 @@ class LoginActivity : BaseActivity(), AuthInterface {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 loginViewModel.getLoginData(mapDataLogin()).observe(this, {
 
-                    when(it.status_code){
-                        "0"->{
+                    when (it.status_code) {
+                        "0" -> {
                             loginBinding.loginButton.revertAnimation()
                             when (it.status_code) {
                                 "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
@@ -392,11 +443,11 @@ class LoginActivity : BaseActivity(), AuthInterface {
 //                            }
                             }
                         }
-                        "2" ->{
+                        "2" -> {
                             apiName = "login"
                             hitAuthApi(this)
                         }
-                        else ->{
+                        else -> {
                             loginBinding.loginButton.revertAnimation()
                             when (it.status_code) {
                                 "11" -> bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
@@ -579,7 +630,7 @@ class LoginActivity : BaseActivity(), AuthInterface {
         mapDataValue["device_id"] = sharedPrefrenceManager.getPreference(CONSTANTS.fireBaseId)!!
         mapDataValue["device_platform"] = "Android"
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
-        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataValue
     }
 
@@ -590,7 +641,7 @@ class LoginActivity : BaseActivity(), AuthInterface {
         mapDataValue["account_mobile"] = forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
         mapDataValue["account_phone_code"] = forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
-        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataValue
     }
 
@@ -602,14 +653,14 @@ class LoginActivity : BaseActivity(), AuthInterface {
         mapDataValue["LoginId"] = loginId
         mapDataValue["Mobile_OTP"] = forgotPasswordTwoDialog.findViewById<EditText>(R.id.otpNumberET)!!.text.toString()
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
-        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataValue
     }
 
     private fun resendData(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
-        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         mapDataVal["account_mobile"] = forgotPasswordOneDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
         mapDataVal["account_phone_code"] = forgotPasswordOneDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
 

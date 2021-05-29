@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.phpexpert.bringme.R
+import com.phpexpert.bringme.activities.ChangeLanguageActivity
 import com.phpexpert.bringme.activities.ChangePasswordActivity
 import com.phpexpert.bringme.activities.LoginActivity
 import com.phpexpert.bringme.activities.delivery.UploadDocumentSelectActivity
@@ -34,6 +36,7 @@ import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.ui.employee.profile.ProfileViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import com.phpexpert.bringme.utilities.SharedPrefrenceManager
 
 @Suppress("DEPRECATION")
@@ -136,7 +139,7 @@ class ProfileFragment : Fragment(), AuthInterface {
     private fun setOtpDialog() {
         otpDataDialog = BottomSheetDialog(requireActivity(), R.style.SheetDialog)
         otpDataDialog.setContentView(R.layout.otp_verify_layout)
-        otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to
+        otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = Html.fromHtml(languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to.replace("\\n", "&lt;br /&gt;"))
         otpDataDialog.findViewById<TextView>(R.id.timeText)?.text = languageData.auto_verifying_your_otp_in_00_12
         otpDataDialog.findViewById<TextView>(R.id.didNotReceive)?.text = languageData.don_t_receive_code_resend_code
         otpDataDialog.findViewById<TextView>(R.id.resendText)?.text = languageData.resend_code
@@ -194,6 +197,9 @@ class ProfileFragment : Fragment(), AuthInterface {
     }
 
     private fun setActions() {
+        profileFragmentBinding.changeLanguageLayout.setOnClickListener {
+            startActivity(Intent(requireActivity(), ChangeLanguageActivity::class.java))
+        }
         profileFragmentBinding.editImage.setOnClickListener {
             startActivity(Intent(requireActivity(), ProfileEditActivity::class.java))
         }
@@ -215,9 +221,11 @@ class ProfileFragment : Fragment(), AuthInterface {
                 (activity as BaseActivity).bottomSheetDialog.dismiss()
                 val languageDtoData = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData()
                 val authData = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()
+                val langCode = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
                 (activity as BaseActivity).sharedPrefrenceManager.clearData()
                 (activity as BaseActivity).sharedPrefrenceManager.saveLanguageData(languageDtoData)
                 (activity as BaseActivity).sharedPrefrenceManager.saveAuthData(authData)
+                (activity as BaseActivity).sharedPrefrenceManager.savePrefrence(CONSTANTS.changeLanguage, langCode)
                 startActivity(Intent(requireActivity(), LoginActivity::class.java))
                 requireActivity().finishAffinity()
             }
@@ -281,7 +289,7 @@ class ProfileFragment : Fragment(), AuthInterface {
                                 otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text = Editable.Factory.getInstance().newEditable("")
                                 otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text = Editable.Factory.getInstance().newEditable("")
                                 otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text = Editable.Factory.getInstance().newEditable("")
-                                otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to + " " + mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString() + mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text.toString()
+                                otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = Html.fromHtml(languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to.replace("\\n", "&lt;br /&gt;")).toString() + " " + mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString() + mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text.toString()
                                 otpDataDialog.show()
                             }
                             (activity as BaseActivity).bottomSheetDialog.dismiss()
@@ -417,7 +425,7 @@ class ProfileFragment : Fragment(), AuthInterface {
         mapDataVal["account_mobile"] = mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
         mapDataVal["account_phone_code"] = mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
-        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         mapDataVal["LoginId"] = sharedPrefrenceManager.getLoginId()
         return mapDataVal
     }
@@ -427,7 +435,7 @@ class ProfileFragment : Fragment(), AuthInterface {
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
         mapDataVal["otp_number"] = otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text.toString() + otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text.toString() + otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text.toString() + otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text.toString()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
-        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataVal
     }
 
@@ -436,7 +444,7 @@ class ProfileFragment : Fragment(), AuthInterface {
         mapDataVal["account_mobile"] = mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)!!.text.toString()
         mapDataVal["account_phone_code"] = mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
-        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         mapDataVal["LoginId"] = sharedPrefrenceManager.getLoginId()
         return mapDataVal
     }

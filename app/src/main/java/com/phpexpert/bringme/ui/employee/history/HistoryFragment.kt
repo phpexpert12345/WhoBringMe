@@ -28,6 +28,7 @@ import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.JobHistoryModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import java.lang.Exception
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -105,6 +106,8 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
             historyBinding.layoutSearchData.visibility = View.GONE
             this.hideKeyboard()
             if (mainArrayList.isNotEmpty()) {
+                historyBinding.noJobHistroy.visibility = View.GONE
+                historyBinding.nestedScrollView.visibility = View.VISIBLE
                 arrayList.clear()
                 arrayList.addAll(mainArrayList)
                 historyBinding.historyRV.adapter?.notifyDataSetChanged()
@@ -143,7 +146,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
                             apiName = "listData"
                             (activity as BaseActivity).hitAuthApi(this)
                         }
-                        "3" -> {
+                        "1" -> {
                             progressDialog.dismiss()
                             historyBinding.noJobHistroy.visibility = View.VISIBLE
                             historyBinding.nestedScrollView.visibility = View.GONE
@@ -183,7 +186,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
     private fun jobHistoryMapData(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["Order_Number"] = searOrderString
         return mapDataVal
@@ -364,6 +367,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
         mapDataValue["total_tating"] = totalRating
         mapDataValue["review_content"] = (activity as BaseActivity).base64Encoded(reviewContent)
         mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataValue["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataValue
     }
 
@@ -371,7 +375,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
         try {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!, (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!, (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

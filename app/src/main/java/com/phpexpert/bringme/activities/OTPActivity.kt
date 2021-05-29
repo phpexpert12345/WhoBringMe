@@ -55,7 +55,7 @@ class OTPActivity : BaseActivity(), AuthInterface {
         viewDataModel = ViewModelProvider(this).get(RegistrationModel::class.java)
 
         timerRestriction()
-        otpActivity.headerText.text = "${languageDtoData.please_wait_we_will_auto_verify_nthe_otp_sent_to} ${postDataOtp.accountPhoneCode + postDataOtp.accountMobile}"
+        otpActivity.headerText.text = languageDtoData.please_wait_we_will_auto_verify_nthe_otp_sent_to.replace("\\n", "\n") + " " + postDataOtp.accountPhoneCode + postDataOtp.accountMobile
 
         otpActivity.backArrow.setOnClickListener {
             finish()
@@ -320,7 +320,7 @@ class OTPActivity : BaseActivity(), AuthInterface {
         mapDataVal["device_token_id"] = sharedPrefrenceManager.getPreference(CONSTANTS.fireBaseId)!!
         mapDataVal["device_platform"] = postDataOtp.devicePlatform
         mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
-        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataVal
     }
 
@@ -328,7 +328,7 @@ class OTPActivity : BaseActivity(), AuthInterface {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["Token_ID"] = postDataOtp.deviceTokenId!!
-        mapDataVal["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataVal
     }
 

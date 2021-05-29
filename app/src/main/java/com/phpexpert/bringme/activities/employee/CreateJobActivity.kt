@@ -15,11 +15,15 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityCreateJobBinding
 import com.phpexpert.bringme.dtos.PostJobPostDto
 import com.phpexpert.bringme.utilities.BaseActivity
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 @Suppress("DEPRECATION")
 class CreateJobActivity : BaseActivity() {
 
     private var counting: Int = 10
+    private var formatChange: Boolean = true
 
     private lateinit var createJobBinding: ActivityCreateJobBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,12 +43,42 @@ class CreateJobActivity : BaseActivity() {
 
     private fun setActions() {
 
+        createJobBinding.totalAmount.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (p0!!.isNotEmpty() && formatChange) {
+                    if (p0.contains(".") || p0.contains(",")) {
+                        try {
+                            if (p0.split(".")[1].isNotEmpty()) {
+                                formatChange = false
+                                createJobBinding.totalAmount.text = Editable.Factory.getInstance().newEditable(p0.toString().formatChange())
+                                createJobBinding.totalAmount.setSelection(createJobBinding.totalAmount.length())
+                            } else {
+                                formatChange = true
+                            }
+                        } catch (e: java.lang.Exception) {
+
+                        }
+                    } else {
+                        formatChange = true
+                    }
+                } else {
+                    formatChange = true
+                }
+            }
+
+        })
         createJobBinding.submitButton.setOnClickListener {
             if (checkValidation()) {
 //                createJobBinding.submitButton.startAnimation()
                 val postJobPostDto = PostJobPostDto()
                 this@CreateJobActivity.hideKeyboard()
-                postJobPostDto.jobAmount = createJobBinding.totalAmount.text.toString()
+                postJobPostDto.jobAmount = createJobBinding.totalAmount.text.toString().formatChangeData()
                 postJobPostDto.jobDescription = createJobBinding.postInfo.text.toString().trim()
                 postJobPostDto.jobTime = createJobBinding.mintsTextView.text.toString()
 //                Handler().postDelayed({
@@ -116,7 +150,7 @@ class CreateJobActivity : BaseActivity() {
                 bottomSheetDialog.show()
                 false
             }
-            createJobBinding.totalAmount.text.toString().toFloat() < 1f -> {
+            createJobBinding.totalAmount.text.toString().formatChangeData()?.toFloat()!! < 1f -> {
                 bottomSheetDialogMessageText.text = "${sharedPrefrenceManager.getLanguageData().total_amount_should_be_more_than_0} ${getCurrencySymbol()}1."
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -127,7 +161,7 @@ class CreateJobActivity : BaseActivity() {
                 bottomSheetDialog.show()
                 false
             }
-            createJobBinding.totalAmount.text.toString().toFloat() > 1000000 -> {
+            createJobBinding.totalAmount.text.toString().formatChangeData()?.toFloat()!! >= 1000000 -> {
                 bottomSheetDialogMessageText.text = "${sharedPrefrenceManager.getLanguageData().enter_job_limit_amount} ${getCurrencySymbol()}1000000."
                 bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                 bottomSheetDialogMessageCancelButton.visibility = View.GONE
@@ -157,5 +191,20 @@ class CreateJobActivity : BaseActivity() {
     private fun Context.hideKeyboard(view: View) {
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun String?.formatChangeData() = run {
+        try {
+//            val formatter = NumberFormat.getInstance(Locale(sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
+//            formatter.format(this?.toFloat())
+            val new = this?.replace(",", ".")
+            /*
+            val symbols = DecimalFormatSymbols(Locale("en", "IN"))
+            val formartter = (DecimalFormat("##.##", symbols))
+            formartter.format(new?.toBigDecimalOrNull().toString())*/
+            return new
+        } catch (e: Exception) {
+            this
+        }
     }
 }

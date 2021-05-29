@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="model"
+            type="com.phpexpert.bringme.dtos.TransactionDtoList" />
         <variable
             name="languageModel"
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
     </data>
-    <LinearLayout
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_10sdp"
-            android:fontFamily="@font/poppins_regular"
-            android:text="Today"
-            android:textColor="@color/text_color_dark"
-            android:textSize="@dimen/_11sdp"
-            tools:ignore="HardcodedText" />
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:elevation="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/white_bg_rounded"
             android:orientation="vertical"
-            android:padding="@dimen/_10sdp">
+            android:padding="@dimen/_5sdp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -43,7 +40,7 @@
                     android:fontFamily="@font/poppins_regular"
                     android:text="@{languageModel.transaction_id}"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_9sdp"
+                    android:textSize="@dimen/_11sdp"
                     tools:ignore="RelativeOverlap" />
 
                 <TextView
@@ -51,10 +48,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="1215451EDR5151"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_12sdp"
-                    tools:ignore="HardcodedText" />
+                    android:text="@{model.transaction_id}"
+                    android:textSize="@dimen/_11sdp"
+                    tools:ignore="HardcodedText,RelativeOverlap" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -67,9 +64,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="@{languageModel.transfer_bank}"
+                    android:text="@{model.transaction_type}"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_9sdp"
+                    android:textSize="@dimen/_11sdp"
                     tools:ignore="RelativeOverlap" />
 
                 <LinearLayout
@@ -80,35 +77,56 @@
                     tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/_5sdp"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="-50"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_12sdp"
-                        tools:ignore="HardcodedText" />
-
-                    <TextView
                         android:id="@+id/currencyCode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_gravity="center_vertical"
-                        android:fontFamily="@font/poppins_regular"
-                        android:textColor="@color/text_color"/>
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_11sdp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@{model.transaction_amount}"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_11sdp"
+                        tools:ignore="HardcodedText" />
+
+
                 </LinearLayout>
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/poppins_regular"
-                android:text="16 March 2021"
-                android:textColor="#B5B5B5"
-                android:textSize="@dimen/_7sdp"
-                tools:ignore="HardcodedText,RelativeOverlap" />
+                android:layout_marginTop="@dimen/_5sdp">
+
+                <TextView
+                    android:id="@+id/transactionStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="@{model.transaction_status_msg}"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textSize="@dimen/_8sdp"
+                    tools:ignore="HardcodedText,RelativeOverlap" />
+
+                <TextView
+                    android:id="@+id/transactionDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textSize="@dimen/_8sdp"
+                    tools:ignore="HardcodedText,RelativeOverlap" />
+            </RelativeLayout>
+
         </LinearLayout>
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
 </layout>

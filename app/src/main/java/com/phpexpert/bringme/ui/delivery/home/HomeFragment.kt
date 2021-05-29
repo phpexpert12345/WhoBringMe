@@ -262,6 +262,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
             homeFragmentBinding.searchET.text = Editable.Factory.getInstance().newEditable("")
             homeFragmentBinding.layoutSearchData.visibility = View.GONE
             homeFragmentBinding.searchIcon.visibility = View.VISIBLE
+            homeFragmentBinding.noDataFoundLayout.visibility = View.GONE
+            homeFragmentBinding.nestedScrollView.visibility = View.VISIBLE
             this.searOrderString = ""
             arrayList.clear()
             arrayList.addAll(mainArrayList)
@@ -310,10 +312,13 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                             apiName = "homeApi"
                             (activity as BaseActivity).hitAuthApi(this)
                         }
-                        else -> {
+                        "1" -> {
                             progressDialog.dismiss()
                             homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
                             homeFragmentBinding.nestedScrollView.visibility = View.GONE
+                        }
+                        else -> {
+                            progressDialog.dismiss()
                             if (it.status_code == "11")
                                 (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                             else
@@ -350,10 +355,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 latestJobViewModel!!.orderAcceptData(orderMapData()).observe(viewLifecycleOwner, {
 //                    progressDialog.dismiss()
-                    if (it.status_code=="2"){
+                    if (it.status_code == "2") {
                         apiName = "acceptOrderApi"
                         (activity as BaseActivity).hitAuthApi(this)
-                    }else {
+                    } else {
                         if (it.status_code == "11")
                             (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                         else
@@ -397,10 +402,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         if ((activity as BaseActivity).isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 latestJobViewModel!!.orderDeclineData(orderDeclineData()).observe(viewLifecycleOwner, {
-                    if (it.status_code == "2"){
+                    if (it.status_code == "2") {
                         apiName = "orderDeclineApi"
                         (activity as BaseActivity).hitAuthApi(this)
-                    }else {
+                    } else {
                         if (it.status_code == "11")
                             (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                         else
@@ -446,10 +451,10 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                 if (sharedPrefrenceManager.getAuthData()?.auth_key != "" && sharedPrefrenceManager.getAuthData()?.auth_key != null) {
                     latestJobViewModel!!.orderFinishData(orderFinishData()).observe(viewLifecycleOwner, {
 //                        progressDialog.dismiss()
-                        if (it.status_code == "2"){
+                        if (it.status_code == "2") {
                             apiName = "finishOrderApi"
                             (activity as BaseActivity).hitAuthApi(this)
-                        }else {
+                        } else {
                             if (it.status_code == "11")
                                 (activity as BaseActivity).bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                             else
@@ -508,7 +513,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         mapDataVal["current_city"] = (activity as BaseActivity).base64Encoded(address.adminArea)
         mapDataVal["current_locality"] = (activity as BaseActivity).base64Encoded(address.locality)
         mapDataVal["current_zipcode"] = address.postalCode
-        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["Order_Number"] = searOrderString
         return mapDataVal
@@ -519,6 +524,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         mapDataVal["job_order_id"] = arrayList[selectedPosition].job_order_id!!
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataVal
     }
 
@@ -528,6 +534,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         mapDataVal["order_decline_reason"] = (activity as BaseActivity).base64Encoded(orderDelcineString)
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataVal
     }
 
@@ -537,6 +544,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         mapDataVal["job_OTP_code"] = orderFinishedBinding.jobCode.text.toString()
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataVal["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataVal
     }
 
@@ -718,7 +726,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         try {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

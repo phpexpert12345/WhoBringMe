@@ -48,14 +48,14 @@ class CalenderAdapter(
         commentCellBinding = holder.viewBinding as LayoutCommentCellBinding
         commentCellBinding.dateCalender.text = arrayListDate[position].date
 
-        if (position % 7 == 0) {
+        /*if (position % 7 == 0) {
             commentCellBinding.weakTv.visibility = View.VISIBLE
             val calender = Calendar.getInstance()
             calender.set(Calendar.YEAR, selectedYearGlobal)
             calender.set(Calendar.MONTH, selectedMonthGlobal)
             calender.set(Calendar.DAY_OF_MONTH, position + 1)
             commentCellBinding.weakTv.text = (calender.get(Calendar.WEEK_OF_YEAR) + 1).toString()
-        } else commentCellBinding.weakTv.visibility = View.GONE
+        } else commentCellBinding.weakTv.visibility = View.GONE*/
 
        /* if (position / 7 == calenderInstance.getActualMaximum(Calendar.WEEK_OF_MONTH)) {
             commentCellBinding.weekLayout.visibility = View.GONE
@@ -63,10 +63,10 @@ class CalenderAdapter(
             commentCellBinding.weekLayout.visibility = View.VISIBLE
         }*/
 
-        if (arrayListDate[position].dotVisible)
+        /*if (arrayListDate[position].dotVisible)
             commentCellBinding.eventDotIv.visibility = View.VISIBLE
         else
-            commentCellBinding.eventDotIv.visibility = View.INVISIBLE
+            commentCellBinding.eventDotIv.visibility = View.INVISIBLE*/
 
         /*if (selectedPosition==position){
             (holder.viewBinding as LayoutCommentCellBinding).dateCalender.setBackgroundResource(R.drawable.event_dot_drawable)

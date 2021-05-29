@@ -18,14 +18,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.phpexpert.bringme.R
-import com.phpexpert.bringme.adapters.CalenderAdapter
+import com.phpexpert.bringme.adapters.Calender12AdapterTransaction
+import com.phpexpert.bringme.adapters.Calender1AdapterTransaction
 import com.phpexpert.bringme.databinding.FragmentMyJobBinding
 import com.phpexpert.bringme.databinding.MyJobViewLayoutDeliveryBinding
+import com.phpexpert.bringme.databinding.TransactionFilterLayoutBinding
 import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.dtos.MyJobDtoList
 import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.MyJobDataModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.ParseException
@@ -42,15 +45,29 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
     private lateinit var myJobModel: MyJobDataModel
     private lateinit var mBottomSheetFilter: BottomSheetBehavior<View>
     private lateinit var jobViewBinding: MyJobViewLayoutDeliveryBinding
+
+    private lateinit var mBottomSheetFilterOriginal: BottomSheetBehavior<View>
+    private lateinit var filterBinding: TransactionFilterLayoutBinding
+
+
     private lateinit var progressDialog: ProgressDialog
     private lateinit var languageDtoData: LanguageDtoData
+
     private val month = ArrayList<String>()
     private var todayMonth = -1
     private var todayYear = -1
     private var currentMonth: Int = -1
     private var currentYear: Int = -1
     private lateinit var calenderInstance: Calendar
-    private lateinit var commentDateAdapter: CalenderAdapter
+    private lateinit var commentDateAdapter: Calender1AdapterTransaction
+
+    private val month1 = ArrayList<String>()
+    private var todayMonth1 = -1
+    private var todayYear1 = -1
+    private var currentMonth1: Int = -1
+    private var currentYear1: Int = -1
+    private lateinit var calenderInstance1: Calendar
+    private lateinit var commentDateAdapter1: Calender12AdapterTransaction
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         myJobBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_job, container, false)
@@ -65,48 +82,75 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
         mBottomSheetFilter.isDraggable = false
         mBottomSheetFilter.peekHeight = 0
 
+        filterBinding = myJobBinding.filterLayout
+        mBottomSheetFilterOriginal = BottomSheetBehavior.from(filterBinding.root)
+        filterBinding.languageModel = languageDtoData
+
+        mBottomSheetFilterOriginal.isDraggable = false
+        mBottomSheetFilterOriginal.peekHeight = 0
+
         myJobBinding.jobRV.layoutManager = LinearLayoutManager(requireActivity())
         myJobBinding.jobRV.isNestedScrollingEnabled = false
         arrayList = ArrayList()
-        month.add(languageDtoData.january)
-        month.add(languageDtoData.february)
-        month.add(languageDtoData.march)
-        month.add(languageDtoData.april)
-        month.add(languageDtoData.may)
-        month.add(languageDtoData.june)
-        month.add(languageDtoData.july)
-        month.add(languageDtoData.august)
-        month.add(languageDtoData.september)
-        month.add(languageDtoData.october)
-        month.add(languageDtoData.november)
-        month.add(languageDtoData.december)
 
-        myJobBinding.calenderTextLayout.setOnClickListener {
-            if (myJobBinding.calenderLayout.visibility == View.VISIBLE) {
-                myJobBinding.calenderLayout.visibility = View.GONE
-            } else {
-                myJobBinding.calenderLayout.visibility = View.VISIBLE
+        myJobBinding.jobRV.adapter = MyJobAdapter(requireActivity(), arrayList, this)
+
+        setCalenderInitial1()
+        setCalenderInitial2()
+
+        setText1()
+        setText2()
+
+        myJobBinding.blurView.setOnClickListener {
+            myJobBinding.blurView.visibility = View.GONE
+            mBottomSheetFilterOriginal.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        filterBinding.btnSubmit.setOnClickListener {
+            when {
+                filterBinding.startDate.text!!.isEmpty() -> {
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().start_date_mandatory
+                    (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                }
+                filterBinding.endDate.text!!.isEmpty() -> {
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().end_date_mandatory
+                    (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                }
+                !compareDates(filterBinding.startDate.text.toString(), filterBinding.endDate.text.toString()) -> {
+                    (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().compare_date
+                    (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    (activity as BaseActivity).bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener {
+                        (activity as BaseActivity).bottomSheetDialog.dismiss()
+                    }
+                    (activity as BaseActivity).bottomSheetDialog.show()
+                }
+                else -> {
+                    myJobBinding.blurView.visibility = View.GONE
+                    mBottomSheetFilterOriginal.state= BottomSheetBehavior.STATE_COLLAPSED
+                    progressDialog.show()
+                    setObserver()
+                }
             }
         }
-        commentDateAdapter = CalenderAdapter(requireActivity(), this)
-        myJobBinding.calenderRV.layoutManager = GridLayoutManager(activity, 7)
-        myJobBinding.calenderRV.isNestedScrollingEnabled = false
-        myJobBinding.calenderRV.adapter = commentDateAdapter
+        myJobBinding.filterIcon.setOnClickListener {
+            myJobBinding.blurView.visibility = View.VISIBLE
+            mBottomSheetFilterOriginal.state = BottomSheetBehavior.STATE_EXPANDED
+        }
 
-        myJobBinding.previousMonth.setOnClickListener {
-            setPreviousMonthYear()
-        }
-        myJobBinding.nextMonth.setOnClickListener {
-            setNextMonthYear()
-        }
-        calenderInstance = Calendar.getInstance()
-        todayMonth = Calendar.getInstance().get(Calendar.MONTH) + 1
-        todayYear = Calendar.getInstance().get(Calendar.YEAR)
-        currentMonth = calenderInstance.get(Calendar.MONTH)
-        currentYear = calenderInstance.get(Calendar.YEAR)
-        commentDateAdapter.printDate(currentMonth, currentYear)
-        setText()
-        myJobBinding.jobRV.adapter = MyJobAdapter(requireActivity(), arrayList, this)
         progressDialog = ProgressDialog(requireActivity())
         progressDialog.setMessage(languageDtoData.please_wait)
         progressDialog.setCancelable(false)
@@ -136,7 +180,7 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
                         "2" -> {
                             (activity as BaseActivity).hitAuthApi(this@MyJobFragment)
                         }
-                        "3" -> {
+                        "1" -> {
                             progressDialog.dismiss()
                             myJobBinding.noDataFoundLayout.visibility = View.VISIBLE
                             myJobBinding.nestedScrollView.visibility = View.GONE
@@ -176,8 +220,10 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
     private fun getMapData(): Map<String, String> {
         val mapDataValue = HashMap<String, String>()
         mapDataValue["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
-        mapDataValue["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataValue["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataValue["start_date"] = filterBinding.startDate.text.toString()
+        mapDataValue["end_date"] = filterBinding.endDate.text.toString()
         return mapDataValue
     }
 
@@ -271,50 +317,12 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
         try {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
+            val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this
         }
-    }
-
-    private fun setPreviousMonthYear() {
-        if (currentMonth == 0) {
-            calenderInstance.set(Calendar.MONTH, 11)
-            calenderInstance.set(Calendar.YEAR, currentYear - 1)
-        } else {
-            calenderInstance.set(Calendar.MONTH, currentMonth - 1)
-            calenderInstance.set(Calendar.YEAR, currentYear)
-        }
-
-        currentMonth = calenderInstance.get(Calendar.MONTH)
-        currentYear = calenderInstance.get(Calendar.YEAR)
-        commentDateAdapter.printDate(currentMonth, currentYear)
-        setText()
-    }
-
-    private fun setNextMonthYear() {
-        if (currentMonth == 11) {
-            calenderInstance.set(Calendar.MONTH, 0)
-            calenderInstance.set(Calendar.YEAR, currentYear + 1)
-        } else {
-            calenderInstance.set(Calendar.MONTH, currentMonth + 1)
-            calenderInstance.set(Calendar.YEAR, currentYear)
-        }
-
-        currentMonth = calenderInstance.get(Calendar.MONTH)
-        currentYear = calenderInstance.get(Calendar.YEAR)
-        commentDateAdapter.printDate(currentMonth, currentYear)
-        setText()
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setText() {
-        if (currentMonth == todayMonth - 1 && currentYear == todayYear) {
-            myJobBinding.nextMonth.visibility = View.GONE
-        } else myJobBinding.nextMonth.visibility = View.VISIBLE
-        myJobBinding.currentMonth.text = "${month[currentMonth]}  $currentYear"
     }
 
     override fun isAuthHit(value: Boolean, message: String) {
@@ -341,5 +349,202 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
         } catch (e: Exception) {
 
         }
+    }
+
+    private fun setCalenderInitial1() {
+        month.add(languageDtoData.january)
+        month.add(languageDtoData.february)
+        month.add(languageDtoData.march)
+        month.add(languageDtoData.april)
+        month.add(languageDtoData.may)
+        month.add(languageDtoData.june)
+        month.add(languageDtoData.july)
+        month.add(languageDtoData.august)
+        month.add(languageDtoData.september)
+        month.add(languageDtoData.october)
+        month.add(languageDtoData.november)
+        month.add(languageDtoData.december)
+
+        filterBinding.startDateCalenderIcon.setOnClickListener {
+            if (filterBinding.calenderLayout.visibility == View.VISIBLE) {
+                filterBinding.calenderLayout.visibility = View.GONE
+            } else {
+                filterBinding.calenderLayout.visibility = View.VISIBLE
+            }
+        }
+
+        commentDateAdapter = Calender1AdapterTransaction(requireActivity(), filterBinding)
+        filterBinding.calenderRV.layoutManager = GridLayoutManager(requireActivity(), 7)
+        filterBinding.calenderRV.isNestedScrollingEnabled = false
+        filterBinding.calenderRV.adapter = commentDateAdapter
+
+        filterBinding.previousMonth.setOnClickListener {
+            setPreviousMonthYear1()
+        }
+        filterBinding.nextMonth.setOnClickListener {
+            setNextMonthYear1()
+        }
+        calenderInstance = Calendar.getInstance()
+        todayMonth = Calendar.getInstance().get(Calendar.MONTH) + 1
+        todayYear = Calendar.getInstance().get(Calendar.YEAR)
+        currentMonth = calenderInstance.get(Calendar.MONTH)
+        currentYear = calenderInstance.get(Calendar.YEAR)
+        commentDateAdapter.printDate(currentMonth, currentYear, filterBinding.startDate.text.toString())
+    }
+
+    private fun setCalenderInitial2() {
+        month1.add(languageDtoData.january)
+        month1.add(languageDtoData.february)
+        month1.add(languageDtoData.march)
+        month1.add(languageDtoData.april)
+        month1.add(languageDtoData.may)
+        month1.add(languageDtoData.june)
+        month1.add(languageDtoData.july)
+        month1.add(languageDtoData.august)
+        month1.add(languageDtoData.september)
+        month1.add(languageDtoData.october)
+        month1.add(languageDtoData.november)
+        month1.add(languageDtoData.december)
+
+        filterBinding.endDateCalenderIcon.setOnClickListener {
+            if (filterBinding.calender2Layout.visibility == View.VISIBLE) {
+                filterBinding.calender2Layout.visibility = View.GONE
+            } else {
+                filterBinding.calender2Layout.visibility = View.VISIBLE
+            }
+        }
+
+        commentDateAdapter1 = Calender12AdapterTransaction(requireActivity(), filterBinding)
+        filterBinding.calenderRV2.layoutManager = GridLayoutManager(requireActivity(), 7)
+        filterBinding.calenderRV2.isNestedScrollingEnabled = false
+        filterBinding.calenderRV2.adapter = commentDateAdapter1
+
+        filterBinding.previousMonth2.setOnClickListener {
+            setPreviousMonthYear2()
+        }
+        filterBinding.nextMonth2.setOnClickListener {
+            setNextMonthYear2()
+        }
+        calenderInstance1 = Calendar.getInstance()
+        todayMonth1 = Calendar.getInstance().get(Calendar.MONTH) + 1
+        todayYear1 = Calendar.getInstance().get(Calendar.YEAR)
+        currentMonth1 = calenderInstance1.get(Calendar.MONTH)
+        currentYear1 = calenderInstance1.get(Calendar.YEAR)
+        commentDateAdapter1.printDate(currentMonth1, currentYear1, filterBinding.endDate.text.toString())
+    }
+
+    private fun setPreviousMonthYear1() {
+        if (currentMonth == 0) {
+            calenderInstance.set(Calendar.MONTH, 11)
+            calenderInstance.set(Calendar.YEAR, currentYear - 1)
+        } else {
+            calenderInstance.set(Calendar.MONTH, currentMonth - 1)
+            calenderInstance.set(Calendar.YEAR, currentYear)
+        }
+
+        currentMonth = calenderInstance.get(Calendar.MONTH)
+        currentYear = calenderInstance.get(Calendar.YEAR)
+        commentDateAdapter.printDate(currentMonth, currentYear, filterBinding.startDate.text.toString())
+        setText1()
+    }
+
+    private fun setNextMonthYear1() {
+        if (currentMonth == 11) {
+            calenderInstance.set(Calendar.MONTH, 0)
+            calenderInstance.set(Calendar.YEAR, currentYear + 1)
+        } else {
+            calenderInstance.set(Calendar.MONTH, currentMonth + 1)
+            calenderInstance.set(Calendar.YEAR, currentYear)
+        }
+
+        currentMonth = calenderInstance.get(Calendar.MONTH)
+        currentYear = calenderInstance.get(Calendar.YEAR)
+        commentDateAdapter.printDate(currentMonth, currentYear, filterBinding.startDate.text.toString())
+        setText1()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setText1() {
+        if (currentMonth == todayMonth - 1 && currentYear == todayYear) {
+            filterBinding.nextMonth.visibility = View.GONE
+        } else filterBinding.nextMonth.visibility = View.VISIBLE
+        filterBinding.currentMonth.text = "${month[currentMonth]}  $currentYear"
+    }
+
+    private fun setPreviousMonthYear2() {
+        if (currentMonth1 == 0) {
+            calenderInstance1.set(Calendar.MONTH, 11)
+            calenderInstance1.set(Calendar.YEAR, currentYear1 - 1)
+        } else {
+            calenderInstance1.set(Calendar.MONTH, currentMonth1 - 1)
+            calenderInstance1.set(Calendar.YEAR, currentYear1)
+        }
+
+        currentMonth1 = calenderInstance1.get(Calendar.MONTH)
+        currentYear1 = calenderInstance1.get(Calendar.YEAR)
+        commentDateAdapter1.printDate(currentMonth1, currentYear1, filterBinding.endDate.text.toString())
+        setText2()
+    }
+
+    private fun setNextMonthYear2() {
+        if (currentMonth1 == 11) {
+            calenderInstance1.set(Calendar.MONTH, 0)
+            calenderInstance1.set(Calendar.YEAR, currentYear1 + 1)
+        } else {
+            calenderInstance1.set(Calendar.MONTH, currentMonth1 + 1)
+            calenderInstance1.set(Calendar.YEAR, currentYear1)
+        }
+
+        currentMonth1 = calenderInstance1.get(Calendar.MONTH)
+        currentYear1 = calenderInstance1.get(Calendar.YEAR)
+        commentDateAdapter1.printDate(currentMonth1, currentYear1, filterBinding.endDate.text.toString())
+        setText2()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setText2() {
+        if (currentMonth1 == todayMonth1 - 1 && currentYear1 == todayYear1) {
+            filterBinding.nextMonth2.visibility = View.GONE
+        } else filterBinding.nextMonth2.visibility = View.VISIBLE
+        filterBinding.currentMonth2.text = "${month1[currentMonth1]}  $currentYear1"
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun compareDates(date1: String, date2: String): Boolean {
+        val inputPattern = "dd MMM yyyy"
+        val inputFormat = SimpleDateFormat(inputPattern)
+
+        val date: Date?
+        val dateC2: Date?
+        return try {
+            date = inputFormat.parse(date1)
+            dateC2 = inputFormat.parse(date2)
+            date.time < dateC2.time
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun changeDateTime2(dateTime: String): String? {
+        val inputPattern = "dd MMM yyyy"
+        val outputPattern = "yyyy-MM-dd"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+
+        val date: Date?
+        var str: String?
+
+        try {
+            date = inputFormat.parse(dateTime)
+            @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            str = outputFormat.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            str = dateTime
+        }
+
+        return str
     }
 }

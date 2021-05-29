@@ -62,6 +62,11 @@
             android:name=".activities.delivery.DashboardActivity"
             android:label="@string/app_name" />
 
+        <activity
+            android:name=".activities.ChangeLanguageActivity"
+            android:theme="@style/Theme.BringMe.NoActionBar"
+            android:label="@string/app_name" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

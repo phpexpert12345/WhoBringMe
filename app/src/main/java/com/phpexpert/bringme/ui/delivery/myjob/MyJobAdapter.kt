@@ -15,6 +15,7 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutJobCellBinding
 import com.phpexpert.bringme.dtos.MyJobDtoList
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import java.lang.Exception
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -67,7 +68,7 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
         }
 
         when (arrayList[position].order_status_msg) {
-            "Accepted" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted -> {
                 try {
                     jobCellBinding.orderCompleteDateLayout.visibility = View.VISIBLE
                     jobCellBinding.jobAcceptCancelTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
@@ -76,7 +77,7 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
                     e.printStackTrace()
                 }
             }
-            "Completed" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().completed -> {
                 try {
                     jobCellBinding.orderCompleteDateLayout.visibility = View.VISIBLE
                     jobCellBinding.jobAcceptCancelTime.text = changeAcceptDateTime(arrayList[position].job_completed_date + " " + arrayList[position].job_completed_time)
@@ -85,7 +86,7 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
                     e.printStackTrace()
                 }
             }
-            "Cancelled" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().cancelled -> {
                 jobCellBinding.orderCompleteDateLayout.visibility = View.GONE
                 jobCellBinding.jobAcceptCancelTime.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
             }
@@ -172,7 +173,7 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
         try {
 //            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, (context as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
+            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (context as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

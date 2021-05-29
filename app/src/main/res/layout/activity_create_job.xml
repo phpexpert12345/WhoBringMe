@@ -107,7 +107,7 @@
                     android:padding="@dimen/_5sdp"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/color_text_grey"
-                    android:textSize="@dimen/_11sdp"
+                    android:textSize="@dimen/_12sdp"
                     tools:ignore="Autofill,TextFields" />
 
                 <TextView
@@ -163,17 +163,19 @@
 
                             <ImageView
                                 android:id="@+id/minusIcon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="@dimen/_40sdp"
+                                android:layout_height="@dimen/_40sdp"
                                 android:src="@drawable/minus"
+                                android:layout_centerVertical="true"
                                 tools:ignore="ContentDescription" />
 
                             <ImageView
                                 android:id="@+id/plusIcon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="@dimen/_40sdp"
+                                android:layout_height="@dimen/_40sdp"
                                 android:layout_alignParentEnd="true"
                                 android:src="@drawable/plus"
+                                android:layout_centerVertical="true"
                                 tools:ignore="ContentDescription" />
 
                             <LinearLayout
@@ -223,7 +225,6 @@
                                 android:layout_height="wrap_content"
                                 android:background="@android:color/transparent"
                                 android:backgroundTint="@color/view_color_dark"
-                                android:digits="1234567890."
                                 android:fontFamily="@font/poppins_regular"
                                 android:inputType="numberDecimal"
                                 android:lineHeight="0.5dp"
@@ -233,7 +234,7 @@
                                 android:paddingBottom="@dimen/_minus40sdp"
                                 android:singleLine="true"
                                 android:textColor="@color/text_color"
-                                android:textSize="@dimen/_13sdp"
+                                android:textSize="@dimen/_12sdp"
                                 app:boxBackgroundColor="@android:color/transparent"
                                 tools:ignore="RtlHardcoded,RtlSymmetry,UnusedAttribute" />
 

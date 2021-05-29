@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.text.Html"/>
         <variable
             name="languageModel"
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
@@ -60,7 +60,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/poppins_medium"
                 android:gravity="center_horizontal"
-                android:text="@{languageModel.declineOrderText}"
+                android:text='@{Html.fromHtml(languageModel.declineOrderText.replace("\\n", "&lt;br /&gt;"))}'
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_11sdp" />
 

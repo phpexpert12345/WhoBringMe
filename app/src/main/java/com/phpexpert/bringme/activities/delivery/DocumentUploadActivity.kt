@@ -3,6 +3,7 @@ package com.phpexpert.bringme.activities.delivery
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -16,6 +17,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -29,6 +32,7 @@ import com.phpexpert.bringme.interfaces.PermissionInterface
 import com.phpexpert.bringme.retro.ProfileRetro
 import com.phpexpert.bringme.retro.ServiceGenerator
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import com.phpexpert.bringme.utilities.ImageCropActivity
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -53,8 +57,9 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
     private lateinit var languageDtoData: LanguageDtoData
+    private lateinit var imageUri:Uri
 
-    @SuppressLint("ObsoleteSdkInt")
+    @SuppressLint("ObsoleteSdkInt", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= 24) {
@@ -69,7 +74,7 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
         uploadDocumentActivity = DataBindingUtil.setContentView(this, R.layout.upload_doucment_activity)
         uploadDocumentActivity.languageModel = sharedPrefrenceManager.getLanguageData()
 
-        uploadDocumentActivity.documentType.text = intent.extras?.getString("document_type")
+        uploadDocumentActivity.documentType.text = intent.extras?.getString("document_type") + sharedPrefrenceManager.getLanguageData().document
         languageDtoData = sharedPrefrenceManager.getLanguageData()
 
         uploadDocumentActivity.backArrow.setOnClickListener {
@@ -133,12 +138,14 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
             val intent = Intent(
                     MediaStore.ACTION_IMAGE_CAPTURE)
 //            val outputFileUri: Uri? = getCaptureImageOutputUri()!!
-            val f = File(Environment
-                    .getExternalStorageDirectory(), "temp.jpg")
-            if (Uri.fromFile(f) != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(f))
-            }
+            val values = ContentValues()
+            values.put(MediaStore.Images.Media.TITLE, "New Picture")
+            values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera")
+            imageUri = contentResolver.insert(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values
+            )!!
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    imageUri)
             startActivityForResult(intent,
                     4001)
             bottomSheetDialog1.dismiss()
@@ -161,32 +168,42 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
                     startActivityForResult(intent, 999)
                 }
             } else if (requestCode == 999) {
-                if (permissionName == "Front")
+                if (permissionName == "Front") {
                     POD1_URI = Uri.parse(data!!.getStringExtra("imgUri"))
-                else
+                    val selectedImage = BitmapFactory.decodeFile(POD1_URI.toString()) as Bitmap
+                    var requestOptions = RequestOptions()
+                    uploadDocumentActivity.documentFrontLayoutUpload.visibility = View.GONE
+                    requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(16))
+                    Glide.with(this).load(selectedImage)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .apply(requestOptions)
+                            .into(uploadDocumentActivity.imageViewFront)
+                } else {
                     POD2_URI = Uri.parse(data!!.getStringExtra("imgUri"))
-
-                val selectedImage = BitmapFactory.decodeFile(POD1_URI.toString()) as Bitmap
-                var requestOptions = RequestOptions()
-                requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(16))
-                /*Glide.with(this).load(selectedImage)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .apply(requestOptions)
-                        .into(profileEditLayoutBinding.userImage)*/
+                    val selectedImage = BitmapFactory.decodeFile(POD2_URI.toString()) as Bitmap
+                    var requestOptions = RequestOptions()
+                    uploadDocumentActivity.documentBackLayoutUpload.visibility = View.GONE
+                    requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(16))
+                    Glide.with(this).load(selectedImage)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .apply(requestOptions)
+                            .into(uploadDocumentActivity.imageViewBack)
+                }
             }
         }
     }
 
     private fun getCaptureImageOutputUri(): Uri? {
-        var outputFileUri: Uri? = null
+        /*var outputFileUri: Uri? = null
         val getImage = getExternalFilesDir("")
         if (getImage != null) {
             outputFileUri =
                     Uri.fromFile(File(Environment
                             .getExternalStorageDirectory(), "temp.jpg"))
-        }
-        return outputFileUri
+        }*/
+        return imageUri
     }
 
 
@@ -207,7 +224,7 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
         val isCamera = data?.data == null
         return try {
             if (isCamera) {
-                getCaptureImageOutputUri()!!.path!!
+                getPathFromURI(imageUri)
             } else {
                 getPathFromURI(data?.data!!)!!
             }
@@ -253,6 +270,7 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
                 }
 
                 map["auth_key"] = createRequestBody(sharedPrefrenceManager.getAuthData()?.auth_key!!)
+                map["lang_code"] = createRequestBody(sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!)
                 ServiceGenerator.createService(ProfileRetro::class.java)
                         .uploadDocument(map, createMultiPartBody(POD1_URI, "document_front"),
                                 createMultiPartBody(POD2_URI, "document_back"))
@@ -260,20 +278,24 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
                             @SuppressLint("SetTextI18n")
                             override fun onResponse(call: Call<EditProfileDto>, response: Response<EditProfileDto>) {
                                 if (response.isSuccessful) {
+                                    uploadDocumentActivity.submitData.revertAnimation()
                                     val responseData = response.body()
                                     if (responseData?.status_code == "2") {
                                         hitAuthApi(this@DocumentUploadActivity)
                                     } else {
                                         bottomSheetDialogHeadingText.visibility = View.VISIBLE
                                         when (responseData?.status_code) {
-                                            "0" -> bottomSheetDialogHeadingText.visibility = View.GONE
-                                            else -> bottomSheetDialogMessageText.text = responseData?.status_message
+                                            "0" -> {
+                                                bottomSheetDialogHeadingText.visibility = View.GONE
+                                            }
+                                            else -> bottomSheetDialogHeadingText.visibility = View.VISIBLE
                                         }
-
+                                        bottomSheetDialogMessageText.text = responseData?.status_message
                                         bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                                         bottomSheetDialogMessageCancelButton.visibility = View.GONE
-                                        bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
+                                        bottomSheetDialogMessageOkButton.setOnClickListener {
                                             bottomSheetDialog.dismiss()
+                                            finish()
                                             /*if (responseData?.status_code == "0")
                                             finish()*/
                                         }
@@ -308,6 +330,7 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
                         })
             } else hitAuthApi(this)
         } else {
+            uploadDocumentActivity.submitData.revertAnimation()
             bottomSheetDialogMessageText.text = languageDtoData.network_error
             bottomSheetDialogHeadingText.visibility = View.GONE
             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
@@ -345,6 +368,7 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
         if (value) {
             editImageData()
         } else {
+            uploadDocumentActivity.submitData.revertAnimation()
             bottomSheetDialogMessageText.text = message
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogHeadingText.visibility = View.VISIBLE

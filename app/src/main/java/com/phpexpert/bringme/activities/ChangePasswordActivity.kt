@@ -1,6 +1,8 @@
 package com.phpexpert.bringme.activities
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import androidx.databinding.DataBindingUtil
@@ -11,6 +13,7 @@ import com.phpexpert.bringme.dtos.LanguageDtoData
 import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.ProfileViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 
 class ChangePasswordActivity : BaseActivity(), AuthInterface {
 
@@ -73,6 +76,57 @@ class ChangePasswordActivity : BaseActivity(), AuthInterface {
                 changePasswordActivity.confirmPasswordET.transformationMethod = null
             }
         }
+
+        changePasswordActivity.oldPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0!!.isEmpty()) {
+                    changePasswordActivity.oldPasswordEye.visibility = View.GONE
+                } else {
+                    changePasswordActivity.oldPasswordEye.visibility = View.VISIBLE
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
+
+        changePasswordActivity.newPasswordET.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0!!.isEmpty()) {
+                    changePasswordActivity.newPasswordEye.visibility = View.GONE
+                } else {
+                    changePasswordActivity.newPasswordEye.visibility = View.VISIBLE
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
+
+        changePasswordActivity.confirmPasswordET.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0!!.isEmpty()) {
+                    changePasswordActivity.confirmPasswordEye.visibility = View.GONE
+                } else {
+                    changePasswordActivity.confirmPasswordEye.visibility = View.VISIBLE
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
     }
 
     private fun validationData(): Boolean {
@@ -157,9 +211,9 @@ class ChangePasswordActivity : BaseActivity(), AuthInterface {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 changePasswordActivity.continueButton.revertAnimation()
                 changePasswordViewModel.changePassword(mapData()).observe(this, {
-                    if (it.status_code=="2"){
+                    if (it.status_code == "2") {
                         hitAuthApi(this)
-                    }else {
+                    } else {
                         changePasswordActivity.continueButton.revertAnimation()
                         if (it.status_message == "11")
                             bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
@@ -203,7 +257,7 @@ class ChangePasswordActivity : BaseActivity(), AuthInterface {
         mapDataValue["LoginId"] = sharedPrefrenceManager.getLoginId()
         mapDataValue["Old_Password"] = changePasswordActivity.oldPassword.text.toString()
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
-        mapDataValue["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapDataValue["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataValue
     }
 

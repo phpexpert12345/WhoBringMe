@@ -17,6 +17,7 @@ import com.phpexpert.bringme.dtos.NotificationDtoList
 import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.models.NotificationViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 
 @Suppress("DEPRECATION")
 class NotificationsFragment : Fragment(), AuthInterface {
@@ -94,6 +95,7 @@ class NotificationsFragment : Fragment(), AuthInterface {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
+        mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataVal
     }
 

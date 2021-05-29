@@ -14,4 +14,5 @@ object CONSTANTS {
     const val currentLongitude = "currentLongitude"
     const val isLocation = "false"
     const val fireBaseId="fireBaseID"
+    const val changeLanguage = "changeLanguage"
 }

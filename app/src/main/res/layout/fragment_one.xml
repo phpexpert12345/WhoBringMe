@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-
+        <import type="android.text.Html"/>
         <variable
             name="languageModel"
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
@@ -29,16 +29,21 @@
             android:fontFamily="@font/poppins_semi_bold"
             android:text="@{languageModel.title_1}"
             android:textAlignment="center"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:textColor="@color/text_color"
             android:textSize="@dimen/_14sdp" />
 
         <TextView
+            android:id="@+id/lableData"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/_15sdp"
             android:fontFamily="@font/poppins_regular"
-            android:text="@{languageModel.label_one}"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:text='@{Html.fromHtml(languageModel.label_one.replace("\\n", "&lt;br /&gt;"))}'
             android:textAlignment="center"
             android:textColor="@color/color_text_grey"
             android:textSize="@dimen/_12sdp">

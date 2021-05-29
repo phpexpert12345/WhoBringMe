@@ -17,6 +17,7 @@ import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.DeliveryHomeCellBinding
 import com.phpexpert.bringme.dtos.LatestJobDeliveryDataList
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.ParseException
@@ -64,7 +65,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
             e.printStackTrace()
         }
         when (arrayList[position].order_status_msg) {
-            "Accepted" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted -> {
                 try {
                     homeFragmentCellBinding.acceptedDateTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
                 } catch (e: java.lang.Exception) {
@@ -75,7 +76,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().finished
                 homeFragmentCellBinding.declineFinishedLayout.setBackgroundResource(R.drawable.button_blue_green)
             }
-            "Completed" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().completed -> {
                 try {
                     homeFragmentCellBinding.acceptedDateTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
                 } catch (e: java.lang.Exception) {
@@ -86,7 +87,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.visibility = View.GONE
                 homeFragmentCellBinding.declineFinishedLayout.setBackgroundResource(R.drawable.button_blue_green)
             }
-            "Cancelled" -> {
+            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().cancelled -> {
                 homeFragmentCellBinding.declineFinishedLayout.visibility = View.GONE
                 homeFragmentCellBinding.acceptedDateTimeLayout.visibility = View.GONE
                 homeFragmentCellBinding.acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
@@ -188,7 +189,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         try {
 //            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
-            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, (context as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
+            val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (context as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
             val formartter = (DecimalFormat("##.##", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {

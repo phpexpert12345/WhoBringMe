@@ -85,6 +85,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/editData"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -276,13 +277,13 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textData"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_5sdp"
                             android:hint="@{languageModel._6_digit_mpin_number}"
                             android:textColorHint="@color/lightColor">
 
@@ -312,13 +313,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_18sdp"
+                            android:layout_marginEnd="@dimen/_minus5sdp"
                             android:paddingStart="@dimen/_10sdp"
-                            android:paddingLeft="@dimen/_10sdp"
                             android:paddingTop="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
                             android:src="@drawable/eyes_off"
+                            android:visibility="gone"
                             tools:ignore="ContentDescription,RtlHardcoded,RtlSymmetry" />
                     </RelativeLayout>
                 </LinearLayout>

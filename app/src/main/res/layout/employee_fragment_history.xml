@@ -65,7 +65,7 @@
                     android:layout_marginTop="@dimen/_minus15sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_20sdp"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <EditText
                         android:id="@+id/searchET"
@@ -76,9 +76,12 @@
                         android:fontFamily="@font/poppins_regular"
                         android:hint="@{languageModel.enter_order_number}"
                         android:singleLine="true"
+                        android:inputType="number"
                         android:textColor="@color/white"
                         android:textColorHint="#CFCFCF"
                         android:textSize="@dimen/_15sdp"
+                        android:text="sdfsfdkljsdgfhkadsjlfksadhfkjslafh"
+                        android:paddingEnd="@dimen/_80sdp"
                         android:visibility="visible"
                         tools:ignore="Autofill,TextFields" />
 

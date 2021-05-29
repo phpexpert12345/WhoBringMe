@@ -6,7 +6,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.text.Html
+import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.RelativeLayout
@@ -20,6 +22,7 @@ import com.phpexpert.bringme.interfaces.AuthInterface
 import com.phpexpert.bringme.interfaces.PermissionInterface
 import com.phpexpert.bringme.models.RegistrationModel
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -78,6 +81,22 @@ open class RegistrationActivity : BaseActivity(), AuthInterface, PermissionInter
             }
         }
 
+        registrationActivity.digitPin.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0!!.isEmpty()) {
+                    registrationActivity.passwordEye.visibility = View.GONE
+                } else {
+                    registrationActivity.passwordEye.visibility = View.VISIBLE
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
 
         registrationActivity.passwordEye.setOnClickListener {
             registrationActivity.digitPin.setSelection(registrationActivity.digitPin.text.toString().trim().length)
@@ -175,7 +194,7 @@ open class RegistrationActivity : BaseActivity(), AuthInterface, PermissionInter
         mapData["account_type"] = if (selectionString == "client") "1" else "2"
         mapData["account_phone_code"] = registrationActivity.searchCountyCountry.textView_selectedCountry.text.toString()
         mapData["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
-        mapData["lang_code"] = sharedPrefrenceManager.getAuthData()?.lang_code!!
+        mapData["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapData
     }
 

@@ -3,77 +3,102 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="languageModel"
             type="com.phpexpert.bringme.dtos.LanguageDtoData" />
     </data>
-    <LinearLayout
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/backgroundColor"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/headerLayout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/_20sdp"
-            android:background="@color/colorLoginButton"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/back_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="-20dp"
-                android:src="@drawable/back_arrow"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/_23sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:src="@drawable/filter"
-                tools:ignore="ContentDescription" />
+            android:layout_height="match_parent"
+            android:background="@color/backgroundColor"
+            android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/back_arrow"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="-20dp"
-                android:layout_marginBottom="@dimen/_20sdp"
                 android:background="@color/colorLoginButton"
                 android:gravity="center_vertical">
 
-                <TextView
+                <ImageView
+                    android:id="@+id/back_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="-20dp"
+                    android:src="@drawable/back_arrow"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/filterIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_23sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/filter"
+                    tools:ignore="ContentDescription" />
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:text="@{languageModel.transactions_history}"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_19sdp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-        </RelativeLayout>
+                    android:layout_below="@id/back_arrow"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="-20dp"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    android:background="@color/colorLoginButton"
+                    android:gravity="center_vertical">
 
-        <androidx.core.widget.NestedScrollView
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="@{languageModel.transactions_history}"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_19sdp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/historyTransactionRV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_10sdp"
+                        android:layout_below="@+id/historyTransactionRV" />
+                </RelativeLayout>
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/blurView"
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:background="#B3111010"
+            android:clickable="true"
+            android:visibility="gone" />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/historyTransactionRV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </RelativeLayout>
-        </androidx.core.widget.NestedScrollView>
-    </LinearLayout>
+        <include
+            android:id="@+id/jobViewLayout"
+            layout="@layout/transaction_filter_layout"
+            android:visibility="visible" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -7,6 +7,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.ComponentName
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -69,6 +70,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var progressDialog: ProgressDialog
     private lateinit var permissionName: String
+    private lateinit var imageUri:Uri
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -472,12 +474,14 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
             val intent = Intent(
                     MediaStore.ACTION_IMAGE_CAPTURE)
 //            val outputFileUri: Uri? = getCaptureImageOutputUri()!!
-            val f = File(Environment
-                    .getExternalStorageDirectory(), "temp.jpg")
-            if (Uri.fromFile(f) != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(f))
-            }
+            val values = ContentValues()
+            values.put(MediaStore.Images.Media.TITLE, "New Picture")
+            values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera")
+            imageUri = contentResolver.insert(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values
+            )!!
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    imageUri)
             startActivityForResult(intent,
                     4001)
             bottomSheetDialog1.dismiss()
@@ -487,14 +491,14 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
 
 
     private fun getCaptureImageOutputUri(): Uri? {
-        var outputFileUri: Uri? = null
+        /*var outputFileUri: Uri? = null
         val getImage = getExternalFilesDir("")
         if (getImage != null) {
             outputFileUri =
                     Uri.fromFile(File(Environment
                             .getExternalStorageDirectory(), "temp.jpg"))
-        }
-        return outputFileUri
+        }*/
+        return imageUri
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -542,7 +546,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
         val isCamera = data?.data == null
         return try {
             if (isCamera) {
-                getCaptureImageOutputUri()!!.path!!
+                getPathFromURI(imageUri)
             } else {
                 getPathFromURI(data?.data!!)!!
             }
@@ -613,7 +617,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
                 map["account_lat"] = createRequestBody(postDataOtp.accountLat!!)
                 map["account_long"] = createRequestBody(postDataOtp.accountLong!!)
                 map["auth_key"] = createRequestBody(sharedPrefrenceManager.getAuthData()?.auth_key!!)
-                map["lang_code"] = createRequestBody(sharedPrefrenceManager.getAuthData()?.lang_code!!)
+                map["lang_code"] = createRequestBody(sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!)
                 ServiceGenerator.createService(ProfileRetro::class.java)
                         .editPhotoData(map, createMultiPartBody(POD1_URI, "account_photo"))
                         .enqueue(object : Callback<EditProfileDto> {

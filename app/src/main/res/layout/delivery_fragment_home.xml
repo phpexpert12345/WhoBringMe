@@ -88,6 +88,7 @@
                         android:hint="@{languageModel.enter_order_number}"
                         android:inputType="number"
                         android:singleLine="true"
+                        android:paddingEnd="@dimen/_80sdp"
                         android:textColor="@color/white"
                         android:textColorHint="#CFCFCF"
                         android:textSize="@dimen/_12sdp"
