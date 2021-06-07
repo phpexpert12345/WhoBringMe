@@ -265,7 +265,7 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun base64Encoded(dataValue: String?): String {
+    fun base64Encoded(dataValue: String?): String? {
         val data = dataValue?.toByteArray(charset("UTF-8"))
         return Base64.encodeToString(data, Base64.DEFAULT)
     }

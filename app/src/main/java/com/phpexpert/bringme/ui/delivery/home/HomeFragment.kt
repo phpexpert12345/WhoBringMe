@@ -126,18 +126,21 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         setList()
 
         if (sharedPrefrenceManager.getPreference(CONSTANTS.isLocation) == "true") {
-            val locationData = Location("")
-            locationData.latitude = sharedPrefrenceManager.getPreference(CONSTANTS.currentLatitue)!!.toDouble()
-            locationData.longitude = sharedPrefrenceManager.getPreference(CONSTANTS.currentLongitude)!!.toDouble()
+            try {
+                val locationData = Location("")
+                locationData.latitude = sharedPrefrenceManager.getPreference(CONSTANTS.currentLatitue)!!.toDouble()
+                locationData.longitude = sharedPrefrenceManager.getPreference(CONSTANTS.currentLongitude)!!.toDouble()
 
-            val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-            val addresses = geocoder.getFromLocation(locationData.latitude, locationData.longitude, 1)
-            val stringBuilder = StringBuilder()
-            for (i in 0..addresses[0]!!.maxAddressLineIndex)
-                stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
-            currentLocation = locationData
-            address = addresses[0]
-            setObserver()
+                val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+                val addresses = geocoder.getFromLocation(locationData.latitude, locationData.longitude, 1)
+                val stringBuilder = StringBuilder()
+                for (i in 0..addresses[0]!!.maxAddressLineIndex)
+                    stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
+                currentLocation = locationData
+                address = addresses[0]
+                setObserver()
+            } catch (e: Exception) {
+            }
         } else {
             if ((activity as BaseActivity).isCheckPermissions(requireActivity(), perission))
                 if ((activity as BaseActivity).isLocationEnabled()) {
@@ -510,8 +513,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
         mapDataVal["current_lat"] = currentLocation.latitude.toString()
         mapDataVal["current_long"] = currentLocation.longitude.toString()
-        mapDataVal["current_city"] = (activity as BaseActivity).base64Encoded(address.adminArea)
-        mapDataVal["current_locality"] = (activity as BaseActivity).base64Encoded(address.locality)
+        mapDataVal["current_city"] = (activity as BaseActivity).base64Encoded(address.adminArea) ?: ""
+        mapDataVal["current_locality"] = (activity as BaseActivity).base64Encoded(address.locality) ?: ""
         mapDataVal["current_zipcode"] = address.postalCode
         mapDataVal["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
@@ -531,7 +534,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
     private fun orderDeclineData(): Map<String, String> {
         val mapDataVal = HashMap<String, String>()
         mapDataVal["job_order_id"] = arrayList[selectedPosition].job_order_id!!
-        mapDataVal["order_decline_reason"] = (activity as BaseActivity).base64Encoded(orderDelcineString)
+        mapDataVal["order_decline_reason"] = (activity as BaseActivity).base64Encoded(orderDelcineString) ?: ""
         mapDataVal["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
         mapDataVal["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataVal["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!

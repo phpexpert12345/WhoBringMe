@@ -6,7 +6,7 @@ import org.acra.ReportField
 import org.acra.annotation.ReportsCrashes
 import org.acra.sender.HttpSender
 
-@ReportsCrashes(mailTo = "hunny226@gmail.com",
+@ReportsCrashes(mailTo = "himanshu@phpexpettechnologies.com",
         formUri = "https://{myusername}.cloudant.com/acra-{myapp}/_design/acra-storage/_update/report",
         reportType = HttpSender.Type.JSON,
         httpMethod = HttpSender.Method.POST,
@@ -19,7 +19,7 @@ import org.acra.sender.HttpSender
 class ApplicationMainClass : Application() {
     override fun onCreate() {
         super.onCreate()
-        ACRA.init(this);
+        ACRA.init(this)
 
     }
 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutNotificationCellBinding
 import com.phpexpert.bringme.dtos.NotificationDtoList
+import com.phpexpert.bringme.utilities.BaseActivity
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,7 +30,7 @@ class NotificationAdapter(var context: Context, var arrayList: ArrayList<Notific
     override fun onBindViewHolder(holder: NotificationFragmentViewHolder, position: Int) {
         notificationFragmentCellBinding = holder.viewBinding as LayoutNotificationCellBinding
         notificationFragmentCellBinding.jobTime.text = orderDateValue(arrayList[position].notification_date + " " + arrayList[position].notification_time)
-        notificationFragmentCellBinding.jobId.text = arrayList[position].order_id
+        notificationFragmentCellBinding.jobId.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().order + arrayList[position].order_id
         notificationFragmentCellBinding.title.text = arrayList[position].notification_subject
         notificationFragmentCellBinding.message.text = arrayList[position].notification_message
     }

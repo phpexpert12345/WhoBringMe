@@ -425,7 +425,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         mapDataValue["LoginId"] = (activity as BaseActivity).sharedPrefrenceManager.getLoginId()
         mapDataValue["job_order_id"] = jobOrderId
         mapDataValue["total_tating"] = totalRating
-        mapDataValue["review_content"] = (activity as BaseActivity).base64Encoded(reviewContent)
+        mapDataValue["review_content"] = (activity as BaseActivity).base64Encoded(reviewContent) ?: ""
         mapDataValue["auth_key"] = (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.auth_key!!
         mapDataValue["lang_code"] = (activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         return mapDataValue

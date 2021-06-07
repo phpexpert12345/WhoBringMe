@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
+import com.hbb20.CountryCodePicker
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.LayoutDocumentChoosenActivityBinding
 import com.phpexpert.bringme.utilities.BaseActivity
+import com.phpexpert.bringme.utilities.CONSTANTS
 
 @Suppress("DEPRECATION")
 class UploadDocumentSelectActivity : BaseActivity() {
@@ -21,7 +21,7 @@ class UploadDocumentSelectActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         documentSelectActivity = DataBindingUtil.setContentView(this, R.layout.layout_document_choosen_activity)
         documentSelectActivity.languageModel = sharedPrefrenceManager.getLanguageData()
-
+        selectedDocumentType = sharedPrefrenceManager.getLanguageData().id_card
         documentSelectActivity.countryCode.setArrowSize(70)
         documentSelectActivity.continueButton.setOnClickListener {
             documentSelectActivity.continueButton.startAnimation()
@@ -37,6 +37,18 @@ class UploadDocumentSelectActivity : BaseActivity() {
         documentSelectActivity.backArrow.setOnClickListener {
             finish()
         }
+
+        if (intent.extras?.getString("page") == "new") {
+            if (sharedPrefrenceManager.getProfile().login_document_back_photo != "") {
+                val intent = Intent(this, DocumentUploadActivity::class.java)
+                intent.putExtra("document_type", sharedPrefrenceManager.getProfile().document_type)
+                intent.putExtra("document_country", sharedPrefrenceManager.getProfile().document_country)
+                startActivity(intent)
+                finish()
+            }
+        }
+
+        documentSelectActivity.countryCode.changeDefaultLanguage(CountryCodePicker.Language.forCountryNameCode(sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)))
         setAction()
     }
 
@@ -55,7 +67,7 @@ class UploadDocumentSelectActivity : BaseActivity() {
                 documentSelectActivity.driverLicenseCheckImage.visibility = View.GONE
                 documentSelectActivity.driverLicenseImage.setImageResource(R.drawable.driver_license)
                 documentSelectActivity.driverLicenseText.setTextColor(resources.getColor(R.color.colorDarkGrey))
-                selectedDocumentType = "ID Card"
+                selectedDocumentType = sharedPrefrenceManager.getLanguageData().id_card
             }
         }
 
@@ -75,7 +87,7 @@ class UploadDocumentSelectActivity : BaseActivity() {
                 documentSelectActivity.driverLicenseCheckImage.visibility = View.GONE
                 documentSelectActivity.driverLicenseImage.setImageResource(R.drawable.driver_license)
                 documentSelectActivity.driverLicenseText.setTextColor(resources.getColor(R.color.colorDarkGrey))
-                selectedDocumentType = "Passport"
+                selectedDocumentType = sharedPrefrenceManager.getLanguageData().passport
 
             }
         }
@@ -96,7 +108,7 @@ class UploadDocumentSelectActivity : BaseActivity() {
                 documentSelectActivity.driverLicenseCheckImage.visibility = View.VISIBLE
                 documentSelectActivity.driverLicenseImage.setImageResource(R.drawable.driver_license_geen)
                 documentSelectActivity.driverLicenseText.setTextColor(resources.getColor(R.color.colorGreen))
-                selectedDocumentType = "Driving License"
+                selectedDocumentType = sharedPrefrenceManager.getLanguageData().driver_s_license
             }
         }
     }

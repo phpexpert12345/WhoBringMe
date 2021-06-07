@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -27,6 +28,7 @@ import com.phpexpert.bringme.models.JobPostModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.utilities.CONSTANTS
 import com.stripe.android.ApiResultCallback
+import com.stripe.android.CardUtils
 import com.stripe.android.Stripe
 import com.stripe.android.model.Card
 import com.stripe.android.model.Token
@@ -94,20 +96,33 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (p3 == 0) {
-                    if (cardActivityBinding.expiryDate.text.toString().trim() != "") {
-                        cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("")
-                        cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+                    if (p3 == 0){
+                        if (cardActivityBinding.expiryDate.text.toString().trim() != "") {
+                            cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("")
+                            cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
+                        }
+                    }else {
+                        if (p1 == 1 && p1 + p3 == 2 && p0?.contains('/') == false) {
+                            cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("$p0/")
+                        }
                     }
-                } else {
-                    if (p1 == 1 && p1 + p3 == 2 && p0?.contains('/') == false) {
-                        cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("$p0/")
-                    } else if (p1 == 3 && p1 - p2 == 2 && p0?.contains('/') == true) {
+                }else {
+                    if (p3 == 0 || (p1 == 3 && p2 == 2 && p3 == 1)) {
+                        if (cardActivityBinding.expiryDate.text.toString().trim() != "") {
+                            cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("")
+                            cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
+                        }
+                    } else {
+                        if (p3 == 2 && p0?.contains('/') == false) {
+                            cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("$p0/")
+                        } /*else if (p3 == 4 && p0?.contains('/') == true) {
                         cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable(p0.toString().replace("/", ""))
+                    }*/
                     }
-                    cardActivityBinding.expiryDate.setSelection(cardActivityBinding.expiryDate.text.toString().length)
-                    cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
                 }
+                cardActivityBinding.expiryDate.setSelection(cardActivityBinding.expiryDate.text.toString().length)
+                cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
 
             }
 
@@ -116,12 +131,31 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
 
         })
 
+        cardActivityBinding.cardNumber.onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+            if (!p1) {
+                if (!CardUtils.isValidCardNumber(cardActivityBinding.cardNumber.text.toString().replace(" ", ""))) {
+                    bottomSheetDialogMessageText.text = languageDtoData.card_number_not_valid
+                    bottomSheetDialogHeadingText.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        cardActivityBinding.cardNumber.requestFocus()
+                        cardActivityBinding.cardNumber.setSelection(cardActivityBinding.cardNumber.length())
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
+                }
+
+            }
+        }
+
         cardActivityBinding.cardNumber.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                cardActivityBinding.cardNumberText.text = p0
+                if (p0!!.length < 19)
+                    cardActivityBinding.cardNumberText.text = p0
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -369,7 +403,7 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
         val mapDataValue = HashMap<String, String>()
         mapDataValue["LoginId"] = sharedPrefrenceManager.getLoginId()
         mapDataValue["payment_transaction_id"] = paymentTransactionId
-        mapDataValue["about_job"] = base64Encoded(servicePostValue.jobDescription!!)
+        mapDataValue["about_job"] = base64Encoded(servicePostValue.jobDescription!!) ?: ""
         mapDataValue["job_offer_time"] = servicePostValue.jobTime!! + " minutes"
         mapDataValue["job_sub_total"] = servicePostValue.jobAmount!!
         mapDataValue["job_tax_amount"] = servicePostValue.job_tax_amount!!
@@ -383,16 +417,16 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
         mapDataValue["payment_mode"] = servicePostValue.jobPaymentMode!!
         val geocoder = Geocoder(this@NewCardActivity, Locale.getDefault())
         val addresses = geocoder.getFromLocation(mLocation.latitude, mLocation.longitude, 1)
-        mapDataValue["job_posted_country"] = base64Encoded(addresses[0]!!.countryName)
-        mapDataValue["job_posted_state"] = base64Encoded(addresses[0]!!.adminArea)
-        mapDataValue["job_posted_city"] = base64Encoded(addresses[0]!!.locality)
+        mapDataValue["job_posted_country"] = base64Encoded(addresses[0]!!.countryName) ?: ""
+        mapDataValue["job_posted_state"] = base64Encoded(addresses[0]!!.adminArea) ?: ""
+        mapDataValue["job_posted_city"] = base64Encoded(addresses[0]!!.locality) ?: ""
         mapDataValue["job_posted_lat"] = mLocation.latitude.toString()
         mapDataValue["job_posted_lang"] = mLocation.longitude.toString()
         mapDataValue["job_posted_zipcode"] = addresses[0]!!.postalCode
         val stringBuilder = StringBuilder()
         for (i in 0..addresses[0]!!.maxAddressLineIndex)
             stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")
-        mapDataValue["job_posted_address"] = base64Encoded(stringBuilder.toString())
+        mapDataValue["job_posted_address"] = base64Encoded(stringBuilder.toString()) ?: ""
         mapDataValue["lang_code"] = sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!
         mapDataValue["auth_key"] = sharedPrefrenceManager.getAuthData()?.auth_key!!
 

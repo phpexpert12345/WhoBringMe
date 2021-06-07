@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="@dimen/_minus2sdp"
+            android:layout_marginStart="@dimen/_minus2sdp"
             android:background="@drawable/top_shadow_background">
 
             <ImageView
@@ -158,9 +159,11 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/footerLayout"
             android:layout_marginBottom="@dimen/_minus50sdp"
+            android:layout_marginStart="@dimen/_minus20sdp"
+            android:layout_marginEnd="@dimen/_minus20sdp"
             android:background="@drawable/calendar_bg_down"
             android:minHeight="@dimen/_200sdp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -325,6 +328,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/calendar_bg_down"
                 android:minHeight="@dimen/_200sdp"
+                android:layout_marginStart="@dimen/_minus20sdp"
+                android:layout_marginEnd="@dimen/_minus20sdp"
                 android:layout_alignParentBottom="true"
                 tools:ignore="UselessParent">
 

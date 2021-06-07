@@ -67,7 +67,7 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
     private fun initValues() {
 
         congratulationScreenBinding.currencyCode.text = getCurrencySymbol()
-        congratulationScreenBinding.userName.text = "${languageDtoData.hello} ${sharedPrefrenceManager.getProfile().login_name},"
+        congratulationScreenBinding.userName.text = "${sharedPrefrenceManager.getProfile().login_name},"
         congratulationScreenBinding.userName1.text = "${languageDtoData.hello} ${sharedPrefrenceManager.getProfile().login_name},"
         servicePostValue = intent.getSerializableExtra("postValue") as PostJobPostDto
         jobViewBinding = congratulationScreenBinding.jobViewLayout
@@ -397,7 +397,7 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
             if (sharedPrefrenceManager.getAuthData()?.auth_key != null && sharedPrefrenceManager.getAuthData()?.auth_key != "") {
                 jobViewModel.getJobDetails(getJobDetailsMap()).observe(this, {
                     if (it.status_code == "0") {
-                        if (it.data!!.OrderDetailList!![0].order_status_msg == languageDtoData.accepted) {
+                        if (it.data!!.OrderDetailList!![0].job_status == "1") {
                             congratulationScreenBinding.timingDataLayout.visibility = View.GONE
                             congratulationScreenBinding.userAcceptedData.visibility = View.VISIBLE
                             congratulationScreenBinding.homeButton.visibility = View.VISIBLE

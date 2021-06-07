@@ -52,8 +52,8 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
         historyFragmentCellBinding.currencyCode.text = (context as BaseActivity).getCurrencySymbol()
 
 
-        when (arrayList[position].order_status_msg) {
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted -> {
+        when (arrayList[position].job_status) {
+            "1" -> {
                 try {
                     historyFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_accept_date!!} ${arrayList[position].job_accept_time}")
                     historyFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted_time_text
@@ -66,11 +66,11 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
                     e.printStackTrace()
                 }
             }
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().completed -> {
+            "3" -> {
                 try {
                     historyFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_completed_date!!} ${arrayList[position].job_completed_time}")
                     historyFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().complete_time_text
-                    if (arrayList[position].review_status == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().not_done) {
+                    if (arrayList[position].review_status == "Not Done") {
                         historyFragmentCellBinding.reviewView.visibility = View.GONE
                         historyFragmentCellBinding.writeReview.visibility = View.VISIBLE
                     } else {
@@ -84,9 +84,9 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
                     e.printStackTrace()
                 }
             }
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().cancelled -> {
+            "4" -> {
                 try {
-                    if (arrayList[position].review_status == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().not_done) {
+                    if (arrayList[position].review_status == "Not Done") {
                         historyFragmentCellBinding.reviewView.visibility = View.GONE
                         historyFragmentCellBinding.writeReview.visibility = View.VISIBLE
                     } else {
@@ -101,7 +101,7 @@ class HistoryFragmentAdapter(var context: Context, var arrayList: ArrayList<Empl
                     e.printStackTrace()
                 }
             }
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().pending -> {
+            "0" -> {
                 try {
                     historyFragmentCellBinding.writeReview.visibility = View.GONE
                     historyFragmentCellBinding.deliveryDataLayout.visibility = View.GONE

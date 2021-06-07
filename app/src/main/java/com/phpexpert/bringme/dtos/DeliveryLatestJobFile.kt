@@ -223,6 +223,9 @@ class LatestJobDeliveryDataList {
     @SerializedName("write_review_status")
     var write_review_status: String? = ""
 
+    @SerializedName("job_status")
+    var job_status: String? = ""
+
 }
 
 class OrderAcceptMainDto : BaseResponseDto() {

@@ -85,6 +85,9 @@ open class LoginDetailsDto {
     @SerializedName("document_type")
     var document_type: String? = ""
 
+    @SerializedName("document_status")
+    var document_status: String? = ""
+
     @SerializedName("device_id_android")
     var device_id_android: String? = ""
 

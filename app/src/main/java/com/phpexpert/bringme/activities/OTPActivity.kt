@@ -84,6 +84,7 @@ class OTPActivity : BaseActivity(), AuthInterface {
                 if (isLocationEnabled())
                     gettingLocationData()
                 else {
+                    otpActivity.btnSubmit.revertAnimation()
                     bottomSheetDialogHeadingText.visibility = View.GONE
                     bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().location_enable_message
                     bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
@@ -302,17 +303,17 @@ class OTPActivity : BaseActivity(), AuthInterface {
     private fun mapData(): Map<String, String?> {
         val mapDataVal = HashMap<String, String?>()
         mapDataVal["otp_number"] = otpActivity.otpPass1.text.toString() + otpActivity.otpPass2.text.toString() + otpActivity.otpPass3.text.toString() + otpActivity.otpPass4.text.toString()
-        mapDataVal["account_first_name"] = base64Encoded(postDataOtp.accountFirstName)
-        mapDataVal["account_last_name"] = base64Encoded(postDataOtp.accountLasttName)
+        mapDataVal["account_first_name"] = base64Encoded(postDataOtp.accountFirstName) ?: ""
+        mapDataVal["account_last_name"] = base64Encoded(postDataOtp.accountLasttName) ?: ""
         mapDataVal["account_email"] = postDataOtp.accountEmail
         mapDataVal["account_mobile"] = postDataOtp.accountMobile
         mapDataVal["account_mpin_number"] = postDataOtp.mobilePinCode
         mapDataVal["account_type"] = if (postDataOtp.accountType == "client") "1" else "2"
-        mapDataVal["account_country"] = base64Encoded(postDataOtp.accountCountry)
-        mapDataVal["account_state"] = base64Encoded(postDataOtp.accountState)
-        mapDataVal["account_city"] = base64Encoded(postDataOtp.accountCity)
-        mapDataVal["account_address"] = base64Encoded(postDataOtp.accountAddress)
-        mapDataVal["address_postcode"] = base64Encoded(postDataOtp.addressPostCode)
+        mapDataVal["account_country"] = base64Encoded(postDataOtp.accountCountry) ?: ""
+        mapDataVal["account_state"] = base64Encoded(postDataOtp.accountState) ?: ""
+        mapDataVal["account_city"] = base64Encoded(postDataOtp.accountCity) ?: ""
+        mapDataVal["account_address"] = base64Encoded(postDataOtp.accountAddress) ?: ""
+        mapDataVal["address_postcode"] = base64Encoded(postDataOtp.addressPostCode) ?: ""
         mapDataVal["account_lat"] = postDataOtp.accountLat
         mapDataVal["account_long"] = postDataOtp.accountLong
         mapDataVal["account_phone_code"] = postDataOtp.accountPhoneCode
@@ -408,7 +409,7 @@ class OTPActivity : BaseActivity(), AuthInterface {
         postDataOtp.accountLong = mLocation.longitude.toString()
         postDataOtp.accountCountry = addresses[0]!!.countryName
         postDataOtp.accountState = addresses[0]!!.adminArea
-        postDataOtp.accountCity = addresses[0]!!.locality
+        postDataOtp.accountCity = addresses[0]!!.locality ?: ""
         val stringBuilder = StringBuilder()
         for (i in 0..addresses[0]!!.maxAddressLineIndex)
             stringBuilder.append(addresses[0]!!.getAddressLine(i) + ",")

@@ -204,7 +204,9 @@ class ProfileFragment : Fragment(), AuthInterface {
             startActivity(Intent(requireActivity(), ProfileEditActivity::class.java))
         }
         profileFragmentBinding.documentUploadLayout.setOnClickListener {
-            startActivity(Intent(requireActivity(), UploadDocumentSelectActivity::class.java))
+            val  i = Intent(requireActivity(), UploadDocumentSelectActivity::class.java)
+            i.putExtra("page", "new")
+            startActivity(i)
         }
 
         profileFragmentBinding.changeMPinLayout.setOnClickListener {
@@ -283,13 +285,13 @@ class ProfileFragment : Fragment(), AuthInterface {
                         }
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.setOnClickListener { _ ->
                             if (it.status_code == "0") {
-                                mobileNumberDialog.dismiss()
                                 timerRestriction()
                                 otpDataDialog.findViewById<EditText>(R.id.otpPass4)?.text = Editable.Factory.getInstance().newEditable("")
                                 otpDataDialog.findViewById<EditText>(R.id.otpPass3)?.text = Editable.Factory.getInstance().newEditable("")
                                 otpDataDialog.findViewById<EditText>(R.id.otpPass2)?.text = Editable.Factory.getInstance().newEditable("")
                                 otpDataDialog.findViewById<EditText>(R.id.otpPass1)?.text = Editable.Factory.getInstance().newEditable("")
-                                otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = Html.fromHtml(languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to.replace("\\n", "&lt;br /&gt;")).toString() + " " + mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString() + mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text.toString()
+                                otpDataDialog.findViewById<TextView>(R.id.headerText)?.text = "${Html.fromHtml(languageData.please_wait_we_will_auto_verify_nthe_otp_sent_to.replace("\\n", "&lt;br /&gt;"))} ${mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)!!.textView_selectedCountry.text.toString()} + ${mobileNumberDialog.findViewById<EditText>(R.id.mobileNumber)?.text.toString()}"
+                                mobileNumberDialog.dismiss()
                                 otpDataDialog.show()
                             }
                             (activity as BaseActivity).bottomSheetDialog.dismiss()

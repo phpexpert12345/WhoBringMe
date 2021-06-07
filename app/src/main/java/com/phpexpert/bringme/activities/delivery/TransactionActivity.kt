@@ -124,6 +124,11 @@ class TransactionActivity : BaseActivity(), AuthInterface {
             }
         }
 
+        transactionActivity.blurView.setOnClickListener {
+
+            bottomSheetDialog.dismiss()
+        }
+
         transactionActivity.backArrow.setOnClickListener {
             finish()
         }

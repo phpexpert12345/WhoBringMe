@@ -64,8 +64,8 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
-        when (arrayList[position].order_status_msg) {
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted -> {
+        when (arrayList[position].job_status) {
+            "1" -> {
                 try {
                     homeFragmentCellBinding.acceptedDateTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
                 } catch (e: java.lang.Exception) {
@@ -76,7 +76,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().finished
                 homeFragmentCellBinding.declineFinishedLayout.setBackgroundResource(R.drawable.button_blue_green)
             }
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().completed -> {
+            "3" -> {
                 try {
                     homeFragmentCellBinding.acceptedDateTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
                 } catch (e: java.lang.Exception) {
@@ -87,7 +87,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.visibility = View.GONE
                 homeFragmentCellBinding.declineFinishedLayout.setBackgroundResource(R.drawable.button_blue_green)
             }
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().cancelled -> {
+            "4" -> {
                 homeFragmentCellBinding.declineFinishedLayout.visibility = View.GONE
                 homeFragmentCellBinding.acceptedDateTimeLayout.visibility = View.GONE
                 homeFragmentCellBinding.acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view

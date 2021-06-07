@@ -70,7 +70,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var progressDialog: ProgressDialog
     private lateinit var permissionName: String
-    private lateinit var imageUri:Uri
+    private lateinit var imageUri: Uri
 
     @SuppressLint("InlinedApi")
     private var perission = arrayOf(
@@ -193,7 +193,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
         if (addresses[0].locality != "") {
             profileEditLayoutBinding.cityET.isFocusable = false
             profileEditLayoutBinding.cityET.isFocusableInTouchMode = false
-            profileEditLayoutBinding.cityET.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.locality)
+            profileEditLayoutBinding.cityET.text = Editable.Factory.getInstance().newEditable(addresses[0]!!.locality ?: "")
         } else {
             profileEditLayoutBinding.cityET.isFocusable = true
             profileEditLayoutBinding.cityET.isFocusableInTouchMode = true
@@ -208,7 +208,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
             profileEditLayoutBinding.postCodeEt.isFocusableInTouchMode = true
         }
         postDataOtp.accountState = addresses[0]!!.adminArea
-        postDataOtp.accountCity = addresses[0]!!.locality
+        postDataOtp.accountCity = addresses[0]!!.locality ?: ""
         val stringBuilder = StringBuilder()
         for (j in 0..addresses[0]!!.maxAddressLineIndex)
             stringBuilder.append(addresses[0]!!.getAddressLine(j) + ",")
@@ -490,7 +490,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
     }
 
 
-    private fun getCaptureImageOutputUri(): Uri? {
+    private fun getCaptureImageOutputUri(): Uri {
         /*var outputFileUri: Uri? = null
         val getImage = getExternalFilesDir("")
         if (getImage != null) {
@@ -605,15 +605,15 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
         if (isOnline()) {
             if (sharedPrefrenceManager.getAuthData()?.auth_key != "" && sharedPrefrenceManager.getAuthData()?.auth_key != null) {
                 val map = HashMap<String, RequestBody?>()
-                map["account_first_name"] = createRequestBody(base64Encoded(profileEditLayoutBinding.firstNameEt.text.toString()))
-                map["account_last_name"] = createRequestBody(base64Encoded(profileEditLayoutBinding.lastName.text.toString()))
+                map["account_first_name"] = createRequestBody(base64Encoded(profileEditLayoutBinding.firstNameEt.text.toString()) ?: "")
+                map["account_last_name"] = createRequestBody(base64Encoded(profileEditLayoutBinding.lastName.text.toString()) ?: "")
                 map["LoginId"] = createRequestBody(sharedPrefrenceManager.getLoginId())
                 map["account_email"] = createRequestBody((profileEditLayoutBinding.emailEt.text.toString()))
-                map["account_country"] = createRequestBody(base64Encoded(postDataOtp.accountCountry!!))
-                map["account_state"] = createRequestBody(base64Encoded(profileEditLayoutBinding.stateEt.text.toString()))
-                map["account_city"] = createRequestBody(base64Encoded(profileEditLayoutBinding.cityET.text.toString()))
-                map["account_address"] = createRequestBody(base64Encoded(profileEditLayoutBinding.autoComplete.text.toString()))
-                map["address_postcode"] = createRequestBody(base64Encoded(profileEditLayoutBinding.postCodeEt.text.toString()))
+                map["account_country"] = createRequestBody(base64Encoded(postDataOtp.accountCountry!!) ?: "")
+                map["account_state"] = createRequestBody(base64Encoded(profileEditLayoutBinding.stateEt.text.toString()) ?: "")
+                map["account_city"] = createRequestBody(base64Encoded(profileEditLayoutBinding.cityET.text.toString()) ?: "")
+                map["account_address"] = createRequestBody(base64Encoded(profileEditLayoutBinding.autoComplete.text.toString()) ?: "")
+                map["address_postcode"] = createRequestBody(base64Encoded(profileEditLayoutBinding.postCodeEt.text.toString()) ?: "")
                 map["account_lat"] = createRequestBody(postDataOtp.accountLat!!)
                 map["account_long"] = createRequestBody(postDataOtp.accountLong!!)
                 map["auth_key"] = createRequestBody(sharedPrefrenceManager.getAuthData()?.auth_key!!)
@@ -745,5 +745,6 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
             }
         }
     }
+
 
 }

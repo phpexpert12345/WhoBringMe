@@ -12,6 +12,7 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="match_parent">
 
         <ScrollView
@@ -102,8 +103,9 @@
                             android:background="@android:color/transparent"
                             android:digits="0123456789"
                             android:fontFamily="@font/poppins_regular"
-                            android:imeOptions="actionDone"
+                            android:imeOptions="actionNext"
                             android:inputType="number"
+                            android:singleLine="true"
                             android:maxLength="14"
                             android:paddingStart="@dimen/_70sdp"
                             android:paddingLeft="@dimen/_70sdp"
@@ -160,6 +162,8 @@
                             android:fontFamily="@font/poppins_regular"
                             android:inputType="numberPassword"
                             android:maxLength="6"
+                            android:imeOptions="actionDone"
+                            android:singleLine="true"
                             android:paddingStart="0dp"
                             android:paddingLeft="0dp"
                             android:paddingTop="@dimen/_25sdp"
@@ -246,7 +250,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:text="@{languageModel.create_account}"
                         android:textColor="#00A8EC"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -258,15 +262,5 @@
             android:layout_height="match_parent"
             android:background="#80000000"
             android:visibility="gone" />
-
-        <!--<include
-            android:id="@+id/forPasswordOne"
-            layout="@layout/layout_forgot_password_one"
-            android:visibility="visible" />
--->
-        <!--<include
-            android:id="@+id/forgotPasswordTwo"
-            layout="@layout/layout_forgot_password_two"
-            android:visibility="visible" />-->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

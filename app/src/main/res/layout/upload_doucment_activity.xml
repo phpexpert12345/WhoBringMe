@@ -48,15 +48,34 @@
                     android:textSize="@dimen/_13sdp" />
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/documentType"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:fontFamily="@font/poppins_semi_bold"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_13sdp" />
+                android:layout_marginEnd="@dimen/_10sdp">
+
+                <TextView
+                    android:id="@+id/documentType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/editIcon"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_13sdp" />
+
+                <ImageView
+                    android:id="@+id/editIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:paddingStart="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_5sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:src="@drawable/edit_small"
+                    tools:ignore="ContentDescription,RtlSymmetry" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/documentFrontLayout"
@@ -129,7 +148,8 @@
                     android:id="@+id/documentBackLayoutUpload"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -152,7 +172,49 @@
                 </LinearLayout>
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@{languageModel.document_status}"
+                    android:textColor="@color/text_color_dark"
+                    android:textSize="@dimen/_9sdp" />
+
+                <TextView
+                    android:id="@+id/documentStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@{languageModel.pending}"
+                    android:textColor="@color/text_color_dark"
+                    android:textSize="@dimen/_9sdp"
+                    tools:ignore="RelativeOverlap" />
+
+            </RelativeLayout>
+
             <TextView
+                android:id="@+id/contactCustomerSupport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:visibility="gone"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@{languageModel.please_contact_support_team}"
+                android:textColor="@color/text_color_dark"
+                android:textSize="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/uploadDocumentText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"

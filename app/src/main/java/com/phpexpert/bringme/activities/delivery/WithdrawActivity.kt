@@ -95,7 +95,7 @@ class WithdrawActivity : BaseActivity(), AuthInterface {
             false
         }
         totalAvailableAmount?.formatChangeCountry()?.toFloat()!! < layoutWithdrawActivity.withdrawData.text.toString().formatChangeCountry()!!.toFloat() -> {
-            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().amount_greater_than_available
+            bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().insufficient_balance
             bottomSheetDialogHeadingText.visibility = View.VISIBLE
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
             bottomSheetDialogMessageCancelButton.visibility = View.GONE

@@ -268,7 +268,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:orientation="vertical"
-                android:visibility='@{model.review_status.equalsIgnoreCase(languageModel.not_done) ? View.GONE : View.VISIBLE}'>
+                android:visibility='@{model.review_status.equalsIgnoreCase("Not Done") ? View.GONE : View.VISIBLE}'>
 
                 <RelativeLayout
                     android:layout_width="match_parent"

@@ -247,7 +247,7 @@ class LanguageDtoData {
     var write_your_review = "Write your Review"
 
     @SerializedName("card_details")
-    var card_details = "Card Details"
+    var card_details = "Card\\Debit Details"
 
     @SerializedName("email")
     var email = "Email"
@@ -819,4 +819,13 @@ class LanguageDtoData {
 
     @SerializedName("done")
     var done = "Done"
+
+    @SerializedName("please_contact_support_team")
+    var please_contact_support_team = "Please contact to Who Bring Me Support team to update your document information"
+
+    @SerializedName("document_status")
+    var document_status = " Document Status"
+
+    @SerializedName("insufficient_balance")
+    var insufficient_balance: String? = "Insufficient Balance"
 }

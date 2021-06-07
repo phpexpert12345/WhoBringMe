@@ -173,13 +173,13 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal"
-                android:visibility='@{model.order_status_msg.equalsIgnoreCase(languageModel.pending) || model.order_status_msg.equalsIgnoreCase(languageModel.cancelled)? View.GONE : View.VISIBLE}'>
+                android:visibility='@{model.job_status.equalsIgnoreCase("0") || model.job_status.equalsIgnoreCase("4")? View.GONE : View.VISIBLE}'>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text='@{model.order_status_msg.equalsIgnoreCase(languageModel.accepted) ? languageModel.accepted_time : languageModel.complete_time}'
+                    android:text='@{model.job_status.equalsIgnoreCase("1") ? languageModel.accepted_time : languageModel.complete_time}'
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_11sdp" />
 

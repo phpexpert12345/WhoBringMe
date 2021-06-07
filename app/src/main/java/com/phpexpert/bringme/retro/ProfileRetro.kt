@@ -1,5 +1,6 @@
 package com.phpexpert.bringme.retro
 
+import com.google.gson.JsonObject
 import com.phpexpert.bringme.dtos.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -35,6 +36,6 @@ interface ProfileRetro {
     @POST("phpexpert_delivery_emp_document_upload.php")
     fun uploadDocument(@PartMap map: HashMap<String, RequestBody?>,
                        @Part document_front: MultipartBody.Part?,
-                       @Part document_back: MultipartBody.Part?): Call<EditProfileDto>
+                       @Part document_back: MultipartBody.Part?): Call<JsonObject>
 
 }

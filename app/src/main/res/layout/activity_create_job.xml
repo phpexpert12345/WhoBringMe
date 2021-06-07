@@ -135,6 +135,7 @@
                     android:layout_marginBottom="@dimen/_20sdp"
                     app:cardCornerRadius="@dimen/_10sdp"
                     app:cardElevation="@dimen/_3sdp"
+                    app:cardBackgroundColor="@color/white"
                     android:elevation="@dimen/_3sdp"
                     app:cardUseCompatPadding="true">
 

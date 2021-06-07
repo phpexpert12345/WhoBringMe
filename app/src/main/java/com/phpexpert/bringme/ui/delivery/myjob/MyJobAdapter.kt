@@ -67,8 +67,8 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
             e.printStackTrace()
         }
 
-        when (arrayList[position].order_status_msg) {
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted -> {
+        when (arrayList[position].job_status) {
+            "1" -> {
                 try {
                     jobCellBinding.orderCompleteDateLayout.visibility = View.VISIBLE
                     jobCellBinding.jobAcceptCancelTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
@@ -77,7 +77,7 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
                     e.printStackTrace()
                 }
             }
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().completed -> {
+            "3" -> {
                 try {
                     jobCellBinding.orderCompleteDateLayout.visibility = View.VISIBLE
                     jobCellBinding.jobAcceptCancelTime.text = changeAcceptDateTime(arrayList[position].job_completed_date + " " + arrayList[position].job_completed_time)
@@ -86,7 +86,7 @@ class MyJobAdapter(var context: Context, var arrayList: ArrayList<MyJobDtoList>,
                     e.printStackTrace()
                 }
             }
-            (context as BaseActivity).sharedPrefrenceManager.getLanguageData().cancelled -> {
+            "4" -> {
                 jobCellBinding.orderCompleteDateLayout.visibility = View.GONE
                 jobCellBinding.jobAcceptCancelTime.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
             }

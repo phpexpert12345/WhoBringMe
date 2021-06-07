@@ -213,5 +213,8 @@ class OrderListData {
 
     @SerializedName("order_decline_reason")
     var order_decline_reason: String? = ""
+
+    @SerializedName("job_status")
+    var job_status: String? = ""
 }
 
