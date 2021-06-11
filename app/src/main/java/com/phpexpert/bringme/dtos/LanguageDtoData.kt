@@ -824,7 +824,7 @@ class LanguageDtoData {
     var please_contact_support_team = "Please contact to Who Bring Me Support team to update your document information"
 
     @SerializedName("document_status")
-    var document_status = " Document Status"
+    var document_status = "Document Status"
 
     @SerializedName("insufficient_balance")
     var insufficient_balance: String? = "Insufficient Balance"

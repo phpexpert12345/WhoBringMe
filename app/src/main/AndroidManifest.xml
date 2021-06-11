@@ -29,10 +29,12 @@
         tools:ignore="AllowBackup">
         <activity
             android:name=".activities.RegistrationActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/RegistrationActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.OTPActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar" />
 
         <activity
@@ -43,10 +45,12 @@
 
         <activity
             android:name=".activities.employee.SwipeViewActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBarLight" />
 
         <activity
             android:name=".activities.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/CustomTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,16 +60,19 @@
         </activity>
         <activity
             android:name=".activities.employee.DashboardActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activities.delivery.DashboardActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activities.ChangeLanguageActivity"
-            android:theme="@style/Theme.BringMe.NoActionBar"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BringMe.NoActionBar" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -74,10 +81,12 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -90,46 +99,58 @@
 
         <activity
             android:name=".activities.employee.CreateJobActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.RegistrationSelectionActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.employee.PaymentActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.employee.CongratulationScreen"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.employee.ProfileEditActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.employee.NewCardActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".activities.delivery.TransactionActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar" />
 
         <activity
             android:name=".activities.delivery.WithdrawActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar" />
 
         <activity
             android:name=".activities.delivery.UploadDocumentSelectActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.delivery.DocumentUploadActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity
             android:name=".activities.ChangePasswordActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.NotificationActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BringMe.NoActionBar" />
         <activity android:name=".utilities.ImageCropActivity" />
 

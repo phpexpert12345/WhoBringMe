@@ -47,7 +47,7 @@ import java.net.URI
 class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterface {
 
     private lateinit var uploadDocumentActivity: UploadDoucmentActivityBinding
-    private lateinit var permissionName: String
+    private var permissionName: String = "Front"
     private var POD1_URI: Uri? = null
     private var POD2_URI: Uri? = null
     private var permissionCamera = arrayOf(
@@ -82,6 +82,7 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
 
         if (sharedPrefrenceManager.getProfile().login_document_front_photo != "") {
             uploadDocumentActivity.documentFrontLayoutUpload.visibility = View.GONE
+            uploadDocumentActivity.editFromImageIcon.visibility = View.VISIBLE
             var requestOptions = RequestOptions()
             requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(16))
             Glide.with(this).load(sharedPrefrenceManager.getProfile().login_document_front_photo)
@@ -93,6 +94,7 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
         }
         if (sharedPrefrenceManager.getProfile().login_document_back_photo != "") {
             uploadDocumentActivity.documentBackLayoutUpload.visibility = View.GONE
+            uploadDocumentActivity.editBackImageIcon.visibility = View.VISIBLE
             var requestOptions = RequestOptions()
             requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(16))
             Glide.with(this).load(sharedPrefrenceManager.getProfile().login_document_back_photo)
@@ -218,6 +220,7 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
                     val selectedImage = BitmapFactory.decodeFile(POD1_URI.toString()) as Bitmap
                     var requestOptions = RequestOptions()
                     uploadDocumentActivity.documentFrontLayoutUpload.visibility = View.GONE
+                    uploadDocumentActivity.editFromImageIcon.visibility = View.VISIBLE
                     requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(16))
                     Glide.with(this).load(selectedImage)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -229,6 +232,7 @@ class DocumentUploadActivity : BaseActivity(), AuthInterface, PermissionInterfac
                     val selectedImage = BitmapFactory.decodeFile(POD2_URI.toString()) as Bitmap
                     var requestOptions = RequestOptions()
                     uploadDocumentActivity.documentBackLayoutUpload.visibility = View.GONE
+                    uploadDocumentActivity.editBackImageIcon.visibility = View.VISIBLE
                     requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(16))
                     Glide.with(this).load(selectedImage)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)

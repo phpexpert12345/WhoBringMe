@@ -434,14 +434,24 @@
 
 
                 <TextView
+                    android:id="@+id/jobTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/text_color"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:text="@{languageModel.there_are_no_job}"
-                    android:textColor="@color/color_text_grey"
-                    android:textSize="@dimen/_13sdp" />
+                    android:textSize="@dimen/_14sdp" />
+
+                <TextView
+                    android:id="@+id/jobMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_12sdp" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -456,7 +466,7 @@
         <include
             android:id="@+id/jobViewLayout"
             layout="@layout/my_earning_view_layout_delivery"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <include
             android:id="@+id/filterLayout"

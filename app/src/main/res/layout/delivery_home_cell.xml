@@ -315,7 +315,7 @@
                         android:paddingEnd="@dimen/_3sdp"
                         android:paddingBottom="@dimen/_5sdp"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_7sdp" />
+                        android:textSize="@dimen/_8sdp" />
 
                     <TextView
                         android:id="@+id/declineFinishedLayout"
@@ -330,7 +330,7 @@
                         android:paddingEnd="@dimen/_3sdp"
                         android:paddingBottom="@dimen/_5sdp"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_7sdp" />
+                        android:textSize="@dimen/_8sdp" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

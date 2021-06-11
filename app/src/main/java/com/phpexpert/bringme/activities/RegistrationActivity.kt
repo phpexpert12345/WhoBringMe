@@ -15,6 +15,7 @@ import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
+import com.hbb20.CountryCodePicker
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityRegistrationBinding
 import com.phpexpert.bringme.dtos.PostDataOtp
@@ -45,6 +46,8 @@ open class RegistrationActivity : BaseActivity(), AuthInterface, PermissionInter
         registrationActivity.languageModel = sharedPrefrenceManager.getLanguageData()
         registrationActivity.continueMessage.text = Html.fromHtml(sharedPrefrenceManager.getLanguageData().by_continuing_you_agree_that_you_have_read_and_accept_our_t_amp_cs_and_privacy_policy)
         permissionInterface = this
+
+        registrationActivity.searchCountyCountry.changeDefaultLanguage(CountryCodePicker.Language.forCountryNameCode(sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)))
         setActions()
         setValues()
     }

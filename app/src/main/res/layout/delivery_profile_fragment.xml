@@ -90,6 +90,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/phone_icon"
+                                android:layout_gravity="center_vertical"
                                 tools:ignore="ContentDescription" />
 
                             <TextView
@@ -106,8 +107,8 @@
                         <LinearLayout
                             android:id="@+id/userEmail"
                             android:layout_width="wrap_content"
+                            android:layout_marginTop="@dimen/_2sdp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_5sdp"
                             android:orientation="horizontal"
                             tools:ignore="UseCompoundDrawables">
 

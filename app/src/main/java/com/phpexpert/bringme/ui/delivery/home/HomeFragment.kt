@@ -37,10 +37,7 @@ import com.phpexpert.bringme.models.LatestJobDeliveryViewModel
 import com.phpexpert.bringme.utilities.BaseActivity
 import com.phpexpert.bringme.utilities.CONSTANTS
 import com.phpexpert.bringme.utilities.SharedPrefrenceManager
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.text.ParseException
-import java.text.SimpleDateFormat
+import java.text.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -257,6 +254,7 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
 
         homeFragmentBinding.searchIconEdit.setOnClickListener {
             if (homeFragmentBinding.searchET.text.toString().trim().isNotEmpty()) {
+                this.hideKeyboard()
                 searOrderString = homeFragmentBinding.searchET.text.toString()
                 setObserver()
             }
@@ -319,6 +317,8 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
                             progressDialog.dismiss()
                             homeFragmentBinding.noDataFoundLayout.visibility = View.VISIBLE
                             homeFragmentBinding.nestedScrollView.visibility = View.GONE
+                            homeFragmentBinding.jobTitle.text = it.status_message_heading
+                            homeFragmentBinding.jobMessage.text = it.status_message
                         }
                         else -> {
                             progressDialog.dismiss()
@@ -727,10 +727,12 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
 
     private fun String?.formatChange() = run {
         try {
-//            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
+//            val formatter = NumberFormat.getNumberInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.lang_code, "DE"))
+//            formatter.isGroupingUsed = true
+//            formatter.maximumFractionDigits = 2
 //            formatter.format(this?.toFloat())
             val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
-            val formartter = (DecimalFormat("##.##", symbols))
+            val formartter = (DecimalFormat("##.00", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this
@@ -748,10 +750,11 @@ class HomeFragment : Fragment(), HomeFragmentAdapter.OnClickView, AuthInterface,
         Handler().postDelayed({
             orderDeclineBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             orderFinishedBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            orderAcceptBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             orderFinishedBinding.jobCode.text = Editable.Factory.getInstance().newEditable("")
             orderDeclineBinding.orderReason.text = Editable.Factory.getInstance().newEditable("")
             homeFragmentBinding.blurView.visibility = View.GONE
-        }, 100)
+        }, 200)
     }
 
     override fun onDestroyView() {

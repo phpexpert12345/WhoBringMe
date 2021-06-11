@@ -405,7 +405,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
 
     @SuppressLint("QueryPermissionsNeeded")
     private fun getPickImageChooserIntent(): Intent? {
-        val outputFileUri: Uri? = getCaptureImageOutputUri()!!
+        val outputFileUri: Uri = getCaptureImageOutputUri()
         val allIntents: ArrayList<Intent> = ArrayList()
         val packageManager = packageManager
         val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -415,9 +415,7 @@ class ProfileEditActivity : BaseActivity(), AuthInterface, PermissionInterface {
             val intent = Intent(captureIntent)
             intent.component = ComponentName(res.activityInfo.packageName, res.activityInfo.name)
             intent.setPackage(res.activityInfo.packageName)
-            if (outputFileUri != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
-            }
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
             allIntents.add(intent)
         }
         val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)

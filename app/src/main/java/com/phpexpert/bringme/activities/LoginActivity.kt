@@ -18,6 +18,7 @@ import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.hbb20.CountryCodePicker
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.databinding.ActivityLoginBinding
 import com.phpexpert.bringme.interfaces.AuthInterface
@@ -52,6 +53,7 @@ class LoginActivity : BaseActivity(), AuthInterface {
 
         loginBinding.languageModel = sharedPrefrenceManager.getLanguageData()
 
+        loginBinding.searchCountyCountry.changeDefaultLanguage(CountryCodePicker.Language.forCountryNameCode(sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)))
         initValues() // method to init values
         setForgotPasswordOne()
         setForgotPasswordTwo()
@@ -150,7 +152,7 @@ class LoginActivity : BaseActivity(), AuthInterface {
         forgotPasswordOneDialog.findViewById<TextView>(R.id.weWillSendText)?.text = sharedPrefrenceManager.getLanguageData().we_will_send_you_an
         forgotPasswordOneDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = sharedPrefrenceManager.getLanguageData().one_time_password
         forgotPasswordOneDialog.findViewById<TextView>(R.id.onThisMobile)?.text = sharedPrefrenceManager.getLanguageData().on_this_mobile_number
-
+        forgotPasswordOneDialog.findViewById<CountryCodePicker>(R.id.countyCode)?.changeDefaultLanguage(CountryCodePicker.Language.forCountryNameCode(sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)))
         forgotPasswordOneDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
         forgotPasswordOneDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = sharedPrefrenceManager.getLanguageData().get_otp
         forgotPasswordOneDialog.findViewById<TextInputEditText>(R.id.mobileNumber)?.onFocusChangeListener = View.OnFocusChangeListener { _, b ->
@@ -218,6 +220,16 @@ class LoginActivity : BaseActivity(), AuthInterface {
             when {
                 loginBinding.mobileNumberEditText.text!!.length !in 10..14 -> {
                     bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_valid_mobile_number
+                    bottomSheetDialogHeadingText.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
+                    bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                    bottomSheetDialogMessageOkButton.setOnClickListener {
+                        bottomSheetDialog.dismiss()
+                    }
+                    bottomSheetDialog.show()
+                }
+                loginBinding.digitPin.text!!.isEmpty() ->{
+                    bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().enter_6_digit_password
                     bottomSheetDialogHeadingText.visibility = View.GONE
                     bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
                     bottomSheetDialogMessageCancelButton.visibility = View.GONE

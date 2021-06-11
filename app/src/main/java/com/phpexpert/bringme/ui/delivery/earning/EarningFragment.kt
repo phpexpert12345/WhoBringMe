@@ -236,6 +236,8 @@ class EarningFragment : Fragment(), AuthInterface, EarningAdapter.OnClickView {
                             progressDialog.dismiss()
                             fragmentEarningBinding.noDataFoundLayout.visibility = View.VISIBLE
                             fragmentEarningBinding.myEarningScrollView.visibility = View.GONE
+                            fragmentEarningBinding.jobTitle.text = it.status_message_heading
+                            fragmentEarningBinding.jobMessage.text = it.status_message
                         }
                         else -> {
                             progressDialog.dismiss()
@@ -388,7 +390,7 @@ class EarningFragment : Fragment(), AuthInterface, EarningAdapter.OnClickView {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
             val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
-            val formartter = (DecimalFormat("##.##", symbols))
+            val formartter = (DecimalFormat("##.00", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this

@@ -96,33 +96,23 @@ class NewCardActivity : BaseActivity(), AuthInterface, PermissionInterface {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
-                    if (p3 == 0){
-                        if (cardActivityBinding.expiryDate.text.toString().trim() != "") {
-                            cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("")
-                            cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
-                        }
-                    }else {
-                        if (p1 == 1 && p1 + p3 == 2 && p0?.contains('/') == false) {
-                            cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("$p0/")
-                        }
+
+                if (p3 == 0 || (p1 == 3 && p2 == 2 && p3 == 1)) {
+                    if (cardActivityBinding.expiryDate.text.toString().trim() != "") {
+                        cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("")
+                        cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
                     }
-                }else {
-                    if (p3 == 0 || (p1 == 3 && p2 == 2 && p3 == 1)) {
-                        if (cardActivityBinding.expiryDate.text.toString().trim() != "") {
-                            cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("")
-                            cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
-                        }
-                    } else {
-                        if (p3 == 2 && p0?.contains('/') == false) {
-                            cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("$p0/")
-                        } /*else if (p3 == 4 && p0?.contains('/') == true) {
+                } else {
+                    if ((p1 == 1 && p1 + p3 == 2 && p0?.contains('/') == false) || (p3 == 2 && p0?.contains('/') == false)) {
+                        cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable("$p0/")
+                    } /*else if (p3 == 4 && p0?.contains('/') == true) {
                         cardActivityBinding.expiryDate.text = Editable.Factory.getInstance().newEditable(p0.toString().replace("/", ""))
                     }*/
-                    }
+
+                    cardActivityBinding.expiryDate.setSelection(cardActivityBinding.expiryDate.text.toString().length)
+                    cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
                 }
-                cardActivityBinding.expiryDate.setSelection(cardActivityBinding.expiryDate.text.toString().length)
-                cardActivityBinding.expireDateText.text = cardActivityBinding.expiryDate.text.toString()
+
 
             }
 

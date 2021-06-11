@@ -328,7 +328,7 @@ open class BaseActivity : AppCompatActivity() {
 //            val formatter = NumberFormat.getInstance(Locale(sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
 //            formatter.format(this?.toFloat())
             val symbols = DecimalFormatSymbols(Locale(sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!, sharedPrefrenceManager.getAuthData()?.country_code!!))
-            val formartter = (DecimalFormat("##.##", symbols))
+            val formartter = (DecimalFormat("##.00", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this

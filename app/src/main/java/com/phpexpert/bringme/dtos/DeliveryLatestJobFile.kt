@@ -3,8 +3,6 @@ package com.phpexpert.bringme.dtos
 import com.google.gson.annotations.SerializedName
 
 class DeliveryLatestJobDtoMain : BaseResponseDto() {
-    @SerializedName("status_message_heading")
-    var status_message_heading: String? = ""
 
     @SerializedName("Total_Running_Orders")
     var Total_Running_Orders: String? = ""

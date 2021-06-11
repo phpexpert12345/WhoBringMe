@@ -60,10 +60,10 @@ class NotificationsFragment : Fragment(), AuthInterface {
                         notificationBinding.notificationRV.adapter!!.notifyDataSetChanged()
                     } else if (it.status_code == "2") {
                         (activity as BaseActivity).hitAuthApi(this)
-                    }else{
+                    } else {
                         (activity as BaseActivity).bottomSheetDialogHeadingText.visibility = View.VISIBLE
                         if (it.status_message == "11")
-                            (activity as BaseActivity).bottomSheetDialogMessageText.text =  (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
+                            (activity as BaseActivity).bottomSheetDialogMessageText.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().could_not_connect_server_message
                         else
                             (activity as BaseActivity).bottomSheetDialogMessageText.text = it.status_message
                         (activity as BaseActivity).bottomSheetDialogMessageOkButton.text = (activity as BaseActivity).sharedPrefrenceManager.getLanguageData().ok_text
@@ -74,6 +74,8 @@ class NotificationsFragment : Fragment(), AuthInterface {
                         (activity as BaseActivity).bottomSheetDialog.show()
                         notificationBinding.nestedScrollView.visibility = View.GONE
                         notificationBinding.noNotificationData.visibility = View.VISIBLE
+                        notificationBinding.jobTitle.text = it.status_message_heading
+                        notificationBinding.jobMessage.text = it.status_message
                     }
                 })
             } else {

@@ -9,6 +9,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
+import android.util.TimeUtils
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -68,7 +70,7 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
 
         congratulationScreenBinding.currencyCode.text = getCurrencySymbol()
         congratulationScreenBinding.userName.text = "${sharedPrefrenceManager.getProfile().login_name},"
-        congratulationScreenBinding.userName1.text = "${languageDtoData.hello} ${sharedPrefrenceManager.getProfile().login_name},"
+        congratulationScreenBinding.userName1.text = "${sharedPrefrenceManager.getProfile().login_name},"
         servicePostValue = intent.getSerializableExtra("postValue") as PostJobPostDto
         jobViewBinding = congratulationScreenBinding.jobViewLayout
         jobViewBinding.languageModel = languageDtoData
@@ -170,24 +172,29 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
             var countSecond = intArrayOf(59)
             countDownTimer = object : CountDownTimer(TimeUnit.MINUTES.toMillis(servicePostValue.jobTime!!.toLong()), 1000) {
                 override fun onTick(p0: Long) {
-                    if (counterHour[0] > 0)
-                        congratulationScreenBinding.hoursTV.text = counterHour[0].toString()
-                    else {
-                        congratulationScreenBinding.hoursTV.text = "0"
-                    }
-                    if (countMint[0] > 0) {
-                        congratulationScreenBinding.minute1TV.text = (countMint[0] / 10).toString()
-                        congratulationScreenBinding.minute2TV.text = (countMint[0] % 10).toString()
-                    } else {
-                        congratulationScreenBinding.minute1TV.text = "0"
-                        congratulationScreenBinding.minute2TV.text = "0"
-                    }
-                    congratulationScreenBinding.second1TV.text = (countSecond[0] / 10).toString()
-                    congratulationScreenBinding.second2TV.text = (countSecond[0] % 10).toString()
+
+//                    if (counterHour[0] > 0)
+                    congratulationScreenBinding.hoursTV.text = TimeUnit.MILLISECONDS.toHours(p0).toString()
+//                    else {
+//                        congratulationScreenBinding.hoursTV.text = "0"
+//                    }
+//                    if (countMint[0] > 0) {
+                    congratulationScreenBinding.minute1TV.text = (TimeUnit.MILLISECONDS.toMinutes(p0) / 10).toString()
+                    congratulationScreenBinding.minute2TV.text = (TimeUnit.MILLISECONDS.toMinutes(p0) % 10).toString()
+//                    } else {
+//                        congratulationScreenBinding.minute1TV.text = "0"
+//                        congratulationScreenBinding.minute2TV.text = "0"
+//                    }
+                    congratulationScreenBinding.second1TV.text = ((TimeUnit.MILLISECONDS.toSeconds(p0) % 60) / 10).toString()
+                    congratulationScreenBinding.second2TV.text = ((TimeUnit.MILLISECONDS.toSeconds(p0) % 60) % 10).toString()
                     if (countSecond[0] == 0) {
+                        Log.d("minutes", TimeUnit.MILLISECONDS.toMinutes(p0).toString())
                         countMint[0]--
                         countSecond = intArrayOf(59)
                     } else {
+                        val mint = TimeUnit.MILLISECONDS.toSeconds(p0).toInt()
+                        val seconds = TimeUnit.MILLISECONDS.toSeconds(p0).toInt() % 60
+                        Log.d("seconds", seconds.toString())
                         countSecond[0]--
                     }
 
@@ -262,6 +269,7 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
         } catch (e: Exception) {
         }
 
+        finishAffinity()
     }
 
 
@@ -342,11 +350,12 @@ class CongratulationScreen : BaseActivity(), AuthInterface, PermissionInterface 
                                 e.printStackTrace()
                             }
                             bottomSheetDialogMessageCancelButton.visibility = View.GONE
+                            bottomSheetDialogMessageText.text = it.status_message
                             bottomSheetDialogMessageOkButton.text = languageDtoData.ok_text
                             bottomSheetDialogHeadingText.visibility = View.GONE
                             bottomSheetDialogMessageOkButton.setOnClickListener {
                                 bottomSheetDialog.dismiss()
-                                countDownTimer.cancel()
+//                                countDownTimer.cancel()
                                 setCountDownTimer()
                             }
                         }

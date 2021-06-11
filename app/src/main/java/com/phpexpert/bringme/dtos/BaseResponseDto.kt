@@ -11,4 +11,7 @@ open class BaseResponseDto {
 
     @SerializedName("status_message")
     var status_message: String? = ""
+
+    @SerializedName("status_message_heading")
+    var status_message_heading: String? = ""
 }

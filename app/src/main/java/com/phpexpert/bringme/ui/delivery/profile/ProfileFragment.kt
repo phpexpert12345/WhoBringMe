@@ -25,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.hbb20.CountryCodePicker
 import com.phpexpert.bringme.R
 import com.phpexpert.bringme.activities.ChangeLanguageActivity
 import com.phpexpert.bringme.activities.ChangePasswordActivity
@@ -78,7 +79,7 @@ class ProfileFragment : Fragment(), AuthInterface {
         mobileNumberDialog.findViewById<TextView>(R.id.oneTimePassword)?.text = sharedPrefrenceManager.getLanguageData().one_time_password
         mobileNumberDialog.findViewById<TextView>(R.id.onThisMobile)?.text = sharedPrefrenceManager.getLanguageData().on_this_mobile_number
         mobileNumberDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
-
+        mobileNumberDialog.findViewById<com.hbb20.CountryCodePicker>(R.id.countyCode)?.changeDefaultLanguage(CountryCodePicker.Language.forCountryNameCode(sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)))
         mobileNumberDialog.findViewById<TextInputLayout>(R.id.mobileNumberInputText)?.hint = sharedPrefrenceManager.getLanguageData().enter_mobile_number
         mobileNumberDialog.findViewById<CircularProgressButton>(R.id.getOtpButton)?.text = sharedPrefrenceManager.getLanguageData().get_otp
         mobileNumberDialog.findViewById<TextInputEditText>(R.id.mobileNumber)?.onFocusChangeListener = View.OnFocusChangeListener { _, b ->

@@ -35,7 +35,6 @@
             android:layout_centerInParent="true"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:visibility="gone"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
@@ -45,13 +44,24 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
+                android:id="@+id/jobTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@{languageModel.no_notification_yet}"
+                android:layout_gravity="center_horizontal"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_14sdp" />
+
+            <TextView
+                android:id="@+id/jobMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/_12sdp" />
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView

@@ -67,6 +67,8 @@ class NotificationActivity : BaseActivity(), AuthInterface {
                         bottomSheetDialog.show()
                         notificationBinding.nestedScrollView.visibility = View.GONE
                         notificationBinding.noNotificationData.visibility = View.VISIBLE
+                        notificationBinding.jobTitle.text = it.status_message_heading
+                        notificationBinding.jobMessage.text = it.status_message
                     }
                 })
             } else {

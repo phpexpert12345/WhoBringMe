@@ -82,7 +82,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_20sdp"
-                    android:src="@drawable/calendar_grey"
+                    android:src="@drawable/calendar_grey_doted"
                     tools:ignore="ContentDescription" />
             </RelativeLayout>
 
@@ -132,7 +132,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_20sdp"
-                    android:src="@drawable/calendar_grey"
+                    android:src="@drawable/calendar_grey_doted"
                     tools:ignore="ContentDescription" />
             </RelativeLayout>
 
@@ -163,7 +163,7 @@
             android:layout_marginEnd="@dimen/_minus20sdp"
             android:background="@drawable/calendar_bg_down"
             android:minHeight="@dimen/_200sdp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"

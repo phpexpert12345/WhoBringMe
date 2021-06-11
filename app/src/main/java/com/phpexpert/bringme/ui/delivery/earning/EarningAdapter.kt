@@ -59,7 +59,7 @@ class EarningAdapter(var context: Context, var arrayList: ArrayList<EarningDtoLi
 //            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
             val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (context as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
-            val formartter = (DecimalFormat("##.##", symbols))
+            val formartter = (DecimalFormat("##.00", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this

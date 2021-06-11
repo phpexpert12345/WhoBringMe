@@ -94,6 +94,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
 
         historyBinding.searchIcon.setOnClickListener {
             if (historyBinding.searchET.text.isNotEmpty()) {
+                this.hideKeyboard()
                 searOrderString = historyBinding.searchET.text.toString().trim()
                 setObserver()
             }
@@ -149,6 +150,8 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
                         "1" -> {
                             progressDialog.dismiss()
                             historyBinding.noJobHistroy.visibility = View.VISIBLE
+                            historyBinding.jobTitle.text = it.status_message_heading
+                            historyBinding.jobMessage.text = it.status_message
                             historyBinding.nestedScrollView.visibility = View.GONE
                         }
                         else -> {
@@ -376,7 +379,7 @@ class HistoryFragment : Fragment(), HistoryFragmentAdapter.OnClickView, AuthInte
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code!!, "DE"))
 //            formatter.format(this?.toFloat())
             val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage)!!, (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
-            val formartter = (DecimalFormat("##.##", symbols))
+            val formartter = (DecimalFormat("##.00", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this

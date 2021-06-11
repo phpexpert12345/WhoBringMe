@@ -75,15 +75,16 @@
                         android:backgroundTint="@color/white"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="@{languageModel.enter_order_number}"
-                        android:singleLine="true"
+                        android:imeOptions="actionDone"
                         android:inputType="number"
+                        android:paddingEnd="@dimen/_80sdp"
+                        android:singleLine="true"
                         android:textColor="@color/white"
                         android:textColorHint="#CFCFCF"
+                        android:textCursorDrawable="@null"
                         android:textSize="@dimen/_15sdp"
-                        android:text="sdfsfdkljsdgfhkadsjlfksadhfkjslafh"
-                        android:paddingEnd="@dimen/_80sdp"
                         android:visibility="visible"
-                        tools:ignore="Autofill,TextFields" />
+                        tools:ignore="Autofill,RtlSymmetry,TextFields" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -105,8 +106,8 @@
                             android:id="@+id/closeIcon"
                             android:layout_width="@dimen/_36sdp"
                             android:layout_height="@dimen/_36sdp"
-                            android:layout_marginTop="@dimen/_4sdp"
                             android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_4sdp"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"
                             android:src="@drawable/close"
@@ -122,36 +123,48 @@
                 android:id="@+id/noJobHistroy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/headerLayout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_110sdp"
                 android:orientation="vertical"
                 android:visibility="visible"
-                android:layout_below="@+id/headerLayout"
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:src="@drawable/no_job"
                     tools:ignore="ContentDescription" />
 
                 <TextView
+                    android:id="@+id/jobTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_gravity="center_horizontal"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@{languageModel.there_are_no_job}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14sdp" />
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/jobMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_12sdp" />
             </LinearLayout>
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/nestedScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="visible"
                 android:layout_below="@+id/headerLayout"
-                android:layout_marginTop="@dimen/_4sdp">
+                android:layout_marginTop="@dimen/_4sdp"
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

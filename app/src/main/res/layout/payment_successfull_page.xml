@@ -86,7 +86,7 @@
                             android:fontFamily="@font/poppins_medium"
                             android:gravity="center_horizontal"
                             android:textColor="@color/text_color"
-                            android:textSize="@dimen/_15sdp" />
+                            android:textSize="@dimen/_16sdp" />
                     </LinearLayout>
 
                     <TextView

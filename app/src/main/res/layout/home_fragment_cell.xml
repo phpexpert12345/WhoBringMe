@@ -237,6 +237,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_3sdp"
                             android:fontFamily="@font/poppins_regular"
+                            android:singleLine="true"
                             android:text="@{languageModel.mint}"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_9sdp" />
@@ -383,7 +384,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_toStartOf="@+id/completeAcceptTime"
                     android:layout_toEndOf="@+id/deliveryImageView"
                     android:orientation="vertical">
 
@@ -405,36 +405,34 @@
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_9sdp"
                         tools:ignore="HardcodedText" />
-                </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/completeAcceptTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="vertical"
-                    tools:ignore="RelativeOverlap">
-
-                    <TextView
-                        android:id="@+id/acceptedDateTimeText"
+                    <LinearLayout
+                        android:id="@+id/completeAcceptTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:fontFamily="@font/poppins_medium"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_9sdp" />
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:orientation="horizontal"
+                        tools:ignore="RelativeOverlap">
 
-                    <TextView
-                        android:id="@+id/timeData"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:fontFamily="@font/poppins_medium"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_9sdp"
-                        tools:ignore="HardcodedText" />
+                        <TextView
+                            android:id="@+id/acceptedDateTimeText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_9sdp" />
+
+                        <TextView
+                            android:id="@+id/timeData"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="@dimen/_3sdp"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_9sdp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

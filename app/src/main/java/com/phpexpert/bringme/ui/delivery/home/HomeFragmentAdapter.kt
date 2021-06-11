@@ -67,6 +67,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
         when (arrayList[position].job_status) {
             "1" -> {
                 try {
+                    homeFragmentCellBinding.declineFinishedLayout.visibility = View.VISIBLE
                     homeFragmentCellBinding.acceptedDateTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
@@ -78,6 +79,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
             }
             "3" -> {
                 try {
+                    homeFragmentCellBinding.declineFinishedLayout.visibility = View.VISIBLE
                     homeFragmentCellBinding.acceptedDateTime.text = changeAcceptDateTime(arrayList[position].job_accept_date + " " + arrayList[position].job_accept_time)
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
@@ -93,6 +95,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
                 homeFragmentCellBinding.acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view
             }
             else -> {
+                homeFragmentCellBinding.declineFinishedLayout.visibility = View.VISIBLE
                 homeFragmentCellBinding.acceptedDateTimeLayout.visibility = View.GONE
                 (holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accept
                 (holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().decline
@@ -102,7 +105,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
 
         Glide.with(context).asGif().load(arrayList[position].order_status_icon).placeholder(R.drawable.cs).into(homeFragmentCellBinding.csImage)
 
-        homeFragmentCellBinding.acceptViewLayout.setOnClickListener {
+        homeFragmentCellBinding.acceptViewLayout.setOnClickListener{
             if ((holder.viewBinding as DeliveryHomeCellBinding).acceptViewLayout.text.toString() == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().view) {
                 onClickListener.onClick("viewData", position)
             } else {
@@ -110,7 +113,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
             }
         }
 
-        homeFragmentCellBinding.declineFinishedLayout.setOnClickListener {
+        homeFragmentCellBinding.declineFinishedLayout.setOnClickListener{
             if ((holder.viewBinding as DeliveryHomeCellBinding).declineFinishedLayout.text.toString() == (context as BaseActivity).sharedPrefrenceManager.getLanguageData().finished) {
                 onClickListener.onClick("finishedJob", position)
             } else {
@@ -190,7 +193,7 @@ class HomeFragmentAdapter(var context: Context, private var arrayList: ArrayList
 //            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
             val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (context as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
-            val formartter = (DecimalFormat("##.##", symbols))
+            val formartter = (DecimalFormat("##.00", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this

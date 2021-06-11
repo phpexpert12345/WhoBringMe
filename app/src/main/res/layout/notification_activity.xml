@@ -58,13 +58,22 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
+                android:id="@+id/jobTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@{languageModel.no_notification_yet}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_14sdp" />
+
+            <TextView
+                android:id="@+id/jobMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/_12sdp" />
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView

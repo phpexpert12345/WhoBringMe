@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.phpexpert.bringme.activities
 
 import android.app.ProgressDialog

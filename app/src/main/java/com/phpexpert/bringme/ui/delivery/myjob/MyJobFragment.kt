@@ -184,6 +184,8 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
                             progressDialog.dismiss()
                             myJobBinding.noDataFoundLayout.visibility = View.VISIBLE
                             myJobBinding.nestedScrollView.visibility = View.GONE
+                            myJobBinding.jobTitle.text = it.status_message_heading
+                            myJobBinding.jobMessage.text = it.status_message
                         }
                         else -> {
 
@@ -318,7 +320,7 @@ class MyJobFragment : Fragment(), MyJobAdapter.OnClickView, AuthInterface {
 //            val formatter = NumberFormat.getInstance(Locale((activity as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
             val symbols = DecimalFormatSymbols(Locale((activity as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (activity as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
-            val formartter = (DecimalFormat("##.##", symbols))
+            val formartter = (DecimalFormat("##.00", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this

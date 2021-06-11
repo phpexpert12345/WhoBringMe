@@ -32,7 +32,7 @@ class NotificationAdapter(var context: Context, var arrayList: ArrayList<Notific
         notificationFragmentCellBinding = holder.viewBinding as LayoutNotificationCellBinding
         notificationFragmentCellBinding.languageModel = (context as BaseActivity).sharedPrefrenceManager.getLanguageData()
         notificationFragmentCellBinding.jobTime.text = orderDateValue(arrayList[position].notification_date + " " + arrayList[position].notification_time)
-        notificationFragmentCellBinding.jobId.text = arrayList[position].order_id
+        notificationFragmentCellBinding.jobId.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().order + arrayList[position].order_id
         notificationFragmentCellBinding.title.text = arrayList[position].notification_subject
         notificationFragmentCellBinding.message.text = arrayList[position].notification_message
     }

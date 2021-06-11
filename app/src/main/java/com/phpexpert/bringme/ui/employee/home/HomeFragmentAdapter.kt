@@ -64,7 +64,7 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
             "1" -> {
                 try {
                     homeFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_accept_date!!} ${arrayList[position].job_accept_time}")
-                    homeFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted_time_text
+                    homeFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().accepted_time
                     homeFragmentCellBinding.reviewView.visibility = View.GONE
                     homeFragmentCellBinding.writeReview.visibility = View.GONE
                     homeFragmentCellBinding.deliveryDataLayout.visibility = View.VISIBLE
@@ -77,7 +77,7 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
             "3" -> {
                 try {
                     homeFragmentCellBinding.timeData.text = orderDateValue("${arrayList[position].job_completed_date!!} ${arrayList[position].job_completed_time}")
-                    homeFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().complete_time_text
+                    homeFragmentCellBinding.acceptedDateTimeText.text = (context as BaseActivity).sharedPrefrenceManager.getLanguageData().complete_time
                     if (arrayList[position].review_status == "Not Done") {
                         homeFragmentCellBinding.reviewView.visibility = View.GONE
                         homeFragmentCellBinding.writeReview.visibility = View.VISIBLE
@@ -190,7 +190,7 @@ class HomeFragmentAdapter(var context: Context, var arrayList: ArrayList<OrderLi
 //            val formatter = NumberFormat.getInstance(Locale((context as BaseActivity).sharedPrefrenceManager.getAuthData().lang_code, "DE"))
 //            formatter.format(this?.toFloat())
             val symbols = DecimalFormatSymbols(Locale((context as BaseActivity).sharedPrefrenceManager.getPreference(CONSTANTS.changeLanguage), (context as BaseActivity).sharedPrefrenceManager.getAuthData()?.country_code!!))
-            val formartter = (DecimalFormat("##.##", symbols))
+            val formartter = (DecimalFormat("##.00", symbols))
             formartter.format(this?.toFloat())
         } catch (e: Exception) {
             this

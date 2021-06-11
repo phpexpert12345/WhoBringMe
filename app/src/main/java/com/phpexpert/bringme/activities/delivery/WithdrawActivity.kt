@@ -105,7 +105,7 @@ class WithdrawActivity : BaseActivity(), AuthInterface {
             bottomSheetDialog.show()
             false
         }
-        totalAvailableAmount?.toFloat()!! < 0 -> {
+        layoutWithdrawActivity.withdrawData.text.toString().formatChangeCountry()!!.toFloat() < 0 -> {
             bottomSheetDialogMessageText.text = sharedPrefrenceManager.getLanguageData().amount_greater_than_0
             bottomSheetDialogHeadingText.visibility = View.VISIBLE
             bottomSheetDialogMessageOkButton.text = sharedPrefrenceManager.getLanguageData().ok_text
